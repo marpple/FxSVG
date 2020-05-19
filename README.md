@@ -73,3 +73,21 @@ console.log($$createSVGPoint({ y: 10 }));
 console.log($$createSVGPoint({ x: 10, y: 10 }));
 // SVGPoint {x: 10, y: 10}
 ```
+
+### \$\$createSVGRect
+
+`SVGRect` 객체를 생성합니다.
+
+```javascript
+console.log($$createSVGRect());
+// SVGRect {x: 0, y: 0, width: 0, height: 0}
+
+console.log($$createSVGRect({ x: 10 }));
+// SVGRect {x: 10, y: 0, width: 0, height: 0}
+
+console.log($$createSVGRect({ width: 100 }));
+// SVGRect {x: 0, y: 0, width: 100, height: 0}
+
+console.log($$createSVGRect({ x: 10, y: 10, width: 100, height: 100 }));
+// SVGRect {x: 10, y: 10, width: 100, height: 100}
+```
