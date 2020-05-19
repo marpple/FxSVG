@@ -154,6 +154,8 @@ console.log($$createSVGTransformRotate({ cx: 10, cy: 10, angle: 30 }));
 ### \$\$createSVGTransformScale
 
 `type`이 `SVGTransform.SVG_TRANSFORM_SCALE`인 `SVGTransform` 객체를 생성합니다.
+`sx`로 x축 방향으로 확대할 비율을, `sy`로 y축 방향으로 확대할 비율을 설정합니다.
+`sx`, `sy`가 음수일 경우 해당 축을 기준으로 대칭이동합니다.
 
 ```javascript
 console.log($$createSVGTransformScale());
