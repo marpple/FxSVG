@@ -91,3 +91,18 @@ console.log($$createSVGRect({ width: 100 }));
 console.log($$createSVGRect({ x: 10, y: 10, width: 100, height: 100 }));
 // SVGRect {x: 10, y: 10, width: 100, height: 100}
 ```
+
+### \$\$createSVGMatrix
+
+`SVGMatrix` 객체를 생성합니다.
+
+```javascript
+console.log($$createSVGMatrix());
+// SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
+
+console.log($$createSVGMatrix({ e: 10, f: 20 }));
+// SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 20}
+
+console.log($$createSVGMatrix({ a: 2, b: 0, c: 0, d: 4, e: 10, f: 20 }));
+// SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 10, f: 20}
+```
