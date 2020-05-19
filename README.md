@@ -55,3 +55,21 @@ console.log(
 );
 // rect
 ```
+
+### \$\$createSVGPoint
+
+`SVGPoint` 객체를 생성합니다.
+
+```javascript
+console.log($$createSVGPoint());
+// SVGPoint {x: 0, y: 0}
+
+console.log($$createSVGPoint({ x: 10 }));
+// SVGPoint {x: 10, y: 0}
+
+console.log($$createSVGPoint({ y: 10 }));
+// SVGPoint {x: 0, y: 10}
+
+console.log($$createSVGPoint({ x: 10, y: 10 }));
+// SVGPoint {x: 10, y: 10}
+```
