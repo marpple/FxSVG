@@ -106,3 +106,12 @@ console.log($$createSVGMatrix({ e: 10, f: 20 }));
 console.log($$createSVGMatrix({ a: 2, b: 0, c: 0, d: 4, e: 10, f: 20 }));
 // SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 10, f: 20}
 ```
+
+### \$\$createSVGTransform
+
+`SVGTransform` 객체를 생성합니다.
+
+```javascript
+console.log($$createSVGTransform());
+// SVGTransform {type: 1, matrix: SVGMatrix, angle: 0}
+```
