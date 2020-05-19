@@ -7,3 +7,4 @@ export { $$createSVGMatrix } from "./createSVGMatrix.js";
 export { $$createSVGTransform } from "./createSVGTransform.js";
 export { $$createSVGTransformTranslate } from "./createSVGTransformTranslate.js";
 export { $$createSVGTransformRotate } from "./createSVGTransformRotate.js";
+export { $$createSVGTransformScale } from "./createSVGTransformScale.js";

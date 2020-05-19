@@ -150,3 +150,21 @@ console.log($$createSVGTransformRotate({ angle: 45 }));
 console.log($$createSVGTransformRotate({ cx: 10, cy: 10, angle: 30 }));
 // SVGTransform {type: 4, matrix: SVGMatrix, angle: 30}
 ```
+
+### \$\$createSVGTransformScale
+
+`type`이 `SVGTransform.SVG_TRANSFORM_SCALE`인 `SVGTransform` 객체를 생성합니다.
+
+```javascript
+console.log($$createSVGTransformScale());
+// SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
+//   SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
+
+console.log($$createSVGTransformScale({ sx: 2 }));
+// SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
+//   SVGMatrix {a: 2, b: 0, c: 0, d: 1, e: 0, f: 0}
+
+console.log($$createSVGTransformScale({ sx: 2, sy: 4 }));
+// SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
+//   SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 0, f: 0}
+```
