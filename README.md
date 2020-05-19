@@ -4,7 +4,29 @@ Functional SVG Handling Library
 
 ## API
 
-### $$els
+### \$\$getSVG
+
+내부적으로 사용하는 svg 객체를 반환합니다.
+`$$setSVG` 함수로 설정하지 않은 경우 `document.createElementNS` 를 실행합니다.
+해당 함수를 실행하지 못하는 환경인 경우 `$$setSVG` 함수로 사용할 svg 객체를 설정합니다.
+
+```javascript
+console.log($$getSVG());
+// <svg></svg>
+```
+
+### \$\$setSVG
+
+내부적으로 사용하는 svg 객체를 설정한 후 설정한 svg 객체를 반환합니다.
+
+```javascript
+console.log(
+  $$setSVG(document.createElementNS("http://www.w3.org/2000/svg", "svg"))
+);
+// <svg></svg>
+```
+
+### \$\$els
 
 svg 문자열을 받아 svg 객체를 담은 배열을 생성합니다.
 
@@ -19,7 +41,7 @@ console.log(
 // [rect, circle]
 ```
 
-### $$el
+### \$\$el
 
 svg 문자열을 받아 svg 객체를 생성합니다.
 
