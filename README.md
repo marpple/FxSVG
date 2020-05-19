@@ -119,7 +119,7 @@ console.log($$createSVGTransform());
 ### \$\$createSVGTransformTranslate
 
 `type`이 `SVGTransform.SVG_TRANSFORM_TRANSLATE`인 `SVGTransform` 객체를 생성합니다.
-`tx`, `ty` 값을 전달한 경우 해당 값을 설정합니다.
+`tx`로 x축 방향으로 이동할 값, `ty`로 y축 방향으로 이동할 값을 설정합니다.
 
 ```javascript
 console.log($$createSVGTransformTranslate());
