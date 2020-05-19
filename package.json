@@ -13,7 +13,12 @@
   "keywords": [
     "SVG"
   ],
-  "author": "dev_marpple",
+  "author": "dev_marpple <dev@marpple.com>",
+  "maintainers": [
+    "dev_marpple <dev@marpple.com>",
+    "kunholee <khl@marpple.com>",
+    "daengdaenglee <gunho1020@gmail.com>"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/marpple/FxSVG/issues"
