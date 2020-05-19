@@ -5,3 +5,4 @@ export { $$createSVGPoint } from "./createSVGPoint.js";
 export { $$createSVGRect } from "./createSVGRect.js";
 export { $$createSVGMatrix } from "./createSVGMatrix.js";
 export { $$createSVGTransform } from "./createSVGTransform.js";
+export { $$createSVGTransformTranslate } from "./createSVGTransformTranslate.js";
