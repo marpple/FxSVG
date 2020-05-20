@@ -26,6 +26,7 @@ console.log($$createSVGMatrix($svg)());
 - `$$createSVGRect`
 - `$$createSVGTransform`
 - `$$createSVGTransformMatrix`
+- `$$createSVGTransformRotate`
 
 ### \$\$getSVG
 
@@ -164,13 +165,13 @@ console.log($$createSVGTransformTranslate({ tx: 10, ty: 20 }));
 `cx`, `cy`를 설정하지 않으면 `(0, 0)`으로 설정합니다.
 
 ```javascript
-console.log($$createSVGTransformRotate());
+console.log($$createSVGTransformRotate()());
 // SVGTransform {type: 4, matrix: SVGMatrix, angle: 0}
 
-console.log($$createSVGTransformRotate({ angle: 45 }));
+console.log($$createSVGTransformRotate()({ angle: 45 }));
 // SVGTransform {type: 4, matrix: SVGMatrix, angle: 45}
 
-console.log($$createSVGTransformRotate({ cx: 10, cy: 10, angle: 30 }));
+console.log($$createSVGTransformRotate()({ cx: 10, cy: 10, angle: 30 }));
 // SVGTransform {type: 4, matrix: SVGMatrix, angle: 30}
 ```
 
@@ -221,7 +222,7 @@ console.log(
 console.log($$isTranslateSVGTransform($$createSVGTransformTranslate()));
 // true
 
-console.log($$isTranslateSVGTransform($$createSVGTransformRotate()));
+console.log($$isTranslateSVGTransform($$createSVGTransformRotate()()));
 // false
 ```
 
@@ -230,7 +231,7 @@ console.log($$isTranslateSVGTransform($$createSVGTransformRotate()));
 해당 `SVGTransform`의 `type`이 `SVGTransform.SVG_TRANSFORM_ROTATE`인지 여부를 판단합니다.
 
 ```javascript
-console.log($$isRotateSVGTransform($$createSVGTransformRotate()));
+console.log($$isRotateSVGTransform($$createSVGTransformRotate()()));
 // true
 
 console.log($$isRotateSVGTransform($$createSVGTransformTranslate()));
