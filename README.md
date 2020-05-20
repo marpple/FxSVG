@@ -27,6 +27,7 @@ console.log($$createSVGMatrix($svg)());
 - `$$createSVGTransform`
 - `$$createSVGTransformMatrix`
 - `$$createSVGTransformRotate`
+- `$$createSVGTransformScale`
 
 ### \$\$getSVG
 
@@ -182,15 +183,15 @@ console.log($$createSVGTransformRotate()({ cx: 10, cy: 10, angle: 30 }));
 `sx`, `sy`가 음수일 경우 해당 축을 기준으로 대칭이동합니다.
 
 ```javascript
-console.log($$createSVGTransformScale());
+console.log($$createSVGTransformScale()());
 // SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
 
-console.log($$createSVGTransformScale({ sx: 2 }));
+console.log($$createSVGTransformScale()({ sx: 2 }));
 // SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 2, b: 0, c: 0, d: 1, e: 0, f: 0}
 
-console.log($$createSVGTransformScale({ sx: 2, sy: 4 }));
+console.log($$createSVGTransformScale()({ sx: 2, sy: 4 }));
 // SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 0, f: 0}
 ```
@@ -243,7 +244,7 @@ console.log($$isRotateSVGTransform($$createSVGTransformTranslate()));
 해당 `SVGTransform`의 `type`이 `SVGTransform.SVG_TRANSFORM_SCALE`인지 여부를 판단합니다.
 
 ```javascript
-console.log($$isScaleSVGTransform($$createSVGTransformScale()));
+console.log($$isScaleSVGTransform($$createSVGTransformScale()()));
 // true
 
 console.log($$isScaleSVGTransform($$createSVGTransformTranslate()));
