@@ -21,4 +21,5 @@ export { $$initTranslateTransform } from "./initTranslateTransform.js";
 export { $$updateTranslateTransform } from "./updateTranslateTransform.js";
 export { $$appendTranslateTransform } from "./appendTranslateTransform.js";
 export { $$mergeTranslateTransform } from "./mergeTranslateTransform.js";
+export { $$controlTranslateTransform } from "./controlTranslateTransform.js";
 export { default } from "./index_default.js";

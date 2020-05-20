@@ -21,6 +21,7 @@ import { $$initTranslateTransform } from "./initTranslateTransform.js";
 import { $$updateTranslateTransform } from "./updateTranslateTransform.js";
 import { $$appendTranslateTransform } from "./appendTranslateTransform.js";
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform.js";
+import { $$controlTranslateTransform } from "./controlTranslateTransform.js";
 
 const FxSVG = {
   getSVG: $$getSVG,
@@ -47,6 +48,7 @@ const FxSVG = {
   updateTranslateTransform: $$updateTranslateTransform,
   appendTranslateTransform: $$appendTranslateTransform,
   mergeTranslateTransform: $$mergeTranslateTransform,
+  controlTranslateTransform: $$controlTranslateTransform,
 };
 
 export default FxSVG;
