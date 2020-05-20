@@ -11,4 +11,5 @@ export { $$createSVGTransformScale } from "./createSVGTransformScale.js";
 export { $$createSVGTransformMatrix } from "./createSVGTransformMatrix.js";
 export { $$isTranslateSVGTransform } from "./isTranslateSVGTransform.js";
 export { $$isRotateSVGTransform } from "./isRotateSVGTransform.js";
+export { $$isScaleSVGTransform } from "./isScaleSVGTransform.js";
 export { default } from "./index_default.js";
