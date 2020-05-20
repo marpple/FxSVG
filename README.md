@@ -189,3 +189,15 @@ console.log(
 // SVGTransform {type: 1, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 2, b: 3, c: 4, d: 5, e: 6, f: 7}
 ```
+
+### \$\$isTranslateSVGTransform
+
+해당 `SVGTransform`의 `type`이 `SVGTransform.SVG_TRANSFORM_TRANSLATE`인지 여부를 판단합니다.
+
+```javascript
+console.log($$isTranslateSVGTransform($$createSVGTransformTranslate()));
+// true
+
+console.log($$isTranslateSVGTransform($$createSVGTransformRotate()));
+// false
+```
