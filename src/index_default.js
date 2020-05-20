@@ -16,6 +16,7 @@ import { $$getBaseTransformList } from "./getBaseTransformList.js";
 import { $$getAnimTransformList } from "./getAnimTransformList.js";
 import { $$getBoxPoints } from "./getBoxPoints.js";
 import { $$getCenterPoint } from "./getCenterPoint.js";
+import { $$consolidateTransformList } from "./consolidateTransformList.js";
 
 const FxSVG = {
   getSVG: $$getSVG,
@@ -37,6 +38,7 @@ const FxSVG = {
   getAnimTransformList: $$getAnimTransformList,
   getBoxPoints: $$getBoxPoints,
   getCenterPoint: $$getCenterPoint,
+  consolidateTransformList: $$consolidateTransformList,
 };
 
 export default FxSVG;
