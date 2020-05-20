@@ -10,7 +10,7 @@ const $$calcCenterPoint = (points) => {
   ];
   const x = l.map(({ x }) => x).reduce((a, b) => a + b) / 4;
   const y = l.map(({ y }) => y).reduce((a, b) => a + b) / 4;
-  return $$createSVGPoint({ x, y });
+  return $$createSVGPoint()({ x, y });
 };
 
 export const $$getCenterPoint = ($el) => {

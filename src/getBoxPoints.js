@@ -4,10 +4,10 @@ import { $$getBaseTransformList } from "./getBaseTransformList.js";
 const $$getOriginalBoxPoints = ($el) => {
   const bbox = $el.getBBox();
   return {
-    top_left: $$createSVGPoint({ x: bbox.x, y: bbox.y }),
-    top_right: $$createSVGPoint({ x: bbox.x + bbox.width, y: bbox.y }),
-    bottom_left: $$createSVGPoint({ x: bbox.x, y: bbox.y + bbox.height }),
-    bottom_right: $$createSVGPoint({
+    top_left: $$createSVGPoint()({ x: bbox.x, y: bbox.y }),
+    top_right: $$createSVGPoint()({ x: bbox.x + bbox.width, y: bbox.y }),
+    bottom_left: $$createSVGPoint()({ x: bbox.x, y: bbox.y + bbox.height }),
+    bottom_right: $$createSVGPoint()({
       x: bbox.x + bbox.width,
       y: bbox.y + bbox.height,
     }),
@@ -15,10 +15,10 @@ const $$getOriginalBoxPoints = ($el) => {
 };
 
 const $$getTransformedBoxPoints = ($el, original_box_points) => {
-  let tl = $$createSVGPoint(original_box_points.top_left);
-  let tr = $$createSVGPoint(original_box_points.top_right);
-  let bl = $$createSVGPoint(original_box_points.bottom_left);
-  let br = $$createSVGPoint(original_box_points.bottom_right);
+  let tl = $$createSVGPoint()(original_box_points.top_left);
+  let tr = $$createSVGPoint()(original_box_points.top_right);
+  let bl = $$createSVGPoint()(original_box_points.bottom_left);
+  let br = $$createSVGPoint()(original_box_points.bottom_right);
 
   const consolidated_transform = $$getBaseTransformList($el).consolidate();
   if (consolidated_transform) {
@@ -52,8 +52,8 @@ const $$getBoundingBoxPoints = ($el, transformed_box_points) => {
   const max_y = Math.max(...ys);
 
   return {
-    min: $$createSVGPoint({ x: min_x, y: min_y }),
-    max: $$createSVGPoint({ x: max_x, y: max_y }),
+    min: $$createSVGPoint()({ x: min_x, y: min_y }),
+    max: $$createSVGPoint()({ x: max_x, y: max_y }),
   };
 };
 
