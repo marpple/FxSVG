@@ -1,3 +1,4 @@
 import { $$getSVG } from "./getSetSVG.js";
 
-export const $$createSVGTransform = () => $$getSVG().createSVGTransform();
+export const $$createSVGTransform = ($svg = $$getSVG()) =>
+  $svg.createSVGTransform();

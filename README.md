@@ -24,6 +24,7 @@ console.log($$createSVGMatrix($svg)());
 - `$$createSVGMatrix`
 - `$$createSVGPoint`
 - `$$createSVGRect`
+- `$$createSVGTransform`
 
 ### \$\$getSVG
 
@@ -133,7 +134,7 @@ console.log($$createSVGMatrix()({ a: 2, b: 0, c: 0, d: 4, e: 10, f: 20 }));
 `SVGTransform` 객체를 생성합니다.
 
 ```javascript
-console.log($$createSVGTransform());
+console.log($$createSVGTransform()());
 // SVGTransform {type: 1, matrix: SVGMatrix, angle: 0}
 ```
 
