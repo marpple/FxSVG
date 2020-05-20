@@ -28,6 +28,7 @@ console.log($$createSVGMatrix($svg)());
 - `$$createSVGTransformMatrix`
 - `$$createSVGTransformRotate`
 - `$$createSVGTransformScale`
+- `$$createSVGTransformTranslate`
 
 ### \$\$getSVG
 
@@ -147,14 +148,14 @@ console.log($$createSVGTransform()());
 `tx`로 x축 방향으로 이동할 값, `ty`로 y축 방향으로 이동할 값을 설정합니다.
 
 ```javascript
-console.log($$createSVGTransformTranslate());
+console.log($$createSVGTransformTranslate()());
 // SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 
-console.log($$createSVGTransformTranslate({ tx: 10 }));
+console.log($$createSVGTransformTranslate()({ tx: 10 }));
 // SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 0}
 
-console.log($$createSVGTransformTranslate({ tx: 10, ty: 20 }));
+console.log($$createSVGTransformTranslate()({ tx: 10, ty: 20 }));
 // SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 20}
 ```
@@ -220,7 +221,7 @@ console.log(
 해당 `SVGTransform`의 `type`이 `SVGTransform.SVG_TRANSFORM_TRANSLATE`인지 여부를 판단합니다.
 
 ```javascript
-console.log($$isTranslateSVGTransform($$createSVGTransformTranslate()));
+console.log($$isTranslateSVGTransform($$createSVGTransformTranslate()()));
 // true
 
 console.log($$isTranslateSVGTransform($$createSVGTransformRotate()()));
@@ -235,7 +236,7 @@ console.log($$isTranslateSVGTransform($$createSVGTransformRotate()()));
 console.log($$isRotateSVGTransform($$createSVGTransformRotate()()));
 // true
 
-console.log($$isRotateSVGTransform($$createSVGTransformTranslate()));
+console.log($$isRotateSVGTransform($$createSVGTransformTranslate()()));
 // false
 ```
 
@@ -247,7 +248,7 @@ console.log($$isRotateSVGTransform($$createSVGTransformTranslate()));
 console.log($$isScaleSVGTransform($$createSVGTransformScale()()));
 // true
 
-console.log($$isScaleSVGTransform($$createSVGTransformTranslate()));
+console.log($$isScaleSVGTransform($$createSVGTransformTranslate()()));
 // false
 ```
 
