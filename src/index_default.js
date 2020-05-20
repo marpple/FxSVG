@@ -12,6 +12,7 @@ import { $$createSVGTransformMatrix } from "./createSVGTransformMatrix.js";
 import { $$isTranslateSVGTransform } from "./isTranslateSVGTransform.js";
 import { $$isRotateSVGTransform } from "./isRotateSVGTransform.js";
 import { $$isScaleSVGTransform } from "./isScaleSVGTransform.js";
+import { $$getBaseTransformList } from "./getBaseTransformList.js";
 
 const FxSVG = {
   getSVG: $$getSVG,
@@ -29,6 +30,7 @@ const FxSVG = {
   isTranslateSVGTransform: $$isTranslateSVGTransform,
   isRotateSVGTransform: $$isRotateSVGTransform,
   isScaleSVGTransform: $$isScaleSVGTransform,
+  getBaseTransformList: $$getBaseTransformList,
 };
 
 export default FxSVG;
