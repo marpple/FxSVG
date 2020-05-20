@@ -20,6 +20,7 @@ import { $$consolidateTransformList } from "./consolidateTransformList.js";
 import { $$initTranslateTransform } from "./initTranslateTransform.js";
 import { $$updateTranslateTransform } from "./updateTranslateTransform.js";
 import { $$appendTranslateTransform } from "./appendTranslateTransform.js";
+import { $$mergeTranslateTransform } from "./mergeTranslateTransform.js";
 
 const FxSVG = {
   getSVG: $$getSVG,
@@ -45,6 +46,7 @@ const FxSVG = {
   initTranslateTransform: $$initTranslateTransform,
   updateTranslateTransform: $$updateTranslateTransform,
   appendTranslateTransform: $$appendTranslateTransform,
+  mergeTranslateTransform: $$mergeTranslateTransform,
 };
 
 export default FxSVG;
