@@ -9,3 +9,4 @@ export { $$createSVGTransformTranslate } from "./createSVGTransformTranslate.js"
 export { $$createSVGTransformRotate } from "./createSVGTransformRotate.js";
 export { $$createSVGTransformScale } from "./createSVGTransformScale.js";
 export { $$createSVGTransformMatrix } from "./createSVGTransformMatrix.js";
+export { default } from "./index_default.js";
