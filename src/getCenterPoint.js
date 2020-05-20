@@ -1,7 +1,8 @@
 import { $$createSVGPoint } from "./createSVGPoint.js";
 import { $$getBoxPoints } from "./getBoxPoints.js";
+import { $$getSVG } from "./getSetSVG.js";
 
-const $$calcCenterPoint = (points) => {
+const $$calcCenterPoint = ($svg = $$getSVG()) => (points) => {
   const l = [
     points.top_left,
     points.top_right,
@@ -10,17 +11,17 @@ const $$calcCenterPoint = (points) => {
   ];
   const x = l.map(({ x }) => x).reduce((a, b) => a + b) / 4;
   const y = l.map(({ y }) => y).reduce((a, b) => a + b) / 4;
-  return $$createSVGPoint()({ x, y });
+  return $$createSVGPoint($svg)({ x, y });
 };
 
-export const $$getCenterPoint = ($el) => {
+export const $$getCenterPoint = ($svg = $$getSVG()) => ($el) => {
   const {
     original: original_points,
     transformed: transformed_points,
-  } = $$getBoxPoints()($el);
+  } = $$getBoxPoints($svg)($el);
 
-  const original = $$calcCenterPoint(original_points);
-  const transformed = $$calcCenterPoint(transformed_points);
+  const original = $$calcCenterPoint($svg)(original_points);
+  const transformed = $$calcCenterPoint($svg)(transformed_points);
 
   return { original, transformed };
 };

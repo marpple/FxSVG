@@ -32,6 +32,7 @@ console.log($$createSVGMatrix($svg)());
 - `$$els`
 - `$$el`
 - `$$getBoxPoints`
+- `$$getCenterPoint`
 
 ### \$\$getSVG
 
@@ -362,7 +363,7 @@ const $el = $$el()(`
   </rect>
 `);
 $svg.appendChild($el);
-console.log($$getCenterPoint($el));
+console.log($$getCenterPoint()($el));
 // {original: SVGPoint, transformed: SVGPoint}
 // original: SVGPoint {x: 60, y: 120}
 // transformed: SVGPoint {x: 460, y: 620}
