@@ -14,6 +14,7 @@ import { $$isRotateSVGTransform } from "./isRotateSVGTransform.js";
 import { $$isScaleSVGTransform } from "./isScaleSVGTransform.js";
 import { $$getBaseTransformList } from "./getBaseTransformList.js";
 import { $$getAnimTransformList } from "./getAnimTransformList.js";
+import { $$getBoxPoints } from "./getBoxPoints.js";
 
 const FxSVG = {
   getSVG: $$getSVG,
@@ -33,6 +34,7 @@ const FxSVG = {
   isScaleSVGTransform: $$isScaleSVGTransform,
   getBaseTransformList: $$getBaseTransformList,
   getAnimTransformList: $$getAnimTransformList,
+  getBoxPoints: $$getBoxPoints,
 };
 
 export default FxSVG;

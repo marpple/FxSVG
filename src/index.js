@@ -14,4 +14,5 @@ export { $$isRotateSVGTransform } from "./isRotateSVGTransform.js";
 export { $$isScaleSVGTransform } from "./isScaleSVGTransform.js";
 export { $$getBaseTransformList } from "./getBaseTransformList.js";
 export { $$getAnimTransformList } from "./getAnimTransformList.js";
+export { $$getBoxPoints } from "./getBoxPoints.js";
 export { default } from "./index_default.js";
