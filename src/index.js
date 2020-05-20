@@ -17,4 +17,5 @@ export { $$getAnimTransformList } from "./getAnimTransformList.js";
 export { $$getBoxPoints } from "./getBoxPoints.js";
 export { $$getCenterPoint } from "./getCenterPoint.js";
 export { $$consolidateTransformList } from "./consolidateTransformList.js";
+export { $$initTranslateTransform } from "./initTranslateTransform.js";
 export { default } from "./index_default.js";
