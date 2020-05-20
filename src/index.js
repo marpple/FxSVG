@@ -22,4 +22,5 @@ export { $$updateTranslateTransform } from "./updateTranslateTransform.js";
 export { $$appendTranslateTransform } from "./appendTranslateTransform.js";
 export { $$mergeTranslateTransform } from "./mergeTranslateTransform.js";
 export { $$controlTranslateTransform } from "./controlTranslateTransform.js";
+export { $$initRotateTransform } from "./initRotateTransform.js";
 export { default } from "./index_default.js";
