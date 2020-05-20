@@ -31,6 +31,7 @@ console.log($$createSVGMatrix($svg)());
 - `$$createSVGTransformTranslate`
 - `$$els`
 - `$$el`
+- `$$getBoxPoints`
 
 ### \$\$getSVG
 
@@ -325,7 +326,7 @@ const $el = $$el()(`
   </rect>
 `);
 $svg.appendChild($el);
-console.log($$getBoxPoints($el));
+console.log($$getBoxPoints()($el));
 // {original: {...}, transformed: {...}, bounding: {...}}
 // original:
 //   top_left: SVGPoint {x: 10, y: 20}

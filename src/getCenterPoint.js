@@ -17,7 +17,7 @@ export const $$getCenterPoint = ($el) => {
   const {
     original: original_points,
     transformed: transformed_points,
-  } = $$getBoxPoints($el);
+  } = $$getBoxPoints()($el);
 
   const original = $$calcCenterPoint(original_points);
   const transformed = $$calcCenterPoint(transformed_points);
