@@ -1,8 +1,7 @@
 import { $$getSVG } from "./getSetSVG.js";
 
-export const $$els = (svg) => {
+export const $$els = ($svg = $$getSVG()) => (svg) => {
   svg = svg.trim();
-  const $svg = $$getSVG();
   $svg.innerHTML = svg;
   const result = [...$svg.childNodes];
   $svg.innerHTML = "";

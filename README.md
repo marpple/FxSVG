@@ -29,6 +29,8 @@ console.log($$createSVGMatrix($svg)());
 - `$$createSVGTransformRotate`
 - `$$createSVGTransformScale`
 - `$$createSVGTransformTranslate`
+- `$$els`
+- `$$el`
 
 ### \$\$getSVG
 
@@ -57,10 +59,10 @@ console.log(
 svg 문자열을 받아 svg 객체를 담은 배열을 생성합니다.
 
 ```javascript
-console.log($$els('<rect x="0" y="0" width="10" height="10"></rect>'));
+console.log($$els()('<rect x="0" y="0" width="10" height="10"></rect>'));
 // [rect]
 console.log(
-  $$els(
+  $$els()(
     '<rect x="0" y="0" width="10" height="10"></rect><circle cx="1" cy="1" r="5"></circle>'
   )
 );
@@ -72,10 +74,10 @@ console.log(
 svg 문자열을 받아 svg 객체를 생성합니다.
 
 ```javascript
-console.log($$el('<rect x="0" y="0" width="10" height="10"></rect>'));
+console.log($$el()('<rect x="0" y="0" width="10" height="10"></rect>'));
 // rect
 console.log(
-  $$el(
+  $$el()(
     '<rect x="0" y="0" width="10" height="10"></rect><circle cx="1" cy="1" r="5"></circle>'
   )
 );
@@ -260,7 +262,7 @@ console.log($$isScaleSVGTransform($$createSVGTransformTranslate()()));
 해당 객체는 `baseVal` 속성으로 `SVGTransformList` 객체를 가지고 있습니다.
 
 ```javascript
-const $el = $$el(`
+const $el = $$el()(`
   <rect
     x="0"
     y="0"
@@ -287,7 +289,7 @@ console.log($$getBaseTransformList($el));
 하지만 값은 동일해도 다른 래퍼런스를 가리킵니다.
 
 ```javascript
-const $el = $$el(`
+const $el = $$el()(`
   <rect
     x="0"
     y="0"
@@ -312,7 +314,7 @@ svg 객체의 영역에 해당하는 `SVGPoint`들을 반환합니다. 해당 sv
 `bounding` 속성은 svg 객체가 `transform` 한 후 영역을 덮는 최소 직사각형 영역입니다.
 
 ```javascript
-const $el = $$el(`
+const $el = $$el()(`
   <rect
     x="10"
     y="20"
@@ -348,7 +350,7 @@ svg 객체의 중심에 해당하는 `SVGPoint`를 반환합니다. 해당 svg �
 `transformed` 속성은 svg 객체가 `transform` 한 후 중심입니다.
 
 ```javascript
-const $el = $$el(`
+const $el = $$el()(`
   <rect
     x="10"
     y="20"
