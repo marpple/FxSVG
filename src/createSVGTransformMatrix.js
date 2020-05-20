@@ -1,7 +1,8 @@
 import { $$createSVGTransform } from "./createSVGTransform.js";
+import { $$getSVG } from "./getSetSVG.js";
 
-export const $$createSVGTransformMatrix = (matrix) => {
-  const transform = $$createSVGTransform();
+export const $$createSVGTransformMatrix = ($svg = $$getSVG()) => (matrix) => {
+  const transform = $$createSVGTransform($svg);
   transform.setMatrix(matrix);
   return transform;
 };

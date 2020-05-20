@@ -1,6 +1,6 @@
 import { $$getSVG } from "./getSetSVG.js";
 
-export const $$createSVGMatrix = ({
+export const $$createSVGMatrix = ($svg = $$getSVG()) => ({
   a = 1,
   b = 0,
   c = 0,
@@ -8,7 +8,7 @@ export const $$createSVGMatrix = ({
   e = 0,
   f = 0,
 } = {}) => {
-  const matrix = $$getSVG().createSVGMatrix();
+  const matrix = $svg.createSVGMatrix();
   matrix.a = a;
   matrix.b = b;
   matrix.c = c;
