@@ -64,6 +64,9 @@ svg 문자열을 받아 svg 객체를 담은 배열을 생성합니다.
 ```javascript
 console.log($$els()('<rect x="0" y="0" width="10" height="10"></rect>'));
 // [rect]
+```
+
+```javascript
 console.log(
   $$els()(
     '<rect x="0" y="0" width="10" height="10"></rect><circle cx="1" cy="1" r="5"></circle>'
@@ -79,6 +82,9 @@ svg 문자열을 받아 svg 객체를 생성합니다.
 ```javascript
 console.log($$el()('<rect x="0" y="0" width="10" height="10"></rect>'));
 // rect
+```
+
+```javascript
 console.log(
   $$el()(
     '<rect x="0" y="0" width="10" height="10"></rect><circle cx="1" cy="1" r="5"></circle>'
@@ -94,13 +100,19 @@ console.log(
 ```javascript
 console.log($$createSVGPoint()());
 // SVGPoint {x: 0, y: 0}
+```
 
+```javascript
 console.log($$createSVGPoint()({ x: 10 }));
 // SVGPoint {x: 10, y: 0}
+```
 
+```javascript
 console.log($$createSVGPoint()({ y: 10 }));
 // SVGPoint {x: 0, y: 10}
+```
 
+```javascript
 console.log($$createSVGPoint()({ x: 10, y: 10 }));
 // SVGPoint {x: 10, y: 10}
 ```
@@ -112,13 +124,19 @@ console.log($$createSVGPoint()({ x: 10, y: 10 }));
 ```javascript
 console.log($$createSVGRect()());
 // SVGRect {x: 0, y: 0, width: 0, height: 0}
+```
 
+```javascript
 console.log($$createSVGRect()({ x: 10 }));
 // SVGRect {x: 10, y: 0, width: 0, height: 0}
+```
 
+```javascript
 console.log($$createSVGRect()({ width: 100 }));
 // SVGRect {x: 0, y: 0, width: 100, height: 0}
+```
 
+```javascript
 console.log($$createSVGRect()({ x: 10, y: 10, width: 100, height: 100 }));
 // SVGRect {x: 10, y: 10, width: 100, height: 100}
 ```
@@ -130,10 +148,14 @@ console.log($$createSVGRect()({ x: 10, y: 10, width: 100, height: 100 }));
 ```javascript
 console.log($$createSVGMatrix()());
 // SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
+```
 
+```javascript
 console.log($$createSVGMatrix()({ e: 10, f: 20 }));
 // SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 20}
+```
 
+```javascript
 console.log($$createSVGMatrix()({ a: 2, b: 0, c: 0, d: 4, e: 10, f: 20 }));
 // SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 10, f: 20}
 ```
@@ -155,11 +177,15 @@ console.log($$createSVGTransform()());
 ```javascript
 console.log($$createSVGTransformTranslate()());
 // SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
+```
 
+```javascript
 console.log($$createSVGTransformTranslate()({ tx: 10 }));
 // SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 0}
+```
 
+```javascript
 console.log($$createSVGTransformTranslate()({ tx: 10, ty: 20 }));
 // SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 20}
@@ -174,10 +200,14 @@ console.log($$createSVGTransformTranslate()({ tx: 10, ty: 20 }));
 ```javascript
 console.log($$createSVGTransformRotate()());
 // SVGTransform {type: 4, matrix: SVGMatrix, angle: 0}
+```
 
+```javascript
 console.log($$createSVGTransformRotate()({ angle: 45 }));
 // SVGTransform {type: 4, matrix: SVGMatrix, angle: 45}
+```
 
+```javascript
 console.log($$createSVGTransformRotate()({ cx: 10, cy: 10, angle: 30 }));
 // SVGTransform {type: 4, matrix: SVGMatrix, angle: 30}
 ```
@@ -192,11 +222,15 @@ console.log($$createSVGTransformRotate()({ cx: 10, cy: 10, angle: 30 }));
 console.log($$createSVGTransformScale()());
 // SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
+```
 
+```javascript
 console.log($$createSVGTransformScale()({ sx: 2 }));
 // SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 2, b: 0, c: 0, d: 1, e: 0, f: 0}
+```
 
+```javascript
 console.log($$createSVGTransformScale()({ sx: 2, sy: 4 }));
 // SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 0, f: 0}
@@ -211,7 +245,9 @@ console.log($$createSVGTransformScale()({ sx: 2, sy: 4 }));
 console.log($$createSVGTransformMatrix()($$createSVGMatrix()()));
 // SVGTransform {type: 1, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
+```
 
+```javascript
 console.log(
   $$createSVGTransformMatrix()(
     $$createSVGMatrix()({ a: 2, b: 3, c: 4, d: 5, e: 6, f: 7 })
@@ -228,7 +264,9 @@ console.log(
 ```javascript
 console.log($$isTranslateSVGTransform($$createSVGTransformTranslate()()));
 // true
+```
 
+```javascript
 console.log($$isTranslateSVGTransform($$createSVGTransformRotate()()));
 // false
 ```
@@ -240,7 +278,9 @@ console.log($$isTranslateSVGTransform($$createSVGTransformRotate()()));
 ```javascript
 console.log($$isRotateSVGTransform($$createSVGTransformRotate()()));
 // true
+```
 
+```javascript
 console.log($$isRotateSVGTransform($$createSVGTransformTranslate()()));
 // false
 ```
@@ -252,7 +292,9 @@ console.log($$isRotateSVGTransform($$createSVGTransformTranslate()()));
 ```javascript
 console.log($$isScaleSVGTransform($$createSVGTransformScale()()));
 // true
+```
 
+```javascript
 console.log($$isScaleSVGTransform($$createSVGTransformTranslate()()));
 // false
 ```
