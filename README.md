@@ -4,11 +4,30 @@ Functional SVG Handling Library
 
 ## API
 
+### `<svg></svg>` 엘리먼트 커링
+
+아래 함수들은 커링 인자로 `<svg></svg>` 엘리먼트를 받을 수 있습니다.
+인자를 넘기지 않으면 `$$getSVG` 함수의 반환값을 사용합니다.
+커링 인자로 받은 `<svg></svg>` 엘리먼트는 해당 함수 호출에서만 사용합니다.
+기본으로 사용하는 `<svg></svg>` 엘리먼트를 변경하기 위해서는 `$$setSVG` 함수를 사용해야 합니다.
+
+```javascript
+const $svg = document.querySelector("svg");
+
+// Both OK
+console.log($$createSVGMatrix()());
+// SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
+console.log($$createSVGMatrix($svg)());
+// SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
+```
+
+- `$$createSVGMatrix`
+
 ### \$\$getSVG
 
-내부적으로 사용하는 svg 객체를 반환합니다.
+내부적으로 사용하는 `<svg></svg>` 엘리먼트를 반환합니다.
 `$$setSVG` 함수로 설정하지 않은 경우 `document.createElementNS` 를 실행합니다.
-해당 함수를 실행하지 못하는 환경인 경우 `$$setSVG` 함수로 사용할 svg 객체를 설정합니다.
+해당 함수를 실행하지 못하는 환경인 경우 `$$setSVG` 함수로 사용할 `<svg></svg>` 엘리먼트를 설정해주세요.
 
 ```javascript
 console.log($$getSVG());
@@ -17,7 +36,7 @@ console.log($$getSVG());
 
 ### \$\$setSVG
 
-내부적으로 사용하는 svg 객체를 설정한 후 설정한 svg 객체를 반환합니다.
+내부적으로 사용하는 `<svg></svg>` 엘리먼트를 설정합니다.
 
 ```javascript
 console.log(
@@ -97,13 +116,13 @@ console.log($$createSVGRect({ x: 10, y: 10, width: 100, height: 100 }));
 `SVGMatrix` 객체를 생성합니다.
 
 ```javascript
-console.log($$createSVGMatrix());
+console.log($$createSVGMatrix()());
 // SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
 
-console.log($$createSVGMatrix({ e: 10, f: 20 }));
+console.log($$createSVGMatrix()({ e: 10, f: 20 }));
 // SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 20}
 
-console.log($$createSVGMatrix({ a: 2, b: 0, c: 0, d: 4, e: 10, f: 20 }));
+console.log($$createSVGMatrix()({ a: 2, b: 0, c: 0, d: 4, e: 10, f: 20 }));
 // SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 10, f: 20}
 ```
 
@@ -177,13 +196,13 @@ console.log($$createSVGTransformScale({ sx: 2, sy: 4 }));
 `SVGTransform`에 인자로 받은 `SVGMatrix`를 설정합니다.
 
 ```javascript
-console.log($$createSVGTransformMatrix($$createSVGMatrix()));
+console.log($$createSVGTransformMatrix($$createSVGMatrix()()));
 // SVGTransform {type: 1, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
 
 console.log(
   $$createSVGTransformMatrix(
-    $$createSVGMatrix({ a: 2, b: 3, c: 4, d: 5, e: 6, f: 7 })
+    $$createSVGMatrix()({ a: 2, b: 3, c: 4, d: 5, e: 6, f: 7 })
   )
 );
 // SVGTransform {type: 1, matrix: SVGMatrix, angle: 0}
