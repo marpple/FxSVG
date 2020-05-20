@@ -19,4 +19,5 @@ export { $$getCenterPoint } from "./getCenterPoint.js";
 export { $$consolidateTransformList } from "./consolidateTransformList.js";
 export { $$initTranslateTransform } from "./initTranslateTransform.js";
 export { $$updateTranslateTransform } from "./updateTranslateTransform.js";
+export { $$appendTranslateTransform } from "./appendTranslateTransform.js";
 export { default } from "./index_default.js";
