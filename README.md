@@ -21,6 +21,7 @@ console.log($$createSVGMatrix($svg)());
 // SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
 ```
 
+- `$$controlRotateTransform`
 - `$$controlTranslateTransform`
 - `$$createSVGMatrix`
 - `$$createSVGPoint`
@@ -34,7 +35,9 @@ console.log($$createSVGMatrix($svg)());
 - `$$el`
 - `$$getBoxPoints`
 - `$$getCenterPoint`
+- `$$initRotateTransform`
 - `$$initTranslateTransform`
+- `$$mergeRotateTransform`
 - `$$mergeTranslateTransform`
 
 ### \$\$getSVG
@@ -641,4 +644,180 @@ controller.update({ tx: 30, ty: 60 }).append({ tx: 70, ty: 40 }).end();
 
 console.log($el);
 // <circle cx="110" cy="120" r="100" transform="matrix(2 0 0 4 -100 -300)"></circle>
+```
+
+### \$\$initRotateTransform
+
+svg 엘리먼트에 총 3개의 `SVGTransform`을 순서대로 추가합니다.
+
+1. `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransform` (`index`: `0`)
+2. `SVGTransform.SVG_TRANSFORM_ROTATE` 타입의 `SVGTransform` (`index`: `1`)
+3. `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransform` (`index`: `2`)
+
+2번 `SVGTransform` 객체를 반환합니다.
+1번, 3번 `SVGTranform` 객체는 회전 중심을 설정합니다.
+
+회전 중심 `cx`, `cy` 를 설정할 수 있습니다.
+초기 회전 각도 `angle` 을 설정할 수 있습니다. 단위는 `deg` 입니다.
+설정하지 않는 경우 모두 `0` 으로 초기화됩니다.
+
+```javascript
+const $el = $$el()(`
+  <rect
+    x="10"
+    y="20"
+    width="100"
+    height="200"
+  >
+  </rect>
+`);
+
+console.log($$getBaseTransformList($el));
+// SVGTransformList {length: 0, numberOfItems: 0}
+
+$$initRotateTransform()($el, { tx: 10, ty: 20 });
+
+console.log($$getBaseTransformList($el));
+// SVGTransformList {0: SVGTransform, 1: SVGTransform, 2: SVGTransform, length: 3, numberOfItems: 3}
+// 0: SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
+//   matrix: SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 20}
+// 1: SVGTransform {type: 4, matrix: SVGMatrix, angle: 30}
+// 2: SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
+//   matrix: SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: -10, f: -20}
+```
+
+```javascript
+const $el = $$el()(`
+  <rect
+    x="10"
+    y="20"
+    width="100"
+    height="200"
+    transform="scale(2, 4)"
+  >
+  </rect>
+`);
+
+console.log($$getBaseTransformList($el));
+// SVGTransformList {0: SVGTransform, length: 1, numberOfItems: 1}
+// 0: SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
+//   matrix: SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 0, f: 0}
+
+$$initTranslateTransform()($el, { tx: 10, ty: 20 });
+
+console.log($$getBaseTransformList($el));
+// SVGTransformList {0: SVGTransform, 1: SVGTransform, 2: SVGTransform, 3: SVGTransform, length: 4, numberOfItems: 4}
+// 0: SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
+//   matrix: SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 20}
+// 1: SVGTransform {type: 4, matrix: SVGMatrix, angle: 30}
+// 2: SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
+//   matrix: SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: -10, f: -20}
+// 3: SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
+//   matrix: SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 0, f: 0}
+```
+
+### \$\$updateRotateTransform
+
+`SVGTransform.SVG_TRANSFORM_ROTATE` 타입의 `SVGTransform` 의 `angle` 값을 수정합니다.
+기존 `angle`을 입력받은 `angle`로 수정합니다.
+`cx`, `cy`는 항상 `0`으로 고정됩니다.
+회전 중심을 설정해야 할 경우 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransform` 을 앞, 뒤로 추가하는 방삭을 사용합니다.
+수정한 `SVGTransform` 객체를 반환합니다.
+이 함수는 인자로 받은 `SVGTransform` 객체를 직접 수정합니다.
+
+```javascript
+const t = $$createSVGTransformRotate()({ angle: 30 });
+console.log(t);
+// SVGTransform {type: 4, matrix: SVGMatrix, angle: 30}
+$$updateRotateTransform(t, { angle: 60 });
+console.log(t);
+// SVGTransform {type: 4, matrix: SVGMatrix, angle: 60}
+```
+
+### \$\$appendRotateTransform
+
+`SVGTransform.SVG_TRANSFORM_ROTATE` 타입의 `SVGTransform` 의 `angle` 값을 수정합니다.
+기존 `angle`에 입력받은 `angle`을 더한 값으로 수정합니다.
+`cx`, `cy`는 항상 `0`으로 고정됩니다.
+회전 중심을 설정해야 할 경우 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransform` 을 앞, 뒤로 추가하는 방삭을 사용합니다.
+수정한 `SVGTransform` 객체를 반환합니다.
+이 함수는 인자로 받은 `SVGTransform` 객체를 직접 수정합니다.
+
+```javascript
+const t = $$createSVGTransformRotate()({ angle: 45 });
+console.log(t);
+// SVGTransform {type: 4, matrix: SVGMatrix, angle: 45}
+$$appendRotateTransform(t, { angle: 30 });
+console.log(t);
+// SVGTransform {type: 4, matrix: SVGMatrix, angle: 75}
+```
+
+### \$\$mergeRotateTransform
+
+`$$initRotateTransform` 으로 적용된 3개의 `SVGTransform` 객체를 하나의 `SVGTransform` 으로 병합합니다.
+한 번 병합한 `SVGTransform`을 `$$updateRotateTransform` 이나 `$$appendRotateTransform` 으로 변경하는 것은 안전하지 않습니다.
+`cx`, `cy`가 `0` 이 아닌 경우 회전 변환 중심이 의도치 않게 수정될 수 있습니다.
+
+```javascript
+const $el = $$el()(`
+  <rect
+    x="10"
+    y="20"
+    width="100"
+    height="200"
+    transform="scale(2, 4)"
+  >
+  </rect>
+`);
+
+console.log($$getBaseTransformList($el));
+// SVGTransformList {0: SVGTransform, length: 1, numberOfItems: 1}
+// 0: SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
+//   matrix: SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 0, f: 0}
+
+$$initRotateTransform()($el, { angle: 30, cx: 10, cy: 20 });
+
+console.log($$getBaseTransformList($el));
+// SVGTransformList {0: SVGTransform, 1: SVGTransform, 2: SVGTransform, 3: SVGTransform, length: 4, numberOfItems: 4}
+// 0: SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
+//   matrix: SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 20}
+// 1: SVGTransform {type: 4, matrix: SVGMatrix, angle: 30}
+//   matrix: SVGMatrix {a: 0.8660254037844387, b: 0.49999999999999994, c: -0.49999999999999994, d: 0.8660254037844387, e: 0, f: 0}
+// 2: SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
+//   matrix: SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: -10, f: -20}
+// 3: SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
+//   matrix: SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 0, f: 0}
+
+$$mergeRotateTransform()($el);
+
+console.log($$getBaseTransformList($el));
+// SVGTransformList {0: SVGTransform, 1: SVGTransform, length: 2, numberOfItems: 2}
+// 0: SVGTransform {type: 4, matrix: SVGMatrix, angle: 30}
+//   matrix: SVGMatrix {a: 0.8660254037844387, b: 0.49999999999999994, c: -0.49999999999999994, d: 0.8660254037844387, e: 11.339745962155611, f: -2.3205080756887746}
+// 1: SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
+//   matrix: SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 0, f: 0}
+
+console.log($el);
+// <rect x="10" y="20" width="100" height="200" transform="rotate(30 10 20) scale(2 4)"></rect>
+```
+
+### \$\$controlRotateTransform
+
+`$$initRotateTransform`, `$$updateRotateTransform`, `$$appendRotateTransform`, `$$mergeRotateTransform` 함수들을
+쉽게 사용할 수 있는 `controller` 를 생성합니다.
+
+`update`, `append`, `end` 메소드를 체이닝하여 안전하게 조작할 수 있습니다.
+
+```javascript
+const $el = $$el()(
+  `<rect x="10" y="20" width="100" height="200" transform="scale(2, 4)"></rect>`
+);
+const { controller } = $$controlTranslateTransform()($el, {
+  cx: 10,
+  cy: 20,
+});
+controller.update({ angle: 30 }).append({ angle: 45 }).end();
+
+console.log($el);
+// <rect x="10" y="20" width="100" height="200" transform="matrix(0.517638 1.93185 -3.8637 1.03528 26.7303 5.16436)"></rect>
 ```
