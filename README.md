@@ -170,3 +170,22 @@ console.log($$createSVGTransformScale({ sx: 2, sy: 4 }));
 // SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 0, f: 0}
 ```
+
+### \$\$createSVGTransformMatrix
+
+`type`이 `SVGTransform.SVG_TRANSFORM_MATRIX`인 `SVGTransform` 객체를 생성합니다.
+`SVGTransform`에 인자로 받은 `SVGMatrix`를 설정합니다.
+
+```javascript
+console.log($$createSVGTransformMatrix($$createSVGMatrix()));
+// SVGTransform {type: 1, matrix: SVGMatrix, angle: 0}
+//   SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
+
+console.log(
+  $$createSVGTransformMatrix(
+    $$createSVGMatrix({ a: 2, b: 3, c: 4, d: 5, e: 6, f: 7 })
+  )
+);
+// SVGTransform {type: 1, matrix: SVGMatrix, angle: 0}
+//   SVGMatrix {a: 2, b: 3, c: 4, d: 5, e: 6, f: 7}
+```
