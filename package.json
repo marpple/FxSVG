@@ -3,8 +3,12 @@
   "version": "0.0.5",
   "description": "Functional SVG Handling Library",
   "type": "module",
-  "main": "./src/index.js",
+  "main": "./dist/esm/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build:esm": "node ./bin/build.esm.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,6 +30,9 @@
   },
   "homepage": "https://github.com/marpple/FxSVG#readme",
   "devDependencies": {
+    "@babel/generator": "^7.9.6",
+    "@babel/parser": "^7.9.6",
+    "@babel/traverse": "^7.9.6",
     "prettier": "2.0.5"
   }
 }
