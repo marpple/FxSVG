@@ -63,21 +63,10 @@ SVG Element 를 담은 배열을 생성합니다.
 
 ### \$\$el
 
-svg 문자열을 받아 svg 객체를 생성합니다.
+- [source](./src/el/el.index.js)
+- [detail](./src/el/README.md)
 
-```javascript
-console.log($$el()('<rect x="0" y="0" width="10" height="10"></rect>'));
-// rect
-```
-
-```javascript
-console.log(
-  $$el()(
-    '<rect x="0" y="0" width="10" height="10"></rect><circle cx="1" cy="1" r="5"></circle>'
-  )
-);
-// rect
-```
+`SVGElement` 를 생성합니다.
 
 ### \$\$createSVGPoint
 
