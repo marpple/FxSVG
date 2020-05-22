@@ -36,4 +36,20 @@ describe(`$$createSVGMatrix`, () => {
     expect(matrix.e).toEqual(0);
     expect(matrix.f).toEqual(0);
   });
+
+  test(`
+  will use default values if there is no given values
+  (a: 1, b: 0, c: 0, d: 1, e: 0, f: 0)
+  `, () => {
+    const [e, f] = [...Array(2)].map(() => Math.round(Math.random() * 1000));
+
+    const matrix = $$createSVGMatrix($dummy_svg)({ e, f });
+
+    expect(matrix.a).toEqual(1);
+    expect(matrix.b).toEqual(0);
+    expect(matrix.c).toEqual(0);
+    expect(matrix.d).toEqual(1);
+    expect(matrix.e).toEqual(e);
+    expect(matrix.f).toEqual(f);
+  });
 });
