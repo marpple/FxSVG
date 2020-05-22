@@ -38,27 +38,10 @@ Functional SVG Handling Library
 
 ### \$\$createSVGPoint
 
+- [source](./src/createSVGPoint/createSVGPoint.index.js)
+- [detail](./src/createSVGPoint/README.md)
+
 `SVGPoint` 객체를 생성합니다.
-
-```javascript
-console.log($$createSVGPoint()());
-// SVGPoint {x: 0, y: 0}
-```
-
-```javascript
-console.log($$createSVGPoint()({ x: 10 }));
-// SVGPoint {x: 10, y: 0}
-```
-
-```javascript
-console.log($$createSVGPoint()({ y: 10 }));
-// SVGPoint {x: 0, y: 10}
-```
-
-```javascript
-console.log($$createSVGPoint()({ x: 10, y: 10 }));
-// SVGPoint {x: 10, y: 10}
-```
 
 ### \$\$createSVGRect
 
