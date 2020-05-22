@@ -18,13 +18,13 @@ describe(`$$els`, () => {
 
     expect(list.length).toBe(2);
 
-    expect(list[0].nodeName).toEqual("rect");
+    expect(list[0].nodeName.toLowerCase()).toEqual("rect");
     expect(list[0].getAttributeNS(null, "x")).toEqual("0");
     expect(list[0].getAttributeNS(null, "y")).toEqual("0");
     expect(list[0].getAttributeNS(null, "width")).toEqual("10");
     expect(list[0].getAttributeNS(null, "height")).toEqual("10");
 
-    expect(list[1].nodeName).toEqual("circle");
+    expect(list[1].nodeName.toLowerCase()).toEqual("circle");
     expect(list[1].getAttributeNS(null, "cx")).toEqual("10");
     expect(list[1].getAttributeNS(null, "cy")).toEqual("10");
     expect(list[1].getAttributeNS(null, "r")).toEqual("30");

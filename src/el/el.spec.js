@@ -15,7 +15,7 @@ describe(`$$el`, () => {
     const str = `<circle cx="10" cy="20" r="30"></circle>`;
     const $el = $$el($dummy_svg)(str);
 
-    expect($el.nodeName).toEqual("circle");
+    expect($el.nodeName.toLowerCase()).toEqual("circle");
     expect($el.getAttributeNS(null, "cx")).toEqual("10");
     expect($el.getAttributeNS(null, "cy")).toEqual("20");
     expect($el.getAttributeNS(null, "r")).toEqual("30");
@@ -31,7 +31,7 @@ describe(`$$el`, () => {
     `;
     const $el = $$el($dummy_svg)(str);
 
-    expect($el.nodeName).toEqual("circle");
-    expect($el.nodeName).not.toEqual("rect");
+    expect($el.nodeName.toLowerCase()).toEqual("circle");
+    expect($el.nodeName.toLowerCase()).not.toEqual("rect");
   });
 });
