@@ -21,10 +21,22 @@ describe(`$$createSVGPoint`, () => {
     expect(p.y).toEqual(y);
   });
 
-  test("will use 0 as default coordinate", () => {
+  test("will use 0 as default coordinates", () => {
     const p = $$createSVGPoint($dummy_svg)();
 
     expect(p.x).toEqual(0);
+    expect(p.y).toEqual(0);
+  });
+
+  test("will use 0 as default x coordinate", () => {
+    const p = $$createSVGPoint($dummy_svg)({ y: 10 });
+
+    expect(p.x).toEqual(0);
+  });
+
+  test("will use 0 as default y coordinate", () => {
+    const p = $$createSVGPoint($dummy_svg)({ x: 10 });
+
     expect(p.y).toEqual(0);
   });
 });
