@@ -45,27 +45,10 @@ Functional SVG Handling Library
 
 ### \$\$createSVGRect
 
+- [source](./src/createSVGRect/createSVGRect.index.js)
+- [detail](./src/createSVGRect/README.md)
+
 `SVGRect` 객체를 생성합니다.
-
-```javascript
-console.log($$createSVGRect()());
-// SVGRect {x: 0, y: 0, width: 0, height: 0}
-```
-
-```javascript
-console.log($$createSVGRect()({ x: 10 }));
-// SVGRect {x: 10, y: 0, width: 0, height: 0}
-```
-
-```javascript
-console.log($$createSVGRect()({ width: 100 }));
-// SVGRect {x: 0, y: 0, width: 100, height: 0}
-```
-
-```javascript
-console.log($$createSVGRect()({ x: 10, y: 10, width: 100, height: 100 }));
-// SVGRect {x: 10, y: 10, width: 100, height: 100}
-```
 
 ### \$\$createSVGMatrix
 
