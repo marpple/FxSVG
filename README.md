@@ -59,7 +59,7 @@ console.log($$createSVGMatrix($svg)());
 - [source](./src/els/els.index.js)
 - [detail](./src/els/README.md)
 
-SVG Element 를 담은 배열을 생성합니다.
+`SVGElement` 를 담은 배열을 생성합니다.
 
 ### \$\$el
 
