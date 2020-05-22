@@ -43,34 +43,23 @@ console.log($$createSVGMatrix($svg)());
 ### \$\$getSVG
 
 - [source](./src/getSetSVG/getSetSVG.index.js)
-- [detail](src/getSetSVG/README.md)
+- [detail](./src/getSetSVG/README.md)
 
 `<svg></svg>` 엘리먼트를 반환합니다.
 
 ### \$\$setSVG
 
 - [source](./src/getSetSVG/getSetSVG.index.js)
-- [detail](src/getSetSVG/README.md)
+- [detail](./src/getSetSVG/README.md)
 
 내부적으로 사용하는 `<svg></svg>` 엘리먼트를 설정합니다.
 
 ### \$\$els
 
-svg 문자열을 받아 svg 객체를 담은 배열을 생성합니다.
+- [source](./src/els/els.index.js)
+- [detail](./src/els/README.md)
 
-```javascript
-console.log($$els()('<rect x="0" y="0" width="10" height="10"></rect>'));
-// [rect]
-```
-
-```javascript
-console.log(
-  $$els()(
-    '<rect x="0" y="0" width="10" height="10"></rect><circle cx="1" cy="1" r="5"></circle>'
-  )
-);
-// [rect, circle]
-```
+SVG Element 를 담은 배열을 생성합니다.
 
 ### \$\$el
 
