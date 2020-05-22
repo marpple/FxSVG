@@ -43,20 +43,16 @@ console.log($$createSVGMatrix($svg)());
 ### \$\$getSVG
 
 - [source](./src/getSetSVG/getSetSVG.index.js)
-- [detail](./src/getSetSVG/getSVG.README.md)
+- [detail](src/getSetSVG/README.md)
 
 `<svg></svg>` 엘리먼트를 반환합니다.
 
 ### \$\$setSVG
 
-내부적으로 사용하는 `<svg></svg>` 엘리먼트를 설정합니다.
+- [source](./src/getSetSVG/getSetSVG.index.js)
+- [detail](src/getSetSVG/README.md)
 
-```javascript
-console.log(
-  $$setSVG(document.createElementNS("http://www.w3.org/2000/svg", "svg"))
-);
-// <svg></svg>
-```
+내부적으로 사용하는 `<svg></svg>` 엘리먼트를 설정합니다.
 
 ### \$\$els
 
