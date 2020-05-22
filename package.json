@@ -37,6 +37,7 @@
     "@babel/traverse": "^7.9.6",
     "babel-jest": "^26.0.1",
     "jest": "^26.0.1",
-    "prettier": "2.0.5"
+    "prettier": "2.0.5",
+    "svgdom": "^0.1.8"
   }
 }
