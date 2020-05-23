@@ -1,6 +1,6 @@
 {
   "name": "fxsvg",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Functional SVG Handling Library",
   "type": "module",
   "main": "./dist/esm/index.js",
@@ -8,8 +8,8 @@
     "dist"
   ],
   "scripts": {
-    "build:esm": "node ./bin/build.esm.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:esm": "node bin/build.esm.cjs",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -30,9 +30,14 @@
   },
   "homepage": "https://github.com/marpple/FxSVG#readme",
   "devDependencies": {
+    "@babel/core": "^7.9.6",
     "@babel/generator": "^7.9.6",
     "@babel/parser": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
     "@babel/traverse": "^7.9.6",
-    "prettier": "2.0.5"
+    "babel-jest": "^26.0.1",
+    "jest": "^26.0.1",
+    "prettier": "2.0.5",
+    "svgdom": "^0.1.8"
   }
 }

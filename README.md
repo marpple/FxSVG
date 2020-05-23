@@ -4,166 +4,58 @@ Functional SVG Handling Library
 
 ## API
 
-### `<svg></svg>` 엘리먼트 커링
+[`<svg></svg>` 엘리먼트 커링](./svg_currying.md)
 
-아래 함수들은 커링 인자로 `<svg></svg>` 엘리먼트를 받을 수 있습니다.
-인자를 넘기지 않으면 `$$getSVG` 함수의 반환값을 사용합니다.
-커링 인자로 받은 `<svg></svg>` 엘리먼트는 해당 함수 호출에서만 사용합니다.
-기본으로 사용하는 `<svg></svg>` 엘리먼트를 변경하기 위해서는 `$$setSVG` 함수를 사용해야 합니다.
-
-```javascript
-const $svg = document.querySelector("svg");
-
-// Both OK
-console.log($$createSVGMatrix()());
-// SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
-console.log($$createSVGMatrix($svg)());
-// SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
-```
-
-- `$$controlRotateTransform`
-- `$$controlTranslateTransform`
-- `$$createSVGMatrix`
-- `$$createSVGPoint`
-- `$$createSVGRect`
-- `$$createSVGTransform`
-- `$$createSVGTransformMatrix`
-- `$$createSVGTransformRotate`
-- `$$createSVGTransformScale`
-- `$$createSVGTransformTranslate`
-- `$$els`
-- `$$el`
-- `$$getBoxPoints`
-- `$$getCenterPoint`
-- `$$initRotateTransform`
-- `$$initTranslateTransform`
-- `$$mergeRotateTransform`
-- `$$mergeTranslateTransform`
+---
 
 ### \$\$getSVG
 
-내부적으로 사용하는 `<svg></svg>` 엘리먼트를 반환합니다.
-`$$setSVG` 함수로 설정하지 않은 경우 `document.createElementNS` 를 실행합니다.
-해당 함수를 실행하지 못하는 환경인 경우 `$$setSVG` 함수로 사용할 `<svg></svg>` 엘리먼트를 설정해주세요.
+- [source](./src/getSetSVG/getSetSVG.index.js)
+- [detail](./src/getSetSVG/README.md)
 
-```javascript
-console.log($$getSVG());
-// <svg></svg>
-```
+`<svg></svg>` 엘리먼트를 반환합니다.
 
 ### \$\$setSVG
 
-내부적으로 사용하는 `<svg></svg>` 엘리먼트를 설정합니다.
+- [source](./src/getSetSVG/getSetSVG.index.js)
+- [detail](./src/getSetSVG/README.md)
 
-```javascript
-console.log(
-  $$setSVG(document.createElementNS("http://www.w3.org/2000/svg", "svg"))
-);
-// <svg></svg>
-```
+내부적으로 사용하는 `<svg></svg>` 엘리먼트를 설정합니다.
 
 ### \$\$els
 
-svg 문자열을 받아 svg 객체를 담은 배열을 생성합니다.
+- [source](./src/els/els.index.js)
+- [detail](./src/els/README.md)
 
-```javascript
-console.log($$els()('<rect x="0" y="0" width="10" height="10"></rect>'));
-// [rect]
-```
-
-```javascript
-console.log(
-  $$els()(
-    '<rect x="0" y="0" width="10" height="10"></rect><circle cx="1" cy="1" r="5"></circle>'
-  )
-);
-// [rect, circle]
-```
+`SVGElement` 를 담은 배열을 생성합니다.
 
 ### \$\$el
 
-svg 문자열을 받아 svg 객체를 생성합니다.
+- [source](./src/el/el.index.js)
+- [detail](./src/el/README.md)
 
-```javascript
-console.log($$el()('<rect x="0" y="0" width="10" height="10"></rect>'));
-// rect
-```
-
-```javascript
-console.log(
-  $$el()(
-    '<rect x="0" y="0" width="10" height="10"></rect><circle cx="1" cy="1" r="5"></circle>'
-  )
-);
-// rect
-```
+`SVGElement` 를 생성합니다.
 
 ### \$\$createSVGPoint
 
+- [source](./src/createSVGPoint/createSVGPoint.index.js)
+- [detail](./src/createSVGPoint/README.md)
+
 `SVGPoint` 객체를 생성합니다.
-
-```javascript
-console.log($$createSVGPoint()());
-// SVGPoint {x: 0, y: 0}
-```
-
-```javascript
-console.log($$createSVGPoint()({ x: 10 }));
-// SVGPoint {x: 10, y: 0}
-```
-
-```javascript
-console.log($$createSVGPoint()({ y: 10 }));
-// SVGPoint {x: 0, y: 10}
-```
-
-```javascript
-console.log($$createSVGPoint()({ x: 10, y: 10 }));
-// SVGPoint {x: 10, y: 10}
-```
 
 ### \$\$createSVGRect
 
+- [source](./src/createSVGRect/createSVGRect.index.js)
+- [detail](./src/createSVGRect/README.md)
+
 `SVGRect` 객체를 생성합니다.
-
-```javascript
-console.log($$createSVGRect()());
-// SVGRect {x: 0, y: 0, width: 0, height: 0}
-```
-
-```javascript
-console.log($$createSVGRect()({ x: 10 }));
-// SVGRect {x: 10, y: 0, width: 0, height: 0}
-```
-
-```javascript
-console.log($$createSVGRect()({ width: 100 }));
-// SVGRect {x: 0, y: 0, width: 100, height: 0}
-```
-
-```javascript
-console.log($$createSVGRect()({ x: 10, y: 10, width: 100, height: 100 }));
-// SVGRect {x: 10, y: 10, width: 100, height: 100}
-```
 
 ### \$\$createSVGMatrix
 
+- [source](./src/createSVGMatrix/createSVGMatrix.index.js)
+- [detail](./src/createSVGMatrix/README.md)
+
 `SVGMatrix` 객체를 생성합니다.
-
-```javascript
-console.log($$createSVGMatrix()());
-// SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
-```
-
-```javascript
-console.log($$createSVGMatrix()({ e: 10, f: 20 }));
-// SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 20}
-```
-
-```javascript
-console.log($$createSVGMatrix()({ a: 2, b: 0, c: 0, d: 4, e: 10, f: 20 }));
-// SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 10, f: 20}
-```
 
 ### \$\$createSVGTransform
 
