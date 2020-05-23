@@ -5,6 +5,8 @@ const babelParser = require("@babel/parser");
 const { default: traverse } = require("@babel/traverse");
 const { default: generate } = require("@babel/generator");
 
+const GET_SET_SVG_MODULE_NAME = "getSetSVG";
+
 // Make directory "<project_root>/dist/esm"
 fs.mkdirSync(path.resolve(__dirname, "../dist/esm"), {
   recursive: true,
@@ -21,7 +23,7 @@ fs.readdirSync(path.resolve(__dirname, "../dist/esm"), {
     fs.unlinkSync(path.resolve(__dirname, `../dist/esm/${name}`))
   );
 
-// Get file names
+// Get module names
 const names = fs
   .readdirSync(path.resolve(__dirname, "../src"), {
     encoding: "utf8",
@@ -30,7 +32,7 @@ const names = fs
   .filter((dirent) => dirent.isDirectory())
   .map(({ name }) => name);
 
-// Copy files to "<project_root>/dist/esm"
+// Copy modules to "<project_root>/dist/esm"
 names
   .map((name) => ({
     src: path.resolve(__dirname, `../src/${name}/${name}.index.js`),
@@ -49,12 +51,14 @@ names
     traverse(ast, {
       ImportDeclaration(path) {
         const l = path.node.source.value.split("/");
-        const reverseI = l
-          .slice()
-          .reverse()
-          .findIndex((s) => s.includes(".index.js"));
-        const i = l.length - reverseI - 1;
-        const n = l[i - 1];
+        const r = l.slice().reverse();
+
+        const n = r[1];
+
+        if (r[0] !== `${n}.index.js`) {
+          return;
+        }
+
         path.node.source.value = `./${n}.js`;
       },
     });
@@ -71,9 +75,9 @@ names
 
 // Make fxsvg.js
 const fxsvgjs = `
-import { $$getSVG, $$setSVG } from "./getSetSVG.js";
+import { $$getSVG, $$setSVG } from "./${GET_SET_SVG_MODULE_NAME}.js";
 ${names
-  .filter((name) => name !== "getSetSVG")
+  .filter((name) => name !== GET_SET_SVG_MODULE_NAME)
   .map((name) => `import { $$${name} } from "./${name}.js";`)
   .join("\n")}
 
@@ -81,7 +85,7 @@ const FxSVG = {
   getSVG: $$getSVG,
   setSVG: $$setSVG,
 ${names
-  .filter((name) => name !== "getSetSVG")
+  .filter((name) => name !== GET_SET_SVG_MODULE_NAME)
   .map((name) => `  ${name}: $$${name}`)
   .join(",\n")}
 };
@@ -96,8 +100,9 @@ Readable.from([fxsvgjs]).pipe(
 
 // Make index.js
 const indexjs = `
+export { $$getSVG, $$setSVG } from "./${GET_SET_SVG_MODULE_NAME}.js";
 ${names
-  .filter((name) => name !== "getSetSVG")
+  .filter((name) => name !== GET_SET_SVG_MODULE_NAME)
   .map((name) => `export { $$${name} } from "./${name}.js";`)
   .join("\n")}
 export { default } from "./fxsvg.js";
