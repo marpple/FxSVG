@@ -59,12 +59,10 @@ Functional SVG Handling Library
 
 ### \$\$createSVGTransform
 
-`SVGTransform` 객체를 생성합니다.
+- [source](./src/createSVGTransform/createSVGTransform.index.js)
+- [detail](./src/createSVGTransform/README.md)
 
-```javascript
-console.log($$createSVGTransform()());
-// SVGTransform {type: 1, matrix: SVGMatrix, angle: 0}
-```
+`SVGTransform` 객체를 생성합니다.
 
 ### \$\$createSVGTransformTranslate
 
