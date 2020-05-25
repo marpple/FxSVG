@@ -4,7 +4,12 @@
   "description": "Functional SVG Handling Library",
   "type": "module",
   "main": "./src/index.js",
+  "files": [
+    "src",
+    "dist"
+  ],
   "scripts": {
+    "build": "node ./bin/build.cjs",
     "test": "jest"
   },
   "repository": {
@@ -31,6 +36,8 @@
     "babel-jest": "^26.0.1",
     "jest": "^26.0.1",
     "prettier": "2.0.5",
-    "svgdom": "^0.1.8"
+    "svgdom": "^0.1.8",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   }
 }
