@@ -9,8 +9,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "node ./bin/build.cjs",
-    "test": "jest"
+    "test:browser": "node ./test/server.cjs",
+    "build": "node ./bin/build.cjs"
   },
   "repository": {
     "type": "git",
@@ -31,12 +31,11 @@
   },
   "homepage": "https://github.com/marpple/FxSVG#readme",
   "devDependencies": {
-    "@babel/core": "^7.9.6",
-    "@babel/preset-env": "^7.9.6",
-    "babel-jest": "^26.0.1",
-    "jest": "^26.0.1",
+    "chai": "^4.2.0",
+    "express": "^4.17.1",
+    "mocha": "^7.2.0",
     "prettier": "2.0.5",
-    "svgdom": "^0.1.8",
-    "webpack": "^4.43.0"
+    "webpack": "^4.43.0",
+    "webpack-dev-middleware": "^3.7.2"
   }
 }
