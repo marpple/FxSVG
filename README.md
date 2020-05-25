@@ -154,17 +154,10 @@ controller.append({ tx: 10 }).append({ ty: 10 }).end();
 
 ### \$\$isScaleSVGTransform
 
+- [source](./src/isScaleSVGTransform/isScaleSVGTransform.index.js)
+- [detail](./src/isScaleSVGTransform/README.md)
+
 해당 `SVGTransform`의 `type`이 `SVGTransform.SVG_TRANSFORM_SCALE`인지 여부를 판단합니다.
-
-```javascript
-console.log($$isScaleSVGTransform($$createSVGTransformScale()()));
-// true
-```
-
-```javascript
-console.log($$isScaleSVGTransform($$createSVGTransformTranslate()()));
-// false
-```
 
 ### \$\$getBaseTransformList
 
