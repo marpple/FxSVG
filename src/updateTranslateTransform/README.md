@@ -1,11 +1,14 @@
 # \$\$updateTranslateTransform
 
 - [source](./updateTranslateTransform.index.js)
+- [test](./updateTranslateTransform.spec.js)
 
 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransform` 의 `tx`, `ty` 값을 수정합니다.
 기존 `tx`, `ty`를 입력받은 `tx`, `ty`로 수정합니다.
 수정한 `SVGTransform` 객체를 반환합니다.
 이 함수는 인자로 받은 `SVGTransform` 객체를 직접 수정합니다.
+
+입력한 `tx`, `ty` 값과 실제 Transform 에 적용된 값은 정확도 차이가 발생할 수 있습니다.
 
 ```javascript
 const t = $$createSVGTransformTranslate()({ tx: 10, ty: 20 });
