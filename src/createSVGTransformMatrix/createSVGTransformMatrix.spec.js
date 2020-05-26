@@ -3,7 +3,7 @@ import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$createSVGTransformMatrix } from "./createSVGTransformMatrix.index.js";
 
 describe(`$$createSVGTransformMatrix`, () => {
-  it(`The return value is a SVGTransform`, () => {
+  it(`The return value is a SVGTransform.`, () => {
     const ts = [
       $$createSVGTransformMatrix()(),
       $$createSVGTransformMatrix(
@@ -20,7 +20,7 @@ describe(`$$createSVGTransformMatrix`, () => {
     }
   });
 
-  it(`The SVGTransform's type should be the SVGTransform.SVG_TRANSFORM_MATRIX`, () => {
+  it(`The SVGTransform's type should be the SVGTransform.SVG_TRANSFORM_MATRIX.`, () => {
     const ts = [
       $$createSVGTransformMatrix()(),
       $$createSVGTransformMatrix(
@@ -37,7 +37,7 @@ describe(`$$createSVGTransformMatrix`, () => {
     }
   });
 
-  it(`The SVGTransform will be initialized with the given matrix`, () => {
+  it(`The SVGTransform will be initialized with the given matrix.`, () => {
     const m = $$createSVGMatrix()({
       a: Math.random(),
       b: Math.random(),
@@ -58,7 +58,7 @@ describe(`$$createSVGTransformMatrix`, () => {
     }
   });
 
-  it(`The SVGTransform will be initialized with identity matrix if there is no passed matrix`, () => {
+  it(`The SVGTransform will be initialized with identity matrix if there is no passed matrix.`, () => {
     const identity_m = $$createSVGMatrix()({
       a: 1,
       b: 0,
