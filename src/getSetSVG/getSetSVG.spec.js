@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { $$getSVG, $$setSVG } from "./getSetSVG.index.js";
 
 describe(`$$setSVG + $$getSVG`, () => {
-  it(`$$setSVG will change return value of $$getSVG`, () => {
+  it(`$$setSVG will change return value of $$getSVG.`, () => {
     const $svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     $$setSVG($svg);
 
@@ -11,7 +11,7 @@ describe(`$$setSVG + $$getSVG`, () => {
 });
 
 describe(`$$setSVG`, () => {
-  it(`return the 1st argument`, () => {
+  it(`The return value is the 1st argument.`, () => {
     const $svg = document.createElementNS(
       "http://www.w3.org/2000/svg",
       "svg"
@@ -26,13 +26,13 @@ describe(`$$getSVG`, () => {
     $$setSVG(undefined);
   });
 
-  it(`will return SVGSVGElement`, () => {
+  it(`The return value is a SVGSVGElement.`, () => {
     const $svg = $$getSVG();
 
     expect($svg.nodeName.toLowerCase()).to.equal("svg");
   });
 
-  it(`will always return same value`, () => {
+  it(`The return value will be always same.`, () => {
     const $svg1 = $$getSVG();
     const $svg2 = $$getSVG();
 
