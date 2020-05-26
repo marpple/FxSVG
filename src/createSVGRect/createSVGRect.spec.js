@@ -1,79 +1,82 @@
 import { expect } from "chai";
 import { $$createSVGRect } from "./createSVGRect.index.js";
 
-describe(`$$createSVGRect`, () => {
-  it(`will create SVGRect with given coordinates and width, height`, () => {
-    const x = Math.round(Math.random() * 1000);
-    const y = Math.round(Math.random() * 1000);
-    const width = Math.round(Math.random() * 2000);
-    const height = Math.round(Math.random() * 2000);
+const makeRandomNumber = () => {
+  const n = Math.round(Math.random() * 1000);
+  return Math.round(Math.random()) ? n : -n;
+};
 
-    const rect = $$createSVGRect()({ x, y, width, height });
+const makeCases = () => {
+  const makeSubCases = () =>
+    [
+      [],
+      ["x"],
+      ["y"],
+      ["width"],
+      ["height"],
+      ["x", "y"],
+      ["x", "width"],
+      ["x", "height"],
+      ["y", "width"],
+      ["y", "height"],
+      ["width", "height"],
+      ["x", "y", "width"],
+      ["x", "y", "height"],
+      ["x", "width", "height"],
+      ["y", "width", "height"],
+      ["x", "y", "width", "height"],
+    ].map((ks) =>
+      ks
+        .map((k) => [k, makeRandomNumber()])
+        .reduce((acc, [k, v]) => {
+          acc[k] = v;
+          return acc;
+        }, {})
+    );
 
-    expect(rect.x).to.equal(x);
-    expect(rect.y).to.equal(y);
-    expect(rect.width).to.equal(width);
-    expect(rect.height).to.equal(height);
+  return [
+    { rect: $$createSVGRect()() },
+    ...makeSubCases().map((values) => ({
+      values,
+      rect: $$createSVGRect()(values),
+    })),
+    {
+      rect: $$createSVGRect(
+        document.createElementNS("http://www.w3.org/2000/svg", "svg")
+      )(),
+    },
+    ...makeSubCases().map((values) => ({
+      values,
+      rect: $$createSVGRect(
+        document.createElementNS("http://www.w3.org/2000/svg", "svg")
+      )(values),
+    })),
+  ];
+};
+
+describe(`$$createSVGRect`, function () {
+  it(`The return value will be a SVGRect.`, function () {
+    const cases = makeCases();
+
+    for (const { rect } of cases) {
+      expect(rect).to.instanceof(SVGRect);
+    }
   });
 
-  it(`will use 0 as default coordinates and width, height`, () => {
-    const rect = $$createSVGRect()();
+  it(`
+  The SVGRect's each values are same with input values.
+  The omitted values will be 0.
+  `, function () {
+    const cases = makeCases();
 
-    expect(rect.x).to.equal(0);
-    expect(rect.y).to.equal(0);
-    expect(rect.width).to.equal(0);
-    expect(rect.height).to.equal(0);
-  });
-
-  it(`will use 0 as default x coordinate`, () => {
-    const y = Math.round(Math.random() * 1000);
-    const width = Math.round(Math.random() * 2000);
-    const height = Math.round(Math.random() * 2000);
-
-    const rect = $$createSVGRect()({ y, width, height });
-
-    expect(rect.x).to.equal(0);
-    expect(rect.y).to.equal(y);
-    expect(rect.width).to.equal(width);
-    expect(rect.height).to.equal(height);
-  });
-
-  it(`will use 0 as default y coordinate`, () => {
-    const x = Math.round(Math.random() * 1000);
-    const width = Math.round(Math.random() * 2000);
-    const height = Math.round(Math.random() * 2000);
-
-    const rect = $$createSVGRect()({ x, width, height });
-
-    expect(rect.x).to.equal(x);
-    expect(rect.y).to.equal(0);
-    expect(rect.width).to.equal(width);
-    expect(rect.height).to.equal(height);
-  });
-
-  it(`will use 0 as default width`, () => {
-    const x = Math.round(Math.random() * 1000);
-    const y = Math.round(Math.random() * 1000);
-    const height = Math.round(Math.random() * 2000);
-
-    const rect = $$createSVGRect()({ x, y, height });
-
-    expect(rect.x).to.equal(x);
-    expect(rect.y).to.equal(y);
-    expect(rect.width).to.equal(0);
-    expect(rect.height).to.equal(height);
-  });
-
-  it(`will use 0 as default height`, () => {
-    const x = Math.round(Math.random() * 1000);
-    const y = Math.round(Math.random() * 1000);
-    const width = Math.round(Math.random() * 2000);
-
-    const rect = $$createSVGRect()({ x, y, width });
-
-    expect(rect.x).to.equal(x);
-    expect(rect.y).to.equal(y);
-    expect(rect.width).to.equal(width);
-    expect(rect.height).to.equal(0);
+    for (const {
+      rect,
+      values: { x = 0, y = 0, width = 0, height = 0 } = {},
+    } of cases) {
+      expect(rect.x).to.equal(x);
+      expect(rect.y).to.equal(y);
+      expect(rect.width).to.equal(width);
+      expect(rect.height).to.equal(height);
+    }
   });
 });
