@@ -63,7 +63,7 @@ describe(`$$updateTranslateTransform`, function () {
   If the SVGTransform's type is not the SVGTransform.SVG_TRANSFORM_TRANSLATE,
   the function will do nothing but return SVGTransform.
   `, function () {
-    it(`Matrix Transform`, function () {
+    it(`Use a matrix transform.`, function () {
       const matrix = $$createSVGMatrix()({
         a: makeRandomNumber(),
         b: makeRandomNumber(),
@@ -78,7 +78,7 @@ describe(`$$updateTranslateTransform`, function () {
       expect(matrix_t.matrix).to.deep.equal(matrix);
     });
 
-    it(`Rotate Transform`, function () {
+    it(`Use a rotate transform.`, function () {
       const rotate_t = $$createSVGTransformRotate()({
         angle: makeRandomNumber(),
         cx: makeRandomNumber(),
@@ -90,7 +90,7 @@ describe(`$$updateTranslateTransform`, function () {
       expect(rotate_t.matrix).to.deep.equal(matrix);
     });
 
-    it(`Scale Transform`, function () {
+    it(`Use a scale transform.`, function () {
       const scale_t = $$createSVGTransformScale()({
         sx: makeRandomNumber(),
         sy: makeRandomNumber(),
