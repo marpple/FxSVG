@@ -1,6 +1,7 @@
 # \$\$appendRotateTransform
 
 - [source](./appendRotateTransform.index.js)
+- [test](./appendRotateTransform.spec.js)
 
 `SVGTransform.SVG_TRANSFORM_ROTATE` 타입의 `SVGTransform` 의 `angle` 값을 수정합니다.
 기존 `angle`에 입력받은 `angle`을 더한 값으로 수정합니다.
