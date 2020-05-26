@@ -82,8 +82,8 @@ describe(`$$createSVGTransformRotate`, () => {
   });
 
   it(`
-  The SVGTransform's matrix is same with the result using native API (SVGTransform.setRotate)
-  If some arguments are omitted, the omitted values will be 0
+  The SVGTransform's matrix is same with the result using native API(SVGTransform.setRotate). 
+  If some arguments are omitted, the omitted values will be 0.
   `, () => {
     const tests = makeTests();
     for (const [t, { angle = 0, cx = 0, cy = 0 } = {}] of tests) {
