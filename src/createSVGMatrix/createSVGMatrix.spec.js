@@ -58,7 +58,7 @@ describe(`$$createSVGMatrix`, function () {
     }
   });
 
-  it(`The matrix will be a identity matrix if there is no arguments`, function () {
+  it(`The matrix will be a identity matrix if there is no arguments.`, function () {
     const $svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
     const m1 = $$createSVGMatrix()();
