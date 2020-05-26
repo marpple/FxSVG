@@ -1,17 +1,12 @@
 import { expect } from "chai";
-import { makeAllCombinations } from "../../test/utils/index.js";
+import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
 import { $$createSVGTransformScale } from "./createSVGTransformScale.index.js";
-
-const makeRandomNumber = () => {
-  const n = Math.round(Math.random() * 100000);
-  return Math.round(Math.random()) ? n : -n;
-};
 
 const makeCases = () => {
   const makeSubCases = () =>
     [[], ...makeAllCombinations(["sx", "sy"])].map((ks) =>
       ks
-        .map((k) => [k, makeRandomNumber()])
+        .map((k) => [k, makeRandomInt()])
         .reduce((acc, [k, v]) => {
           acc[k] = v;
           return acc;

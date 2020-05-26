@@ -1,18 +1,13 @@
 import { expect } from "chai";
-import { makeAllCombinations } from "../../test/utils/index.js";
+import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
 import { $$createSVGPoint } from "./createSVGPoint.index.js";
-
-const makeRandomNumber = () => {
-  const n = Math.round(Math.random() * 1000);
-  return Math.round(Math.random()) ? n : -n;
-};
 
 const makeCases = () => {
   const makeSubCases = () => [
     {},
     ...makeAllCombinations(["x", "y"]).map((ks) =>
       ks
-        .map((k) => [k, makeRandomNumber()])
+        .map((k) => [k, makeRandomInt()])
         .reduce((acc, [k, v]) => {
           acc[k] = v;
           return acc;
@@ -21,7 +16,10 @@ const makeCases = () => {
   ];
   return [
     { point: $$createSVGPoint()() },
-    ...makeSubCases().map((values) => ({ values, point: $$createSVGPoint()(values) })),
+    ...makeSubCases().map((values) => ({
+      values,
+      point: $$createSVGPoint()(values),
+    })),
     {
       point: $$createSVGPoint(
         document.createElementNS("http://www.w3.org/2000/svg", "svg")

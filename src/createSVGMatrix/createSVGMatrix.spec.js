@@ -1,5 +1,8 @@
 import { expect } from "chai";
-import { makeAllCombinations } from "../../test/utils/index.js";
+import {
+  makeAllCombinations,
+  makeRandomNumber,
+} from "../../test/utils/index.js";
 import { $$createSVGMatrix } from "./createSVGMatrix.index.js";
 
 const expectSameMatrix = (
@@ -12,11 +15,6 @@ const expectSameMatrix = (
   expect(m1.d).to.equal(d);
   expect(m1.e).to.equal(e);
   expect(m1.f).to.equal(f);
-};
-
-const makeRandomNumber = () => {
-  const n = Math.random() * 1000;
-  return Math.round(Math.random()) ? n : -n;
 };
 
 const makeCases = () => {

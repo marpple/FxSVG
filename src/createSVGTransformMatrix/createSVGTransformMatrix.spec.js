@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { makeRandomNumber } from "../../test/utils/index.js";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$createSVGTransformMatrix } from "./createSVGTransformMatrix.index.js";
 
@@ -39,12 +40,12 @@ describe(`$$createSVGTransformMatrix`, () => {
 
   it(`The SVGTransform will be initialized with the given matrix.`, () => {
     const m = $$createSVGMatrix()({
-      a: Math.random(),
-      b: Math.random(),
-      c: Math.random(),
-      d: Math.random(),
-      e: Math.random(),
-      f: Math.random(),
+      a: makeRandomNumber(),
+      b: makeRandomNumber(),
+      c: makeRandomNumber(),
+      d: makeRandomNumber(),
+      e: makeRandomNumber(),
+      f: makeRandomNumber(),
     });
     const ts = [
       $$createSVGTransformMatrix()(m),

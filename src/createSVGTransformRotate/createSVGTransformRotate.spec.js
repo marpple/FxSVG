@@ -1,12 +1,10 @@
 import { expect } from "chai";
-import { makeAllCombinations } from "../../test/utils/index.js";
+import {
+  makeAllCombinations,
+  makeRandomNumber,
+} from "../../test/utils/index.js";
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
 import { $$createSVGTransformRotate } from "./createSVGTransformRotate.index.js";
-
-const makeRandomNumber = () => {
-  const n = Math.random() * 100;
-  return Math.round(Math.random()) ? n : -n;
-};
 
 const makeCases = () => {
   const makeSubCases = () =>

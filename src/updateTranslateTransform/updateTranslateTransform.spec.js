@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { makeRandomInt } from "../../test/utils/index.js";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
@@ -6,24 +7,19 @@ import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGT
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$updateTranslateTransform } from "./updateTranslateTransform.index.js";
 
-const makeRandomNumber = () => {
-  const n = Math.round(Math.random() * 1000);
-  return Math.round(Math.random()) ? n : -n;
-};
-
 describe(`$$updateTranslateTransform`, function () {
   let t;
 
   beforeEach(function () {
     t = $$createSVGTransformTranslate()({
-      tx: makeRandomNumber(),
-      ty: makeRandomNumber(),
+      tx: makeRandomInt(),
+      ty: makeRandomInt(),
     });
   });
 
   it(`The SVGTransform's tx, ty values will be changed to input values.`, function () {
-    const tx = makeRandomNumber();
-    const ty = makeRandomNumber();
+    const tx = makeRandomInt();
+    const ty = makeRandomInt();
     $$updateTranslateTransform(t, { tx, ty });
 
     expect(t.matrix.e).to.equal(tx);
@@ -33,7 +29,7 @@ describe(`$$updateTranslateTransform`, function () {
   describe(`If there is an omitted input value, that value will be same with before.`, function () {
     it(`Omit tx.`, function () {
       const _tx = t.matrix.e;
-      const ty = makeRandomNumber();
+      const ty = makeRandomInt();
       $$updateTranslateTransform(t, { ty });
 
       expect(t.matrix.e).to.equal(_tx);
@@ -42,7 +38,7 @@ describe(`$$updateTranslateTransform`, function () {
 
     it(`Omit ty.`, function () {
       const _ty = t.matrix.f;
-      const tx = makeRandomNumber();
+      const tx = makeRandomInt();
       $$updateTranslateTransform(t, { tx });
 
       expect(t.matrix.e).to.equal(tx);
@@ -65,12 +61,12 @@ describe(`$$updateTranslateTransform`, function () {
   `, function () {
     it(`Use a matrix transform.`, function () {
       const matrix = $$createSVGMatrix()({
-        a: makeRandomNumber(),
-        b: makeRandomNumber(),
-        c: makeRandomNumber(),
-        d: makeRandomNumber(),
-        e: makeRandomNumber(),
-        f: makeRandomNumber(),
+        a: makeRandomInt(),
+        b: makeRandomInt(),
+        c: makeRandomInt(),
+        d: makeRandomInt(),
+        e: makeRandomInt(),
+        f: makeRandomInt(),
       });
       const matrix_t = $$createSVGTransformMatrix()(matrix);
 
@@ -80,9 +76,9 @@ describe(`$$updateTranslateTransform`, function () {
 
     it(`Use a rotate transform.`, function () {
       const rotate_t = $$createSVGTransformRotate()({
-        angle: makeRandomNumber(),
-        cx: makeRandomNumber(),
-        cy: makeRandomNumber(),
+        angle: makeRandomInt(),
+        cx: makeRandomInt(),
+        cy: makeRandomInt(),
       });
       const { matrix } = rotate_t;
 
@@ -92,8 +88,8 @@ describe(`$$updateTranslateTransform`, function () {
 
     it(`Use a scale transform.`, function () {
       const scale_t = $$createSVGTransformScale()({
-        sx: makeRandomNumber(),
-        sy: makeRandomNumber(),
+        sx: makeRandomInt(),
+        sy: makeRandomInt(),
       });
       const { matrix } = scale_t;
 
