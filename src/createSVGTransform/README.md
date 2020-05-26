@@ -1,6 +1,7 @@
 # \$\$createSVGTransform
 
 - [source](./createSVGTransform.index.js)
+- [test](./createSVGTransform.spec.js)
 
 `SVGTransform` 객체를 생성합니다.
 `SVGTransform.SVG_TRANSFORM_MATRIX` 타입을 가집니다.
