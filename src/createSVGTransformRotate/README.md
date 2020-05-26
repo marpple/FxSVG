@@ -1,6 +1,7 @@
 # \$\$createSVGTransformRotate
 
 - [source](./createSVGTransformRotate.index.js)
+- [test](./createSVGTransformRotate.spec.js)
 
 `type`이 `SVGTransform.SVG_TRANSFORM_ROTATE`인 `SVGTransform` 객체를 생성합니다.
 `cx`, `cy`로 회전할 중심의 좌포를 설정하고 `angle`로 회전할 각도(`deg` 단위)를 설정합니다.
