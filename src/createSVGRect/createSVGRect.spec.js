@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { makeAllCombinations } from "../../test/utils/index.js";
 import { $$createSVGRect } from "./createSVGRect.index.js";
 
 const makeRandomNumber = () => {
@@ -8,24 +9,7 @@ const makeRandomNumber = () => {
 
 const makeCases = () => {
   const makeSubCases = () =>
-    [
-      [],
-      ["x"],
-      ["y"],
-      ["width"],
-      ["height"],
-      ["x", "y"],
-      ["x", "width"],
-      ["x", "height"],
-      ["y", "width"],
-      ["y", "height"],
-      ["width", "height"],
-      ["x", "y", "width"],
-      ["x", "y", "height"],
-      ["x", "width", "height"],
-      ["y", "width", "height"],
-      ["x", "y", "width", "height"],
-    ].map((ks) =>
+    [[], ...makeAllCombinations(["x", "y", "width", "height"])].map((ks) =>
       ks
         .map((k) => [k, makeRandomNumber()])
         .reduce((acc, [k, v]) => {

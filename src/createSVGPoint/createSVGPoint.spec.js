@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { makeAllCombinations } from "../../test/utils/index.js";
 import { $$createSVGPoint } from "./createSVGPoint.index.js";
 
 const makeRandomNumber = () => {
@@ -6,22 +7,27 @@ const makeRandomNumber = () => {
   return Math.round(Math.random()) ? n : -n;
 };
 
-const makeTests = () => {
-  const l = [
+const makeCases = () => {
+  const makeSubCases = () => [
     {},
-    { x: makeRandomNumber() },
-    { y: makeRandomNumber() },
-    { x: makeRandomNumber(), y: makeRandomNumber() },
+    ...makeAllCombinations(["x", "y"]).map((ks) =>
+      ks
+        .map((k) => [k, makeRandomNumber()])
+        .reduce((acc, [k, v]) => {
+          acc[k] = v;
+          return acc;
+        }, {})
+    ),
   ];
   return [
     { point: $$createSVGPoint()() },
-    ...l.map((values) => ({ values, point: $$createSVGPoint()(values) })),
+    ...makeSubCases().map((values) => ({ values, point: $$createSVGPoint()(values) })),
     {
       point: $$createSVGPoint(
         document.createElementNS("http://www.w3.org/2000/svg", "svg")
       )(),
     },
-    ...l.map((values) => ({
+    ...makeSubCases().map((values) => ({
       values,
       point: $$createSVGPoint(
         document.createElementNS("http://www.w3.org/2000/svg", "svg")
@@ -32,8 +38,8 @@ const makeTests = () => {
 
 describe(`$$createSVGPoint`, () => {
   it(`The return value will be a SVGPoint.`, () => {
-    const tests = makeTests();
-    for (const { point } of tests) {
+    const cases = makeCases();
+    for (const { point } of cases) {
       expect(point).to.instanceof(SVGPoint);
     }
   });
@@ -42,8 +48,8 @@ describe(`$$createSVGPoint`, () => {
   The point's x, y value will be same with input value.
   The omitted value will be 0.
   `, () => {
-    const tests = makeTests();
-    for (const { point, values: { x = 0, y = 0 } = {} } of tests) {
+    const cases = makeCases();
+    for (const { point, values: { x = 0, y = 0 } = {} } of cases) {
       expect(point.x).to.equal(x);
       expect(point.y).to.equal(y);
     }

@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { makeAllCombinations } from "../../test/utils/index.js";
 import { $$createSVGMatrix } from "./createSVGMatrix.index.js";
 
 const expectSameMatrix = (
@@ -18,42 +19,42 @@ const makeRandomNumber = () => {
   return Math.round(Math.random()) ? n : -n;
 };
 
-const makeMatrixValues = () =>
-  [...Array(5000)]
-    .map(() =>
-      ["a", "b", "c", "d", "e", "f"]
-        .map((k) => [k, Math.round(Math.random()) === 1])
-        .map(([k, exist]) => [k, exist ? makeRandomNumber() : null])
-    )
-    .map((kvs) =>
-      kvs.reduce((m, [k, v]) => {
-        if (v == null) {
-          return m;
-        }
-        m[k] = v;
-        return m;
-      }, {})
-    );
-
-const makeTests = () => [
-  ...makeMatrixValues()
-    .map((values) => ({ values }))
-    .map(({ values }) => ({ values, matrix: $$createSVGMatrix()(values) })),
-  ...makeMatrixValues().map((values) => ({
-    values,
-    matrix: $$createSVGMatrix(
-      document.createElementNS("http://www.w3.org/2000/svg", "svg")
-    )(values),
-  })),
-];
+const makeCases = () => {
+  const makeSubCases = () => [
+    ...makeAllCombinations(["a", "b", "c", "d", "e", "f"]).map((ks) =>
+      ks
+        .map((k) => [k, makeRandomNumber()])
+        .reduce((acc, [k, v]) => {
+          acc[k] = v;
+          return acc;
+        }, {})
+    ),
+    {},
+  ];
+  return [
+    { matrix: $$createSVGMatrix()() },
+    ...makeSubCases().map((values) => ({
+      values,
+      matrix: $$createSVGMatrix()(values),
+    })),
+    {
+      matrix: $$createSVGMatrix(
+        document.createElementNS("http://www.w3.org/2000/svg", "svg")
+      )(),
+    },
+    ...makeSubCases().map((values) => ({
+      values,
+      matrix: $$createSVGMatrix(
+        document.createElementNS("http://www.w3.org/2000/svg", "svg")
+      )(values),
+    })),
+  ];
+};
 
 describe(`$$createSVGMatrix`, function () {
   it(`The return value is a SVGMatrix.`, function () {
-    this.slow(2 * 5 * 60 * 1000);
-    this.timeout(5 * 60 * 1000);
-
-    const tests = makeTests();
-    for (const { matrix } of tests) {
+    const cases = makeCases();
+    for (const { matrix } of cases) {
       expect(matrix).to.instanceof(SVGMatrix);
     }
   });
@@ -72,11 +73,8 @@ describe(`$$createSVGMatrix`, function () {
   Each value of the matrix will be same with the given value.
   If there is omitted values, the values will be {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0} individually by default.
   `, function () {
-    this.slow(2 * 5 * 60 * 1000);
-    this.timeout(5 * 60 * 1000);
-
-    const tests = makeTests();
-    for (const { matrix, values } of tests) {
+    const cases = makeCases();
+    for (const { matrix, values } of cases) {
       expectSameMatrix(matrix, values);
     }
   });

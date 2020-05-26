@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { makeAllCombinations } from "../../test/utils/index.js";
 import { $$createSVGTransformScale } from "./createSVGTransformScale.index.js";
 
 const makeRandomNumber = () => {
@@ -6,48 +7,49 @@ const makeRandomNumber = () => {
   return Math.round(Math.random()) ? n : -n;
 };
 
-const makeTests = () => {
-  const l = [
-    {},
-    { sx: makeRandomNumber() },
-    { sy: makeRandomNumber() },
-    { sx: makeRandomNumber(), sy: makeRandomNumber() },
-  ];
+const makeCases = () => {
+  const makeSubCases = () =>
+    [[], ...makeAllCombinations(["sx", "sy"])].map((ks) =>
+      ks
+        .map((k) => [k, makeRandomNumber()])
+        .reduce((acc, [k, v]) => {
+          acc[k] = v;
+          return acc;
+        }, {})
+    );
   return [
     { t: $$createSVGTransformScale()() },
-    ...l.map(({ sx, sy }) => ({
-      t: $$createSVGTransformScale()({ sx, sy }),
-      sx,
-      sy,
+    ...makeSubCases().map((values) => ({
+      t: $$createSVGTransformScale()(values),
+      values,
     })),
     {
       t: $$createSVGTransformScale(
         document.createElementNS("http://www.w3.org/2000/svg", "svg")
       )(),
     },
-    ...l.map(({ sx, sy }) => ({
+    ...makeSubCases().map((values) => ({
       t: $$createSVGTransformScale(
         document.createElementNS("http://www.w3.org/2000/svg", "svg")
-      )({ sx, sy }),
-      sx,
-      sy,
+      )(values),
+      values,
     })),
   ];
 };
 
 describe(`$$createSVGTransformScale`, function () {
   it(`The return value will be a SVGTransform.`, function () {
-    const tests = makeTests();
+    const cases = makeCases();
 
-    for (const { t } of tests) {
+    for (const { t } of cases) {
       expect(t).to.instanceof(SVGTransform);
     }
   });
 
   it(`The SVGTransform's type will be the SVGTransform.SVG_TRANSFORM_SCALE.`, function () {
-    const tests = makeTests();
+    const cases = makeCases();
 
-    for (const { t } of tests) {
+    for (const { t } of cases) {
       expect(t.type).to.equal(SVGTransform.SVG_TRANSFORM_SCALE);
     }
   });
@@ -56,9 +58,9 @@ describe(`$$createSVGTransformScale`, function () {
   The SVGTransform's scale value will be set to the input value. (matrix.a = sx, matrix.d = sy)
   The omitted values will be 1.
   `, function () {
-    const tests = makeTests();
+    const cases = makeCases();
 
-    for (const { t, sx = 1, sy = 1 } of tests) {
+    for (const { t, values: { sx = 1, sy = 1 } = {} } of cases) {
       expect(t.matrix.a).to.equal(sx);
       expect(t.matrix.d).to.equal(sy);
     }

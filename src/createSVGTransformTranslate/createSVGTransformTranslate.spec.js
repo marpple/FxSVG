@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { makeAllCombinations } from "../../test/utils/index.js";
 import { $$createSVGTransformTranslate } from "./createSVGTransformTranslate.index.js";
 
 const makeRandomNumber = () => {
@@ -7,15 +8,18 @@ const makeRandomNumber = () => {
 };
 
 const makeCases = () => {
-  const l = [
-    {},
-    { tx: makeRandomNumber() },
-    { ty: makeRandomNumber() },
-    { tx: makeRandomNumber(), ty: makeRandomNumber() },
-  ];
+  const makeSubCases = () =>
+    [[], ...makeAllCombinations(["tx", "ty"])].map((ks) =>
+      ks
+        .map((k) => [k, makeRandomNumber()])
+        .reduce((acc, [k, v]) => {
+          acc[k] = v;
+          return acc;
+        }, {})
+    );
   return [
     { t: $$createSVGTransformTranslate()() },
-    ...l.map((values) => ({
+    ...makeSubCases().map((values) => ({
       t: $$createSVGTransformTranslate()(values),
       values,
     })),
@@ -24,7 +28,7 @@ const makeCases = () => {
         document.createElementNS("http://www.w3.org/2000/svg", "svg")
       )(),
     },
-    ...l.map((values) => ({
+    ...makeSubCases().map((values) => ({
       t: $$createSVGTransformTranslate(
         document.createElementNS("http://www.w3.org/2000/svg", "svg")
       )(values),

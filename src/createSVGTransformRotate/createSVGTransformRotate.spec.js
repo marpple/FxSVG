@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { makeAllCombinations } from "../../test/utils/index.js";
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
 import { $$createSVGTransformRotate } from "./createSVGTransformRotate.index.js";
 
@@ -7,76 +8,47 @@ const makeRandomNumber = () => {
   return Math.round(Math.random()) ? n : -n;
 };
 
-const makeTests = () =>
-  [
-    {},
-    { values: {} },
-    { values: { angle: makeRandomNumber() } },
-    { values: { cx: makeRandomNumber() } },
-    { values: { cy: makeRandomNumber() } },
-    { values: { angle: makeRandomNumber(), cx: makeRandomNumber() } },
-    { values: { angle: makeRandomNumber(), cy: makeRandomNumber() } },
-    { values: { cx: makeRandomNumber(), cy: makeRandomNumber() } },
-    {
-      values: {
-        angle: makeRandomNumber(),
-        cx: makeRandomNumber(),
-        cy: makeRandomNumber(),
-      },
-    },
-    { $svg: document.createElementNS("http://www.w3.org/2000/svg", "svg") },
-    {
-      $svg: document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      values: {},
-    },
-    {
-      $svg: document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      values: { angle: makeRandomNumber() },
-    },
-    {
-      $svg: document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      values: { cx: makeRandomNumber() },
-    },
-    {
-      $svg: document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      values: { cy: makeRandomNumber() },
-    },
-    {
-      $svg: document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      values: { angle: makeRandomNumber(), cx: makeRandomNumber() },
-    },
-    {
-      $svg: document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      values: { angle: makeRandomNumber(), cy: makeRandomNumber() },
-    },
-    {
-      $svg: document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      values: { cx: makeRandomNumber(), cy: makeRandomNumber() },
-    },
-    {
-      $svg: document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      values: {
-        angle: makeRandomNumber(),
-        cx: makeRandomNumber(),
-        cy: makeRandomNumber(),
-      },
-    },
-  ].map(({ $svg, values }) => [
-    $$createSVGTransformRotate($svg)(values),
-    values,
-  ]);
+const makeCases = () => {
+  const makeSubCases = () =>
+    [[], ...makeAllCombinations(["angle", "cx", "cy"])].map((ks) =>
+      ks
+        .map((k) => [k, makeRandomNumber()])
+        .reduce((acc, [k, v]) => {
+          acc[k] = v;
+          return acc;
+        }, {})
+    );
+  return [
+    [$$createSVGTransformRotate()()],
+    ...makeSubCases().map((values) => [
+      $$createSVGTransformRotate()(values),
+      values,
+    ]),
+    [
+      $$createSVGTransformRotate(
+        document.createElementNS("http://www.w3.org/2000/svg", "svg")
+      )(),
+    ],
+    ...makeSubCases().map((values) => [
+      $$createSVGTransformRotate(
+        document.createElementNS("http://www.w3.org/2000/svg", "svg")
+      )(values),
+      values,
+    ]),
+  ];
+};
 
 describe(`$$createSVGTransformRotate`, () => {
   it(`The return value is a SVGTransform.`, () => {
-    const tests = makeTests();
-    for (const [t] of tests) {
+    const cases = makeCases();
+    for (const [t] of cases) {
       expect(t).to.instanceof(SVGTransform);
     }
   });
 
   it(`The SVGTransform's type is same with a SVGTransform.SVG_TRANSFORM_ROTATE.`, () => {
-    const tests = makeTests();
-    for (const [t] of tests) {
+    const cases = makeCases();
+    for (const [t] of cases) {
       expect(t.type).to.equal(SVGTransform.SVG_TRANSFORM_ROTATE);
     }
   });
@@ -85,8 +57,8 @@ describe(`$$createSVGTransformRotate`, () => {
   The SVGTransform's matrix is same with the result using native API(SVGTransform.setRotate). 
   If some arguments are omitted, the omitted values will be 0.
   `, () => {
-    const tests = makeTests();
-    for (const [t, { angle = 0, cx = 0, cy = 0 } = {}] of tests) {
+    const cases = makeCases();
+    for (const [t, { angle = 0, cx = 0, cy = 0 } = {}] of cases) {
       const _t = $$createSVGTransform();
       _t.setRotate(angle, cx, cy);
       expect(t.matrix).to.deep.equal(_t.matrix);
