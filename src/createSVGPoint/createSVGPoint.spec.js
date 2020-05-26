@@ -31,7 +31,7 @@ const makeTests = () => {
 };
 
 describe(`$$createSVGPoint`, () => {
-  it(`The return value will be a SVGPoint`, () => {
+  it(`The return value will be a SVGPoint.`, () => {
     const tests = makeTests();
     for (const { point } of tests) {
       expect(point).to.instanceof(SVGPoint);
@@ -39,8 +39,8 @@ describe(`$$createSVGPoint`, () => {
   });
 
   it(`
-  The point's x, y value will be same with input value
-  The omitted value will be 0
+  The point's x, y value will be same with input value.
+  The omitted value will be 0.
   `, () => {
     const tests = makeTests();
     for (const { point, values: { x = 0, y = 0 } = {} } of tests) {
