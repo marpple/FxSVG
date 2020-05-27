@@ -1,6 +1,7 @@
 # \$\$initTranslateTransform
 
 - [source](./initTranslateTransform.index.js)
+- [test](./initTranslateTransform.spec.js)
 
 svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransform` 을 추가합니다.
 `SVGTransform` 은 항상 `transform.baseVal` 에 해당하는 `SVGTransformList` 의 `0` 인덱스에 추가됩니다.
