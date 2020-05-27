@@ -2,7 +2,7 @@ import { expect } from "chai";
 import {
   makeRandomInt,
   makeRandomNumber,
-  makeRandomTransformString,
+  makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
 import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
@@ -13,11 +13,7 @@ describe(`$$initTranslateTransform`, function () {
   let $el;
 
   beforeEach(function () {
-    const transform_list = [...Array(50)]
-      .map(makeRandomTransformString)
-      .map((t) => (Math.round(Math.random()) ? t : null))
-      .filter((t) => t !== null);
-    const transform_str = transform_list.length ? transform_list.join(" ") : "";
+    const transform_str = makeRandomTransformAttributeValue();
     $el = $$el()(`
       <rect
         x="${makeRandomNumber()}"

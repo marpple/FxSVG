@@ -2,7 +2,7 @@ import { expect } from "chai";
 import {
   makeRandomInt,
   makeRandomNumber,
-  makeRandomTransformString,
+  makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
@@ -45,11 +45,7 @@ describe(`$$mergeTranslateTransform`, function () {
     x = makeRandomInt();
     y = makeRandomInt();
 
-    const transform_list = [...Array(50)]
-      .map(makeRandomTransformString)
-      .map((t) => (Math.round(Math.random()) ? t : null))
-      .filter((t) => t !== null);
-    const transform_str = transform_list.length ? transform_list.join(" ") : "";
+    const transform_str = makeRandomTransformAttributeValue();
     $el = $$el()(`
       <rect
         x="${x}"
