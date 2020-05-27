@@ -36,15 +36,15 @@ const makeCases = () => {
   ];
 };
 
-describe(`$$createSVGTransformRotate`, () => {
-  it(`The return value is a SVGTransform.`, () => {
+describe(`$$createSVGTransformRotate`, function () {
+  it(`The return value is a SVGTransform.`, function () {
     const cases = makeCases();
     for (const [t] of cases) {
       expect(t).to.instanceof(SVGTransform);
     }
   });
 
-  it(`The SVGTransform's type is same with a SVGTransform.SVG_TRANSFORM_ROTATE.`, () => {
+  it(`The SVGTransform's type is same with a SVGTransform.SVG_TRANSFORM_ROTATE.`, function () {
     const cases = makeCases();
     for (const [t] of cases) {
       expect(t.type).to.equal(SVGTransform.SVG_TRANSFORM_ROTATE);
@@ -54,7 +54,7 @@ describe(`$$createSVGTransformRotate`, () => {
   it(`
   The SVGTransform's matrix is same with the result using native API(SVGTransform.setRotate). 
   If some arguments are omitted, the omitted values will be 0.
-  `, () => {
+  `, function () {
     const cases = makeCases();
     for (const [t, { angle = 0, cx = 0, cy = 0 } = {}] of cases) {
       const _t = $$createSVGTransform();
