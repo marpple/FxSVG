@@ -8,12 +8,12 @@ import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/cr
 import { $$isRotateSVGTransform } from "./isRotateSVGTransform.index.js";
 
 describe(`$$isRotateSVGTransform`, function () {
-  describe(`The function will throw an error when the input value is not a SVGTransform`, function () {
+  describe(`The function will throw an error when the input value is not a SVGTransform.`, function () {
     it(`Input null.`, function () {
       expect(() => $$isRotateSVGTransform(null)).to.throw();
     });
 
-    it(`Input plain object`, function () {
+    it(`Input plain object.`, function () {
       expect(() => $$isRotateSVGTransform({})).to.throw();
     });
 
