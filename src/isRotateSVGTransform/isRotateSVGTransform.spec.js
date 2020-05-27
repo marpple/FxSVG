@@ -13,7 +13,7 @@ describe(`$$isRotateSVGTransform`, function () {
       expect(() => $$isRotateSVGTransform(null)).to.throw();
     });
 
-    it(`Input plain object.`, function () {
+    it(`Input plain empty object.`, function () {
       expect(() => $$isRotateSVGTransform({})).to.throw();
     });
 
