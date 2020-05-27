@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import {
+  deepCopyTransformListToMatrixList,
   makeRandomInt,
   makeRandomNumber,
   makeRandomTransformAttributeValue,
@@ -81,7 +82,9 @@ describe(`$$initRotateTransform`, function () {
   });
 
   it(`The function do nothing on other SVGTransforms of the element.`, function () {
-    const before_ts = [...$$getBaseTransformList($el)];
+    const before_l = deepCopyTransformListToMatrixList(
+      $$getBaseTransformList($el)
+    );
 
     $$initRotateTransform()($el, {
       angle: makeRandomNumber(),
@@ -89,12 +92,9 @@ describe(`$$initRotateTransform`, function () {
       cy: makeRandomNumber(),
     });
 
-    const after_ts = [...$$getBaseTransformList($el)].slice(3);
-    expect(after_ts.length).to.equal(before_ts.length);
-    for (let i = 0; i < after_ts.length; i++) {
-      const before_t = before_ts[i];
-      const after_t = after_ts[i];
-      expect(after_t).to.deep.equal(before_t);
-    }
+    const after_l = deepCopyTransformListToMatrixList(
+      $$getBaseTransformList($el)
+    ).slice(3);
+    expect(after_l).to.deep.equal(before_l);
   });
 });

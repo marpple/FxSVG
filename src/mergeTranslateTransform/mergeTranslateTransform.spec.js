@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import {
+  deepCopyTransformListToMatrixList,
   makeRandomInt,
   makeRandomNumber,
   makeRandomTransformAttributeValue,
@@ -13,27 +14,20 @@ import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform.index.js";
 
-const expectSameTransformList = (l1, l2) => {
-  expect(l1.length).to.equal(l2.length);
-  for (let i = 0; i < l1.length; i++) {
-    const t1 = l1[0];
-    const t2 = l2[0];
-    expect(t1).to.deep.equal(t2);
-  }
-};
-
 const expectSameTransformsAfterMerge = ($el) => {
-  const before_list = [...$$getBaseTransformList($el)];
+  const before_list = deepCopyTransformListToMatrixList(
+    $$getBaseTransformList($el)
+  );
 
   const result = $$mergeTranslateTransform()($el, {
     x_name: "x",
     y_name: "y",
   });
 
-  const after_list = [...$$getBaseTransformList($el)];
+  const after_list = deepCopyTransformListToMatrixList($$getBaseTransformList($el));
 
   expect(result).to.equal($el);
-  expectSameTransformList(after_list, before_list);
+  expect(after_list).to.deep.equal(before_list);
 };
 
 describe(`$$mergeTranslateTransform`, function () {
@@ -109,19 +103,17 @@ describe(`$$mergeTranslateTransform`, function () {
   it(`
   If the SVGTransform is merged, the SVGTransform will be removed from the element's SVGTransformList. 
   `, function () {
-    const before_l = [...$$getBaseTransformList($el)];
-
     const t = $$createSVGTransformTranslate()({
       tx: makeRandomNumber(),
       ty: makeRandomNumber(),
     });
     $$getBaseTransformList($el).insertItemBefore(t, 0);
+    const { numberOfItems: before_n } = $$getBaseTransformList($el);
 
     $$mergeTranslateTransform()($el, { x_name: "x", y_name: "y" });
 
-    const after_l = [...$$getBaseTransformList($el)];
-
-    expectSameTransformList(after_l, before_l);
+    const { numberOfItems: after_n } = $$getBaseTransformList($el);
+    expect(after_n).to.equal(before_n - 1);
   });
 
   it(`The element's x value will be added by SVGTransform's tx value.`, function () {
@@ -148,10 +140,9 @@ describe(`$$mergeTranslateTransform`, function () {
   Other SVGTransforms will be changed by the following formula. 
   [after SVGTransform matrix = translate(tx, ty) matrix * before SVGTransform matrix * translate(-tx, -ty) matrix]
   `, function () {
-    const before_list = [...$$getBaseTransformList($el)]
-      .map(({ matrix: m }) => m)
-      .map(({ a, b, c, d, e, f }) => ({ a, b, c, d, e, f }))
-      .map($$createSVGMatrix());
+    const before_list = deepCopyTransformListToMatrixList(
+      $$getBaseTransformList($el)
+    );
 
     const tx = makeRandomInt();
     const ty = makeRandomInt();
@@ -162,17 +153,11 @@ describe(`$$mergeTranslateTransform`, function () {
 
     $$mergeTranslateTransform()($el, { x_name: "x", y_name: "y" });
 
-    const after_list = [...$$getBaseTransformList($el)]
-      .map(({ matrix: m }) => m)
-      .map(({ a, b, c, d, e, f }) => ({ a, b, c, d, e, f }))
-      .map($$createSVGMatrix());
-
-    expect(after_list.length).to.equal(before_list.length);
-    for (let i = 0; i < after_list.length; i++) {
-      const before_m = before_list[i];
-      const after_m = after_list[i];
-
-      expect(after_m).to.deep.equal(m1.multiply(before_m).multiply(m2));
-    }
+    const after_list = deepCopyTransformListToMatrixList(
+      $$getBaseTransformList($el)
+    );
+    expect(after_list).to.deep.equal(
+      before_list.map((m) => m1.multiply(m).multiply(m2))
+    );
   });
 });
