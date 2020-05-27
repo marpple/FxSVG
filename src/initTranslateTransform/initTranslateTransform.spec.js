@@ -6,6 +6,7 @@ import {
 } from "../../test/utils/index.js";
 import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
+import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 import { $$initTranslateTransform } from "./initTranslateTransform.index.js";
 
 describe(`$$initTranslateTransform`, function () {
@@ -48,6 +49,7 @@ describe(`$$initTranslateTransform`, function () {
     $$initTranslateTransform()($el, { tx, ty });
 
     const t = $$getBaseTransformList($el).getItem(0);
+    expect($$isTranslateSVGTransform(t)).to.be.true;
     expect(t.matrix.e).to.equal(tx);
     expect(t.matrix.f).to.equal(ty);
   });
