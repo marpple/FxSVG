@@ -55,6 +55,10 @@ describe(`$$updateTranslateTransform`, function () {
     });
   });
 
+  it(`If no second argument, the function will throw an error.`, function () {
+    expect(() => $$updateTranslateTransform(t)).to.throw();
+  });
+
   describe(`
   If the SVGTransform's type is not the SVGTransform.SVG_TRANSFORM_TRANSLATE,
   the function will do nothing but return SVGTransform.
