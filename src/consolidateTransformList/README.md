@@ -1,6 +1,7 @@
 # \$\$consolidateTransformList
 
 - [source](./consolidateTransformList.index.js)
+- [test](./consolidateTransformList.spec.js)
 
 `SVGTransformList` 객체의 모든 `SVGTransform` 객체를 하나로 통합하여 `SVGTransformList` 객체를 새로 초기화합니다.
 이 함수는 입력받은 `SVGTransformList`를 수정합니다.
