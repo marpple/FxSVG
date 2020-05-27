@@ -1,5 +1,9 @@
 import { expect } from "chai";
-import { makeRandomInt, makeRandomNumber } from "../../test/utils/index.js";
+import {
+  makeRandomInt,
+  makeRandomNumber,
+  makeRandomTransformString,
+} from "../../test/utils/index.js";
 import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$initTranslateTransform } from "./initTranslateTransform.index.js";
@@ -9,16 +13,7 @@ describe(`$$initTranslateTransform`, function () {
 
   beforeEach(function () {
     const transform_list = [...Array(50)]
-      .map(() => {
-        const ts = [
-          `translate(${makeRandomNumber()} ${makeRandomNumber()})`,
-          `rotate(${makeRandomNumber()} ${makeRandomNumber()} ${makeRandomNumber()})`,
-          `scale(${makeRandomNumber()} ${makeRandomNumber()})`,
-          `matrix(${[...Array(6)].map(() => makeRandomNumber()).join(" ")})`,
-        ];
-        const index = Math.floor(Math.random() * 4);
-        return ts[index];
-      })
+      .map(makeRandomTransformString)
       .map((t) => (Math.round(Math.random()) ? t : null))
       .filter((t) => t !== null);
     const transform_str = transform_list.length ? transform_list.join(" ") : "";
