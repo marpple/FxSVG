@@ -14,7 +14,7 @@ describe(`$$appendRotateTransform`, function () {
     t = $$createSVGTransformRotate()({ angle: makeRandomInt(), cx: 0, cy: 0 });
   });
 
-  it(`The SVGTransform's angle values will be added with input angle value.`, function () {
+  it(`The SVGTransform's angle value will be added with input angle value.`, function () {
     const { angle: prev_angle } = t;
     const angle = makeRandomInt();
     $$appendRotateTransform(t, { angle });
