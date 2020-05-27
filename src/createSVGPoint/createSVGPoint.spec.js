@@ -34,8 +34,8 @@ const makeCases = () => {
   ];
 };
 
-describe(`$$createSVGPoint`, () => {
-  it(`The return value will be a SVGPoint.`, () => {
+describe(`$$createSVGPoint`, function () {
+  it(`The return value will be a SVGPoint.`, function () {
     const cases = makeCases();
     for (const { point } of cases) {
       expect(point).to.instanceof(SVGPoint);
@@ -45,7 +45,7 @@ describe(`$$createSVGPoint`, () => {
   it(`
   The point's x, y value will be same with input value.
   The omitted value will be 0.
-  `, () => {
+  `, function () {
     const cases = makeCases();
     for (const { point, values: { x = 0, y = 0 } = {} } of cases) {
       expect(point.x).to.equal(x);
