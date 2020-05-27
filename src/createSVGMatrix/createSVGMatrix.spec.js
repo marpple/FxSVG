@@ -6,15 +6,15 @@ import {
 import { $$createSVGMatrix } from "./createSVGMatrix.index.js";
 
 const expectSameMatrix = (
-  m1,
+  m,
   { a = 1, b = 0, c = 0, d = 1, e = 0, f = 0 } = {}
 ) => {
-  expect(m1.a).to.equal(a);
-  expect(m1.b).to.equal(b);
-  expect(m1.c).to.equal(c);
-  expect(m1.d).to.equal(d);
-  expect(m1.e).to.equal(e);
-  expect(m1.f).to.equal(f);
+  expect(m.a).to.equal(a);
+  expect(m.b).to.equal(b);
+  expect(m.c).to.equal(c);
+  expect(m.d).to.equal(d);
+  expect(m.e).to.equal(e);
+  expect(m.f).to.equal(f);
 };
 
 const makeCases = () => {
