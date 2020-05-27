@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { makeRandomNumber } from "../../test/utils/index.js";
+import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
@@ -45,12 +46,14 @@ describe(`$$isScaleSVGTransform`, function () {
   `, function () {
     it(`Use a SVGTransform whose type is a SVGTransform.SVG_TRANSFORM_MATRIX.`, function () {
       const matrix_t = $$createSVGTransformMatrix()(
-        ["a", "b", "c", "d", "e", "f"]
-          .map((k) => [k, makeRandomNumber()])
-          .reduce((acc, [k, v]) => {
-            acc[k] = v;
-            return acc;
-          }, {})
+        $$createSVGMatrix()(
+          ["a", "b", "c", "d", "e", "f"]
+            .map((k) => [k, makeRandomNumber()])
+            .reduce((acc, [k, v]) => {
+              acc[k] = v;
+              return acc;
+            }, {})
+        )
       );
       const result = $$isScaleSVGTransform(matrix_t);
 
