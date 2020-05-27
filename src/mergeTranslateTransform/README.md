@@ -1,6 +1,7 @@
 # \$\$mergeTranslateTransform
 
 - [source](./mergeTranslateTransform.index.js)
+- [test](./mergeTranslateTransform.spec.js)
 
 svg 엘리먼트에 가장 마지막으로 적용된 `SVGTransform` 이 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입인 경우
 해당 `SVGTransform` 을 svg 엘리먼트의 `x`, `y` 속성 (혹은 그에 준하는 속성) 에 반영합니다.
