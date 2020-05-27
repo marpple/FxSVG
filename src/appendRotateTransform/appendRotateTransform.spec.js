@@ -37,7 +37,7 @@ describe(`$$appendRotateTransform`, function () {
     expect(t.matrix.f).to.equal(0);
   });
 
-  it(`If no angle or second arguments, the function will throw an error.`, function () {
+  it(`If no angle or second argument, the function will throw an error.`, function () {
     expect(() => $$appendRotateTransform(t)).to.throw();
     expect(() => $$appendRotateTransform(t, {})).to.throw();
   });
