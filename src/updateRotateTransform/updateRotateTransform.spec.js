@@ -13,8 +13,8 @@ describe(`$$updateRotateTransform`, function () {
   beforeEach(function () {
     t = $$createSVGTransformRotate()({
       angle: makeRandomInt(),
-      cx: 0,
-      cy: 0,
+      cx: makeRandomNumber(),
+      cy: makeRandomNumber(),
     });
   });
 
@@ -25,25 +25,34 @@ describe(`$$updateRotateTransform`, function () {
     expect(t.angle).to.equal(angle);
   });
 
-  it(`The SVGTransform's cx, cy values will be reset to 0.`, function () {
-    t = $$createSVGTransformRotate()({
-      angle: makeRandomInt(),
-      cx: makeRandomInt(),
-      cy: makeRandomInt(),
-    });
+  it(`If no second argument, the angle will be same but cx, cy will be 0.`, function () {
+    const { angle: before_angle } = t;
 
+    $$updateRotateTransform(t);
+
+    const { angle: after_angle } = t;
+
+    expect(after_angle).to.equal(before_angle);
+  });
+
+  it(`If no cx, cy values, The cx, cy values will be reset to 0.`, function () {
     $$updateRotateTransform(t, { angle: makeRandomInt() });
 
     expect(t.matrix.e).to.equal(0);
     expect(t.matrix.f).to.equal(0);
   });
 
-  it(`If no second arguments, the function will throw an error.`, function () {
-    expect(() => $$updateRotateTransform(t)).to.throw();
-  });
+  it(`If no angle value, the angle will be same.`, function () {
+    const { angle: before_angle } = t;
 
-  it(`If no angle value, the function will throw an error.`, function () {
-    expect(() => $$updateRotateTransform(t, {})).to.throw();
+    $$updateRotateTransform(t, {
+      cx: makeRandomNumber(),
+      cy: makeRandomNumber(),
+    });
+
+    const { angle: after_angle } = t;
+
+    expect(after_angle).to.equal(before_angle);
   });
 
   describe(`
@@ -74,7 +83,9 @@ describe(`$$updateRotateTransform`, function () {
       });
       const { matrix } = translate_t;
 
-      expect($$updateRotateTransform(translate_t, { angle: makeRandomNumber() }));
+      expect(
+        $$updateRotateTransform(translate_t, { angle: makeRandomNumber() })
+      );
       expect(translate_t.matrix).to.deep.equal(matrix);
     });
 
