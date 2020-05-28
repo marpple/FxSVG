@@ -1,4 +1,2 @@
-export const makeRandomNumber = (size = 1000) => {
-  const n = Math.random() * size;
-  return Math.round(Math.random()) ? n : -n;
-};
+export const makeRandomNumber = (min = 0, max = 1000) =>
+  min + Math.random() * (max - min);

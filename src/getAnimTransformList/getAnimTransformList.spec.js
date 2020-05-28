@@ -15,8 +15,8 @@ describe(`$$getAnimTransformList`, function () {
       <rect
         x="${makeRandomNumber()}"
         y="${makeRandomNumber()}"
-        width="${Math.abs(makeRandomNumber()) + 1}"
-        height="${Math.abs(makeRandomNumber()) + 1}"
+        width="${makeRandomNumber(1)}"
+        height="${makeRandomNumber(1)}"
         ${t_attr ? `transform="${t_attr}"` : ""}
       >
       </rect>

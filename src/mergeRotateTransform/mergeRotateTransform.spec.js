@@ -36,8 +36,8 @@ describe(`$$mergeRotateTransform`, function () {
       <rect
         x="${makeRandomNumber()}"
         y="${makeRandomNumber()}"
-        width="${Math.abs(makeRandomNumber())}"
-        height="${Math.abs(makeRandomNumber())}"
+        width="${makeRandomNumber(1)}"
+        height="${makeRandomNumber(1)}"
         ${transform_str ? `transform="${transform_str}"` : ""}
       >
       </rect> 
@@ -215,11 +215,7 @@ describe(`$$mergeRotateTransform`, function () {
         cy: makeRandomNumber(),
       });
       const t = $$getBaseTransformList($el).getItem(1);
-      t.setRotate(
-        t.angle,
-        Math.ceil(Math.random() * 1000),
-        Math.ceil(Math.random() * 1000)
-      );
+      t.setRotate(t.angle, makeRandomNumber(1), makeRandomNumber(1));
 
       expectSameElementAndSameTransformListAfterMerge($el);
     });

@@ -19,8 +19,8 @@ describe(`$$initTranslateTransform`, function () {
       <rect
         x="${makeRandomNumber()}"
         y="${makeRandomNumber()}"
-        width="${Math.abs(makeRandomNumber())}"
-        height="${Math.abs(makeRandomNumber())}"
+        width="${makeRandomNumber(1)}"
+        height="${makeRandomNumber(1)}"
         ${transform_str ? `transform="${transform_str}"` : ""}
       >
       </rect> 
@@ -52,7 +52,9 @@ describe(`$$initTranslateTransform`, function () {
   });
 
   it(`The function do nothing on other SVGTransforms of the element.`, function () {
-    const before_l = deepCopyTransformListToMatrixList($$getBaseTransformList($el));
+    const before_l = deepCopyTransformListToMatrixList(
+      $$getBaseTransformList($el)
+    );
 
     $$initTranslateTransform()($el, {
       tx: makeRandomNumber(),

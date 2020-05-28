@@ -3,10 +3,10 @@ import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
 import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTransformAttributeValue.js";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
-import {$$createSVGTransform} from "../createSVGTransform/createSVGTransform.index.js";
+import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
-import {$$createSVGTransformRotate} from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
-import {$$createSVGTransformScale} from "../createSVGTransformScale/createSVGTransformScale.index.js";
+import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
+import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "./getBaseTransformList.index.js";
@@ -24,8 +24,8 @@ describe(`$$getBaseTransformList`, function () {
       <rect
         x="${makeRandomNumber()}" 
         y="${makeRandomNumber()}"
-        width="${Math.abs(makeRandomNumber()) + 1}"
-        height="${Math.abs(makeRandomNumber()) + 1}"
+        width="${makeRandomNumber(1)}"
+        height="${makeRandomNumber(1)}"
         ${transform_attr ? `transform="${transform_attr}"` : ""}
       >
       </rect> 

@@ -1,3 +1,4 @@
+import { makeRandomInt } from "./makeRandomInt.js";
 import { makeRandomNumber } from "./makeRandomNumber.js";
 
 export const makeRandomTransformString = (random = makeRandomNumber) =>
@@ -6,4 +7,4 @@ export const makeRandomTransformString = (random = makeRandomNumber) =>
     `rotate(${random()} ${random()} ${random()})`,
     `scale(${random()} ${random()})`,
     `matrix(${[...Array(6)].map(() => random()).join(" ")})`,
-  ][Math.floor(Math.random() * 4)];
+  ][makeRandomInt(0, 4)];

@@ -46,8 +46,8 @@ describe(`$$mergeTranslateTransform`, function () {
       <rect
         x="${x}"
         y="${y}"
-        width="${Math.abs(makeRandomNumber())}"
-        height="${Math.abs(makeRandomNumber())}"
+        width="${makeRandomNumber(1)}"
+        height="${makeRandomNumber(1)}"
         ${transform_str ? `transform="${transform_str}"` : ""}
       >
       </rect> 
