@@ -24,14 +24,13 @@ describe(`$$controlTranslateTransform`, function () {
   beforeEach(function () {
     x = makeRandomInt();
     y = makeRandomInt();
-    const t_attr = makeRandomTransformAttributeValue();
     $el = $$el()(`
       <rect
         x="${x}"
         y="${y}"
         width="${makeRandomNumber(1)}"
         height="${makeRandomNumber(1)}"
-        ${t_attr ? `transform="${t_attr}"` : ""}
+        transform="${makeRandomTransformAttributeValue(1)}"
       >
       </rect> 
     `);
@@ -160,7 +159,7 @@ describe(`$$controlTranslateTransform`, function () {
 
   it(`Arbitrary use case test.`, function () {
     const { controller, $el } = result;
-    const list = [...Array(makeRandomInt(1))]
+    const list = [...Array(makeRandomInt())]
       .map(() => makeRandomBool())
       .map((a) => (a ? "append" : "update"))
       .map((operation) => ({
