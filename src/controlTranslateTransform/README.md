@@ -1,6 +1,7 @@
 # \$\$controlTranslateTransform
 
 - [source](./controlTranslateTransform.index.js)
+- [test](./controlTranslateTransform.spec.js)
 
 `$$initTranslateTransform`, `$$updateTranslateTransform`, `$$appendTranslateTransform`, `$$mergeTranslateTransform` 함수들을
 쉽게 사용할 수 있는 `controller` 를 생성합니다.
