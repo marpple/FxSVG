@@ -160,7 +160,7 @@ describe(`$$controlTranslateTransform`, function () {
 
   it(`Arbitrary use case test.`, function () {
     const { controller, $el } = result;
-    const list = [...Array(makeRandomInt())]
+    const list = [...Array(makeRandomInt(1))]
       .map(() => makeRandomBool())
       .map((a) => (a ? "append" : "update"))
       .map((operation) => ({
