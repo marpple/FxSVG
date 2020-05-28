@@ -17,6 +17,7 @@ import "../src/initTranslateTransform/initTranslateTransform.spec.js";
 import "../src/isRotateSVGTransform/isRotateSVGTransform.spec.js";
 import "../src/isScaleSVGTransform/isScaleSVGTransform.spec.js";
 import "../src/isTranslateSVGTransform/isTranslateSVGTransform.spec.js";
+import "../src/mergeRotateTransform/mergeRotateTransform.spec.js";
 import "../src/mergeTranslateTransform/mergeTranslateTransform.spec.js";
 import "../src/updateRotateTransform/updateRotateTransform.spec.js";
 import "../src/updateTranslateTransform/updateTranslateTransform.spec.js";

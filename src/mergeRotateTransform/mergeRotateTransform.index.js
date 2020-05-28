@@ -6,6 +6,9 @@ import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslat
 
 export const $$mergeRotateTransform = ($svg = $$getSVG()) => ($el) => {
   const base_tl = $$getBaseTransformList($el);
+  if (base_tl.numberOfItems < 3) {
+    return $el;
+  }
 
   const transform1 = base_tl.getItem(0);
   const transform2 = base_tl.getItem(1);
@@ -14,6 +17,8 @@ export const $$mergeRotateTransform = ($svg = $$getSVG()) => ($el) => {
     !$$isTranslateSVGTransform(transform1) ||
     !$$isRotateSVGTransform(transform2) ||
     !$$isTranslateSVGTransform(transform3) ||
+    transform2.matrix.e !== 0 ||
+    transform2.matrix.f !== 0 ||
     transform1.matrix.a !== 1 ||
     transform1.matrix.b !== 0 ||
     transform1.matrix.c !== 0 ||
