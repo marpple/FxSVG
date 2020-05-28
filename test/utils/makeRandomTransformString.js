@@ -1,9 +1,9 @@
 import { makeRandomNumber } from "./makeRandomNumber.js";
 
-export const makeRandomTransformString = () =>
+export const makeRandomTransformString = (random = makeRandomNumber) =>
   [
-    `translate(${makeRandomNumber()} ${makeRandomNumber()})`,
-    `rotate(${makeRandomNumber()} ${makeRandomNumber()} ${makeRandomNumber()})`,
-    `scale(${makeRandomNumber()} ${makeRandomNumber()})`,
-    `matrix(${[...Array(6)].map(() => makeRandomNumber()).join(" ")})`,
+    `translate(${random()} ${random()})`,
+    `rotate(${random()} ${random()} ${random()})`,
+    `scale(${random()} ${random()})`,
+    `matrix(${[...Array(6)].map(() => random()).join(" ")})`,
   ][Math.floor(Math.random() * 4)];

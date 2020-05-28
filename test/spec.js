@@ -11,6 +11,7 @@ import "../src/createSVGTransformScale/createSVGTransformScale.spec.js";
 import "../src/createSVGTransformTranslate/createSVGTransformTranslate.spec.js";
 import "../src/el/el.spec.js";
 import "../src/els/els.spec.js";
+import "../src/getBaseTransformList/getBaseTransformList.spec.js";
 import "../src/getSetSVG/getSetSVG.spec.js";
 import "../src/initRotateTransform/initRotateTransform.spec.js";
 import "../src/initTranslateTransform/initTranslateTransform.spec.js";

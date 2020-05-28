@@ -1,6 +1,7 @@
 # \$\$getBaseTransformList
 
 - [source](./getBaseTransformList.index.js)
+- [test](./getBaseTransformList.spec.js)
 
 입력받은 svg 객체의 `transform.baseVal` 값을 반환합니다.
 
