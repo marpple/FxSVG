@@ -24,7 +24,9 @@ const expectSameTransformsAfterMerge = ($el) => {
     y_name: "y",
   });
 
-  const after_list = deepCopyTransformListToMatrixList($$getBaseTransformList($el));
+  const after_list = deepCopyTransformListToMatrixList(
+    $$getBaseTransformList($el)
+  );
 
   expect(result).to.equal($el);
   expect(after_list).to.deep.equal(before_list);
@@ -56,6 +58,12 @@ describe(`$$mergeTranslateTransform`, function () {
   If the first SVGTransform is not a translate SVGTransform,
   the function do nothing but return the element.
   `, function () {
+    it(`The element have no SVGTransform.`, function () {
+      $el.removeAttributeNS(null, "transform");
+
+      expectSameTransformsAfterMerge($el);
+    });
+
     it(`Use a matrix transform.`, function () {
       $$getBaseTransformList($el).insertItemBefore(
         $$createSVGTransformMatrix()(
