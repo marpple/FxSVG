@@ -1,6 +1,7 @@
 # \$\$getAnimTransformList
 
 - [source](./getAnimTransformList.index.js)
+- [test](./getAnimTransformList.spec.js)
 
 입력받은 svg 객체의 `transform.animVal` 값을 반환합니다.
 
