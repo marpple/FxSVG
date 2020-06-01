@@ -1,6 +1,8 @@
 import { expect } from "chai";
-import { makeRandomNumber } from "../../test/utils/index.js";
-import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
+import {
+  makeRandomNumber,
+  makeRandomSVGMatrix,
+} from "../../test/utils/index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
@@ -45,16 +47,7 @@ describe(`$$isRotateSVGTransform`, function () {
   if the SVGTransform's type is not same with a SVGTransform.SVG_TRANSFORM_ROTATE.
   `, function () {
     it(`Use a SVGTransform whose type is a SVGTransform.SVG_TRANSFORM_MATRIX.`, function () {
-      const matrix_t = $$createSVGTransformMatrix()(
-        $$createSVGMatrix()(
-          ["a", "b", "c", "d", "e", "f"]
-            .map((k) => [k, makeRandomNumber()])
-            .reduce((acc, [k, v]) => {
-              acc[k] = v;
-              return acc;
-            }, {})
-        )
-      );
+      const matrix_t = $$createSVGTransformMatrix()(makeRandomSVGMatrix());
       const result = $$isRotateSVGTransform(matrix_t);
 
       expect(result).to.be.false;

@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { go, map } from "fxjs2";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTransformAttributeValue.js";
 import { $$el } from "../el/el.index.js";
@@ -75,8 +76,7 @@ describe(`$$getBoxPoints`, function () {
   If there are transforms,
   transformed points are same with the points that applied by the transforms.
   `, function () {
-    const transform_attr = makeRandomTransformAttributeValue(1);
-    $el.setAttributeNS(null, "transform", transform_attr);
+    $el.setAttributeNS(null, "transform", makeRandomTransformAttributeValue(1));
 
     const { matrix } = $$getBaseTransformList($el).consolidate();
     const { original, transformed } = $$getBoxPoints()($el);
@@ -111,20 +111,50 @@ describe(`$$getBoxPoints`, function () {
         transformed.bottom_right,
         transformed.bottom_left,
       ];
-      expect(bounding.min.x).to.equal(
-        Math.min(...transformed_list.map(({ x }) => x))
+      const [min_x, max_x] = go(
+        transformed_list,
+        map(({ x }) => x),
+        (xs) => [Math.min(...xs), Math.max(...xs)]
       );
-      expect(bounding.min.y).to.equal(
-        Math.min(...transformed_list.map(({ y }) => y))
+      const [min_y, max_y] = go(
+        transformed_list,
+        map(({ y }) => y),
+        (ys) => [Math.min(...ys), Math.max(...ys)]
       );
-      expect(bounding.max.x).to.equal(
-        Math.max(...transformed_list.map(({ x }) => x))
-      );
-      expect(bounding.max.y).to.equal(
-        Math.max(...transformed_list.map(({ y }) => y))
-      );
+      expect(bounding.min.x).to.equal(min_x);
+      expect(bounding.min.y).to.equal(min_y);
+      expect(bounding.max.x).to.equal(max_x);
+      expect(bounding.max.y).to.equal(max_y);
     });
 
-    it(`The element have transforms.`, function () {});
+    it(`The element have transforms.`, function () {
+      $el.setAttributeNS(
+        null,
+        "transform",
+        makeRandomTransformAttributeValue(1)
+      );
+
+      const { transformed, bounding } = $$getBoxPoints()($el);
+      const transformed_list = [
+        transformed.top_left,
+        transformed.top_right,
+        transformed.bottom_right,
+        transformed.bottom_left,
+      ];
+      const [min_x, max_x] = go(
+        transformed_list,
+        map(({ x }) => x),
+        (xs) => [Math.min(...xs), Math.max(...xs)]
+      );
+      const [min_y, max_y] = go(
+        transformed_list,
+        map(({ y }) => y),
+        (ys) => [Math.min(...ys), Math.max(...ys)]
+      );
+      expect(bounding.min.x).to.equal(min_x);
+      expect(bounding.min.y).to.equal(min_y);
+      expect(bounding.max.x).to.equal(max_x);
+      expect(bounding.max.y).to.equal(max_y);
+    });
   });
 });

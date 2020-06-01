@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
-import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
+import { makeRandomSVGMatrix } from "../../test/utils/makeRandomSVGMatrix.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
@@ -56,24 +56,15 @@ describe(`$$appendTranslateTransform`, function () {
   the function will do nothing but return the SVGTransform.
   `, function () {
     it(`Use a matrix transform.`, function () {
-      const matrix_t = $$createSVGTransformMatrix()(
-        $$createSVGMatrix()(
-          ["a", "b", "c", "d", "e", "f"]
-            .map((k) => [k, makeRandomNumber()])
-            .reduce((acc, [k, v]) => {
-              acc[k] = v;
-              return acc;
-            }, {})
-        )
-      );
+      const matrix_t = $$createSVGTransformMatrix()(makeRandomSVGMatrix());
       const { matrix } = matrix_t;
 
-      expect(
-        $$appendTranslateTransform(matrix_t, {
-          tx: makeRandomNumber(),
-          ty: makeRandomNumber(),
-        })
-      ).to.equal(matrix_t);
+      const return_t = $$appendTranslateTransform(matrix_t, {
+        tx: makeRandomNumber(),
+        ty: makeRandomNumber(),
+      });
+
+      expect(return_t).to.equal(matrix_t);
       expect(matrix_t.matrix).to.equal(matrix);
     });
 
@@ -85,12 +76,12 @@ describe(`$$appendTranslateTransform`, function () {
       });
       const { matrix } = rotate_t;
 
-      expect(
-        $$appendTranslateTransform(rotate_t, {
-          tx: makeRandomNumber(),
-          ty: makeRandomNumber(),
-        })
-      ).to.equal(rotate_t);
+      const return_t = $$appendTranslateTransform(rotate_t, {
+        tx: makeRandomNumber(),
+        ty: makeRandomNumber(),
+      });
+
+      expect(return_t).to.equal(rotate_t);
       expect(rotate_t.matrix).to.equal(matrix);
     });
 
@@ -101,12 +92,12 @@ describe(`$$appendTranslateTransform`, function () {
       });
       const { matrix } = scale_t;
 
-      expect(
-        $$appendTranslateTransform(scale_t, {
-          tx: makeRandomNumber(),
-          ty: makeRandomNumber(),
-        })
-      ).to.equal(scale_t);
+      const return_t = $$appendTranslateTransform(scale_t, {
+        tx: makeRandomNumber(),
+        ty: makeRandomNumber(),
+      });
+
+      expect(return_t).to.equal(scale_t);
       expect(scale_t.matrix).to.equal(matrix);
     });
   });

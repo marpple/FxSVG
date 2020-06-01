@@ -16,7 +16,7 @@ svg 엘리먼트에 총 3개의 `SVGTransform`을 순서대로 추가합니다.
 초기 회전 각도 `angle` 을 설정할 수 있습니다. 단위는 `deg` 입니다.
 설정하지 않는 경우 모두 `0` 으로 초기화됩니다.
 
-[`<svg></svg>` 커링](../../svg_currying.md)이 적용된 함수입니다.
+[`<svg></svg>` 커링](../../doc/SVG_CURRYING.md)이 적용된 함수입니다.
 
 ```javascript
 const $el = $$el()(`

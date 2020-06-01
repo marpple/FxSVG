@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { dropL, each, go, map, mapL, rangeL, reduce } from "fxjs2";
 import {
   deepCopyTransformListToMatrixList,
   makeRandomBool,
@@ -134,20 +135,22 @@ describe(`$$controlTranslateTransform`, function () {
   Every other SVGTransforms are applied [-translate] then [+translate] transform.
   `, function () {
     const { $el, controller } = result;
-    const { matrix: plus_t_m } = $$createSVGTransformTranslate()({
-      tx: init_tx,
-      ty: init_ty,
-    });
-    const { matrix: minus_t_m } = $$createSVGTransformTranslate()({
-      tx: -init_tx,
-      ty: -init_ty,
-    });
-    const compressed_m = deepCopyTransformListToMatrixList(
-      $$getBaseTransformList($el)
-    )
-      .slice(1)
-      .map((matrix) => plus_t_m.multiply(matrix).multiply(minus_t_m))
-      .reduce((m1, m2) => m1.multiply(m2), $$createSVGMatrix()());
+    const [plus_t_m, minus_t_m] = go(
+      [
+        { tx: init_tx, ty: init_ty },
+        { tx: -init_tx, ty: -init_ty },
+      ],
+      mapL($$createSVGTransformTranslate()),
+      mapL(({ matrix: m }) => m)
+    );
+    const compressed_m = go(
+      $el,
+      $$getBaseTransformList,
+      deepCopyTransformListToMatrixList,
+      dropL(1),
+      mapL((m) => plus_t_m.multiply(m).multiply(minus_t_m)),
+      (iter) => reduce((m1, m2) => m1.multiply(m2), $$createSVGMatrix()(), iter)
+    );
 
     controller.end();
 
@@ -159,15 +162,17 @@ describe(`$$controlTranslateTransform`, function () {
 
   it(`Arbitrary use case test.`, function () {
     const { controller, $el } = result;
-    const list = [...Array(makeRandomInt())]
-      .map(() => makeRandomBool())
-      .map((a) => (a ? "append" : "update"))
-      .map((operation) => ({
+    const list = go(
+      rangeL(makeRandomInt()),
+      mapL(makeRandomBool),
+      mapL((a) => (a ? "append" : "update")),
+      map((operation) => ({
         operation,
         tx: makeRandomInt(),
         ty: makeRandomInt(),
-      }));
-    const { tx, ty } = list.reduce(
+      }))
+    );
+    const { tx, ty } = reduce(
       ({ tx: tx1, ty: ty1 }, { operation, tx: tx2, ty: ty2 }) =>
         operation === "update"
           ? { tx: tx2, ty: ty2 }
@@ -175,23 +180,26 @@ describe(`$$controlTranslateTransform`, function () {
       {
         tx: init_tx,
         ty: init_ty,
-      }
+      },
+      list
     );
-    list.forEach(({ operation, tx, ty }) => controller[operation]({ tx, ty }));
-    const { matrix: plus_t_m } = $$createSVGTransformTranslate()({
-      tx,
-      ty,
-    });
-    const { matrix: minus_t_m } = $$createSVGTransformTranslate()({
-      tx: -tx,
-      ty: -ty,
-    });
-    const compressed_m = deepCopyTransformListToMatrixList(
-      $$getBaseTransformList($el)
-    )
-      .slice(1)
-      .map((matrix) => plus_t_m.multiply(matrix).multiply(minus_t_m))
-      .reduce((m1, m2) => m1.multiply(m2), $$createSVGMatrix()());
+    each(({ operation, tx, ty }) => controller[operation]({ tx, ty }), list);
+    const [plus_t_m, minus_t_m] = go(
+      [
+        { tx, ty },
+        { tx: -tx, ty: -ty },
+      ],
+      mapL($$createSVGTransformTranslate()),
+      mapL(({ matrix: m }) => m)
+    );
+    const compressed_m = go(
+      $el,
+      $$getBaseTransformList,
+      deepCopyTransformListToMatrixList,
+      dropL(1),
+      mapL((matrix) => plus_t_m.multiply(matrix).multiply(minus_t_m)),
+      (iter) => reduce((m1, m2) => m1.multiply(m2), $$createSVGMatrix()(), iter)
+    );
 
     controller.end();
 

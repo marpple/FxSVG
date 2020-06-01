@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { drop, go1, mapL, rangeL } from "fxjs2";
 import {
   deepCopyTransformListToMatrixList,
   makeRandomInt,
@@ -14,14 +15,15 @@ describe(`$$initTranslateTransform`, function () {
   let $el;
 
   beforeEach(function () {
-    const transform_str = makeRandomTransformAttributeValue();
     $el = $$el()(`
       <rect
         x="${makeRandomNumber()}"
         y="${makeRandomNumber()}"
         width="${makeRandomNumber(1)}"
         height="${makeRandomNumber(1)}"
-        ${transform_str ? `transform="${transform_str}"` : ""}
+        ${go1(makeRandomTransformAttributeValue(), (t) =>
+          t ? `transform="${t}"` : ""
+        )}
       >
       </rect> 
     `);
@@ -40,8 +42,7 @@ describe(`$$initTranslateTransform`, function () {
   });
 
   it(`The first SVGTransform will be a translate SVGTransform with the input tx, ty values.`, function () {
-    const tx = makeRandomInt();
-    const ty = makeRandomInt();
+    const [tx, ty] = mapL(() => makeRandomInt(), rangeL(2));
 
     $$initTranslateTransform()($el, { tx, ty });
 
@@ -61,9 +62,10 @@ describe(`$$initTranslateTransform`, function () {
       ty: makeRandomNumber(),
     });
 
-    const after_l = deepCopyTransformListToMatrixList(
-      $$getBaseTransformList($el)
-    ).slice(1);
+    const after_l = drop(
+      1,
+      deepCopyTransformListToMatrixList($$getBaseTransformList($el))
+    );
     expect(after_l).to.deep.equal(before_l);
   });
 });

@@ -1,3 +1,4 @@
+import { isNil } from "fxjs2";
 import { $$isRotateSVGTransform } from "../isRotateSVGTransform/isRotateSVGTransform.index.js";
 
 export const $$appendRotateTransform = (transform, { angle }) => {
@@ -5,7 +6,7 @@ export const $$appendRotateTransform = (transform, { angle }) => {
     return transform;
   }
 
-  if (angle == null) {
+  if (isNil(angle)) {
     throw new Error("There is no angle.");
   }
 

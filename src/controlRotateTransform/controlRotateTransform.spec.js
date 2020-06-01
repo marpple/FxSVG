@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { dropL, each, go, go1, map, mapL, rangeL, reduce } from "fxjs2";
 import {
   deepCopyTransformListToMatrixList,
   makeRandomBool,
@@ -23,14 +24,15 @@ describe(`$$controlRotateTransform`, function () {
     angle = makeRandomInt(0, 360);
     cx = makeRandomInt();
     cy = makeRandomInt();
-    const t_attr = makeRandomTransformAttributeValue();
     $el = $$el()(`
       <rect
         x="${makeRandomNumber()}"
         y="${makeRandomNumber()}"
         width="${makeRandomNumber(1)}"
         height="${makeRandomNumber(1)}"
-        ${t_attr ? `transform="${t_attr}"` : ""}
+        ${go1(makeRandomTransformAttributeValue(), (t) =>
+          t ? `transform="${t}"` : ""
+        )} 
       >
       </rect> 
     `);
@@ -83,9 +85,7 @@ describe(`$$controlRotateTransform`, function () {
   The controller.update method update the return transform with the input angle.
   `, function () {
     const { $el, transform, controller } = result;
-
     const new_angle = makeRandomInt(0, 360);
-
     controller.update({ angle: new_angle });
 
     expect(transform.angle).to.equal(new_angle);
@@ -96,9 +96,7 @@ describe(`$$controlRotateTransform`, function () {
   The controller.append method add the input angle to the return transform. 
   `, function () {
     const { $el, transform, controller } = result;
-
     const angle_to_add = makeRandomInt(0, 360);
-
     controller.append({ angle: angle_to_add });
 
     expect(transform.angle).to.equal(angle + angle_to_add);
@@ -121,35 +119,37 @@ describe(`$$controlRotateTransform`, function () {
 
     expect(after_l.length).to.equal(1);
     expect(after_l[0]).to.deep.equal(
-      before_l.reduce((m1, m2) => m1.multiply(m2))
+      reduce((m1, m2) => m1.multiply(m2), before_l)
     );
   });
 
   it(`Arbitrary use case test.`, function () {
     const { controller, $el } = result;
-    const list = [...Array(makeRandomInt())]
-      .map(() => makeRandomBool())
-      .map((a) => (a ? "append" : "update"))
-      .map((operation) => ({
-        operation,
-        angle: makeRandomInt(0, 360),
-      }));
-    const { angle: angle2 } = list.reduce(
+    const list = go(
+      rangeL(makeRandomInt()),
+      mapL(makeRandomBool),
+      mapL((a) => (a ? "append" : "update")),
+      map((operation) => ({ operation, angle: makeRandomInt(0, 360) }))
+    );
+    const { angle: angle2 } = reduce(
       ({ angle: angle1 }, { operation, angle: angle2 }) =>
         operation === "update" ? { angle: angle2 } : { angle: angle1 + angle2 },
-      {
-        angle,
-      }
+      { angle },
+      list
     );
-    list.forEach(({ operation, angle }) => controller[operation]({ angle }));
-    const compressed_m = deepCopyTransformListToMatrixList(
-      $$getBaseTransformList($el)
-    )
-      .slice(3)
-      .reduce(
-        (m1, m2) => m1.multiply(m2),
-        $$createSVGTransformRotate()({ angle: angle2, cx, cy }).matrix
-      );
+    each(({ operation, angle }) => controller[operation]({ angle }), list);
+    const compressed_m = go(
+      $el,
+      $$getBaseTransformList,
+      deepCopyTransformListToMatrixList,
+      dropL(3),
+      (iter) =>
+        reduce(
+          (m1, m2) => m1.multiply(m2),
+          $$createSVGTransformRotate()({ angle: angle2, cx, cy }).matrix,
+          iter
+        )
+    );
 
     controller.end();
 

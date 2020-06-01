@@ -1,63 +1,69 @@
 import { expect } from "chai";
+import {
+  appendL,
+  defaultTo,
+  each,
+  extend,
+  flatMapL,
+  go,
+  mapL,
+  object,
+  pipe,
+  reduce,
+} from "fxjs2";
 import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
 import { $$createSVGTransformTranslate } from "./createSVGTransformTranslate.index.js";
 
-const makeCases = () => {
-  const makeSubCases = () =>
-    [[], ...makeAllCombinations(["tx", "ty"])].map((ks) =>
-      ks
-        .map((k) => [k, makeRandomInt()])
-        .reduce((acc, [k, v]) => {
-          acc[k] = v;
-          return acc;
-        }, {})
-    );
-  return [
-    { t: $$createSVGTransformTranslate()() },
-    ...makeSubCases().map((values) => ({
-      t: $$createSVGTransformTranslate()(values),
-      values,
-    })),
-    {
-      t: $$createSVGTransformTranslate(
+const makeCases = () =>
+  flatMapL(
+    (f) =>
+      go(
+        ["tx", "ty"],
+        makeAllCombinations,
+        mapL(
+          pipe(
+            mapL((k) => [k, makeRandomInt()]),
+            mapL((kv) => object([kv])),
+            reduce(extend),
+            defaultTo({})
+          )
+        ),
+        mapL((values) => ({ values, t: f(values) })),
+        appendL({ t: f() })
+      ),
+    [
+      $$createSVGTransformTranslate(),
+      $$createSVGTransformTranslate(
         document.createElementNS("http://www.w3.org/2000/svg", "svg")
-      )(),
-    },
-    ...makeSubCases().map((values) => ({
-      t: $$createSVGTransformTranslate(
-        document.createElementNS("http://www.w3.org/2000/svg", "svg")
-      )(values),
-      values,
-    })),
-  ];
-};
+      ),
+    ]
+  );
 
 describe(`$$createSVGTransformTranslate`, function () {
   it(`The return value will be a SVGTransform.`, function () {
-    const cases = makeCases();
-
-    for (const { t } of cases) {
-      expect(t).to.instanceof(SVGTransform);
-    }
+    go(
+      makeCases(),
+      mapL(({ t }) => t),
+      each((t) => expect(t).to.instanceof(SVGTransform))
+    );
   });
 
   it(`The SVGTransform's type will be the SVGTransform.SVG_TRANSFORM_TRANSLATE.`, function () {
-    const cases = makeCases();
-
-    for (const { t } of cases) {
-      expect(t.type).to.equal(SVGTransform.SVG_TRANSFORM_TRANSLATE);
-    }
+    go(
+      makeCases(),
+      mapL(({ t }) => t),
+      mapL(({ type: t }) => t),
+      each((t) => expect(t).to.equal(SVGTransform.SVG_TRANSFORM_TRANSLATE))
+    );
   });
 
   it(`
   The SVGTransform's translate values will be same with the input values. (matrix.e = tx, matrix.f = ty)
   The omitted values will be 0.
   `, function () {
-    const cases = makeCases();
-
-    for (const { t, values: { tx = 0, ty = 0 } = {} } of cases) {
+    each(({ t, values: { tx = 0, ty = 0 } = {} }) => {
       expect(t.matrix.e).to.equal(tx);
       expect(t.matrix.f).to.equal(ty);
-    }
+    }, makeCases());
   });
 });

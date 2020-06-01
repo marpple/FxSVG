@@ -1,5 +1,17 @@
 import { expect } from "chai";
 import {
+  appendL,
+  defaultTo,
+  each,
+  extend,
+  flatMapL,
+  go,
+  mapL,
+  object,
+  pipe,
+  reduce,
+} from "fxjs2";
+import {
   makeAllCombinations,
   makeRandomNumber,
 } from "../../test/utils/index.js";
@@ -17,53 +29,47 @@ const expectSameMatrix = (
   expect(m.f).to.equal(f);
 };
 
-const makeCases = () => {
-  const makeSubCases = () => [
-    ...makeAllCombinations(["a", "b", "c", "d", "e", "f"]).map((ks) =>
-      ks
-        .map((k) => [k, makeRandomNumber()])
-        .reduce((acc, [k, v]) => {
-          acc[k] = v;
-          return acc;
-        }, {})
-    ),
-    {},
-  ];
-  return [
-    { matrix: $$createSVGMatrix()() },
-    ...makeSubCases().map((values) => ({
-      values,
-      matrix: $$createSVGMatrix()(values),
-    })),
-    {
-      matrix: $$createSVGMatrix(
+const makeCases = () =>
+  flatMapL(
+    (f) =>
+      go(
+        ["a", "b", "c", "d", "e", "f"],
+        makeAllCombinations,
+        mapL(
+          pipe(
+            mapL((k) => [k, makeRandomNumber()]),
+            mapL((kv) => object([kv])),
+            reduce(extend),
+            defaultTo({})
+          )
+        ),
+        mapL((values) => ({ values, matrix: f(values) })),
+        appendL({ matrix: f() })
+      ),
+    [
+      $$createSVGMatrix(),
+      $$createSVGMatrix(
         document.createElementNS("http://www.w3.org/2000/svg", "svg")
-      )(),
-    },
-    ...makeSubCases().map((values) => ({
-      values,
-      matrix: $$createSVGMatrix(
-        document.createElementNS("http://www.w3.org/2000/svg", "svg")
-      )(values),
-    })),
-  ];
-};
+      ),
+    ]
+  );
 
 describe(`$$createSVGMatrix`, function () {
   it(`The return value is a SVGMatrix.`, function () {
-    const cases = makeCases();
-    for (const { matrix } of cases) {
-      expect(matrix).to.instanceof(SVGMatrix);
-    }
+    go(
+      makeCases(),
+      mapL(({ matrix: m }) => m),
+      each((m) => expect(m).to.instanceof(SVGMatrix))
+    );
   });
 
   it(`The matrix will be a identity matrix if there is no arguments.`, function () {
-    const $svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-
     const m1 = $$createSVGMatrix()();
     expectSameMatrix(m1, { a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 });
 
-    const m2 = $$createSVGMatrix($svg)();
+    const m2 = $$createSVGMatrix(
+      document.createElementNS("http://www.w3.org/2000/svg", "svg")
+    )();
     expectSameMatrix(m2, { a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 });
   });
 
@@ -71,9 +77,6 @@ describe(`$$createSVGMatrix`, function () {
   Each value of the matrix will be same with the given value.
   If there is omitted values, the values will be {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0} individually by default.
   `, function () {
-    const cases = makeCases();
-    for (const { matrix, values } of cases) {
-      expectSameMatrix(matrix, values);
-    }
+    each(({ matrix, values }) => expectSameMatrix(matrix, values), makeCases());
   });
 });

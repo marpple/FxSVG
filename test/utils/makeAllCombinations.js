@@ -9,5 +9,5 @@ const makeCombinations = (l1, l2, result) => {
 export const makeAllCombinations = (list) => {
   const result = [];
   makeCombinations([], list, result);
-  return result.slice(1);
+  return result;
 };

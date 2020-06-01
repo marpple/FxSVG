@@ -1,10 +1,10 @@
-import {$$appendRotateTransform} from "../appendRotateTransform/appendRotateTransform.index.js";
-import {$$consolidateTransformList} from "../consolidateTransformList/consolidateTransformList.index.js";
-import {$$getBaseTransformList} from "../getBaseTransformList/getBaseTransformList.index.js";
+import { $$appendRotateTransform } from "../appendRotateTransform/appendRotateTransform.index.js";
+import { $$consolidateTransformList } from "../consolidateTransformList/consolidateTransformList.index.js";
+import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 import { $$initRotateTransform } from "../initRotateTransform/initRotateTransform.index.js";
-import {$$mergeRotateTransform} from "../mergeRotateTransform/mergeRotateTransform.index.js";
-import {$$updateRotateTransform} from "../updateRotateTransform/updateRotateTransform.index.js";
+import { $$mergeRotateTransform } from "../mergeRotateTransform/mergeRotateTransform.index.js";
+import { $$updateRotateTransform } from "../updateRotateTransform/updateRotateTransform.index.js";
 
 export const $$controlRotateTransform = ($svg = $$getSVG()) => (
   $el,

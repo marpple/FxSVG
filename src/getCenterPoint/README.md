@@ -8,7 +8,7 @@ svg 객체의 중심에 해당하는 `SVGPoint`를 반환합니다. 해당 svg �
 `original` 속성은 svg 객체가 `transform` 하기 전 중심입니다.
 `transformed` 속성은 svg 객체가 `transform` 한 후 중심입니다.
 
-[`<svg></svg>` 커링](../../svg_currying.md)이 적용된 함수입니다.
+[`<svg></svg>` 커링](../../doc/SVG_CURRYING.md)이 적용된 함수입니다.
 
 ```javascript
 const $el = $$el()(`

@@ -8,7 +8,7 @@
 
 `update`, `append`, `end` 메소드를 체이닝하여 안전하게 조작할 수 있습니다.
 
-[`<svg></svg>` 커링](../../svg_currying.md)이 적용된 함수입니다.
+[`<svg></svg>` 커링](../../doc/SVG_CURRYING.md)이 적용된 함수입니다.
 
 ```javascript
 const $el = $$el()(

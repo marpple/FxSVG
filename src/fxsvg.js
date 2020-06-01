@@ -18,14 +18,18 @@ import { $$getBaseTransformList } from "./getBaseTransformList/getBaseTransformL
 import { $$getBoxPoints } from "./getBoxPoints/getBoxPoints.index.js";
 import { $$getCenterPoint } from "./getCenterPoint/getCenterPoint.index.js";
 import { $$getSVG, $$setSVG } from "./getSetSVG/getSetSVG.index.js";
+import { $$initMatrixTransform } from "./initMatrixTransform/initMatrixTransform.index.js";
 import { $$initRotateTransform } from "./initRotateTransform/initRotateTransform.index.js";
 import { $$initTranslateTransform } from "./initTranslateTransform/initTranslateTransform.index.js";
+import { $$isMatrixSVGTransform } from "./isMatrixSVGTransform/isMatrixSVGTransform.index.js";
 import { $$isRotateSVGTransform } from "./isRotateSVGTransform/isRotateSVGTransform.index.js";
 import { $$isScaleSVGTransform } from "./isScaleSVGTransform/isScaleSVGTransform.index.js";
 import { $$isTranslateSVGTransform } from "./isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 import { $$mergeRotateTransform } from "./mergeRotateTransform/mergeRotateTransform.index.js";
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
+import { $$updateMatrixTransform } from "./updateMatrixTransform/updateMatrixTransform.index.js";
 import { $$updateRotateTransform } from "./updateRotateTransform/updateRotateTransform.index.js";
+import { $$updateScaleTransform } from "./updateScaleTransform/updateScaleTransform.index.js";
 import { $$updateTranslateTransform } from "./updateTranslateTransform/updateTranslateTransform.index.js";
 
 export const FxSVG = {
@@ -50,13 +54,17 @@ export const FxSVG = {
   getCenterPoint: $$getCenterPoint,
   getSVG: $$getSVG,
   setSVG: $$setSVG,
+  initMatrixTransform: $$initMatrixTransform,
   initRotateTransform: $$initRotateTransform,
   initTranslateTransform: $$initTranslateTransform,
+  isMatrixSVGTransform: $$isMatrixSVGTransform,
   isRotateSVGTransform: $$isRotateSVGTransform,
   isScaleSVGTransform: $$isScaleSVGTransform,
   isTranslateSVGTransform: $$isTranslateSVGTransform,
   mergeRotateTransform: $$mergeRotateTransform,
   mergeTranslateTransform: $$mergeTranslateTransform,
+  updateMatrixTransform: $$updateMatrixTransform,
   updateRotateTransform: $$updateRotateTransform,
+  updateScaleTransform: $$updateScaleTransform,
   updateTranslateTransform: $$updateTranslateTransform,
 };
