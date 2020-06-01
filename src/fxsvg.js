@@ -29,6 +29,7 @@ import { $$mergeRotateTransform } from "./mergeRotateTransform/mergeRotateTransf
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
 import { $$updateMatrixTransform } from "./updateMatrixTransform/updateMatrixTransform.index.js";
 import { $$updateRotateTransform } from "./updateRotateTransform/updateRotateTransform.index.js";
+import { $$updateScaleTransform } from "./updateScaleTransform/updateScaleTransform.index.js";
 import { $$updateTranslateTransform } from "./updateTranslateTransform/updateTranslateTransform.index.js";
 
 export const FxSVG = {
@@ -64,5 +65,6 @@ export const FxSVG = {
   mergeTranslateTransform: $$mergeTranslateTransform,
   updateMatrixTransform: $$updateMatrixTransform,
   updateRotateTransform: $$updateRotateTransform,
+  updateScaleTransform: $$updateScaleTransform,
   updateTranslateTransform: $$updateTranslateTransform,
 };

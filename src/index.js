@@ -29,6 +29,7 @@ export { $$mergeRotateTransform } from "./mergeRotateTransform/mergeRotateTransf
 export { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
 export { $$updateMatrixTransform } from "./updateMatrixTransform/updateMatrixTransform.index.js";
 export { $$updateRotateTransform } from "./updateRotateTransform/updateRotateTransform.index.js";
+export { $$updateScaleTransform } from "./updateScaleTransform/updateScaleTransform.index.js";
 export { $$updateTranslateTransform } from "./updateTranslateTransform/updateTranslateTransform.index.js";
 
 export { FxSVG as default } from "./fxsvg.js";

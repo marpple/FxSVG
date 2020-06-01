@@ -29,4 +29,5 @@ import "../src/mergeRotateTransform/mergeRotateTransform.spec.js";
 import "../src/mergeTranslateTransform/mergeTranslateTransform.spec.js";
 import "../src/updateMatrixTransform/updateMatrixTransform.spec.js";
 import "../src/updateRotateTransform/updateRotateTransform.spec.js";
+import "../src/updateScaleTransform/updateScaleTransform.sepc.js";
 import "../src/updateTranslateTransform/updateTranslateTransform.spec.js";
