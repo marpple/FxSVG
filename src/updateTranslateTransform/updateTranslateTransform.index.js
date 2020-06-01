@@ -1,6 +1,6 @@
 import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 
-export const $$updateTranslateTransform = (transform, { tx, ty }) => {
+export const $$updateTranslateTransform = (transform, { tx, ty } = {}) => {
   if (!$$isTranslateSVGTransform(transform)) {
     return transform;
   }

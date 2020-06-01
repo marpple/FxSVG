@@ -51,10 +51,14 @@ describe(`$$updateTranslateTransform`, function () {
       expect(t.matrix.e).to.equal(_tx);
       expect(t.matrix.f).to.equal(_ty);
     });
-  });
 
-  it(`If no second argument, the function will throw an error.`, function () {
-    expect(() => $$updateTranslateTransform(t)).to.throw();
+    it(`Omit second argument.`, function () {
+      const { e: _tx, f: _ty } = t.matrix;
+      $$updateTranslateTransform(t);
+
+      expect(t.matrix.e).to.equal(_tx);
+      expect(t.matrix.f).to.equal(_ty);
+    });
   });
 
   describe(`
