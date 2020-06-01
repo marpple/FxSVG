@@ -20,6 +20,7 @@ import { $$getCenterPoint } from "./getCenterPoint/getCenterPoint.index.js";
 import { $$getSVG, $$setSVG } from "./getSetSVG/getSetSVG.index.js";
 import { $$initRotateTransform } from "./initRotateTransform/initRotateTransform.index.js";
 import { $$initTranslateTransform } from "./initTranslateTransform/initTranslateTransform.index.js";
+import { $$isMatrixSVGTransform } from "./isMatrixSVGTransform/isMatrixSVGTransform.index.js";
 import { $$isRotateSVGTransform } from "./isRotateSVGTransform/isRotateSVGTransform.index.js";
 import { $$isScaleSVGTransform } from "./isScaleSVGTransform/isScaleSVGTransform.index.js";
 import { $$isTranslateSVGTransform } from "./isTranslateSVGTransform/isTranslateSVGTransform.index.js";
@@ -52,6 +53,7 @@ export const FxSVG = {
   setSVG: $$setSVG,
   initRotateTransform: $$initRotateTransform,
   initTranslateTransform: $$initTranslateTransform,
+  isMatrixSVGTransform: $$isMatrixSVGTransform,
   isRotateSVGTransform: $$isRotateSVGTransform,
   isScaleSVGTransform: $$isScaleSVGTransform,
   isTranslateSVGTransform: $$isTranslateSVGTransform,

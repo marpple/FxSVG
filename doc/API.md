@@ -88,6 +88,13 @@
 
 `type`이 `SVGTransform.SVG_TRANSFORM_MATRIX`인 `SVGTransform` 객체를 생성합니다.
 
+## \$\$isMatrixSVGTransform
+
+- [source](../src/isMatrixSVGTransform/isMatrixSVGTransform.index.js)
+- [detail](../src/isMatrixSVGTransform/README.md)
+
+해당 `SVGTransform`의 `type`이 `SVGTransform.SVG_TRANSFORM_MATRIX`인지 여부를 판단합니다.
+
 ## \$\$isTranslateSVGTransform
 
 - [source](../src/isTranslateSVGTransform/isTranslateSVGTransform.index.js)
