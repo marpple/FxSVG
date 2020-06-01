@@ -18,6 +18,7 @@ import "../src/getBaseTransformList/getBaseTransformList.spec.js";
 import "../src/getBoxPoints/getBoxPoints.spec.js";
 import "../src/getCenterPoint/getCenterPoint.spec.js";
 import "../src/getSetSVG/getSetSVG.spec.js";
+import "../src/initMatrixTransform/initMatrixTransform.spec.js";
 import "../src/initRotateTransform/initRotateTransform.spec.js";
 import "../src/initTranslateTransform/initTranslateTransform.spec.js";
 import "../src/isMatrixSVGTransform/isMatrixSVGTransform.spec.js";

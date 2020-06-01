@@ -151,6 +151,13 @@ svg 객체의 중심에 해당하는 `SVGPoint`를 반환합니다.
 
 `SVGTransformList` 객체의 모든 `SVGTransform` 객체를 하나로 통합합니다.
 
+## \$\$initMatrixTransform
+
+- [source](../src/initMatrixTransform/initMatrixTransform.index.js)
+- [detail](../src/initMatrixTransform/README.md)
+
+svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_MATRIX` 타입의 `SVGTransform` 을 추가합니다.
+
 ## \$\$initTranslateTransform
 
 - [source](../src/initTranslateTransform/initTranslateTransform.index.js)

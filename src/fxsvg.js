@@ -18,6 +18,7 @@ import { $$getBaseTransformList } from "./getBaseTransformList/getBaseTransformL
 import { $$getBoxPoints } from "./getBoxPoints/getBoxPoints.index.js";
 import { $$getCenterPoint } from "./getCenterPoint/getCenterPoint.index.js";
 import { $$getSVG, $$setSVG } from "./getSetSVG/getSetSVG.index.js";
+import { $$initMatrixTransform } from "./initMatrixTransform/initMatrixTransform.index.js";
 import { $$initRotateTransform } from "./initRotateTransform/initRotateTransform.index.js";
 import { $$initTranslateTransform } from "./initTranslateTransform/initTranslateTransform.index.js";
 import { $$isMatrixSVGTransform } from "./isMatrixSVGTransform/isMatrixSVGTransform.index.js";
@@ -51,6 +52,7 @@ export const FxSVG = {
   getCenterPoint: $$getCenterPoint,
   getSVG: $$getSVG,
   setSVG: $$setSVG,
+  initMatrixTransform: $$initMatrixTransform,
   initRotateTransform: $$initRotateTransform,
   initTranslateTransform: $$initTranslateTransform,
   isMatrixSVGTransform: $$isMatrixSVGTransform,
