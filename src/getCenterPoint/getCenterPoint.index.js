@@ -1,3 +1,4 @@
+import { go, mapL, reduce } from "fxjs2";
 import { $$createSVGPoint } from "../createSVGPoint/createSVGPoint.index.js";
 import { $$getBoxPoints } from "../getBoxPoints/getBoxPoints.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
@@ -9,19 +10,25 @@ const $$calcCenterPoint = ($svg = $$getSVG()) => (points) => {
     points.bottom_left,
     points.bottom_right,
   ];
-  const x = l.map(({ x }) => x).reduce((a, b) => a + b) / 4;
-  const y = l.map(({ y }) => y).reduce((a, b) => a + b) / 4;
+  const x = go(
+    l,
+    mapL(({ x }) => x),
+    reduce((a, b) => a + b),
+    (n) => n / 4
+  );
+  const y = go(
+    l,
+    mapL(({ y }) => y),
+    reduce((a, b) => a + b),
+    (n) => n / 4
+  );
   return $$createSVGPoint($svg)({ x, y });
 };
 
-export const $$getCenterPoint = ($svg = $$getSVG()) => ($el) => {
-  const {
-    original: original_points,
-    transformed: transformed_points,
-  } = $$getBoxPoints($svg)($el);
-
-  const original = $$calcCenterPoint($svg)(original_points);
-  const transformed = $$calcCenterPoint($svg)(transformed_points);
-
-  return { original, transformed };
-};
+export const $$getCenterPoint = ($svg = $$getSVG()) => ($el) =>
+  go(
+    $$getBoxPoints($svg)($el),
+    ({ original, transformed }) => [original, transformed],
+    mapL($$calcCenterPoint($svg)),
+    ([original, transformed]) => ({ original, transformed })
+  );

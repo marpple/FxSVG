@@ -1,3 +1,4 @@
+import { each, mapL, rangeL } from "fxjs2";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
@@ -10,9 +11,10 @@ export const $$mergeRotateTransform = ($svg = $$getSVG()) => ($el) => {
     return $el;
   }
 
-  const transform1 = base_tl.getItem(0);
-  const transform2 = base_tl.getItem(1);
-  const transform3 = base_tl.getItem(2);
+  const [transform1, transform2, transform3] = mapL(
+    (i) => base_tl.getItem(i),
+    rangeL(3)
+  );
   if (
     !$$isTranslateSVGTransform(transform1) ||
     !$$isRotateSVGTransform(transform2) ||
@@ -33,9 +35,7 @@ export const $$mergeRotateTransform = ($svg = $$getSVG()) => ($el) => {
     return $el;
   }
 
-  for (let i = 0; i < 3; i++) {
-    base_tl.removeItem(0);
-  }
+  each(() => base_tl.removeItem(0), rangeL(3));
   base_tl.insertItemBefore(
     $$createSVGTransformRotate($svg)({
       angle: transform2.angle,

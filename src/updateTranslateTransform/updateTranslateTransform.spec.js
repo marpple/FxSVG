@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import { makeRandomInt } from "../../test/utils/index.js";
-import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
+import { mapL, rangeL } from "fxjs2";
+import { makeRandomInt, makeRandomSVGMatrix } from "../../test/utils/index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
@@ -18,8 +18,7 @@ describe(`$$updateTranslateTransform`, function () {
   });
 
   it(`The SVGTransform's tx, ty values will be changed to input values.`, function () {
-    const tx = makeRandomInt();
-    const ty = makeRandomInt();
+    const [tx, ty] = mapL(() => makeRandomInt(), rangeL(2));
     $$updateTranslateTransform(t, { tx, ty });
 
     expect(t.matrix.e).to.equal(tx);
@@ -46,8 +45,7 @@ describe(`$$updateTranslateTransform`, function () {
     });
 
     it(`Omit tx, ty.`, function () {
-      const _tx = t.matrix.e;
-      const _ty = t.matrix.f;
+      const { e: _tx, f: _ty } = t.matrix;
       $$updateTranslateTransform(t, {});
 
       expect(t.matrix.e).to.equal(_tx);
@@ -64,14 +62,7 @@ describe(`$$updateTranslateTransform`, function () {
   the function will do nothing but return SVGTransform.
   `, function () {
     it(`Use a matrix transform.`, function () {
-      const matrix = $$createSVGMatrix()({
-        a: makeRandomInt(),
-        b: makeRandomInt(),
-        c: makeRandomInt(),
-        d: makeRandomInt(),
-        e: makeRandomInt(),
-        f: makeRandomInt(),
-      });
+      const matrix = makeRandomSVGMatrix();
       const matrix_t = $$createSVGTransformMatrix()(matrix);
 
       expect($$updateTranslateTransform(matrix_t, {})).to.equal(matrix_t);

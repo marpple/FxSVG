@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { mapL, rangeL } from "fxjs2";
 import { $$getSVG, $$setSVG } from "./getSetSVG.index.js";
 
 describe(`$$setSVG + $$getSVG`, function () {
@@ -30,8 +31,7 @@ describe(`$$getSVG`, function () {
   });
 
   it(`The return value will be always same.`, function () {
-    const $svg1 = $$getSVG();
-    const $svg2 = $$getSVG();
+    const [$svg1, $svg2] = mapL(() => $$getSVG(), rangeL(2));
 
     expect($svg1).to.equal($svg2);
   });

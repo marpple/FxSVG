@@ -1,6 +1,9 @@
 import { expect } from "chai";
-import { makeRandomInt, makeRandomNumber } from "../../test/utils/index.js";
-import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
+import {
+  makeRandomInt,
+  makeRandomNumber,
+  makeRandomSVGMatrix,
+} from "../../test/utils/index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
@@ -60,14 +63,7 @@ describe(`$$updateRotateTransform`, function () {
   the function will do nothing but return SVGTransform. 
   `, function () {
     it(`Use a matrix transform.`, function () {
-      const matrix = $$createSVGMatrix()({
-        a: makeRandomNumber(),
-        b: makeRandomNumber(),
-        c: makeRandomNumber(),
-        d: makeRandomNumber(),
-        e: makeRandomNumber(),
-        f: makeRandomNumber(),
-      });
+      const matrix = makeRandomSVGMatrix();
       const matrix_t = $$createSVGTransformMatrix()(matrix);
 
       expect(

@@ -1,6 +1,9 @@
 import { expect } from "chai";
-import { makeRandomInt, makeRandomNumber } from "../../test/utils/index.js";
-import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
+import {
+  makeRandomInt,
+  makeRandomNumber,
+  makeRandomSVGMatrix,
+} from "../../test/utils/index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
@@ -44,46 +47,44 @@ describe(`$$appendRotateTransform`, function () {
 
   describe(`If the SVGTransform is not a rotate transform, the function will do nothing but return the transform.`, function () {
     it(`Use a matrix transform.`, function () {
-      const matrix = $$createSVGMatrix()(
-        ["a", "b", "c", "d", "e", "f"]
-          .map((k) => [k, makeRandomNumber()])
-          .reduce((acc, [k, v]) => {
-            acc[k] = v;
-            return acc;
-          }, {})
-      );
-      const t = $$createSVGTransformMatrix()(matrix);
+      const matrix = makeRandomSVGMatrix();
+      const before_t = $$createSVGTransformMatrix()(matrix);
+      const after_t = $$appendRotateTransform(before_t, {
+        angle: makeRandomNumber(),
+      });
 
-      expect(
-        $$appendRotateTransform(t, { angle: makeRandomNumber() })
-      ).to.equal(t);
-      expect(t.matrix).to.deep.equal(matrix);
+      expect(after_t).to.equal(before_t);
+      expect(before_t.matrix).to.deep.equal(matrix);
     });
 
     it(`Use a translate transform.`, function () {
-      const t = $$createSVGTransformTranslate()({
+      const before_t = $$createSVGTransformTranslate()({
         tx: makeRandomNumber(),
         ty: makeRandomNumber(),
       });
-      const { matrix } = t;
+      const { matrix } = before_t;
 
-      expect(
-        $$appendRotateTransform(t, { angle: makeRandomNumber() })
-      ).to.equal(t);
-      expect(t.matrix).to.deep.equal(matrix);
+      const after_t = $$appendRotateTransform(before_t, {
+        angle: makeRandomNumber(),
+      });
+
+      expect(after_t).to.equal(before_t);
+      expect(before_t.matrix).to.deep.equal(matrix);
     });
 
     it(`Use a scale transform.`, function () {
-      const t = $$createSVGTransformScale()({
+      const before_t = $$createSVGTransformScale()({
         sx: makeRandomNumber(),
         sy: makeRandomNumber(),
       });
-      const { matrix } = t;
+      const { matrix } = before_t;
 
-      expect(
-        $$appendRotateTransform(t, { angle: makeRandomNumber() })
-      ).to.equal(t);
-      expect(t.matrix).to.deep.equal(matrix);
+      const after_t = $$appendRotateTransform(before_t, {
+        angle: makeRandomNumber(),
+      });
+
+      expect(after_t).to.equal(before_t);
+      expect(before_t.matrix).to.deep.equal(matrix);
     });
   });
 });

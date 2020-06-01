@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { each, go, go1, mapL, zip } from "fxjs2";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
 import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTransformAttributeValue.js";
@@ -15,18 +16,15 @@ describe(`$$getBaseTransformList`, function () {
   let $el;
 
   beforeEach(function () {
-    const transform_attr = makeRandomTransformAttributeValue(
-      0,
-      100,
-      makeRandomInt
-    );
     $el = $$el()(`
       <rect
         x="${makeRandomNumber()}" 
         y="${makeRandomNumber()}"
         width="${makeRandomNumber(1)}"
         height="${makeRandomNumber(1)}"
-        ${transform_attr ? `transform="${transform_attr}"` : ""}
+        ${go1(makeRandomTransformAttributeValue(0, 100, makeRandomInt), (t) =>
+          t ? `transform="${t}"` : ""
+        )}
       >
       </rect> 
     `);
@@ -53,59 +51,92 @@ describe(`$$getBaseTransformList`, function () {
     const transform_list = $$getBaseTransformList($el);
 
     expect(transform_list.numberOfItems).to.equal(transform_str_list.length);
-    for (let i = 0; i < transform_str_list.length; i++) {
-      const transform_str = transform_str_list[i];
-      const transform = transform_list.getItem(i);
-
-      if (transform.type === transform.SVG_TRANSFORM_UNKNOWN) {
-        expect(true, "INVALID TRANSFORM").to.be.false;
-      } else if (transform.type === transform.SVG_TRANSFORM_MATRIX) {
-        const [a, b, c, d, e, f] = transform_str
-          .match(/(-?\d+(\.\d+)?)/gi)
-          .map((n) => parseFloat(n));
-        const t = $$createSVGTransformMatrix()(
-          $$createSVGMatrix()({ a, b, c, d, e, f })
-        );
-        expect(transform_str).to.have.string("matrix");
-        expect(transform.matrix).to.deep.equal(t.matrix);
-      } else if (transform.type === transform.SVG_TRANSFORM_TRANSLATE) {
-        const [tx, ty] = transform_str
-          .match(/(-?\d+(\.\d+)?)/gi)
-          .map((n) => parseFloat(n));
-        const t = $$createSVGTransformTranslate()({ tx, ty });
-        expect(transform_str).to.have.string("translate");
-        expect(transform.matrix).to.deep.equal(t.matrix);
-      } else if (transform.type === transform.SVG_TRANSFORM_SCALE) {
-        const [sx, sy] = transform_str
-          .match(/(-?\d+(\.\d+)?)/gi)
-          .map((n) => parseFloat(n));
-        const t = $$createSVGTransformScale()({ sx, sy });
-        expect(transform_str).to.have.string("scale");
-        expect(transform.matrix).to.deep.equal(t.matrix);
-      } else if (transform.type === transform.SVG_TRANSFORM_ROTATE) {
-        const [angle, cx, cy] = transform_str
-          .match(/(-?\d+(\.\d+)?)/gi)
-          .map((n) => parseFloat(n));
-        const t = $$createSVGTransformRotate()({ angle, cx, cy });
-        expect(transform_str).to.have.string("rotate");
-        expect(transform.matrix).to.deep.equal(t.matrix);
-      } else if (transform.type === transform.SVG_TRANSFORM_SKEWX) {
-        const [angle] = transform_str
-          .match(/(-?\d+(\.\d+)?)/gi)
-          .map((n) => parseFloat(n));
-        const t = $$createSVGTransform();
-        t.setSkewX(angle);
-        expect(transform_str).to.have.string("skewX");
-        expect(transform.matrix).to.deep.equal(t.matrix);
-      } else if (transform.type === transform.SVG_TRANSFORM_SKEWY) {
-        const [angle] = transform_str
-          .match(/(-?\d+(\.\d+)?)/gi)
-          .map((n) => parseFloat(n));
-        const t = $$createSVGTransform();
-        t.setSkewY(angle);
-        expect(transform_str).to.have.string("skewY");
-        expect(transform.matrix).to.deep.equal(t.matrix);
-      }
-    }
+    go(
+      zip(transform_str_list, transform_list),
+      each(([, transform]) => {
+        if (transform.type === transform.SVG_TRANSFORM_UNKNOWN) {
+          expect(true, "INVALID TRANSFORM").to.be.false;
+        }
+      }),
+      each(([transform_str, transform]) => {
+        if (transform.type === transform.SVG_TRANSFORM_MATRIX) {
+          const t = go(
+            transform_str.match(/(-?\d+(\.\d+)?)/gi),
+            mapL(parseFloat),
+            ([a, b, c, d, e, f]) => ({ a, b, c, d, e, f }),
+            $$createSVGMatrix(),
+            $$createSVGTransformMatrix()
+          );
+          expect(transform_str).to.have.string("matrix");
+          expect(transform.matrix).to.deep.equal(t.matrix);
+        }
+      }),
+      each(([transform_str, transform]) => {
+        if (transform.type === transform.SVG_TRANSFORM_TRANSLATE) {
+          const t = go(
+            transform_str.match(/(-?\d+(\.\d+)?)/gi),
+            mapL(parseFloat),
+            ([tx, ty]) => ({ tx, ty }),
+            $$createSVGTransformTranslate()
+          );
+          expect(transform_str).to.have.string("translate");
+          expect(transform.matrix).to.deep.equal(t.matrix);
+        }
+      }),
+      each(([transform_str, transform]) => {
+        if (transform.type === transform.SVG_TRANSFORM_SCALE) {
+          const t = go(
+            transform_str.match(/(-?\d+(\.\d+)?)/gi),
+            mapL(parseFloat),
+            ([sx, sy]) => ({ sx, sy }),
+            $$createSVGTransformScale()
+          );
+          expect(transform_str).to.have.string("scale");
+          expect(transform.matrix).to.deep.equal(t.matrix);
+        }
+      }),
+      each(([transform_str, transform]) => {
+        if (transform.type === transform.SVG_TRANSFORM_ROTATE) {
+          const t = go(
+            transform_str.match(/(-?\d+(\.\d+)?)/gi),
+            mapL(parseFloat),
+            ([angle, cx, cy]) => ({ angle, cx, cy }),
+            $$createSVGTransformRotate()
+          );
+          expect(transform_str).to.have.string("rotate");
+          expect(transform.matrix).to.deep.equal(t.matrix);
+        }
+      }),
+      each(([transform_str, transform]) => {
+        if (transform.type === transform.SVG_TRANSFORM_SKEWX) {
+          const [t] = go(
+            transform_str.match(/(-?\d+(\.\d+)?)/gi),
+            mapL(parseFloat),
+            mapL((angle) => {
+              const t = $$createSVGTransform();
+              t.setSkewX(angle);
+              return t;
+            })
+          );
+          expect(transform_str).to.have.string("skewX");
+          expect(transform.matrix).to.deep.equal(t.matrix);
+        }
+      }),
+      each(([transform_str, transform]) => {
+        if (transform.type === transform.SVG_TRANSFORM_SKEWY) {
+          const t = go(
+            transform_str.match(/(-?\d+(\.\d+)?)/gi),
+            mapL(parseFloat),
+            mapL((angle) => {
+              const t = $$createSVGTransform();
+              t.setSkewY(angle);
+              return t;
+            })
+          );
+          expect(transform_str).to.have.string("skewY");
+          expect(transform.matrix).to.deep.equal(t.matrix);
+        }
+      })
+    );
   });
 });

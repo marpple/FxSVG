@@ -1,8 +1,10 @@
 import { expect } from "chai";
+import { go1 } from "fxjs2";
 import {
   deepCopyTransformListToMatrixList,
   makeRandomInt,
   makeRandomNumber,
+  makeRandomSVGMatrix,
   makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
@@ -41,14 +43,15 @@ describe(`$$mergeTranslateTransform`, function () {
     x = makeRandomInt();
     y = makeRandomInt();
 
-    const transform_str = makeRandomTransformAttributeValue();
     $el = $$el()(`
       <rect
         x="${x}"
         y="${y}"
         width="${makeRandomNumber(1)}"
         height="${makeRandomNumber(1)}"
-        ${transform_str ? `transform="${transform_str}"` : ""}
+        ${go1(makeRandomTransformAttributeValue(), (t) =>
+          t ? `transform="${t}"` : ""
+        )}
       >
       </rect> 
     `);
@@ -66,16 +69,7 @@ describe(`$$mergeTranslateTransform`, function () {
 
     it(`Use a matrix transform.`, function () {
       $$getBaseTransformList($el).insertItemBefore(
-        $$createSVGTransformMatrix()(
-          $$createSVGMatrix()(
-            ["a", "b", "c", "d", "e", "f"]
-              .map((k) => [k, makeRandomNumber()])
-              .reduce((acc, [k, v]) => {
-                acc[k] = v;
-                return acc;
-              }, {})
-          )
-        ),
+        $$createSVGTransformMatrix()(makeRandomSVGMatrix()),
         0
       );
 
