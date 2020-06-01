@@ -1,6 +1,7 @@
 import "../src/appendRotateTransform/appendRotateTransform.spec.js";
 import "../src/appendTranslateTransform/appendTranslateTransform.spec.js";
 import "../src/consolidateTransformList/consolidateTransformList.spec.js";
+import "../src/controlRotateTransform/controlRotateTransform.spec.js";
 import "../src/controlTranslateTransform/controlTranslateTransform.spec.js";
 import "../src/createSVGMatrix/createSVGMatrix.spec.js";
 import "../src/createSVGPoint/createSVGPoint.spec.js";

@@ -1,6 +1,7 @@
 # \$\$controlRotateTransform
 
 - [source](./controlRotateTransform.index.js)
+- [test](./controlRotateTransform.spec.js)
 
 `$$initRotateTransform`, `$$updateRotateTransform`, `$$appendRotateTransform`, `$$mergeRotateTransform` 함수들을
 쉽게 사용할 수 있는 `controller` 를 생성합니다.
