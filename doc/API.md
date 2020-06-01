@@ -165,6 +165,13 @@ svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_MATRIX` 타입의 `SVGTransform`
 
 svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransform` 을 추가합니다.
 
+## \$\$updateMatrixTransform
+
+- [source](../src/updateMatrixTransform/updateMatrixTransform.index.js)
+- [detail](../src/updateMatrixTransform/README.md)
+
+`SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransform` 의 `tx`, `ty` 값을 수정합니다.
+
 ## \$\$updateTranslateTransform
 
 - [source](../src/updateTranslateTransform/updateTranslateTransform.index.js)

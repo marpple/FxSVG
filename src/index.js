@@ -27,6 +27,7 @@ export { $$isScaleSVGTransform } from "./isScaleSVGTransform/isScaleSVGTransform
 export { $$isTranslateSVGTransform } from "./isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 export { $$mergeRotateTransform } from "./mergeRotateTransform/mergeRotateTransform.index.js";
 export { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
+export { $$updateMatrixTransform } from "./updateMatrixTransform/updateMatrixTransform.index.js";
 export { $$updateRotateTransform } from "./updateRotateTransform/updateRotateTransform.index.js";
 export { $$updateTranslateTransform } from "./updateTranslateTransform/updateTranslateTransform.index.js";
 
