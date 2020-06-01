@@ -1,42 +1,55 @@
-import { createSVGWindow } from "svgdom";
+import { expect } from "chai";
+import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
 import { $$createSVGPoint } from "./createSVGPoint.index.js";
 
-describe(`$$createSVGPoint`, () => {
-  let $dummy_svg;
+const makeCases = () => {
+  const makeSubCases = () => [
+    {},
+    ...makeAllCombinations(["x", "y"]).map((ks) =>
+      ks
+        .map((k) => [k, makeRandomInt()])
+        .reduce((acc, [k, v]) => {
+          acc[k] = v;
+          return acc;
+        }, {})
+    ),
+  ];
+  return [
+    { point: $$createSVGPoint()() },
+    ...makeSubCases().map((values) => ({
+      values,
+      point: $$createSVGPoint()(values),
+    })),
+    {
+      point: $$createSVGPoint(
+        document.createElementNS("http://www.w3.org/2000/svg", "svg")
+      )(),
+    },
+    ...makeSubCases().map((values) => ({
+      values,
+      point: $$createSVGPoint(
+        document.createElementNS("http://www.w3.org/2000/svg", "svg")
+      )(values),
+    })),
+  ];
+};
 
-  beforeEach(() => {
-    const window = createSVGWindow();
-    $dummy_svg = window.document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "svg"
-    );
+describe(`$$createSVGPoint`, function () {
+  it(`The return value will be a SVGPoint.`, function () {
+    const cases = makeCases();
+    for (const { point } of cases) {
+      expect(point).to.instanceof(SVGPoint);
+    }
   });
 
-  test(`will create SVGPoint with given coordinates`, () => {
-    const x = Math.round(Math.random() * 1000);
-    const y = Math.round(Math.random() * 1000);
-    const p = $$createSVGPoint($dummy_svg)({ x, y });
-
-    expect(p.x).toEqual(x);
-    expect(p.y).toEqual(y);
-  });
-
-  test("will use 0 as default coordinates", () => {
-    const p = $$createSVGPoint($dummy_svg)();
-
-    expect(p.x).toEqual(0);
-    expect(p.y).toEqual(0);
-  });
-
-  test("will use 0 as default x coordinate", () => {
-    const p = $$createSVGPoint($dummy_svg)({ y: 10 });
-
-    expect(p.x).toEqual(0);
-  });
-
-  test("will use 0 as default y coordinate", () => {
-    const p = $$createSVGPoint($dummy_svg)({ x: 10 });
-
-    expect(p.y).toEqual(0);
+  it(`
+  The point's x, y value will be same with input value.
+  The omitted value will be 0.
+  `, function () {
+    const cases = makeCases();
+    for (const { point, values: { x = 0, y = 0 } = {} } of cases) {
+      expect(point.x).to.equal(x);
+      expect(point.y).to.equal(y);
+    }
   });
 });

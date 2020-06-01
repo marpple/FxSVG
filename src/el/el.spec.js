@@ -1,37 +1,40 @@
-import { createSVGWindow } from "svgdom";
+import { expect } from "chai";
 import { $$el } from "./el.index.js";
 
-describe(`$$el`, () => {
-  let $dummy_svg;
-
-  beforeEach(() => {
-    $dummy_svg = createSVGWindow().document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "svg"
-    );
-  });
-
-  test(`will return a "SVGElement" using the input SVG string`, () => {
+describe(`$$el`, function () {
+  it(`The return value is a SVGElement representing the input SVG string.`, function () {
     const str = `<circle cx="10" cy="20" r="30"></circle>`;
-    const $el = $$el($dummy_svg)(str);
+    const $els = [
+      $$el()(str),
+      $$el(document.createElementNS("http://www.w3.org/2000/svg", "svg"))(str),
+    ];
 
-    expect($el.nodeName.toLowerCase()).toEqual("circle");
-    expect($el.getAttributeNS(null, "cx")).toEqual("10");
-    expect($el.getAttributeNS(null, "cy")).toEqual("20");
-    expect($el.getAttributeNS(null, "r")).toEqual("30");
+    for (const $el of $els) {
+      expect($el).to.be.instanceof(SVGElement);
+      expect($el.nodeName.toLowerCase()).to.equal("circle");
+      expect($el.getAttributeNS(null, "cx")).to.equal("10");
+      expect($el.getAttributeNS(null, "cy")).to.equal("20");
+      expect($el.getAttributeNS(null, "r")).to.equal("30");
+    }
   });
 
-  test(`
-  will return the first "SVGElement" using the input SVG string
-  even there are multiple SVG Elements in SVG string
-  `, () => {
+  it(`
+  The return SVGElement will be the first element from the input SVG string.
+  All other elements will be ignored.
+  `, function () {
     const str = `
       <circle cx="10" cy="20" r="30"></circle>
       <rect x="100" y="110" width="120" height="130"></rect>
     `;
-    const $el = $$el($dummy_svg)(str);
+    const $els = [
+      $$el()(str),
+      $$el(document.createElementNS("http://www.w3.org/2000/svg", "svg"))(str),
+    ];
 
-    expect($el.nodeName.toLowerCase()).toEqual("circle");
-    expect($el.nodeName.toLowerCase()).not.toEqual("rect");
+    for (const $el of $els) {
+      expect($el).to.be.instanceof(SVGElement);
+      expect($el.nodeName.toLowerCase()).to.equal("circle");
+      expect($el.nodeName.toLowerCase()).not.to.equal("rect");
+    }
   });
 });

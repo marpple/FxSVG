@@ -1,6 +1,7 @@
 # \$\$getCenterPoint
 
 - [source](./getCenterPoint.index.js)
+- [test](./getCenterPoint.spec.js)
 
 svg 객체의 중심에 해당하는 `SVGPoint`를 반환합니다. 해당 svg 객체는 DOM 트리의 `<svg></svg>` 태그에 속해 있어야 합니다.
 

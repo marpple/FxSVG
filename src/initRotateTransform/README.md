@@ -1,6 +1,7 @@
 # \$\$initRotateTransform
 
 - [source](./initRotateTransform.index.js)
+- [test](./initRotateTransform.spec.js)
 
 svg 엘리먼트에 총 3개의 `SVGTransform`을 순서대로 추가합니다.
 

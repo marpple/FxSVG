@@ -1,6 +1,7 @@
 # \$\$appendTranslateTransform
 
 - [source](./appendTranslateTransform.index.js)
+- [test](./appendTranslateTransform.spec.js)
 
 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransform` 의 `tx`, `ty` 값을 수정합니다.
 기존 `tx`, `ty`에 입력받은 `tx`, `ty`를 더한 결과로 수정합니다.

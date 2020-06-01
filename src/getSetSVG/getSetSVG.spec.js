@@ -1,44 +1,38 @@
-import { createSVGWindow } from "svgdom";
+import { expect } from "chai";
 import { $$getSVG, $$setSVG } from "./getSetSVG.index.js";
 
-describe(`$$setSVG + $$getSVG`, () => {
-  test(`$$setSVG will change return value of $$getSVG`, () => {
-    const $svg = createSVGWindow().document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "svg"
-    );
+describe(`$$setSVG + $$getSVG`, function () {
+  it(`$$setSVG will change return value of $$getSVG.`, function () {
+    const $svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     $$setSVG($svg);
 
-    expect($$getSVG()).toBe($svg);
+    expect($$getSVG()).to.equal($svg);
   });
 });
 
-describe(`$$setSVG`, () => {
-  test(`return the 1st argument`, () => {
-    const $svg = createSVGWindow().document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "svg"
-    );
+describe(`$$setSVG`, function () {
+  it(`The return value is the 1st argument.`, function () {
+    const $svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
-    expect($$setSVG($svg)).toBe($svg);
+    expect($$setSVG($svg)).to.equal($svg);
   });
 });
 
-describe(`$$getSVG`, () => {
-  beforeEach(() => {
+describe(`$$getSVG`, function () {
+  beforeEach(function () {
     $$setSVG(undefined);
   });
 
-  test(`will return SVGSVGElement`, () => {
+  it(`The return value is a SVGSVGElement.`, function () {
     const $svg = $$getSVG();
 
-    expect($svg.nodeName.toLowerCase()).toEqual("svg");
+    expect($svg.nodeName.toLowerCase()).to.equal("svg");
   });
 
-  test(`will always return same value`, () => {
+  it(`The return value will be always same.`, function () {
     const $svg1 = $$getSVG();
     const $svg2 = $$getSVG();
 
-    expect($svg1).toBe($svg2);
+    expect($svg1).to.equal($svg2);
   });
 });

@@ -1,6 +1,7 @@
 # \$\$mergeRotateTransform
 
 - [source](./mergeRotateTransform.index.js)
+- [test](./mergeRotateTransform.spec.js)
 
 `$$initRotateTransform` 으로 적용된 3개의 `SVGTransform` 객체를 하나의 `SVGTransform` 으로 병합합니다.
 한 번 병합한 `SVGTransform`을 `$$updateRotateTransform` 이나 `$$appendRotateTransform` 으로 변경하는 것은 안전하지 않습니다.

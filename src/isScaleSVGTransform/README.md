@@ -1,6 +1,7 @@
 # \$\$isScaleSVGTransform
 
 - [source](./isScaleSVGTransform.index.js)
+- [test](./isScaleSVGTransform.spec.js)
 
 해당 `SVGTransform`의 `type`이 `SVGTransform.SVG_TRANSFORM_SCALE`인지 여부를 판단합니다.
 

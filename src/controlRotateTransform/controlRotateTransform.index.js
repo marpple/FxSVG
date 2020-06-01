@@ -14,11 +14,11 @@ export const $$controlRotateTransform = ($svg = $$getSVG()) => (
 
   const controller = {};
   controller.update = ({ angle }) => {
-    $$updateRotateTransform(transform, { angle, cx, cy });
+    $$updateRotateTransform(transform, { angle, cx: 0, cy: 0 });
     return controller;
   };
   controller.append = ({ angle }) => {
-    $$appendRotateTransform(transform, { angle, cx, cy });
+    $$appendRotateTransform(transform, { angle, cx: 0, cy: 0 });
     return controller;
   };
   controller.end = () => {

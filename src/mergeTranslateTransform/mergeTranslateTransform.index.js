@@ -8,6 +8,9 @@ export const $$mergeTranslateTransform = ($svg = $$getSVG()) => (
   { x_name = "x", y_name = "y" } = {}
 ) => {
   const base_tl = $$getBaseTransformList($el);
+  if (base_tl.numberOfItems < 1) {
+    return $el;
+  }
 
   const last_transform = base_tl.getItem(0);
   if (!$$isTranslateSVGTransform(last_transform)) {
