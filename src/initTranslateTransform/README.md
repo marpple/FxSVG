@@ -9,7 +9,7 @@ svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransfo
 
 초기 `tx`, `ty` 값을 설정할 수 있으며 설정하지 않는 경우 모두 `0` 으로 초기화됩니다.
 
-[`<svg></svg>` 커링](../../svg_currying.md)이 적용된 함수입니다.
+[`<svg></svg>` 커링](../../doc/SVG_CURRYING.md)이 적용된 함수입니다.
 
 ```javascript
 const $el = $$el()(`
