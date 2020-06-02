@@ -69,7 +69,7 @@ describe(`$$mergeTranslateTransform`, function () {
 
     it(`Use a matrix transform.`, function () {
       $$getBaseTransformList($el).insertItemBefore(
-        $$createSVGTransformMatrix()(makeRandomSVGMatrix()),
+        $$createSVGTransformMatrix()({ matrix: makeRandomSVGMatrix() }),
         0
       );
 

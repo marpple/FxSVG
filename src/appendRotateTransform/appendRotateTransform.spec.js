@@ -47,8 +47,11 @@ describe(`$$appendRotateTransform`, function () {
 
   describe(`If the SVGTransform is not a rotate transform, the function will do nothing but return the transform.`, function () {
     it(`Use a matrix transform.`, function () {
-      const matrix = makeRandomSVGMatrix();
-      const before_t = $$createSVGTransformMatrix()(matrix);
+      const before_t = $$createSVGTransformMatrix()({
+        matrix: makeRandomSVGMatrix(),
+      });
+      const { matrix } = before_t;
+
       const after_t = $$appendRotateTransform(before_t, {
         angle: makeRandomNumber(),
       });

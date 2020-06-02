@@ -13,7 +13,7 @@ describe(`$$createSVGTransformMatrix`, function () {
           document.createElementNS("http://www.w3.org/2000/svg", "svg")
         ),
       ],
-      flatMapL((f) => [f(), f($$createSVGMatrix()())]),
+      flatMapL((f) => [f(), f({}), f({ matrix: makeRandomSVGMatrix() })]),
       each((t) => expect(t).to.instanceof(SVGTransform))
     );
   });
@@ -26,7 +26,7 @@ describe(`$$createSVGTransformMatrix`, function () {
           document.createElementNS("http://www.w3.org/2000/svg", "svg")
         ),
       ],
-      flatMapL((f) => [f(), f($$createSVGMatrix()())]),
+      flatMapL((f) => [f(), f({}), f({ matrix: makeRandomSVGMatrix() })]),
       mapL(({ type: t }) => t),
       each((t) => expect(t).to.equal(SVGTransform.SVG_TRANSFORM_MATRIX))
     );
@@ -41,7 +41,7 @@ describe(`$$createSVGTransformMatrix`, function () {
           document.createElementNS("http://www.w3.org/2000/svg", "svg")
         ),
       ],
-      mapL((f) => f(m)),
+      mapL((f) => f({ matrix: m })),
       mapL(({ matrix: m }) => m),
       each((_m) => expect(_m).to.deep.equal(m))
     );
@@ -56,7 +56,7 @@ describe(`$$createSVGTransformMatrix`, function () {
           document.createElementNS("http://www.w3.org/2000/svg", "svg")
         ),
       ],
-      mapL((f) => f()),
+      flatMapL((f) => [f(), f({})]),
       mapL(({ matrix: m }) => m),
       each((m) => expect(m).to.deep.equal(identity_m))
     );

@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import {go, go1, join, mapL, rangeL, reduce} from "fxjs2";
+import { go, go1, join, mapL, rangeL, reduce } from "fxjs2";
 import { deepCopyTransformListToMatrixList } from "../../test/utils/deepCopyTransformListToMatrixList.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
 import { makeRandomSVGMatrix } from "../../test/utils/makeRandomSVGMatrix.js";
@@ -83,7 +83,7 @@ describe(`$$mergeRotateTransform`, function () {
     describe(`The first SVGTransform should be a translate SVGTransform.`, function () {
       it(`Use a matrix SVGTransform.`, function () {
         $$getBaseTransformList($el).insertItemBefore(
-          $$createSVGTransformMatrix()(makeRandomSVGMatrix()),
+          $$createSVGTransformMatrix()({ matrix: makeRandomSVGMatrix() }),
           0
         );
 
@@ -119,7 +119,7 @@ describe(`$$mergeRotateTransform`, function () {
     describe(`The second SVGTransform should be a rotate SVGTransform.`, function () {
       it(`Use a matrix SVGTransform.`, function () {
         $$getBaseTransformList($el).insertItemBefore(
-          $$createSVGTransformMatrix()(makeRandomSVGMatrix()),
+          $$createSVGTransformMatrix()({ matrix: makeRandomSVGMatrix() }),
           0
         );
 
@@ -154,7 +154,7 @@ describe(`$$mergeRotateTransform`, function () {
     describe(`The third SVGTransform should be a translate SVGTransform.`, function () {
       it(`Use a matrix SVGTransform.`, function () {
         $$getBaseTransformList($el).insertItemBefore(
-          $$createSVGTransformMatrix()(makeRandomSVGMatrix()),
+          $$createSVGTransformMatrix()({ matrix: makeRandomSVGMatrix() }),
           0
         );
 

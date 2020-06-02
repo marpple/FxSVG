@@ -4,6 +4,6 @@ import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 
 export const $$initMatrixTransform = ($svg = $$getSVG()) => ($el, { matrix }) =>
   $$getBaseTransformList($el).insertItemBefore(
-    $$createSVGTransformMatrix($svg)(matrix),
+    $$createSVGTransformMatrix($svg)({ matrix }),
     0
   );

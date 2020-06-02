@@ -30,7 +30,9 @@ describe(`$$isMatrixSVGTransform`, function () {
   The function returns true
   if the SVGTransform's type is same with a SVGTransform.SVG_TRANSFORM_MATRIX.
   `, function () {
-    const matrix_t = $$createSVGTransformMatrix()(makeRandomSVGMatrix());
+    const matrix_t = $$createSVGTransformMatrix()({
+      matrix: makeRandomSVGMatrix(),
+    });
     const result = $$isMatrixSVGTransform(matrix_t);
 
     expect(result).to.be.true;

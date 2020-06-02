@@ -65,6 +65,7 @@ describe(`$$getBaseTransformList`, function () {
             mapL(parseFloat),
             ([a, b, c, d, e, f]) => ({ a, b, c, d, e, f }),
             $$createSVGMatrix(),
+            (matrix) => ({ matrix }),
             $$createSVGTransformMatrix()
           );
           expect(transform_str).to.have.string("matrix");

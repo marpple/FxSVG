@@ -66,8 +66,10 @@ describe(`$$updateTranslateTransform`, function () {
   the function will do nothing but return SVGTransform.
   `, function () {
     it(`Use a matrix transform.`, function () {
-      const matrix = makeRandomSVGMatrix();
-      const matrix_t = $$createSVGTransformMatrix()(matrix);
+      const matrix_t = $$createSVGTransformMatrix()({
+        matrix: makeRandomSVGMatrix(),
+      });
+      const { matrix } = matrix_t;
 
       expect($$updateTranslateTransform(matrix_t, {})).to.equal(matrix_t);
       expect(matrix_t.matrix).to.deep.equal(matrix);

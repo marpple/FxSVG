@@ -56,7 +56,9 @@ describe(`$$appendTranslateTransform`, function () {
   the function will do nothing but return the SVGTransform.
   `, function () {
     it(`Use a matrix transform.`, function () {
-      const matrix_t = $$createSVGTransformMatrix()(makeRandomSVGMatrix());
+      const matrix_t = $$createSVGTransformMatrix()({
+        matrix: makeRandomSVGMatrix(),
+      });
       const { matrix } = matrix_t;
 
       const return_t = $$appendTranslateTransform(matrix_t, {

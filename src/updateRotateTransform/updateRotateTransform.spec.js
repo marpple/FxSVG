@@ -63,8 +63,10 @@ describe(`$$updateRotateTransform`, function () {
   the function will do nothing but return SVGTransform. 
   `, function () {
     it(`Use a matrix transform.`, function () {
-      const matrix = makeRandomSVGMatrix();
-      const matrix_t = $$createSVGTransformMatrix()(matrix);
+      const matrix_t = $$createSVGTransformMatrix()({
+        matrix: makeRandomSVGMatrix(),
+      });
+      const { matrix } = matrix_t;
 
       expect(
         $$updateRotateTransform(matrix_t, { angle: makeRandomNumber() })
