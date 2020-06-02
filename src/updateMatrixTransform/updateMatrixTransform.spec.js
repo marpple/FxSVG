@@ -14,7 +14,7 @@ describe(`$$updateMatrixTransform`, function () {
   let t;
 
   beforeEach(function () {
-    t = $$createSVGTransformMatrix()(makeRandomSVGMatrix());
+    t = $$createSVGTransformMatrix()({ matrix: makeRandomSVGMatrix() });
   });
 
   it(`The SVGTransform's matrix is changed to input matrix.`, function () {

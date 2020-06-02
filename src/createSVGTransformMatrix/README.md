@@ -9,16 +9,16 @@
 [`<svg></svg>` 커링](../../doc/SVG_CURRYING.md)이 적용된 함수입니다.
 
 ```javascript
-console.log($$createSVGTransformMatrix()($$createSVGMatrix()()));
+console.log($$createSVGTransformMatrix()({ matrix: $$createSVGMatrix()() }));
 // SVGTransform {type: 1, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
 ```
 
 ```javascript
 console.log(
-  $$createSVGTransformMatrix()(
-    $$createSVGMatrix()({ a: 2, b: 3, c: 4, d: 5, e: 6, f: 7 })
-  )
+  $$createSVGTransformMatrix()({
+    matrix: $$createSVGMatrix()({ a: 2, b: 3, c: 4, d: 5, e: 6, f: 7 }),
+  })
 );
 // SVGTransform {type: 1, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 2, b: 3, c: 4, d: 5, e: 6, f: 7}

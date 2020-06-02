@@ -47,7 +47,9 @@ describe(`$$isScaleSVGTransform`, function () {
   if the SVGTransform's type is not same with a SVGTransform.SVG_TRANSFORM_SCALE.
   `, function () {
     it(`Use a SVGTransform whose type is a SVGTransform.SVG_TRANSFORM_MATRIX.`, function () {
-      const matrix_t = $$createSVGTransformMatrix()(makeRandomSVGMatrix());
+      const matrix_t = $$createSVGTransformMatrix()({
+        matrix: makeRandomSVGMatrix(),
+      });
       const result = $$isScaleSVGTransform(matrix_t);
 
       expect(result).to.be.false;
