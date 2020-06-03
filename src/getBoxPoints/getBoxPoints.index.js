@@ -1,4 +1,4 @@
-import { go, map, mapL } from "fxjs2";
+import { go, go1, map, mapL, rangeL, reduce } from "fxjs2";
 import { $$createSVGPoint } from "../createSVGPoint/createSVGPoint.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
@@ -30,7 +30,7 @@ const $$getTransformedBoxPoints = ($svg = $$getSVG()) => (
   $el,
   original_box_points
 ) => {
-  const t = $$getBaseTransformList($el).consolidate();
+  const transform_list = $$getBaseTransformList($el);
   const [top_left, top_right, bottom_left, bottom_right] = go(
     [
       original_box_points.top_left,
@@ -39,7 +39,14 @@ const $$getTransformedBoxPoints = ($svg = $$getSVG()) => (
       original_box_points.bottom_right,
     ],
     mapL($$createSVGPoint($svg)),
-    mapL((p) => (t ? p.matrixTransform(t.matrix) : p))
+    mapL((p) =>
+      go(
+        rangeL(transform_list.numberOfItems),
+        mapL((i) => transform_list.getItem(i)),
+        mapL(({ matrix: m }) => m),
+        (iter) => reduce((p, m) => p.matrixTransform(m), p, iter)
+      )
+    )
   );
 
   return {
@@ -60,14 +67,12 @@ const $$getBoundingBoxPoints = ($svg = $$getSVG()) => (
     transformed_box_points.bottom_left,
     transformed_box_points.bottom_right,
   ];
-  const [min_x, max_x] = go(
-    l,
-    map(({ x }) => x),
+  const [min_x, max_x] = go1(
+    map(({ x }) => x, l),
     (xs) => [Math.min(...xs), Math.max(...xs)]
   );
-  const [min_y, max_y] = go(
-    l,
-    map(({ y }) => y),
+  const [min_y, max_y] = go1(
+    map(({ y }) => y, l),
     (ys) => [Math.min(...ys), Math.max(...ys)]
   );
   const [min, max] = mapL($$createSVGPoint($svg), [
