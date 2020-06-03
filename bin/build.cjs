@@ -18,9 +18,12 @@ import $$ from "../src/index.js";
 window.$$ = $$;
 `.trimStart();
   Readable.from([browser_index_js]).pipe(
-    fs.createWriteStream(path.resolve(__dirname, "../dist/browser_index.js"), {
-      flags: "w",
-    })
+    fs.createWriteStream(
+      path.resolve(__dirname, `../dist/${BROWSER_INDEX_FILENAME}.js`),
+      {
+        flags: "w",
+      }
+    )
   );
 
   await new Promise((resolve, reject) =>
