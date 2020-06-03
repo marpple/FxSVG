@@ -131,7 +131,7 @@ describe(`$$getBoxPoints`, function () {
       $el.setAttributeNS(
         null,
         "transform",
-        makeRandomTransformAttributeValue(1)
+        makeRandomTransformAttributeValue(1, 10, () => makeRandomInt(-10, 10))
       );
 
       const { transformed, bounding } = $$getBoxPoints()($el);
