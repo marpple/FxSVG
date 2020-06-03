@@ -2,12 +2,12 @@ import { $$isRotateSVGTransform } from "../isRotateSVGTransform/isRotateSVGTrans
 
 export const $$updateRotateTransform = (
   transform,
-  { angle, cx = 0, cy = 0 } = {}
+  { angle = transform.angle, cx = 0, cy = 0 } = {}
 ) => {
   if (!$$isRotateSVGTransform(transform)) {
     return transform;
   }
 
-  transform.setRotate(angle == null ? transform.angle : angle, cx, cy);
+  transform.setRotate(angle, cx, cy);
   return transform;
 };

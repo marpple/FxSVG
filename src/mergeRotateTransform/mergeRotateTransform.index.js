@@ -44,5 +44,6 @@ export const $$mergeRotateTransform = ($svg = $$getSVG()) => ($el) => {
     }),
     0
   );
+
   return $el;
 };

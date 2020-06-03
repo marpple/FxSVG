@@ -1,13 +1,13 @@
 import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
 
-export const $$updateScaleTransform = (transform, { sx, sy } = {}) => {
+export const $$updateScaleTransform = (
+  transform,
+  { sx = transform.matrix.a, sy = transform.matrix.d } = {}
+) => {
   if (!$$isScaleSVGTransform(transform)) {
     return transform;
   }
 
-  transform.setScale(
-    sx == null ? transform.matrix.a : sx,
-    sy == null ? transform.matrix.d : sy
-  );
+  transform.setScale(sx, sy);
   return transform;
 };

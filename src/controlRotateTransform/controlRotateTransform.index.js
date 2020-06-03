@@ -18,7 +18,7 @@ export const $$controlRotateTransform = ($svg = $$getSVG()) => (
     return controller;
   };
   controller.append = ({ angle }) => {
-    $$appendRotateTransform(transform, { angle, cx: 0, cy: 0 });
+    $$appendRotateTransform(transform, { angle });
     return controller;
   };
   controller.end = () => {

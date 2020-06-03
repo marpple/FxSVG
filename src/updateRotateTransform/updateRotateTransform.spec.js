@@ -33,9 +33,14 @@ describe(`$$updateRotateTransform`, function () {
 
     $$updateRotateTransform(t);
 
-    const { angle: after_angle } = t;
+    const {
+      angle: after_angle,
+      matrix: { e: after_cx, f: after_cy },
+    } = t;
 
     expect(after_angle).to.equal(before_angle);
+    expect(after_cx).to.equal(0);
+    expect(after_cy).to.equal(0);
   });
 
   it(`If no cx, cy values, The cx, cy values will be reset to 0.`, function () {

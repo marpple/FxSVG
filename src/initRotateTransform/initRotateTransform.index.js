@@ -7,17 +7,20 @@ export const $$initRotateTransform = ($svg = $$getSVG()) => (
   $el,
   { angle = 0, cx = 0, cy = 0 } = {}
 ) => {
-  $$getBaseTransformList($el).insertItemBefore(
+  const transform_list = $$getBaseTransformList($el);
+
+  transform_list.insertItemBefore(
     $$createSVGTransformTranslate($svg)({ tx: -cx, ty: -cy }),
     0
   );
-  const transform = $$getBaseTransformList($el).insertItemBefore(
+  const transform = transform_list.insertItemBefore(
     $$createSVGTransformRotate($svg)({ angle }),
     0
   );
-  $$getBaseTransformList($el).insertItemBefore(
+  transform_list.insertItemBefore(
     $$createSVGTransformTranslate($svg)({ tx: cx, ty: cy }),
     0
   );
+
   return transform;
 };
