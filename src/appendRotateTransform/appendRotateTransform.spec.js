@@ -40,9 +40,18 @@ describe(`$$appendRotateTransform`, function () {
     expect(t.matrix.f).to.equal(0);
   });
 
-  it(`If no angle or second argument, the function will throw an error.`, function () {
+  it(`If no second argument, the function will throw an error.`, function () {
     expect(() => $$appendRotateTransform(t)).to.throw();
-    expect(() => $$appendRotateTransform(t, {})).to.throw();
+  });
+
+  it(`If no input angle value, SVGTransform keep original angle value.`, function () {
+    const { angle: before_angle } = t;
+
+    $$appendRotateTransform(t, {});
+
+    const { angle: after_angle } = t;
+
+    expect(after_angle).to.equal(before_angle);
   });
 
   describe(`If the SVGTransform is not a rotate transform, the function will do nothing but return the transform.`, function () {
