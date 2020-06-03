@@ -32,7 +32,7 @@ const $el = $$el()(`
 console.log($$getBaseTransformList($el));
 // SVGTransformList {length: 0, numberOfItems: 0}
 
-$$initRotateTransform()($el, { tx: 10, ty: 20 });
+$$initRotateTransform()($el, { angle: 30, tx: 10, ty: 20 });
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, 1: SVGTransform, 2: SVGTransform, length: 3, numberOfItems: 3}
@@ -60,7 +60,7 @@ console.log($$getBaseTransformList($el));
 // 0: SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
 //   matrix: SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 0, f: 0}
 
-$$initTranslateTransform()($el, { tx: 10, ty: 20 });
+$$initRotateTransform()($el, { tx: 10, ty: 20, angle: 30 });
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, 1: SVGTransform, 2: SVGTransform, 3: SVGTransform, length: 4, numberOfItems: 4}
