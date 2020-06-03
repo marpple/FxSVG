@@ -20,6 +20,7 @@ import "../src/getCenterPoint/getCenterPoint.spec.js";
 import "../src/getSetSVG/getSetSVG.spec.js";
 import "../src/initMatrixTransform/initMatrixTransform.spec.js";
 import "../src/initRotateTransform/initRotateTransform.spec.js";
+import "../src/initScaleTransform/initScaleTransform.spec.js";
 import "../src/initTranslateTransform/initTranslateTransform.spec.js";
 import "../src/isMatrixSVGTransform/isMatrixSVGTransform.spec.js";
 import "../src/isRotateSVGTransform/isRotateSVGTransform.spec.js";
@@ -31,3 +32,6 @@ import "../src/updateMatrixTransform/updateMatrixTransform.spec.js";
 import "../src/updateRotateTransform/updateRotateTransform.spec.js";
 import "../src/updateScaleTransform/updateScaleTransform.sepc.js";
 import "../src/updateTranslateTransform/updateTranslateTransform.spec.js";
+
+import FxSVG from "../src/index.js";
+window.FxSVG = FxSVG;
