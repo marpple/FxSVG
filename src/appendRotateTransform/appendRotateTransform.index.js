@@ -5,6 +5,7 @@ export const $$appendRotateTransform = (transform, { angle = 0 }) => {
     return transform;
   }
 
-  transform.setRotate(transform.angle + angle, 0, 0);
+  const { angle: prev_angle } = transform;
+  transform.setRotate(prev_angle + angle, 0, 0);
   return transform;
 };
