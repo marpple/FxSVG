@@ -8,9 +8,9 @@ import { $$updateTranslateTransform } from "../updateTranslateTransform/updateTr
 
 export const $$controlTranslateTransform = ($svg = $$getSVG()) => (
   $el,
-  { tx = 0, ty = 0, x_name, y_name } = {}
+  { index = 0, tx = 0, ty = 0, x_name, y_name } = {}
 ) => {
-  const transform = $$initTranslateTransform($svg)($el, { tx, ty });
+  const transform = $$initTranslateTransform($svg)($el, { tx, ty, index });
 
   const controller = {};
   controller.update = ({ tx, ty }) => {
@@ -23,7 +23,7 @@ export const $$controlTranslateTransform = ($svg = $$getSVG()) => (
   };
   controller.end = () => {
     if (x_name && y_name) {
-      $$mergeTranslateTransform($svg)($el, { x_name, y_name });
+      $$mergeTranslateTransform($svg)($el, { index, x_name, y_name });
     }
     $$consolidateTransformList($$getBaseTransformList($el));
     return $el;
