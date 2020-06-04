@@ -152,6 +152,7 @@ describe(`$$initRotateTransform`, function () {
   });
 
   it(`If the second argument is omitted, use default values ({ angle: 0, cx: 0, cy: 0, index: 0 }).`, function () {
+    this.slow(200);
     go(
       ["angle", "cx", "cy", "index"],
       makeAllCombinations,
