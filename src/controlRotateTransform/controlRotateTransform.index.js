@@ -8,9 +8,9 @@ import { $$updateRotateTransform } from "../updateRotateTransform/updateRotateTr
 
 export const $$controlRotateTransform = ($svg = $$getSVG()) => (
   $el,
-  { angle = 0, cx = 0, cy = 0 } = {}
+  { angle = 0, cx = 0, cy = 0, index = 0 } = {}
 ) => {
-  const transform = $$initRotateTransform($svg)($el, { angle, cx, cy });
+  const transform = $$initRotateTransform($svg)($el, { angle, cx, cy, index });
 
   const controller = {};
   controller.update = ({ angle }) => {
@@ -22,7 +22,7 @@ export const $$controlRotateTransform = ($svg = $$getSVG()) => (
     return controller;
   };
   controller.end = () => {
-    $$mergeRotateTransform($svg)($el);
+    $$mergeRotateTransform($svg)($el, { index: index + 1 });
     $$consolidateTransformList($$getBaseTransformList($el));
     return $el;
   };
