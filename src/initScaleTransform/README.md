@@ -61,6 +61,9 @@ console.log($$getBaseTransformList($el));
 // 0: SVGTransform {type: 4, matrix: SVGMatrix, angle: 30}
 
 $$initScaleTransform()($el, { cx: 10, cy: 20, sx: 2, sy: 3, index: 1 });
+// index 를 1 로 설정할 경우
+// 기존 SVGTransformList 의 1 번 인덱스부터 3개의 SVGTransform 이 추가됨
+// 즉 1, 2, 3 번 인덱스 사용
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, 1: SVGTransform, 2: SVGTransform, 3: SVGTransform, length: 4, numberOfItems: 4}
