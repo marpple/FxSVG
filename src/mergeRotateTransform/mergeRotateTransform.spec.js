@@ -1,10 +1,12 @@
 import { expect } from "chai";
 import { go, go1, join, mapL, rangeL, reduce } from "fxjs2";
-import { deepCopyTransformListToMatrixList } from "../../test/utils/deepCopyTransformListToMatrixList.js";
-import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
-import { makeRandomSVGMatrix } from "../../test/utils/makeRandomSVGMatrix.js";
-import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTransformAttributeValue.js";
-import { makeRandomTransformString } from "../../test/utils/makeRandomTransformString.js";
+import {
+  deepCopyTransformListToMatrixList,
+  makeRandomNumber,
+  makeRandomSVGMatrix,
+  makeRandomTransformAttributeValue,
+  makeRandomTransformString,
+} from "../../test/utils/index.js";
 import { $$appendTranslateTransform } from "../appendTranslateTransform/appendTranslateTransform.index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
