@@ -5,21 +5,21 @@ import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 
 export const $$initRotateTransform = ($svg = $$getSVG()) => (
   $el,
-  { angle = 0, cx = 0, cy = 0 } = {}
+  { angle = 0, cx = 0, cy = 0, index = 0 } = {}
 ) => {
   const transform_list = $$getBaseTransformList($el);
 
   transform_list.insertItemBefore(
     $$createSVGTransformTranslate($svg)({ tx: -cx, ty: -cy }),
-    0
+    index
   );
   const transform = transform_list.insertItemBefore(
     $$createSVGTransformRotate($svg)({ angle }),
-    0
+    index
   );
   transform_list.insertItemBefore(
     $$createSVGTransformTranslate($svg)({ tx: cx, ty: cy }),
-    0
+    index
   );
 
   return transform;
