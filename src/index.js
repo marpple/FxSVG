@@ -20,6 +20,7 @@ export { $$getCenterPoint } from "./getCenterPoint/getCenterPoint.index.js";
 export { $$getSVG, $$setSVG } from "./getSetSVG/getSetSVG.index.js";
 export { $$initMatrixTransform } from "./initMatrixTransform/initMatrixTransform.index.js";
 export { $$initRotateTransform } from "./initRotateTransform/initRotateTransform.index.js";
+export { $$initScaleTransform } from "./initScaleTransform/initScaleTransform.index.js";
 export { $$initTranslateTransform } from "./initTranslateTransform/initTranslateTransform.index.js";
 export { $$isMatrixSVGTransform } from "./isMatrixSVGTransform/isMatrixSVGTransform.index.js";
 export { $$isRotateSVGTransform } from "./isRotateSVGTransform/isRotateSVGTransform.index.js";

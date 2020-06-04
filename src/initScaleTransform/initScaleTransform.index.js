@@ -1,11 +1,11 @@
-import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
+import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 
-export const $$initRotateTransform = ($svg = $$getSVG()) => (
+export const $$initScaleTransform = ($svg = $$getSVG()) => (
   $el,
-  { angle = 0, cx = 0, cy = 0, index = 0 } = {}
+  { sx = 1, sy = 1, cx = 0, cy = 0, index = 0 } = {}
 ) => {
   const transform_list = $$getBaseTransformList($el);
 
@@ -14,7 +14,7 @@ export const $$initRotateTransform = ($svg = $$getSVG()) => (
     index
   );
   const transform = transform_list.insertItemBefore(
-    $$createSVGTransformRotate($svg)({ angle }),
+    $$createSVGTransformScale($svg)({ sx, sy }),
     index
   );
   transform_list.insertItemBefore(

@@ -174,6 +174,20 @@ svg 엘리먼트에 총 3개의 `SVGTransform`을 순서대로 추가합니다.
 2번 `SVGTransform` 객체를 반환합니다.
 1번, 3번 `SVGTranform` 객체는 회전 중심을 설정합니다.
 
+## \$\$initScaleTransform
+
+- [source](../src/initScaleTransform/initScaleTransform.index.js)
+- [detail](../src/initScaleTransform/README.md)
+
+svg 엘리먼트에 총 3개의 `SVGTransform`을 순서대로 추가합니다.
+
+1. `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransform` (`index`: `0`)
+2. `SVGTransform.SVG_TRANSFORM_SCALE` 타입의 `SVGTransform` (`index`: `1`)
+3. `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransform` (`index`: `2`)
+
+2번 `SVGTransform` 객체를 반환합니다.
+1번, 3번 `SVGTranform` 객체는 scale 중심을 설정합니다.
+
 ## \$\$initTranslateTransform
 
 - [source](../src/initTranslateTransform/initTranslateTransform.index.js)

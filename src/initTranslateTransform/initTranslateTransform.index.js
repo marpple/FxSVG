@@ -4,9 +4,9 @@ import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 
 export const $$initTranslateTransform = ($svg = $$getSVG()) => (
   $el,
-  { tx = 0, ty = 0 } = {}
+  { tx = 0, ty = 0, index = 0 } = {}
 ) =>
   $$getBaseTransformList($el).insertItemBefore(
     $$createSVGTransformTranslate($svg)({ tx, ty }),
-    0
+    index
   );
