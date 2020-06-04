@@ -7,6 +7,7 @@ import {
   makeAllCombinations,
   makeRandomInt,
 } from "../../test/utils/index.js";
+import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
@@ -26,13 +27,6 @@ const createMockEl = () =>
     >
     </rect> 
   `);
-
-const expectSameValueSVGMatrix = (m1, m2, message) =>
-  go(
-    ["a", "b", "c", "d", "e", "f"],
-    mapL((k) => [m1[k], m2[k], `${message}::expectSameValueSVGMatrix::${k}`]),
-    each(([a, b, m]) => expect(a, m).to.equal(b))
-  );
 
 const expectCorrectSVGTransformListLength = ($el, config) => {
   const { numberOfItems: before_n } = $$getBaseTransformList($el);
@@ -149,7 +143,7 @@ describe(`$$initScaleTransform`, function () {
     });
   });
 
-  it(`If the second argument is omitted, use default values ({ sx: 1, sy: 1, cx: 0, cy: 0, index: 0 })`, function () {
+  it(`If the second argument is omitted, use default values ({ sx: 1, sy: 1, cx: 0, cy: 0, index: 0 }).`, function () {
     this.slow(1000);
     go(
       ["sx", "sy", "cx", "cy", "index"],
