@@ -26,6 +26,7 @@ import { $$isMatrixSVGTransform } from "./isMatrixSVGTransform/isMatrixSVGTransf
 import { $$isRotateSVGTransform } from "./isRotateSVGTransform/isRotateSVGTransform.index.js";
 import { $$isScaleSVGTransform } from "./isScaleSVGTransform/isScaleSVGTransform.index.js";
 import { $$isTranslateSVGTransform } from "./isTranslateSVGTransform/isTranslateSVGTransform.index.js";
+import { $$isValidFxScaleSVGTransformList } from "./isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js";
 import { $$mergeRotateTransform } from "./mergeRotateTransform/mergeRotateTransform.index.js";
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
 import { $$updateMatrixTransform } from "./updateMatrixTransform/updateMatrixTransform.index.js";
@@ -63,6 +64,7 @@ export const FxSVG = {
   isRotateSVGTransform: $$isRotateSVGTransform,
   isScaleSVGTransform: $$isScaleSVGTransform,
   isTranslateSVGTransform: $$isTranslateSVGTransform,
+  isValidFxScaleSVGTransformList: $$isValidFxScaleSVGTransformList,
   mergeRotateTransform: $$mergeRotateTransform,
   mergeTranslateTransform: $$mergeTranslateTransform,
   updateMatrixTransform: $$updateMatrixTransform,
