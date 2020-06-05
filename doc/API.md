@@ -237,6 +237,11 @@ svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransfo
 
 `$$initRotateTransform` 으로 적용된 3개의 `SVGTransform` 객체를 하나의 `SVGTransform` 으로 병합합니다.
 
+## \$\$mergeScaleTransform
+
+- [source](../src/mergeScaleTransform/mergeScaleTransform.index.js)
+- [detail](../src/mergeScaleTransform/README.md)
+
 ## \$\$mergeTranslateTransform
 
 - [source](../src/mergeTranslateTransform/mergeTranslateTransform.index.js)
