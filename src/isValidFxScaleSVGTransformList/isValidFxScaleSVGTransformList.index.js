@@ -2,7 +2,10 @@ import { go, mapL, rangeL } from "fxjs2";
 import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
 import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 
-export const $$isValidFxScaleSVGTransformList = (transform_list, { index }) =>
+export const $$isValidFxScaleSVGTransformList = (
+  transform_list,
+  { index = 0 } = {}
+) =>
   index > 0 &&
   index + 1 < transform_list.numberOfItems &&
   go(
