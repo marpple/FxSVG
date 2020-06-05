@@ -223,6 +223,13 @@ svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransfo
 
 해당 `SVGTransform`의 `type`이 `SVGTransform.SVG_TRANSFORM_TRANSLATE`인지 여부를 판단합니다.
 
+## \$\$isValidFxScaleSVGTransformList
+
+- [source](../src/isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js)
+- [detail](../src/isValidFxScaleSVGTransformList/README.md)
+
+`$$initScaleTransform` 함수를 적용한 `SVGTransformList`인지 여부를 판단합니다.
+
 ## \$\$mergeRotateTransform
 
 - [source](../src/mergeRotateTransform/mergeRotateTransform.index.js)
