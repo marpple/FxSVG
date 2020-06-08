@@ -1,6 +1,8 @@
 import { expect } from "chai";
 import { equals2, go, go1, head, mapL, rangeL, rejectL } from "fxjs2";
 import {
+  makeMockRect,
+  makeMockRectInitiatedScaleTransform,
   makeRandomInt,
   makeRandomNumber,
   makeRandomSVGMatrix,
@@ -10,43 +12,12 @@ import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSV
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
-import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
-import { $$initScaleTransform } from "../initScaleTransform/initScaleTransform.index.js";
 import { $$isValidFxScaleSVGTransformList } from "./isValidFxScaleSVGTransformList.index.js";
-
-const createMockEl = (t) =>
-  $$el()(`
-    <rect
-      x="0"
-      y="0"
-      width="10"
-      height="10"
-      ${t ? `transform="${t}"` : ""}
-    >
-    </rect>
-  `);
-
-const createMockElInitScaleTransform = (t) => {
-  const $el = createMockEl(t);
-  const init_index = makeRandomInt(
-    0,
-    $$getBaseTransformList($el).numberOfItems + 1
-  );
-  go(
-    rangeL(4),
-    mapL(() => makeRandomNumber()),
-    ([cx, cy, sx, sy]) => ({ cx, cy, sx, sy, index: init_index }),
-    (config) => $$initScaleTransform()($el, config)
-  );
-  return { $el, index: init_index + 1 };
-};
 
 describe(`$$isValidFxScaleSVGTransformList`, function () {
   it(`In other cases not in false cases below, the function will return true`, function () {
-    const { $el, index } = createMockElInitScaleTransform(
-      makeRandomTransformAttributeValue()
-    );
+    const { $el, index } = makeMockRectInitiatedScaleTransform();
     const transform_list = $$getBaseTransformList($el);
 
     const result = $$isValidFxScaleSVGTransformList(transform_list, {
@@ -59,7 +30,9 @@ describe(`$$isValidFxScaleSVGTransformList`, function () {
     let transform_list;
 
     beforeEach(function () {
-      const $el = createMockEl(makeRandomTransformAttributeValue(10));
+      const $el = makeMockRect({
+        transform: makeRandomTransformAttributeValue(10),
+      });
       transform_list = $$getBaseTransformList($el);
     });
 
@@ -90,9 +63,7 @@ describe(`$$isValidFxScaleSVGTransformList`, function () {
     let index;
 
     beforeEach(function () {
-      const { $el, index: _index } = createMockElInitScaleTransform(
-        makeRandomTransformAttributeValue()
-      );
+      const { $el, index: _index } = makeMockRectInitiatedScaleTransform();
       transform_list = $$getBaseTransformList($el);
       index = _index;
     });
@@ -217,9 +188,7 @@ describe(`$$isValidFxScaleSVGTransformList`, function () {
     let index;
 
     beforeEach(function () {
-      const { $el, index: _index } = createMockElInitScaleTransform(
-        makeRandomTransformAttributeValue()
-      );
+      const { $el, index: _index } = makeMockRectInitiatedScaleTransform();
       transform_list = $$getBaseTransformList($el);
       index = _index;
     });
@@ -290,9 +259,7 @@ describe(`$$isValidFxScaleSVGTransformList`, function () {
     let index;
 
     beforeEach(function () {
-      const { $el, index: _index } = createMockElInitScaleTransform(
-        makeRandomTransformAttributeValue()
-      );
+      const { $el, index: _index } = makeMockRectInitiatedScaleTransform();
       transform_list = $$getBaseTransformList($el);
       index = _index;
     });
@@ -363,9 +330,7 @@ describe(`$$isValidFxScaleSVGTransformList`, function () {
     let index;
 
     beforeEach(function () {
-      const { $el, index: _index } = createMockElInitScaleTransform(
-        makeRandomTransformAttributeValue()
-      );
+      const { $el, index: _index } = makeMockRectInitiatedScaleTransform();
       transform_list = $$getBaseTransformList($el);
       index = _index;
     });

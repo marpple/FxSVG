@@ -8,3 +8,4 @@ export { makeRandomTransformAttributeValue } from "./makeRandomTransformAttribut
 export { deepCopyTransformListToMatrixList } from "./deepCopyTransformListToMatrixList.js";
 export { makeRandomSVGMatrix } from "./makeRandomSVGMatrix.js";
 export { makeMockRect } from "./makeMockRect.js";
+export { makeMockRectInitiatedScaleTransform } from "./makeMockRectInitializedScaleTransform.js";

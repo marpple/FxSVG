@@ -1,6 +1,5 @@
 import { expect } from "chai";
 import {
-  defaultTo,
   each,
   go,
   head,
@@ -13,53 +12,13 @@ import {
 } from "fxjs2";
 import {
   deepCopyTransformListToMatrixList,
-  makeMockRect,
   makeRandomBool,
   makeRandomInt,
   makeRandomNumber,
-  makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
+import { makeMockRectInitiatedScaleTransform } from "../../test/utils/makeMockRectInitializedScaleTransform.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
-import { $$initScaleTransform } from "../initScaleTransform/initScaleTransform.index.js";
 import { $$mergeScaleTransform2 } from "./mergeScaleTransform2.index.js";
-
-const makeMockRectInitiatedScaleTransform = ({
-  sx: _sx,
-  sy: _sy,
-  cx: _cx,
-  cy: _cy,
-} = {}) => {
-  const $el = makeMockRect({ transform: makeRandomTransformAttributeValue() });
-  const transform_list = $$getBaseTransformList($el);
-  const init_index = makeRandomInt(0, transform_list.numberOfItems + 1);
-  go(
-    rangeL(4),
-    mapL(() => makeRandomNumber(-100, 100)),
-    ([sx, sy, cx, cy]) => [
-      [_sx, sx],
-      [_sy, sy],
-      [_cx, cx],
-      [_cy, cy],
-    ],
-    mapL(([a, b]) => defaultTo(b, a)),
-    ([sx, sy, cx, cy]) =>
-      $$initScaleTransform()($el, { sx, sy, cx, cy, index: init_index })
-  );
-  const index = init_index + 1;
-  const [{ e: cx, f: cy }, { a: sx, d: sy }] = go(
-    rangeL(2),
-    mapL((i) => index - 1 + i),
-    mapL((i) => transform_list.getItem(i)),
-    mapL(({ matrix: m }) => m)
-  );
-  const [x, y, width, height] = go(
-    ["x", "y", "width", "height"],
-    mapL((name) => $el.getAttributeNS(null, name)),
-    mapL(parseFloat)
-  );
-
-  return { $el, index, sx, sy, cx, cy, x, y, width, height };
-};
 
 describe(`$$mergeScaleTransform2`, function () {
   describe(`The input values are valid for the function. (Use $$initScaleTransform)`, function () {
