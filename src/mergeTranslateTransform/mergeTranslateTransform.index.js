@@ -6,19 +6,19 @@ import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslat
 
 export const $$mergeTranslateTransform = ($svg = $$getSVG()) => (
   $el,
-  { x_name = "x", y_name = "y" } = {}
+  { index = 0, x_name = "x", y_name = "y" } = {}
 ) => {
   const base_tl = $$getBaseTransformList($el);
-  if (base_tl.numberOfItems < 1) {
+  if (index > base_tl.numberOfItems - 1) {
     return $el;
   }
 
-  const last_transform = base_tl.getItem(0);
-  if (!$$isTranslateSVGTransform(last_transform)) {
+  const transform = base_tl.getItem(index);
+  if (!$$isTranslateSVGTransform(transform)) {
     return $el;
   }
 
-  const { e: tx, f: ty } = last_transform.matrix;
+  const { e: tx, f: ty } = transform.matrix;
 
   go(
     [
@@ -32,7 +32,7 @@ export const $$mergeTranslateTransform = ($svg = $$getSVG()) => (
     each(({ name, value }) => $el.setAttributeNS(null, name, value))
   );
 
-  base_tl.removeItem(0);
+  base_tl.removeItem(index);
 
   go(
     rangeL(base_tl.numberOfItems),

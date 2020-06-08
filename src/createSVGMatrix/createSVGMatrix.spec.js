@@ -77,6 +77,7 @@ describe(`$$createSVGMatrix`, function () {
   Each value of the matrix will be same with the given value.
   If there is omitted values, the values will be {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0} individually by default.
   `, function () {
+    this.slow(100);
     each(({ matrix, values }) => expectSameMatrix(matrix, values), makeCases());
   });
 });

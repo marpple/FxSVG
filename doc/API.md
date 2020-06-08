@@ -223,12 +223,34 @@ svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransfo
 
 해당 `SVGTransform`의 `type`이 `SVGTransform.SVG_TRANSFORM_TRANSLATE`인지 여부를 판단합니다.
 
+## \$\$isValidFxScaleSVGTransformList
+
+- [source](../src/isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js)
+- [detail](../src/isValidFxScaleSVGTransformList/README.md)
+
+`$$initScaleTransform` 함수를 적용한 `SVGTransformList`인지 여부를 판단합니다.
+
 ## \$\$mergeRotateTransform
 
 - [source](../src/mergeRotateTransform/mergeRotateTransform.index.js)
 - [detail](../src/mergeRotateTransform/README.md)
 
 `$$initRotateTransform` 으로 적용된 3개의 `SVGTransform` 객체를 하나의 `SVGTransform` 으로 병합합니다.
+
+## \$\$mergeScaleTransform
+
+- [source](../src/mergeScaleTransform/mergeScaleTransform.index.js)
+- [detail](../src/mergeScaleTransform/README.md)
+
+`$$initScaleTransform` 으로 적용된 3개의 `SVGTransform` 객체를 하나의 `SVGTransform` 으로 병합합니다.
+
+## \$\$mergeScaleTransform2
+
+- [source](../src/mergeScaleTransform2/mergeScaleTransform2.index.js)
+- [detail](../src/mergeScaleTransform2/README.md)
+
+`$$initScaleTransform` 으로 적용된 3개의 `SVGTransform` 객체를 해당 svg 엘리먼트의 `x`, `y`, `width`, `height` 속성
+(혹은 그에 준하는 속성) 에 반영합니다.
 
 ## \$\$mergeTranslateTransform
 

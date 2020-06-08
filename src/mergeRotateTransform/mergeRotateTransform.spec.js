@@ -1,10 +1,14 @@
 import { expect } from "chai";
-import { go, go1, join, mapL, rangeL, reduce } from "fxjs2";
-import { deepCopyTransformListToMatrixList } from "../../test/utils/deepCopyTransformListToMatrixList.js";
-import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
-import { makeRandomSVGMatrix } from "../../test/utils/makeRandomSVGMatrix.js";
-import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTransformAttributeValue.js";
-import { makeRandomTransformString } from "../../test/utils/makeRandomTransformString.js";
+import { appendL, each, go, mapL, object, rangeL, reduce } from "fxjs2";
+import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
+import {
+  deepCopyTransformListToMatrixList,
+  makeAllCombinations,
+  makeRandomInt,
+  makeRandomNumber,
+  makeRandomSVGMatrix,
+  makeRandomTransformAttributeValue,
+} from "../../test/utils/index.js";
 import { $$appendTranslateTransform } from "../appendTranslateTransform/appendTranslateTransform.index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
@@ -16,11 +20,23 @@ import { $$initRotateTransform } from "../initRotateTransform/initRotateTransfor
 import { $$isRotateSVGTransform } from "../isRotateSVGTransform/isRotateSVGTransform.index.js";
 import { $$mergeRotateTransform } from "./mergeRotateTransform.index.js";
 
-const expectSameElementAndSameTransformListAfterMerge = ($el) => {
+const createMockEl = ({ transform_attr = "" } = {}) =>
+  $$el()(`
+    <rect
+      x="${makeRandomNumber()}"
+      y="${makeRandomNumber()}"
+      width="${makeRandomNumber(1)}"
+      height="${makeRandomNumber(1)}"
+      ${transform_attr ? `transform="${transform_attr}"` : ""}
+    >
+    </rect> 
+  `);
+
+const expectSameElementAndSameTransformListAfterMerge = ($el, config) => {
   const before_list = deepCopyTransformListToMatrixList(
     $$getBaseTransformList($el)
   );
-  const result = $$mergeRotateTransform()($el);
+  const result = $$mergeRotateTransform()($el, config);
   const after_list = deepCopyTransformListToMatrixList(
     $$getBaseTransformList($el)
   );
@@ -29,236 +45,230 @@ const expectSameElementAndSameTransformListAfterMerge = ($el) => {
 };
 
 describe(`$$mergeRotateTransform`, function () {
-  let $el;
-
-  beforeEach(function () {
-    $el = $$el()(`
-      <rect
-        x="${makeRandomNumber()}"
-        y="${makeRandomNumber()}"
-        width="${makeRandomNumber(1)}"
-        height="${makeRandomNumber(1)}"
-        ${go1(makeRandomTransformAttributeValue(3), (t) =>
-          t ? `transform="${t}"` : ""
-        )}
-      >
-      </rect> 
-    `);
-  });
-
   describe(`
-  If the first three SVGTransforms are not matched with the given conditions,
-  the function do nothing but return the element.
+  If the input values are invalid, the function do nothing but return the element.
   `, function () {
-    describe(`The element have SVGTransforms less than 3.`, function () {
-      beforeEach(function () {
-        $el.removeAttributeNS(null, "transform");
-      });
+    let $el;
+    let index;
 
-      it("Have no SVGTransform.", function () {
-        expectSameElementAndSameTransformListAfterMerge($el);
-      });
-
-      it("Have 1 SVGTransform.", function () {
-        $el.setAttributeNS(null, "transform", makeRandomTransformString());
-
-        expectSameElementAndSameTransformListAfterMerge($el);
-      });
-
-      it("Have 2 SVGTransforms.", function () {
-        $el.setAttributeNS(
-          null,
-          "transform",
-          go(
-            rangeL(2),
-            mapL(() => makeRandomTransformString()),
-            join(" ")
-          )
-        );
-
-        expectSameElementAndSameTransformListAfterMerge($el);
-      });
+    beforeEach(function () {
+      const transform_attr = makeRandomTransformAttributeValue(3);
+      $el = createMockEl({ transform_attr });
+      index = makeRandomInt(1, $$getBaseTransformList($el).numberOfItems - 1);
     });
 
-    describe(`The first SVGTransform should be a translate SVGTransform.`, function () {
-      it(`Use a matrix SVGTransform.`, function () {
-        $$getBaseTransformList($el).insertItemBefore(
-          $$createSVGTransformMatrix()({ matrix: makeRandomSVGMatrix() }),
-          0
-        );
+    it("The element has no transform.", function () {
+      go(
+        ["index"],
+        makeAllCombinations,
+        mapL((ks) => [createMockEl(), ks]),
+        mapL(([$el, ks]) =>
+          go(
+            ks,
+            mapL((k) => [k, makeRandomInt()]),
+            object,
+            (config) => [$el, config]
+          )
+        ),
+        appendL([createMockEl()]),
+        each(([$el, config]) =>
+          expectSameElementAndSameTransformListAfterMerge($el, config)
+        )
+      );
+    });
 
-        expectSameElementAndSameTransformListAfterMerge($el);
+    it(`The input index is out of bounds to the element's SVGTransformList.`, function () {
+      const $el = createMockEl({
+        transform_attr: makeRandomTransformAttributeValue(),
+      });
+      const index = makeRandomInt(
+        $$getBaseTransformList($el).numberOfItems - 1
+      );
+
+      expectSameElementAndSameTransformListAfterMerge($el, { index });
+    });
+
+    describe(`The SVGTransform at index - 1 should be a translate SVGTransform.`, function () {
+      it(`Use a matrix SVGTransform.`, function () {
+        const matrix = makeRandomSVGMatrix();
+        const t = $$createSVGTransformMatrix()({ matrix });
+        $$getBaseTransformList($el).insertItemBefore(t, index - 1);
+
+        expectSameElementAndSameTransformListAfterMerge($el, { index });
       });
 
       it(`Use a rotate SVGTransform.`, function () {
-        $$getBaseTransformList($el).insertItemBefore(
-          $$createSVGTransformRotate()({
-            angle: makeRandomNumber(),
-            cx: makeRandomNumber(),
-            cy: makeRandomNumber(),
-          }),
-          0
-        );
+        const t = $$createSVGTransformRotate()({
+          angle: makeRandomNumber(),
+          cx: makeRandomNumber(),
+          cy: makeRandomNumber(),
+        });
+        $$getBaseTransformList($el).insertItemBefore(t, index - 1);
 
-        expectSameElementAndSameTransformListAfterMerge($el);
+        expectSameElementAndSameTransformListAfterMerge($el, { index });
       });
 
       it(`Use a scale SVGTransform.`, function () {
-        $$getBaseTransformList($el).insertItemBefore(
-          $$createSVGTransformScale()({
-            sx: makeRandomNumber(),
-            sy: makeRandomNumber(),
-          }),
-          0
-        );
+        const t = $$createSVGTransformScale()({
+          sx: makeRandomNumber(),
+          sy: makeRandomNumber(),
+        });
+        $$getBaseTransformList($el).insertItemBefore(t, index - 1);
 
-        expectSameElementAndSameTransformListAfterMerge($el);
+        expectSameElementAndSameTransformListAfterMerge($el, { index });
       });
     });
 
-    describe(`The second SVGTransform should be a rotate SVGTransform.`, function () {
+    describe(`The SVGTransform at index should be a rotate SVGTransform.`, function () {
       it(`Use a matrix SVGTransform.`, function () {
-        $$getBaseTransformList($el).insertItemBefore(
-          $$createSVGTransformMatrix()({ matrix: makeRandomSVGMatrix() }),
-          0
-        );
+        const matrix = makeRandomSVGMatrix();
+        const t = $$createSVGTransformMatrix()({ matrix });
+        $$getBaseTransformList($el).insertItemBefore(t, index);
 
-        expectSameElementAndSameTransformListAfterMerge($el);
+        expectSameElementAndSameTransformListAfterMerge($el, { index });
       });
 
       it(`Use a translate SVGTransform.`, function () {
-        $$getBaseTransformList($el).insertItemBefore(
-          $$createSVGTransformTranslate()({
-            tx: makeRandomNumber(),
-            ty: makeRandomNumber(),
-          }),
-          0
-        );
+        const t = $$createSVGTransformTranslate()({
+          tx: makeRandomNumber(),
+          ty: makeRandomNumber(),
+        });
+        $$getBaseTransformList($el).insertItemBefore(t, index);
 
-        expectSameElementAndSameTransformListAfterMerge($el);
+        expectSameElementAndSameTransformListAfterMerge($el, { index });
       });
 
       it(`Use a scale SVGTransform.`, function () {
-        $$getBaseTransformList($el).insertItemBefore(
-          $$createSVGTransformScale()({
-            sx: makeRandomNumber(),
-            sy: makeRandomNumber(),
-          }),
-          0
-        );
+        const t = $$createSVGTransformScale()({
+          sx: makeRandomNumber(),
+          sy: makeRandomNumber(),
+        });
+        $$getBaseTransformList($el).insertItemBefore(t, index);
 
-        expectSameElementAndSameTransformListAfterMerge($el);
+        expectSameElementAndSameTransformListAfterMerge($el, { index });
       });
     });
 
-    describe(`The third SVGTransform should be a translate SVGTransform.`, function () {
+    describe(`The SVGTransform at index + 1 should be a translate SVGTransform.`, function () {
       it(`Use a matrix SVGTransform.`, function () {
-        $$getBaseTransformList($el).insertItemBefore(
-          $$createSVGTransformMatrix()({ matrix: makeRandomSVGMatrix() }),
-          0
-        );
+        const matrix = makeRandomSVGMatrix();
+        const t = $$createSVGTransformMatrix()({ matrix });
+        $$getBaseTransformList($el).insertItemBefore(t, index + 1);
 
-        expectSameElementAndSameTransformListAfterMerge($el);
+        expectSameElementAndSameTransformListAfterMerge($el, { index });
       });
 
       it(`Use a rotate SVGTransform.`, function () {
-        $$getBaseTransformList($el).insertItemBefore(
-          $$createSVGTransformRotate()({
-            angle: makeRandomNumber(),
-            cx: makeRandomNumber(),
-            cy: makeRandomNumber(),
-          }),
-          0
-        );
+        const t = $$createSVGTransformRotate()({
+          angle: makeRandomNumber(),
+          cx: makeRandomNumber(),
+          cy: makeRandomNumber(),
+        });
+        $$getBaseTransformList($el).insertItemBefore(t, index + 1);
 
-        expectSameElementAndSameTransformListAfterMerge($el);
+        expectSameElementAndSameTransformListAfterMerge($el, { index });
       });
 
       it(`Use a scale SVGTransform.`, function () {
-        $$getBaseTransformList($el).insertItemBefore(
-          $$createSVGTransformScale()({
-            sx: makeRandomNumber(),
-            sy: makeRandomNumber(),
-          }),
-          0
-        );
+        const t = $$createSVGTransformScale()({
+          sx: makeRandomNumber(),
+          sy: makeRandomNumber(),
+        });
+        $$getBaseTransformList($el).insertItemBefore(t, index + 1);
 
-        expectSameElementAndSameTransformListAfterMerge($el);
+        expectSameElementAndSameTransformListAfterMerge($el, { index });
       });
     });
 
-    it(`The cx, cy of the second SVGTransform should be 0.`, function () {
+    it(`The cx, cy of the SVGTransform at index should be 0.`, function () {
       $$initRotateTransform()($el, {
         angle: makeRandomNumber(),
         cx: makeRandomNumber(),
         cy: makeRandomNumber(),
+        index: index - 1,
       });
-      const t = $$getBaseTransformList($el).getItem(1);
+      const t = $$getBaseTransformList($el).getItem(index);
       t.setRotate(t.angle, makeRandomNumber(1), makeRandomNumber(1));
 
-      expectSameElementAndSameTransformListAfterMerge($el);
+      expectSameElementAndSameTransformListAfterMerge($el, { index });
     });
 
-    it(`The sum of the first SVGTransform's e and the third SVGTransform's e should be 0.`, function () {
+    it(`(SVGTransform at index - 1).e + (SVGTransform at index + 1).e should be 0.`, function () {
       $$initRotateTransform()($el, {
         angle: makeRandomNumber(),
         cx: makeRandomNumber(),
         cy: makeRandomNumber(),
+        index: index - 1,
       });
-      $$appendTranslateTransform($$getBaseTransformList($el).getItem(0), {
-        tx: 1,
-      });
+      $$appendTranslateTransform(
+        $$getBaseTransformList($el).getItem(index - 1),
+        { tx: 1 }
+      );
 
-      expectSameElementAndSameTransformListAfterMerge($el);
+      expectSameElementAndSameTransformListAfterMerge($el, { index });
     });
 
-    it(`The sum of the first SVGTransform's f and the third SVGTransform's f should be 0.`, function () {
+    it(`(SVGTransform at index - 1).f + (SVGTransform at index + 1).f should be 0.`, function () {
       $$initRotateTransform()($el, {
         angle: makeRandomNumber(),
         cx: makeRandomNumber(),
         cy: makeRandomNumber(),
+        index: index - 1,
       });
-      $$appendTranslateTransform($$getBaseTransformList($el).getItem(0), {
-        ty: 1,
-      });
+      $$appendTranslateTransform(
+        $$getBaseTransformList($el).getItem(index - 1),
+        { ty: 1 }
+      );
 
-      expectSameElementAndSameTransformListAfterMerge($el);
+      expectSameElementAndSameTransformListAfterMerge($el, { index });
     });
   });
 
-  describe(`The element has valid SVGTransformList for the function. (Use $$initRotateTransform)`, function () {
+  describe(`The input values are valid for the function. (Use $$initRotateTransform)`, function () {
+    let $el;
+    let index;
+
     beforeEach(function () {
+      const transform_attr = makeRandomTransformAttributeValue(3);
+      $el = createMockEl({ transform_attr });
+      index = makeRandomInt(1, $$getBaseTransformList($el).numberOfItems - 1);
+
       $$initRotateTransform()($el, {
         angle: makeRandomNumber(),
         cx: makeRandomNumber(),
         cy: makeRandomNumber(),
+        index: index - 1,
       });
     });
 
     it(`The SVGTransformList's length decreases by 2.`, function () {
       const { numberOfItems: before_n } = $$getBaseTransformList($el);
 
-      $$mergeRotateTransform()($el);
+      $$mergeRotateTransform()($el, { index });
 
       const { numberOfItems: after_n } = $$getBaseTransformList($el);
 
       expect(after_n).to.equal(before_n - 2);
     });
 
-    describe(`The first SVGTransform after merged should satisfy following conditions.`, function () {
+    describe(`The SVGTransform at index - 1 after merged should satisfy following conditions.`, function () {
       it(`It is a rotate SVGTransform.`, function () {
-        $$mergeRotateTransform()($el);
+        $$mergeRotateTransform()($el, { index });
 
-        const t = $$getBaseTransformList($el).getItem(0);
+        const t = $$getBaseTransformList($el).getItem(index - 1);
         expect($$isRotateSVGTransform(t)).to.be.true;
       });
 
-      it(`It's angle is same with the angle of the second SVGTransform before merged.`, function () {
-        const { angle: before_angle } = $$getBaseTransformList($el).getItem(1);
+      it(`It's angle is same with the angle of the SVGTransform at index before merged.`, function () {
+        const { angle: before_angle } = $$getBaseTransformList($el).getItem(
+          index
+        );
 
-        $$mergeRotateTransform()($el);
+        $$mergeRotateTransform()($el, { index });
 
-        const { angle: after_angle } = $$getBaseTransformList($el).getItem(0);
+        const { angle: after_angle } = $$getBaseTransformList($el).getItem(
+          index - 1
+        );
 
         expect(after_angle).to.equal(before_angle);
       });
@@ -267,14 +277,18 @@ describe(`$$mergeRotateTransform`, function () {
         const list = $$getBaseTransformList($el);
         const m = go(
           rangeL(3),
+          mapL((i) => index + i - 1),
           mapL((i) => list.getItem(i)),
           mapL(({ matrix: m }) => m),
           reduce((m1, m2) => m1.multiply(m2))
         );
 
-        $$mergeRotateTransform()($el);
+        $$mergeRotateTransform()($el, { index });
 
-        expect($$getBaseTransformList($el).getItem(0).matrix).to.deep.equal(m);
+        expectSameValueSVGMatrix(
+          $$getBaseTransformList($el).getItem(index - 1).matrix,
+          m
+        );
       });
     });
   });
