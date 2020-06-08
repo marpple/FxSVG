@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import {
   each,
+  flatMapL,
   go,
   head,
   isNil,
@@ -18,7 +19,22 @@ import {
 } from "../../test/utils/index.js";
 import { makeMockRectInitiatedScaleTransform } from "../../test/utils/makeMockRectInitializedScaleTransform.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
+import { makeInvalidIndexCases } from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.spec.js";
 import { $$mergeScaleTransform2 } from "./mergeScaleTransform2.index.js";
+
+const DIRECTIONS = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
+
+const expectSameElementAndSameTransformListAfterMerge = ($el, config) => {
+  const before_list = deepCopyTransformListToMatrixList(
+    $$getBaseTransformList($el)
+  );
+  const result = $$mergeScaleTransform2($el, config);
+  const after_list = deepCopyTransformListToMatrixList(
+    $$getBaseTransformList($el)
+  );
+  expect(result).to.equal($el);
+  expect(after_list).to.deep.equal(before_list);
+};
 
 export default ({ describe, it }) => [
   describe(`$$mergeScaleTransform2`, function () {
@@ -294,8 +310,8 @@ export default ({ describe, it }) => [
     });
 
     describe(`
-  If the input values are invalid for the function, the function do nothing but return the input element.
-  `, function () {
+    If the input values are invalid for the function, the function do nothing but return the input element.
+    `, function () {
       describe(`When the input direction is not in ["n", "ne", "e", "se", "s", "sw", "w", "nw"]...`, function () {
         each(
           ([title, direction]) =>
@@ -365,6 +381,39 @@ export default ({ describe, it }) => [
             ],
           ]
         );
+      });
+
+      describe(`When the input element's SVGTransformList and the input index is not pass $$isValidFxScaleSVGTransformList...`, function () {
+        describe(`The input index should [0 < index < SVGTransformList.numberOfItems - 1].`, function () {
+          go(
+            DIRECTIONS,
+            flatMapL((direction) =>
+              mapL(
+                ([title, $el, index]) => [
+                  `[${title}] + [direction="${direction}"]`,
+                  $el,
+                  index,
+                  direction,
+                ],
+                makeInvalidIndexCases()
+              )
+            ),
+            mapL(([title, $el, index, direction]) => [
+              `If [${title}]...`,
+              $el,
+              index,
+              direction,
+            ]),
+            each(([title, $el, index, direction]) =>
+              it(title, function () {
+                expectSameElementAndSameTransformListAfterMerge($el, {
+                  index,
+                  direction,
+                });
+              })
+            )
+          );
+        });
       });
     });
   }),

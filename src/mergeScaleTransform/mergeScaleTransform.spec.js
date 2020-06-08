@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { equals2, go, go1, head, mapL, rangeL, reduce, rejectL } from "fxjs2";
+import { each, equals2, go, head, mapL, rangeL, reduce, rejectL } from "fxjs2";
 import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import {
   makeRandomTransformAttributeValue,
@@ -16,6 +16,7 @@ import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$initScaleTransform } from "../initScaleTransform/initScaleTransform.index.js";
 import { $$isMatrixSVGTransform } from "../isMatrixSVGTransform/isMatrixSVGTransform.index.js";
+import { makeInvalidIndexCases } from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.spec.js";
 import { $$mergeScaleTransform } from "./mergeScaleTransform.index.js";
 
 const createMockEl = ({ transform_attr = "" } = {}) =>
@@ -63,27 +64,15 @@ export default ({ describe, it, beforeEach }) => [
   If the input values failed to pass $$isValidFxScaleSVGTransformList, the function do nothing but return the element.
   `, function () {
       describe(`The input index should [0] < [index] < [SVGTransformList.numberOfItems - 1].`, function () {
-        let $el;
-
-        beforeEach(function () {
-          $el = createMockEl(makeRandomTransformAttributeValue(10));
-        });
-
-        it(`If the input index [<=] 0.`, function () {
-          const index = go1(makeRandomInt(), (n) => (n > 0 ? -n : n));
-
-          expectSameElementAndSameTransformListAfterMerge($el, { index });
-        });
-
-        it(`If the input index is [>=] SVGTransformList.numberOfItems - 1.`, function () {
-          const transform_list = $$getBaseTransformList($el);
-          const index = makeRandomInt(
-            transform_list.numberOfItems - 1,
-            transform_list.numberOfItems + 1000
-          );
-
-          expectSameElementAndSameTransformListAfterMerge($el, { index });
-        });
+        go(
+          makeInvalidIndexCases(),
+          mapL(([title, $el, index]) => [`If [${title}]...`, $el, index]),
+          each(([title, $el, index]) =>
+            it(title, function () {
+              expectSameElementAndSameTransformListAfterMerge($el, { index });
+            })
+          )
+        );
       });
 
       describe(`The SVGTransform should be a valid type.`, function () {

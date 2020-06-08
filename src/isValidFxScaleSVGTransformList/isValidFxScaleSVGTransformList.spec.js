@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { equals2, go, go1, head, mapL, rangeL, rejectL } from "fxjs2";
+import { each, equals2, go, go1, head, mapL, rangeL, rejectL } from "fxjs2";
 import {
   makeMockRect,
   makeMockRectInitiatedScaleTransform,
@@ -15,6 +15,27 @@ import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/cr
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isValidFxScaleSVGTransformList } from "./isValidFxScaleSVGTransformList.index.js";
 
+export const makeInvalidIndexCases = () =>
+  go(
+    rangeL(2),
+    mapL(() =>
+      makeMockRect({ transform: makeRandomTransformAttributeValue(10) })
+    ),
+    ([$el1, $el2]) => [
+      ["index <= 0", $el1, go1(makeRandomInt(), (n) => (n > 0 ? -n : n))],
+      [
+        "index >= SVGTransformList.numberOfItems - 1",
+        $el2,
+        go1($$getBaseTransformList($el2), (transform_list) =>
+          makeRandomInt(
+            transform_list.numberOfItems - 1,
+            transform_list.numberOfItems + 1000
+          )
+        ),
+      ],
+    ]
+  );
+
 export default ({ describe, it, beforeEach }) => [
   describe(`$$isValidFxScaleSVGTransformList`, function () {
     it(`In other cases not in false cases below, the function will return true`, function () {
@@ -28,35 +49,22 @@ export default ({ describe, it, beforeEach }) => [
     });
 
     describe(`The input index should [0] < [index] < [SVGTransformList.numberOfItems - 1].`, function () {
-      let transform_list;
-
-      beforeEach(function () {
-        const $el = makeMockRect({
-          transform: makeRandomTransformAttributeValue(10),
-        });
-        transform_list = $$getBaseTransformList($el);
-      });
-
-      it(`If the input index [<=] 0, the function will return false.`, function () {
-        const index = go1(makeRandomInt(), (n) => (n > 0 ? -n : n));
-
-        const result = $$isValidFxScaleSVGTransformList(transform_list, {
+      go(
+        makeInvalidIndexCases(),
+        mapL(([title, $el, index]) => [
+          `If [${title}], the function will return false.`,
+          $$getBaseTransformList($el),
           index,
-        });
-        expect(result).to.be.false;
-      });
-
-      it(`If the input index is [>=] SVGTransformList.numberOfItems - 1, the function will return false.`, function () {
-        const index = makeRandomInt(
-          transform_list.numberOfItems - 1,
-          transform_list.numberOfItems + 1000
-        );
-
-        const result = $$isValidFxScaleSVGTransformList(transform_list, {
-          index,
-        });
-        expect(result).to.be.false;
-      });
+        ]),
+        each(([title, transform_list, index]) =>
+          it(title, function () {
+            const result = $$isValidFxScaleSVGTransformList(transform_list, {
+              index,
+            });
+            expect(result).to.be.false;
+          })
+        )
+      );
     });
 
     describe(`The SVGTransform should be a valid type.`, function () {
