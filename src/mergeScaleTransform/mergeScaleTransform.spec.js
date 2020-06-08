@@ -3,20 +3,18 @@ import { each, equals2, go, head, mapL, rangeL, reduce, rejectL } from "fxjs2";
 import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import {
   makeRandomTransformAttributeValue,
-  makeRandomSVGMatrix,
   makeRandomNumber,
   makeRandomInt,
   deepCopyTransformListToMatrixList,
 } from "../../test/utils/index.js";
-import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
-import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
-import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
-import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$initScaleTransform } from "../initScaleTransform/initScaleTransform.index.js";
 import { $$isMatrixSVGTransform } from "../isMatrixSVGTransform/isMatrixSVGTransform.index.js";
-import { makeInvalidIndexCases } from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.spec.js";
+import {
+  makeInvalidIndexCases,
+  makeInvalidSVGTransformTypeCases,
+} from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.spec.js";
 import { $$mergeScaleTransform } from "./mergeScaleTransform.index.js";
 
 const createMockEl = ({ transform_attr = "" } = {}) =>
@@ -63,7 +61,7 @@ export default ({ describe, it, beforeEach }) => [
     describe(`
   If the input values failed to pass $$isValidFxScaleSVGTransformList, the function do nothing but return the element.
   `, function () {
-      describe(`The input index should [0] < [index] < [SVGTransformList.numberOfItems - 1].`, function () {
+      describe(`The input index should [0 < index < SVGTransformList.numberOfItems - 1].`, function () {
         go(
           makeInvalidIndexCases(),
           mapL(([title, $el, index]) => [`If [${title}]...`, $el, index]),
@@ -76,110 +74,15 @@ export default ({ describe, it, beforeEach }) => [
       });
 
       describe(`The SVGTransform should be a valid type.`, function () {
-        let $el;
-        let index;
-
-        beforeEach(function () {
-          ({ $el, index } = createMockElInitScaleTransform(
-            makeRandomTransformAttributeValue()
-          ));
-        });
-
-        describe(`The SVGTransform at index - 1 should be a translate SVGTransform.`, function () {
-          it(`If the SVGTransform at index - 1 is a matrix SVGTransform.`, function () {
-            const matrix = makeRandomSVGMatrix();
-            const matrix_t = $$createSVGTransformMatrix()({ matrix });
-            const transform_list = $$getBaseTransformList($el);
-            transform_list.removeItem(index - 1);
-            transform_list.insertItemBefore(matrix_t, index - 1);
-
-            expectSameElementAndSameTransformListAfterMerge($el, { index });
-          });
-
-          it(`If the SVGTransform at index - 1 is a rotate SVGTransform.`, function () {
-            const [angle, cx, cy] = mapL(() => makeRandomNumber(), rangeL(3));
-            const rotate_t = $$createSVGTransformRotate()({ angle, cx, cy });
-            const transform_list = $$getBaseTransformList($el);
-            transform_list.removeItem(index - 1);
-            transform_list.insertItemBefore(rotate_t, index - 1);
-
-            expectSameElementAndSameTransformListAfterMerge($el, { index });
-          });
-
-          it(`If the SVGTransform at index - 1 is a scale SVGTransform.`, function () {
-            const [sx, sy] = mapL(() => makeRandomNumber(), rangeL(2));
-            const scale_t = $$createSVGTransformScale()({ sx, sy });
-            const transform_list = $$getBaseTransformList($el);
-            transform_list.removeItem(index - 1);
-            transform_list.insertItemBefore(scale_t, index - 1);
-
-            expectSameElementAndSameTransformListAfterMerge($el, { index });
-          });
-        });
-
-        describe(`The SVGTransform at index should be a scale SVGTransform.`, function () {
-          it(`If the SVGTransform at index is a matrix SVGTransform.`, function () {
-            const matrix = makeRandomSVGMatrix();
-            const matrix_t = $$createSVGTransformMatrix()({ matrix });
-            const transform_list = $$getBaseTransformList($el);
-            transform_list.removeItem(index);
-            transform_list.insertItemBefore(matrix_t, index);
-
-            expectSameElementAndSameTransformListAfterMerge($el, { index });
-          });
-
-          it(`If the SVGTransform at index is a rotate SVGTransform.`, function () {
-            const [angle, cx, cy] = mapL(() => makeRandomNumber(), rangeL(3));
-            const rotate_t = $$createSVGTransformRotate()({ angle, cx, cy });
-            const transform_list = $$getBaseTransformList($el);
-            transform_list.removeItem(index);
-            transform_list.insertItemBefore(rotate_t, index);
-
-            expectSameElementAndSameTransformListAfterMerge($el, { index });
-          });
-
-          it(`If the SVGTransform at index is a translate SVGTransform.`, function () {
-            const [tx, ty] = mapL(() => makeRandomNumber(), rangeL(2));
-            const translate_t = $$createSVGTransformTranslate()({ tx, ty });
-            const transform_list = $$getBaseTransformList($el);
-            transform_list.removeItem(index);
-            transform_list.insertItemBefore(translate_t, index);
-
-            expectSameElementAndSameTransformListAfterMerge($el, { index });
-          });
-        });
-
-        describe(`The SVGTransform at index + 1 should be a translate SVGTransform.`, function () {
-          it(`If the SVGTransform at index + 1 is a matrix SVGTransform.`, function () {
-            const matrix = makeRandomSVGMatrix();
-            const matrix_t = $$createSVGTransformMatrix()({ matrix });
-            const transform_list = $$getBaseTransformList($el);
-            transform_list.removeItem(index + 1);
-            transform_list.insertItemBefore(matrix_t, index + 1);
-
-            expectSameElementAndSameTransformListAfterMerge($el, { index });
-          });
-
-          it(`If the SVGTransform at index + 1 is a rotate SVGTransform.`, function () {
-            const [angle, cx, cy] = mapL(() => makeRandomNumber(), rangeL(3));
-            const rotate_t = $$createSVGTransformRotate()({ angle, cx, cy });
-            const transform_list = $$getBaseTransformList($el);
-            transform_list.removeItem(index + 1);
-            transform_list.insertItemBefore(rotate_t, index + 1);
-
-            expectSameElementAndSameTransformListAfterMerge($el, { index });
-          });
-
-          it(`If the SVGTransform at index + 1 is a scale SVGTransform.`, function () {
-            const [sx, sy] = mapL(() => makeRandomNumber(), rangeL(2));
-            const scale_t = $$createSVGTransformScale()({ sx, sy });
-            const transform_list = $$getBaseTransformList($el);
-            transform_list.removeItem(index + 1);
-            transform_list.insertItemBefore(scale_t, index + 1);
-
-            expectSameElementAndSameTransformListAfterMerge($el, { index });
-          });
-        });
+        go(
+          makeInvalidSVGTransformTypeCases(),
+          mapL(([title, $el, index]) => [`If [${title}]...`, $el, index]),
+          each(([title, $el, index]) =>
+            it(title, function () {
+              expectSameElementAndSameTransformListAfterMerge($el, { index });
+            })
+          )
+        );
       });
 
       describe(`The matrix of the SVGTransform at index - 1 should have the values ({a: 1, b: 0, c: 0, d: 1}).`, function () {

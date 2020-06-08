@@ -1,17 +1,26 @@
 import { expect } from "chai";
-import { each, equals2, go, go1, head, mapL, rangeL, rejectL } from "fxjs2";
+import {
+  each,
+  equals2,
+  flatMapL,
+  go,
+  go1,
+  head,
+  mapL,
+  rangeL,
+  rejectL,
+} from "fxjs2";
 import {
   makeMockRect,
   makeMockRectInitiatedScaleTransform,
   makeRandomInt,
   makeRandomNumber,
-  makeRandomSVGMatrix,
+  makeRandomSVGTransformMatrix,
+  makeRandomSVGTransformRotate,
+  makeRandomSVGTransformScale,
+  makeRandomSVGTransformTranslate,
   makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
-import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
-import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
-import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
-import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isValidFxScaleSVGTransformList } from "./isValidFxScaleSVGTransformList.index.js";
 
@@ -32,6 +41,54 @@ export const makeInvalidIndexCases = () =>
             transform_list.numberOfItems + 1000
           )
         ),
+      ],
+    ]
+  );
+
+export const makeInvalidSVGTransformTypeCases = () =>
+  flatMapL(
+    ([[title_index, title_expect], index_delta, transforms]) =>
+      mapL(
+        ([title_receive, t]) =>
+          go1(makeMockRectInitiatedScaleTransform(), ({ $el, index }) => {
+            const transform_list = $$getBaseTransformList($el);
+            transform_list.removeItem(index + index_delta);
+            transform_list.insertItemBefore(t, index + index_delta);
+            return [
+              `index=${title_index}::expect=${title_expect}::receive=${title_receive}`,
+              $el,
+              index,
+            ];
+          }),
+        transforms
+      ),
+    [
+      [
+        [`i-1`, `translate`],
+        -1,
+        [
+          [`matrix`, makeRandomSVGTransformMatrix()],
+          [`rotate`, makeRandomSVGTransformRotate()],
+          [`scale`, makeRandomSVGTransformScale()],
+        ],
+      ],
+      [
+        [`i`, `scale`],
+        0,
+        [
+          [`matrix`, makeRandomSVGTransformMatrix()],
+          [`rotate`, makeRandomSVGTransformRotate()],
+          [`translate`, makeRandomSVGTransformTranslate()],
+        ],
+      ],
+      [
+        [`i+1`, `translate`],
+        1,
+        [
+          [`matrix`, makeRandomSVGTransformMatrix()],
+          [`rotate`, makeRandomSVGTransformRotate()],
+          [`scale`, makeRandomSVGTransformScale()],
+        ],
       ],
     ]
   );
@@ -68,128 +125,22 @@ export default ({ describe, it, beforeEach }) => [
     });
 
     describe(`The SVGTransform should be a valid type.`, function () {
-      let transform_list;
-      let index;
-
-      beforeEach(function () {
-        const { $el, index: _index } = makeMockRectInitiatedScaleTransform();
-        transform_list = $$getBaseTransformList($el);
-        index = _index;
-      });
-
-      describe(`The SVGTransform at index - 1 should be a translate SVGTransform.`, function () {
-        it(`If the SVGTransform at index - 1 is a matrix SVGTransform, the function will return false.`, function () {
-          const matrix = makeRandomSVGMatrix();
-          const matrix_t = $$createSVGTransformMatrix()({ matrix });
-          transform_list.removeItem(index - 1);
-          transform_list.insertItemBefore(matrix_t, index - 1);
-
-          const result = $$isValidFxScaleSVGTransformList(transform_list, {
-            index,
-          });
-          expect(result).to.be.false;
-        });
-
-        it(`If the SVGTransform at index - 1 is a rotate SVGTransform, the function will return false.`, function () {
-          const [angle, cx, cy] = mapL(() => makeRandomNumber(), rangeL(3));
-          const rotate_t = $$createSVGTransformRotate()({ angle, cx, cy });
-          transform_list.removeItem(index - 1);
-          transform_list.insertItemBefore(rotate_t, index - 1);
-
-          const result = $$isValidFxScaleSVGTransformList(transform_list, {
-            index,
-          });
-          expect(result).to.be.false;
-        });
-
-        it(`If the SVGTransform at index - 1 is a scale SVGTransform, the function will return false.`, function () {
-          const [sx, sy] = mapL(() => makeRandomNumber(), rangeL(2));
-          const scale_t = $$createSVGTransformScale()({ sx, sy });
-          transform_list.removeItem(index - 1);
-          transform_list.insertItemBefore(scale_t, index - 1);
-
-          const result = $$isValidFxScaleSVGTransformList(transform_list, {
-            index,
-          });
-          expect(result).to.be.false;
-        });
-      });
-
-      describe(`The SVGTransform at index should be a scale SVGTransform.`, function () {
-        it(`If the SVGTransform at index is a matrix SVGTransform, the function will return false.`, function () {
-          const matrix = makeRandomSVGMatrix();
-          const matrix_t = $$createSVGTransformMatrix()({ matrix });
-          transform_list.removeItem(index);
-          transform_list.insertItemBefore(matrix_t, index);
-
-          const result = $$isValidFxScaleSVGTransformList(transform_list, {
-            index,
-          });
-          expect(result).to.be.false;
-        });
-
-        it(`If the SVGTransform at index is a rotate SVGTransform, the function will return false.`, function () {
-          const [angle, cx, cy] = mapL(() => makeRandomNumber(), rangeL(3));
-          const rotate_t = $$createSVGTransformRotate()({ angle, cx, cy });
-          transform_list.removeItem(index);
-          transform_list.insertItemBefore(rotate_t, index);
-
-          const result = $$isValidFxScaleSVGTransformList(transform_list, {
-            index,
-          });
-          expect(result).to.be.false;
-        });
-
-        it(`If the SVGTransform at index is a translate SVGTransform, the function will return false.`, function () {
-          const [tx, ty] = mapL(() => makeRandomNumber(), rangeL(2));
-          const translate_t = $$createSVGTransformTranslate()({ tx, ty });
-          transform_list.removeItem(index);
-          transform_list.insertItemBefore(translate_t, index);
-
-          const result = $$isValidFxScaleSVGTransformList(transform_list, {
-            index,
-          });
-          expect(result).to.be.false;
-        });
-      });
-
-      describe(`The SVGTransform at index + 1 should be a translate SVGTransform.`, function () {
-        it(`If the SVGTransform at index + 1 is a matrix SVGTransform, the function will return false.`, function () {
-          const matrix = makeRandomSVGMatrix();
-          const matrix_t = $$createSVGTransformMatrix()({ matrix });
-          transform_list.removeItem(index + 1);
-          transform_list.insertItemBefore(matrix_t, index + 1);
-
-          const result = $$isValidFxScaleSVGTransformList(transform_list, {
-            index,
-          });
-          expect(result).to.be.false;
-        });
-
-        it(`If the SVGTransform at index + 1 is a rotate SVGTransform, the function will return false.`, function () {
-          const [angle, cx, cy] = mapL(() => makeRandomNumber(), rangeL(3));
-          const rotate_t = $$createSVGTransformRotate()({ angle, cx, cy });
-          transform_list.removeItem(index + 1);
-          transform_list.insertItemBefore(rotate_t, index + 1);
-
-          const result = $$isValidFxScaleSVGTransformList(transform_list, {
-            index,
-          });
-          expect(result).to.be.false;
-        });
-
-        it(`If the SVGTransform at index + 1 is a scale SVGTransform, the function will return false.`, function () {
-          const [sx, sy] = mapL(() => makeRandomNumber(), rangeL(2));
-          const scale_t = $$createSVGTransformScale()({ sx, sy });
-          transform_list.removeItem(index + 1);
-          transform_list.insertItemBefore(scale_t, index + 1);
-
-          const result = $$isValidFxScaleSVGTransformList(transform_list, {
-            index,
-          });
-          expect(result).to.be.false;
-        });
-      });
+      go(
+        makeInvalidSVGTransformTypeCases(),
+        mapL(([title, $el, index]) => [
+          `If [${title}], the function will return false.`,
+          $$getBaseTransformList($el),
+          index,
+        ]),
+        each(([title, transform_list, index]) =>
+          it(title, function () {
+            const result = $$isValidFxScaleSVGTransformList(transform_list, {
+              index,
+            });
+            expect(result).to.be.false;
+          })
+        )
+      );
     });
 
     describe(`The matrix of the SVGTransform at index - 1 should have the values ({a: 1, b: 0, c: 0, d: 1}).`, function () {

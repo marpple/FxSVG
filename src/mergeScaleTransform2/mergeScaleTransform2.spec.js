@@ -19,7 +19,10 @@ import {
 } from "../../test/utils/index.js";
 import { makeMockRectInitiatedScaleTransform } from "../../test/utils/makeMockRectInitializedScaleTransform.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
-import { makeInvalidIndexCases } from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.spec.js";
+import {
+  makeInvalidIndexCases,
+  makeInvalidSVGTransformTypeCases,
+} from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.spec.js";
 import { $$mergeScaleTransform2 } from "./mergeScaleTransform2.index.js";
 
 const DIRECTIONS = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
@@ -390,7 +393,7 @@ export default ({ describe, it }) => [
             flatMapL((direction) =>
               mapL(
                 ([title, $el, index]) => [
-                  `[${title}] + [direction="${direction}"]`,
+                  `If [[${title}] + [direction=${direction}]]...`,
                   $el,
                   index,
                   direction,
@@ -398,12 +401,31 @@ export default ({ describe, it }) => [
                 makeInvalidIndexCases()
               )
             ),
-            mapL(([title, $el, index, direction]) => [
-              `If [${title}]...`,
-              $el,
-              index,
-              direction,
-            ]),
+            each(([title, $el, index, direction]) =>
+              it(title, function () {
+                expectSameElementAndSameTransformListAfterMerge($el, {
+                  index,
+                  direction,
+                });
+              })
+            )
+          );
+        });
+
+        describe(`The SVGTransform should be a valid type.`, function () {
+          go(
+            DIRECTIONS,
+            flatMapL((direction) =>
+              mapL(
+                ([title, $el, index]) => [
+                  `If [[${title}] + [direction=${direction}]]...`,
+                  $el,
+                  index,
+                  direction,
+                ],
+                makeInvalidSVGTransformTypeCases()
+              )
+            ),
             each(([title, $el, index, direction]) =>
               it(title, function () {
                 expectSameElementAndSameTransformListAfterMerge($el, {
