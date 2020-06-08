@@ -54,30 +54,35 @@ const makeCases = () =>
     ]
   );
 
-describe(`$$createSVGMatrix`, function () {
-  it(`The return value is a SVGMatrix.`, function () {
-    go(
-      makeCases(),
-      mapL(({ matrix: m }) => m),
-      each((m) => expect(m).to.instanceof(SVGMatrix))
-    );
-  });
+export default () => [
+  describe(`$$createSVGMatrix`, function () {
+    it(`The return value is a SVGMatrix.`, function () {
+      go(
+        makeCases(),
+        mapL(({ matrix: m }) => m),
+        each((m) => expect(m).to.instanceof(SVGMatrix))
+      );
+    });
 
-  it(`The matrix will be a identity matrix if there is no arguments.`, function () {
-    const m1 = $$createSVGMatrix()();
-    expectSameMatrix(m1, { a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 });
+    it(`The matrix will be a identity matrix if there is no arguments.`, function () {
+      const m1 = $$createSVGMatrix()();
+      expectSameMatrix(m1, { a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 });
 
-    const m2 = $$createSVGMatrix(
-      document.createElementNS("http://www.w3.org/2000/svg", "svg")
-    )();
-    expectSameMatrix(m2, { a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 });
-  });
+      const m2 = $$createSVGMatrix(
+        document.createElementNS("http://www.w3.org/2000/svg", "svg")
+      )();
+      expectSameMatrix(m2, { a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 });
+    });
 
-  it(`
+    it(`
   Each value of the matrix will be same with the given value.
   If there is omitted values, the values will be {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0} individually by default.
   `, function () {
-    this.slow(100);
-    each(({ matrix, values }) => expectSameMatrix(matrix, values), makeCases());
-  });
-});
+      this.slow(100);
+      each(
+        ({ matrix, values }) => expectSameMatrix(matrix, values),
+        makeCases()
+      );
+    });
+  }),
+];

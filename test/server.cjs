@@ -11,9 +11,9 @@ app.use(
     webpack({
       mode: "development",
       context: __dirname,
-      entry: "./spec.js",
+      entry: "./run_tests_in_browser.js",
       output: {
-        filename: "spec.bundle.js",
+        filename: "run_tests_in_browser.bundle.js",
       },
     })
   )

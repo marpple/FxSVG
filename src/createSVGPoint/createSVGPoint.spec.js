@@ -39,22 +39,24 @@ const makeCases = () =>
     ]
   );
 
-describe(`$$createSVGPoint`, function () {
-  it(`The return value will be a SVGPoint.`, function () {
-    go(
-      makeCases(),
-      mapL(({ point: p }) => p),
-      each((p) => expect(p).to.instanceof(SVGPoint))
-    );
-  });
+export default () => [
+  describe(`$$createSVGPoint`, function () {
+    it(`The return value will be a SVGPoint.`, function () {
+      go(
+        makeCases(),
+        mapL(({ point: p }) => p),
+        each((p) => expect(p).to.instanceof(SVGPoint))
+      );
+    });
 
-  it(`
+    it(`
   The point's x, y value will be same with input value.
   The omitted value will be 0.
   `, function () {
-    each(({ point, values: { x = 0, y = 0 } = {} }) => {
-      expect(point.x).to.equal(x);
-      expect(point.y).to.equal(y);
-    }, makeCases());
-  });
-});
+      each(({ point, values: { x = 0, y = 0 } = {} }) => {
+        expect(point.x).to.equal(x);
+        expect(point.y).to.equal(y);
+      }, makeCases());
+    });
+  }),
+];

@@ -9,71 +9,73 @@ import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGT
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$isTranslateSVGTransform } from "./isTranslateSVGTransform.index.js";
 
-describe(`$$isTranslateSVGTransform`, function () {
-  describe(`The function will throw an error when the input value is not a SVGTransform.`, function () {
-    it(`Input null.`, function () {
-      expect(() => $$isTranslateSVGTransform(null)).to.throw();
+export default () => [
+  describe(`$$isTranslateSVGTransform`, function () {
+    describe(`The function will throw an error when the input value is not a SVGTransform.`, function () {
+      it(`Input null.`, function () {
+        expect(() => $$isTranslateSVGTransform(null)).to.throw();
+      });
+
+      it(`Input plain empty object.`, function () {
+        expect(() => $$isTranslateSVGTransform({})).to.throw();
+      });
+
+      it(`Input plain object with type and SVG_TRANSFORM_TRANSLATE.`, function () {
+        const obj = {
+          type: SVGTransform.SVG_TRANSFORM_TRANSLATE,
+          SVG_TRANSFORM_SCALE: SVGTransform.SVG_TRANSFORM_TRANSLATE,
+        };
+
+        expect(() => $$isTranslateSVGTransform(obj)).to.throw();
+      });
     });
 
-    it(`Input plain empty object.`, function () {
-      expect(() => $$isTranslateSVGTransform({})).to.throw();
-    });
-
-    it(`Input plain object with type and SVG_TRANSFORM_TRANSLATE.`, function () {
-      const obj = {
-        type: SVGTransform.SVG_TRANSFORM_TRANSLATE,
-        SVG_TRANSFORM_SCALE: SVGTransform.SVG_TRANSFORM_TRANSLATE,
-      };
-
-      expect(() => $$isTranslateSVGTransform(obj)).to.throw();
-    });
-  });
-
-  it(`
+    it(`
   The function returns true
   if the SVGTransform's type is same with a SVGTransform.SVG_TRANSFORM_TRANSLATE.
   `, function () {
-    const translate_t = $$createSVGTransformTranslate()({
-      tx: makeRandomNumber(),
-      ty: makeRandomNumber(),
+      const translate_t = $$createSVGTransformTranslate()({
+        tx: makeRandomNumber(),
+        ty: makeRandomNumber(),
+      });
+      const result = $$isTranslateSVGTransform(translate_t);
+
+      expect(result).to.be.true;
     });
-    const result = $$isTranslateSVGTransform(translate_t);
 
-    expect(result).to.be.true;
-  });
-
-  describe(`
+    describe(`
   The function returns false
   if the SVGTransform's type is not same with a SVGTransform.SVG_TRANSFORM_TRANSLATE.
   `, function () {
-    it(`Use a SVGTransform whose type is a SVGTransform.SVG_TRANSFORM_MATRIX.`, function () {
-      const matrix_t = $$createSVGTransformMatrix()({
-        matrix: makeRandomSVGMatrix(),
+      it(`Use a SVGTransform whose type is a SVGTransform.SVG_TRANSFORM_MATRIX.`, function () {
+        const matrix_t = $$createSVGTransformMatrix()({
+          matrix: makeRandomSVGMatrix(),
+        });
+        const result = $$isTranslateSVGTransform(matrix_t);
+
+        expect(result).to.be.false;
       });
-      const result = $$isTranslateSVGTransform(matrix_t);
 
-      expect(result).to.be.false;
-    });
+      it(`Use a SVGTransform whose type is a SVGTransform.SVG_TRANSFORM_SCALE.`, function () {
+        const scale_t = $$createSVGTransformScale()({
+          sx: makeRandomNumber(),
+          sy: makeRandomNumber(),
+        });
+        const result = $$isTranslateSVGTransform(scale_t);
 
-    it(`Use a SVGTransform whose type is a SVGTransform.SVG_TRANSFORM_SCALE.`, function () {
-      const scale_t = $$createSVGTransformScale()({
-        sx: makeRandomNumber(),
-        sy: makeRandomNumber(),
+        expect(result).to.be.false;
       });
-      const result = $$isTranslateSVGTransform(scale_t);
 
-      expect(result).to.be.false;
-    });
+      it(`Use a SVGTransform whose type is a SVGTransform.SVG_TRANSFORM_ROTATE.`, function () {
+        const rotate_t = $$createSVGTransformRotate()({
+          angle: makeRandomNumber(),
+          cx: makeRandomNumber(),
+          cy: makeRandomNumber(),
+        });
+        const result = $$isTranslateSVGTransform(rotate_t);
 
-    it(`Use a SVGTransform whose type is a SVGTransform.SVG_TRANSFORM_ROTATE.`, function () {
-      const rotate_t = $$createSVGTransformRotate()({
-        angle: makeRandomNumber(),
-        cx: makeRandomNumber(),
-        cy: makeRandomNumber(),
+        expect(result).to.be.false;
       });
-      const result = $$isTranslateSVGTransform(rotate_t);
-
-      expect(result).to.be.false;
     });
-  });
-});
+  }),
+];
