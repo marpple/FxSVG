@@ -7,3 +7,4 @@ export { makeRandomTransformStringList } from "./makeRandomTransformStringList.j
 export { makeRandomTransformAttributeValue } from "./makeRandomTransformAttributeValue.js";
 export { deepCopyTransformListToMatrixList } from "./deepCopyTransformListToMatrixList.js";
 export { makeRandomSVGMatrix } from "./makeRandomSVGMatrix.js";
+export { makeMockRect } from "./makeMockRect.js";
