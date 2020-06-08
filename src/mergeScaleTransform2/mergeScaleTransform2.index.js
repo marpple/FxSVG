@@ -1,10 +1,17 @@
-import { each, go, mapL, rangeL } from "fxjs2";
+import { each, go, go1, mapL, rangeL, some } from "fxjs2";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isValidFxScaleSVGTransformList } from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js";
 
 export const $$mergeScaleTransform2 = (
   $el,
-  { index, x_name, y_name, width_name, height_name, direction }
+  {
+    index = 0,
+    x_name = "x",
+    y_name = "y",
+    width_name = "width",
+    height_name = "height",
+    direction = "se",
+  } = {}
 ) => {
   const transform_list = $$getBaseTransformList($el);
 
@@ -18,45 +25,32 @@ export const $$mergeScaleTransform2 = (
     mapL((i) => transform_list.getItem(i)),
     mapL(({ matrix: m }) => m)
   );
-  const [x, y, width, height] = mapL(
-    (name) => parseFloat($el.getAttributeNS(null, name)),
-    [x_name, y_name, width_name, height_name]
+  const [x, y, width, height] = go(
+    [x_name, y_name, width_name, height_name],
+    mapL((name) => $el.getAttributeNS(null, name)),
+    mapL(parseFloat)
   );
-
-  const [scaled_width, scaled_height] = mapL(([len, s]) => len * Math.abs(s), [
-    [width, sx],
-    [height, sy],
-  ]);
-  let scaled_x = x;
-  let scaled_y = y;
-  if (direction === "n") {
-    scaled_y = sy >= 0 ? (scaled_y + cy1) * sy + cy2 : scaled_y + height;
-  } else if (direction === "ne") {
-    scaled_x = sx >= 0 ? (scaled_x + cx1) * sx + cx2 : scaled_x - scaled_width;
-    scaled_y = sy >= 0 ? (scaled_y + cy1) * sy + cy2 : scaled_y + height;
-  } else if (direction === "e") {
-    scaled_x = sx >= 0 ? (scaled_x + cx1) * sx + cx2 : scaled_x - scaled_width;
-  } else if (direction === "se") {
-    scaled_x = sx >= 0 ? (scaled_x + cx1) * sx + cx2 : scaled_x - scaled_width;
-    scaled_y = sy >= 0 ? (scaled_y + cy1) * sy + cy2 : scaled_y - scaled_height;
-  } else if (direction === "s") {
-    scaled_y = sy >= 0 ? (scaled_y + cy1) * sy + cy2 : scaled_y - scaled_height;
-  } else if (direction === "sw") {
-    scaled_x = sx >= 0 ? (scaled_x + cx1) * sx + cx2 : scaled_x + width;
-    scaled_y = sy >= 0 ? (scaled_y + cy1) * sy + cy2 : scaled_y - scaled_height;
-  } else if (direction === "w") {
-    scaled_x = sx >= 0 ? (scaled_x + cx1) * sx + cx2 : scaled_x + width;
-  } else if (direction === "nw") {
-    scaled_x = sx >= 0 ? (scaled_x + cx1) * sx + cx2 : scaled_x + width;
-    scaled_y = sy >= 0 ? (scaled_y + cy1) * sy + cy2 : scaled_y + height;
-  }
 
   go(
     [
+      [x, sx, cx1, cx2, width, ["e", "w"]],
+      [y, sy, cy1, cy2, height, ["n", "s"]],
+    ],
+    mapL(([v, s, c1, c2, l, conditions]) =>
+      go(
+        conditions,
+        some((condition) => direction.includes(condition)),
+        (is_changed) =>
+          is_changed
+            ? go1((v + c1) * s + c2, (v) => (s < 0 ? v + l * s : v))
+            : v
+      )
+    ),
+    ([scaled_x, scaled_y]) => [
       [x_name, scaled_x],
       [y_name, scaled_y],
-      [width_name, scaled_width],
-      [height_name, scaled_height],
+      [width_name, width * Math.abs(sx)],
+      [height_name, height * Math.abs(sy)],
     ],
     mapL(([k, v]) => [k, `${v}`]),
     each(([k, v]) => $el.setAttributeNS(null, k, v))
