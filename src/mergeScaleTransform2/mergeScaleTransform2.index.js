@@ -2,6 +2,8 @@ import { each, go, go1, mapL, rangeL, some } from "fxjs2";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isValidFxScaleSVGTransformList } from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js";
 
+const VALID_DIRECTION = new Set(["n", "ne", "e", "se", "s", "sw", "w", "nw"]);
+
 export const $$mergeScaleTransform2 = (
   $el,
   {
@@ -10,12 +12,15 @@ export const $$mergeScaleTransform2 = (
     y_name = "y",
     width_name = "width",
     height_name = "height",
-    direction = "se",
+    direction,
   } = {}
 ) => {
   const transform_list = $$getBaseTransformList($el);
 
-  if (!$$isValidFxScaleSVGTransformList(transform_list, { index })) {
+  if (
+    !$$isValidFxScaleSVGTransformList(transform_list, { index }) ||
+    !VALID_DIRECTION.has(direction)
+  ) {
     return $el;
   }
 
