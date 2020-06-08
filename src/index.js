@@ -29,6 +29,7 @@ export { $$isTranslateSVGTransform } from "./isTranslateSVGTransform/isTranslate
 export { $$isValidFxScaleSVGTransformList } from "./isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js";
 export { $$mergeRotateTransform } from "./mergeRotateTransform/mergeRotateTransform.index.js";
 export { $$mergeScaleTransform } from "./mergeScaleTransform/mergeScaleTransform.index.js";
+export { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransform2.index.js";
 export { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
 export { $$updateMatrixTransform } from "./updateMatrixTransform/updateMatrixTransform.index.js";
 export { $$updateRotateTransform } from "./updateRotateTransform/updateRotateTransform.index.js";

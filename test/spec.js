@@ -29,6 +29,7 @@ import "../src/isTranslateSVGTransform/isTranslateSVGTransform.spec.js";
 import "../src/isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.spec.js";
 import "../src/mergeRotateTransform/mergeRotateTransform.spec.js";
 import "../src/mergeScaleTransform/mergeScaleTransform.spec.js";
+import "../src/mergeScaleTransform2/mergeScaleTransform2.spec.js";
 import "../src/mergeTranslateTransform/mergeTranslateTransform.spec.js";
 import "../src/updateMatrixTransform/updateMatrixTransform.spec.js";
 import "../src/updateRotateTransform/updateRotateTransform.spec.js";

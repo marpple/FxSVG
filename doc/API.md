@@ -242,6 +242,16 @@ svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransfo
 - [source](../src/mergeScaleTransform/mergeScaleTransform.index.js)
 - [detail](../src/mergeScaleTransform/README.md)
 
+`$$initScaleTransform` 으로 적용된 3개의 `SVGTransform` 객체를 하나의 `SVGTransform` 으로 병합합니다.
+
+## \$\$mergeScaleTransform2
+
+- [source](../src/mergeScaleTransform2/mergeScaleTransform2.index.js)
+- [detail](../src/mergeScaleTransform2/README.md)
+
+`$$initScaleTransform` 으로 적용된 3개의 `SVGTransform` 객체를 해당 svg 엘리먼트의 `x`, `y`, `width`, `height` 속성
+(혹은 그에 준하는 속성) 에 반영합니다.
+
 ## \$\$mergeTranslateTransform
 
 - [source](../src/mergeTranslateTransform/mergeTranslateTransform.index.js)
