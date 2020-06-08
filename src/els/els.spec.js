@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { $$els } from "./els.index.js";
 
-export default () => [
+export default ({ describe, it }) => [
   describe(`$$els`, function () {
     it(`The return value is a list of "SVGElement"s using the input SVG string.`, function () {
       const list = $$els()(`

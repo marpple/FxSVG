@@ -54,7 +54,7 @@ const makeCases = () =>
     ]
   );
 
-export default () => [
+export default ({ describe, it }) => [
   describe(`$$createSVGMatrix`, function () {
     it(`The return value is a SVGMatrix.`, function () {
       go(

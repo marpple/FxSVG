@@ -57,7 +57,7 @@ const createMockElInitScaleTransform = (t) => {
   return { $el, index: init_index + 1 };
 };
 
-export default () => [
+export default ({ describe, it, beforeEach }) => [
   describe(`$$mergeScaleTransform`, function () {
     describe(`
   If the input values failed to pass $$isValidFxScaleSVGTransformList, the function do nothing but return the element.

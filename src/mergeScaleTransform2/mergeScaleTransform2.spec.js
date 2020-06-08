@@ -20,7 +20,7 @@ import { makeMockRectInitiatedScaleTransform } from "../../test/utils/makeMockRe
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$mergeScaleTransform2 } from "./mergeScaleTransform2.index.js";
 
-export default () => [
+export default ({ describe, it }) => [
   describe(`$$mergeScaleTransform2`, function () {
     describe(`The input values are valid for the function. (Use $$initScaleTransform)`, function () {
       it(`

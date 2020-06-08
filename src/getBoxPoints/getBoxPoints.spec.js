@@ -6,7 +6,7 @@ import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getBoxPoints } from "./getBoxPoints.index.js";
 
-export default () => [
+export default ({ describe, it, beforeEach, afterEach }) => [
   describe(`$$getBoxPoints`, function () {
     let x;
     let y;

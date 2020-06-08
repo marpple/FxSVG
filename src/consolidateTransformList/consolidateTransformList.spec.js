@@ -5,7 +5,7 @@ import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$consolidateTransformList } from "./consolidateTransformList.index.js";
 
-export default () => [
+export default ({ describe, it, beforeEach }) => [
   describe(`$$consolidateTransformList`, function () {
     let transform_list;
 

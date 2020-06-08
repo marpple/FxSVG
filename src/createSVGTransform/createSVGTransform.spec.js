@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { $$createSVGTransform } from "./createSVGTransform.index.js";
 
-export default () => [
+export default ({ describe, it }) => [
   describe(`$$createSVGTransform`, function () {
     it(`The return value will be a SVGTransform.`, function () {
       const t = $$createSVGTransform();

@@ -34,7 +34,7 @@ const expectSameTransformsAfterMerge = ($el) => {
   expect(after_list).to.deep.equal(before_list);
 };
 
-export default () => [
+export default ({ describe, it, beforeEach }) => [
   describe(`$$mergeTranslateTransform`, function () {
     let $el;
     let x;

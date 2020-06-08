@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { mapL, rangeL } from "fxjs2";
 import { $$getSVG, $$setSVG } from "./getSetSVG.index.js";
 
-export default () => [
+export default ({ describe, it, beforeEach }) => [
   describe(`$$setSVG + $$getSVG`, function () {
     it(`$$setSVG will change return value of $$getSVG.`, function () {
       const $svg = document.createElementNS(

@@ -4,7 +4,7 @@ import { makeRandomSVGMatrix } from "../../test/utils/index.js";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$createSVGTransformMatrix } from "./createSVGTransformMatrix.index.js";
 
-export default () => [
+export default ({ describe, it }) => [
   describe(`$$createSVGTransformMatrix`, function () {
     it(`The return value is a SVGTransform.`, function () {
       go(

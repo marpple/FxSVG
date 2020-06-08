@@ -7,7 +7,7 @@ import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGT
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$updateTranslateTransform } from "./updateTranslateTransform.index.js";
 
-export default () => [
+export default ({ describe, it, beforeEach }) => [
   describe(`$$updateTranslateTransform`, function () {
     let t;
 

@@ -39,7 +39,7 @@ const makeCases = () =>
     ]
   );
 
-export default () => [
+export default ({ describe, it }) => [
   describe(`$$createSVGTransformScale`, function () {
     it(`The return value will be a SVGTransform.`, function () {
       go(

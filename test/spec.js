@@ -75,4 +75,4 @@ export default () =>
     __spec_updateRotateTransform__,
     __spec_updateScaleTransform__,
     __spec_updateTranslateTransform__,
-  ].forEach((f) => f());
+  ].forEach((f) => f({ describe, it, before, beforeEach, afterEach, after }));

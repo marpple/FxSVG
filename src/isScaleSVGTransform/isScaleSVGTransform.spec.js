@@ -9,7 +9,7 @@ import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGT
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$isScaleSVGTransform } from "./isScaleSVGTransform.index.js";
 
-export default () => [
+export default ({ describe, it }) => [
   describe(`$$isScaleSVGTransform`, function () {
     describe(`The function will throw an error when the input value is not a SVGTransform.`, function () {
       it(`Input null.`, function () {

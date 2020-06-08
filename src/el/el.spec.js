@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { each, go, mapL } from "fxjs2";
 import { $$el } from "./el.index.js";
 
-export default () => [
+export default ({ describe, it }) => [
   describe(`$$el`, function () {
     it(`The return value is a SVGElement representing the input SVG string.`, function () {
       go(

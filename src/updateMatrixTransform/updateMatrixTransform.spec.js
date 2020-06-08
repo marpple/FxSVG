@@ -10,7 +10,7 @@ import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGT
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$updateMatrixTransform } from "./updateMatrixTransform.index.js";
 
-export default () => [
+export default ({ describe, it, beforeEach }) => [
   describe(`$$updateMatrixTransform`, function () {
     let t;
 

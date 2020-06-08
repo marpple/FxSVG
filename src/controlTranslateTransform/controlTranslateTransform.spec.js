@@ -14,7 +14,7 @@ import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransform
 import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 import { $$controlTranslateTransform } from "./controlTranslateTransform.index.js";
 
-export default () => [
+export default ({ describe, it, beforeEach }) => [
   describe(`$$controlTranslateTransform`, function () {
     let x;
     let y;

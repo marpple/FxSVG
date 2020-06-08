@@ -110,7 +110,7 @@ const expectAllCorrect = ($el, config) =>
     expectCorrectOtherSVGTransforms,
   ]);
 
-export default () => [
+export default ({ describe, it }) => [
   describe(`$$initRotateTransform`, function () {
     describe(`No omitted arguments.`, function () {
       it(`The length of the element's SVGTransformList will be increased by 3.`, function () {

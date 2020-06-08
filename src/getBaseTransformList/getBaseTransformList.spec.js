@@ -12,7 +12,7 @@ import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/cr
 import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "./getBaseTransformList.index.js";
 
-export default () => [
+export default ({ describe, it, beforeEach }) => [
   describe(`$$getBaseTransformList`, function () {
     let $el;
 

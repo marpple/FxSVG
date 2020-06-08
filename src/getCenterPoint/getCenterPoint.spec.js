@@ -4,7 +4,7 @@ import { $$el } from "../el/el.index.js";
 import { $$getBoxPoints } from "../getBoxPoints/getBoxPoints.index.js";
 import { $$getCenterPoint } from "./getCenterPoint.index.js";
 
-export default () => [
+export default ({ describe, it, beforeEach, afterEach }) => [
   describe(`$$getCenterPoint`, function () {
     let $svg;
     let $el;

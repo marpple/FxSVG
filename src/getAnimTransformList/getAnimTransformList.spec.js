@@ -5,7 +5,7 @@ import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getAnimTransformList } from "./getAnimTransformList.index.js";
 
-export default () => [
+export default ({ describe, it }) => [
   describe(`$$getAnimTransformList`, function () {
     it(`
   The return list is same with the base transform list

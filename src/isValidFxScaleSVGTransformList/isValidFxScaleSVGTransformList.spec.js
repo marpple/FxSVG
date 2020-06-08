@@ -15,7 +15,7 @@ import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/cr
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isValidFxScaleSVGTransformList } from "./isValidFxScaleSVGTransformList.index.js";
 
-export default () => [
+export default ({ describe, it, beforeEach }) => [
   describe(`$$isValidFxScaleSVGTransformList`, function () {
     it(`In other cases not in false cases below, the function will return true`, function () {
       const { $el, index } = makeMockRectInitiatedScaleTransform();

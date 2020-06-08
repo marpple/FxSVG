@@ -39,7 +39,7 @@ const makeCases = () =>
     ]
   );
 
-export default () => [
+export default ({ describe, it }) => [
   describe(`$$createSVGRect`, function () {
     it(`The return value will be a SVGRect.`, function () {
       go(

@@ -13,7 +13,7 @@ import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransform
 import { $$isRotateSVGTransform } from "../isRotateSVGTransform/isRotateSVGTransform.index.js";
 import { $$controlRotateTransform } from "./controlRotateTransform.index.js";
 
-export default () => [
+export default ({ describe, it, beforeEach }) => [
   describe(`$$controlRotateTransform`, function () {
     let angle;
     let cx;

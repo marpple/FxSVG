@@ -44,7 +44,7 @@ const expectSameElementAndSameTransformListAfterMerge = ($el, config) => {
   expect(after_list).to.deep.equal(before_list);
 };
 
-export default () => [
+export default ({ describe, it, beforeEach }) => [
   describe(`$$mergeRotateTransform`, function () {
     describe(`
   If the input values are invalid, the function do nothing but return the element.
