@@ -69,50 +69,61 @@ const expectAllCorrect = ($el, config) =>
     expectCorrectOtherSVGTransforms,
   ]);
 
-describe(`$$initMatrixTransform`, function () {
-  describe(`No omitted arguments,`, function () {
-    it(`The length of the element's SVGTransformList will be increased by 1.`, function () {
-      const $el = createMockEl();
-      const matrix = makeRandomSVGMatrix();
-      const index = makeRandomInt(0, $$getBaseTransformList($el).numberOfItems);
-      expectCorrectSVGTransformListLength($el, { matrix, index });
+export default ({ describe, it }) => [
+  describe(`$$initMatrixTransform`, function () {
+    describe(`No omitted arguments,`, function () {
+      it(`The length of the element's SVGTransformList will be increased by 1.`, function () {
+        const $el = createMockEl();
+        const matrix = makeRandomSVGMatrix();
+        const index = makeRandomInt(
+          0,
+          $$getBaseTransformList($el).numberOfItems
+        );
+        expectCorrectSVGTransformListLength($el, { matrix, index });
+      });
+
+      it(`The SVGTransform at input index is a matrix SVGTransform with the input SVGMatrix.`, function () {
+        const $el = createMockEl();
+        const matrix = makeRandomSVGMatrix();
+        const index = makeRandomInt(
+          0,
+          $$getBaseTransformList($el).numberOfItems
+        );
+        expectCorrectSVGTransform($el, { matrix, index });
+      });
+
+      it(`The function do nothing on other SVGTransforms of the element.`, function () {
+        const $el = createMockEl();
+        const matrix = makeRandomSVGMatrix();
+        const index = makeRandomInt(
+          0,
+          $$getBaseTransformList($el).numberOfItems
+        );
+        expectCorrectOtherSVGTransforms($el, { matrix, index });
+      });
     });
 
-    it(`The SVGTransform at input index is a matrix SVGTransform with the input SVGMatrix.`, function () {
-      const $el = createMockEl();
-      const matrix = makeRandomSVGMatrix();
-      const index = makeRandomInt(0, $$getBaseTransformList($el).numberOfItems);
-      expectCorrectSVGTransform($el, { matrix, index });
+    it(`If the second argument is omitted, use default values ({ matrix: Identity Matrix, index: 0 }).`, function () {
+      go(
+        ["matrix", "index"],
+        makeAllCombinations,
+        mapL((ks) => [createMockEl(), ks]),
+        mapL(([$el, ks]) =>
+          go(
+            ks,
+            mapL((k) => [
+              k,
+              equals2(k, "index")
+                ? makeRandomInt(0, $$getBaseTransformList($el).numberOfItems)
+                : makeRandomSVGMatrix(),
+            ]),
+            object,
+            (config) => [$el, config]
+          )
+        ),
+        appendL([createMockEl()]),
+        each(([$el, config]) => expectAllCorrect($el, config))
+      );
     });
-
-    it(`The function do nothing on other SVGTransforms of the element.`, function () {
-      const $el = createMockEl();
-      const matrix = makeRandomSVGMatrix();
-      const index = makeRandomInt(0, $$getBaseTransformList($el).numberOfItems);
-      expectCorrectOtherSVGTransforms($el, { matrix, index });
-    });
-  });
-
-  it(`If the second argument is omitted, use default values ({ matrix: Identity Matrix, index: 0 }).`, function () {
-    go(
-      ["matrix", "index"],
-      makeAllCombinations,
-      mapL((ks) => [createMockEl(), ks]),
-      mapL(([$el, ks]) =>
-        go(
-          ks,
-          mapL((k) => [
-            k,
-            equals2(k, "index")
-              ? makeRandomInt(0, $$getBaseTransformList($el).numberOfItems)
-              : makeRandomSVGMatrix(),
-          ]),
-          object,
-          (config) => [$el, config]
-        )
-      ),
-      appendL([createMockEl()]),
-      each(([$el, config]) => expectAllCorrect($el, config))
-    );
-  });
-});
+  }),
+];

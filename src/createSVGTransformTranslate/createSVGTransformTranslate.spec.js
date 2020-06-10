@@ -39,31 +39,33 @@ const makeCases = () =>
     ]
   );
 
-describe(`$$createSVGTransformTranslate`, function () {
-  it(`The return value will be a SVGTransform.`, function () {
-    go(
-      makeCases(),
-      mapL(({ t }) => t),
-      each((t) => expect(t).to.instanceof(SVGTransform))
-    );
-  });
+export default ({ describe, it }) => [
+  describe(`$$createSVGTransformTranslate`, function () {
+    it(`The return value will be a SVGTransform.`, function () {
+      go(
+        makeCases(),
+        mapL(({ t }) => t),
+        each((t) => expect(t).to.instanceof(SVGTransform))
+      );
+    });
 
-  it(`The SVGTransform's type will be the SVGTransform.SVG_TRANSFORM_TRANSLATE.`, function () {
-    go(
-      makeCases(),
-      mapL(({ t }) => t),
-      mapL(({ type: t }) => t),
-      each((t) => expect(t).to.equal(SVGTransform.SVG_TRANSFORM_TRANSLATE))
-    );
-  });
+    it(`The SVGTransform's type will be the SVGTransform.SVG_TRANSFORM_TRANSLATE.`, function () {
+      go(
+        makeCases(),
+        mapL(({ t }) => t),
+        mapL(({ type: t }) => t),
+        each((t) => expect(t).to.equal(SVGTransform.SVG_TRANSFORM_TRANSLATE))
+      );
+    });
 
-  it(`
+    it(`
   The SVGTransform's translate values will be same with the input values. (matrix.e = tx, matrix.f = ty)
   The omitted values will be 0.
   `, function () {
-    each(({ t, values: { tx = 0, ty = 0 } = {} }) => {
-      expect(t.matrix.e).to.equal(tx);
-      expect(t.matrix.f).to.equal(ty);
-    }, makeCases());
-  });
-});
+      each(({ t, values: { tx = 0, ty = 0 } = {} }) => {
+        expect(t.matrix.e).to.equal(tx);
+        expect(t.matrix.f).to.equal(ty);
+      }, makeCases());
+    });
+  }),
+];

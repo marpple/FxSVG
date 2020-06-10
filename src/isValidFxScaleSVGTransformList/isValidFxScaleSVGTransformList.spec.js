@@ -1,399 +1,259 @@
 import { expect } from "chai";
-import { equals2, go, go1, head, mapL, rangeL, rejectL } from "fxjs2";
 import {
+  concatL,
+  each,
+  flatMapL,
+  go,
+  join,
+  mapL,
+  rangeL,
+  reduce,
+  tap,
+} from "fxjs2";
+import {
+  makeMockRectInitiatedScaleTransform,
+  makeRandomBool,
   makeRandomInt,
-  makeRandomNumber,
-  makeRandomSVGMatrix,
+  makeRandomNumberExcept,
+  makeRandomSVGTransformMatrix,
+  makeRandomSVGTransformRotate,
+  makeRandomSVGTransformScale,
+  makeRandomSVGTransformTranslate,
   makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
-import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
-import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
-import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
-import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
-import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
-import { $$initScaleTransform } from "../initScaleTransform/initScaleTransform.index.js";
 import { $$isValidFxScaleSVGTransformList } from "./isValidFxScaleSVGTransformList.index.js";
 
-const createMockEl = (t) =>
-  $$el()(`
-    <rect
-      x="0"
-      y="0"
-      width="10"
-      height="10"
-      ${t ? `transform="${t}"` : ""}
-    >
-    </rect>
-  `);
-
-const createMockElInitScaleTransform = (t) => {
-  const $el = createMockEl(t);
-  const init_index = makeRandomInt(
-    0,
-    $$getBaseTransformList($el).numberOfItems + 1
-  );
+export const makeInvalidIndexCases = () =>
   go(
-    rangeL(4),
-    mapL(() => makeRandomNumber()),
-    ([cx, cy, sx, sy]) => ({ cx, cy, sx, sy, index: init_index }),
-    (config) => $$initScaleTransform()($el, config)
+    rangeL(2),
+    mapL(() =>
+      makeMockRectInitiatedScaleTransform({
+        transform: makeRandomTransformAttributeValue(10),
+      })
+    ),
+    mapL(({ $el }) => $el),
+    ([$el1, $el2]) => [
+      go(
+        makeRandomInt(),
+        (n) => (n > 0 ? -n : n),
+        (i) => [`index <= 0`, $el1, i]
+      ),
+      go(
+        $el2,
+        $$getBaseTransformList,
+        ({ numberOfItems: n }) => n,
+        (n) => [n - 1, n + 1000],
+        ([min, max]) => makeRandomInt(min, max),
+        (i) => [`index >= SVGTransformList.numberOfItems - 1`, $el2, i]
+      ),
+    ]
   );
-  return { $el, index: init_index + 1 };
+
+export const makeInvalidSVGTransformTypeCases = () =>
+  go(
+    [
+      [
+        `translate`,
+        -1,
+        [
+          [`matrix`, makeRandomSVGTransformMatrix()],
+          [`rotate`, makeRandomSVGTransformRotate()],
+          [`scale`, makeRandomSVGTransformScale()],
+        ],
+      ],
+      [
+        `scale`,
+        0,
+        [
+          [`matrix`, makeRandomSVGTransformMatrix()],
+          [`rotate`, makeRandomSVGTransformRotate()],
+          [`translate`, makeRandomSVGTransformTranslate()],
+        ],
+      ],
+      [
+        `translate`,
+        1,
+        [
+          [`matrix`, makeRandomSVGTransformMatrix()],
+          [`rotate`, makeRandomSVGTransformRotate()],
+          [`scale`, makeRandomSVGTransformScale()],
+        ],
+      ],
+    ],
+    flatMapL(([title_expect, index_delta, transforms]) =>
+      mapL(
+        ([title_receive, t]) => [title_expect, title_receive, index_delta, t],
+        transforms
+      )
+    ),
+    mapL(([title_expect, title_receive, index_delta, t]) =>
+      go(
+        makeMockRectInitiatedScaleTransform(),
+        tap(({ $el, index }) => {
+          const transform_list = $$getBaseTransformList($el);
+          transform_list.removeItem(index + index_delta);
+          transform_list.insertItemBefore(t, index + index_delta);
+        }),
+        ({ $el, index }) => [
+          title_expect,
+          title_receive,
+          index_delta,
+          $el,
+          index,
+        ]
+      )
+    ),
+    mapL(([title_expect, title_receive, index_delta, $el, index]) =>
+      go(
+        index_delta,
+        (index_delta) => {
+          if (index_delta > 0) return `+${index_delta}`;
+          if (index_delta < 0) return `${index_delta}`;
+          return "";
+        },
+        (s) => `i${s}`,
+        (title_index) => [
+          `index=${title_index}`,
+          `expect=${title_expect}`,
+          `receive=${title_receive}`,
+        ],
+        join("::"),
+        (title) => [title, $el, index]
+      )
+    )
+  );
+
+export const makeInvalidSVGMatrixValueCases = () => {
+  const iter1 = go(
+    rangeL(-1, 2, 2),
+    flatMapL((index_delta) =>
+      mapL(([k, expect_value]) => [index_delta, k, expect_value], [
+        ["a", 1],
+        ["b", 0],
+        ["c", 0],
+        ["d", 1],
+      ])
+    ),
+    mapL(([index_delta, k, expect_value]) => {
+      const { $el, index } = makeMockRectInitiatedScaleTransform();
+      const receive_value = makeRandomNumberExcept(-100, 100, [expect_value]);
+      const { matrix } = $$getBaseTransformList($el).getItem(
+        index + index_delta
+      );
+      matrix[k] = receive_value;
+      return [index_delta, k, expect_value, receive_value, $el, index];
+    }),
+    mapL(([index_delta, k, expect_value, receive_value, $el, index]) =>
+      go(
+        index_delta,
+        (index_delta) =>
+          index_delta > 0 ? `+${index_delta}` : `${index_delta}`,
+        (title_index) => [
+          `index=${title_index}`,
+          `key=${k}`,
+          `expect=${expect_value}`,
+          `receive=${receive_value}`,
+        ],
+        join("::"),
+        (title) => [title, $el, index]
+      )
+    )
+  );
+  const iter2 = go(
+    [
+      ["e", 0],
+      ["f", 0],
+    ],
+    mapL(([k, expect_value]) => {
+      const { $el, index } = makeMockRectInitiatedScaleTransform();
+      const index_delta = makeRandomBool() ? -1 : 1;
+      const receive_value = makeRandomNumberExcept(-100, 100, [0]);
+      const { matrix } = $$getBaseTransformList($el).getItem(
+        index + index_delta
+      );
+      matrix[k] += receive_value;
+      return [k, expect_value, receive_value, $el, index];
+    }),
+    mapL(([k, expect_value, receive_value, $el, index]) =>
+      go(
+        [
+          `expresion=(i-1).matrix.${k}+(i+1).matrix.${k}`,
+          `expect=${expect_value}`,
+          `receive=${receive_value}`,
+        ],
+        join("::"),
+        (title) => [title, $el, index]
+      )
+    )
+  );
+
+  return concatL(iter1, iter2);
 };
 
-describe(`$$isValidFxScaleSVGTransformList`, function () {
-  it(`In other cases not in false cases below, the function will return true`, function () {
-    const { $el, index } = createMockElInitScaleTransform(
-      makeRandomTransformAttributeValue()
+export const makeInvalidCases = () =>
+  go(
+    [
+      makeInvalidIndexCases,
+      makeInvalidSVGTransformTypeCases,
+      makeInvalidSVGMatrixValueCases,
+    ],
+    mapL((f) => f()),
+    reduce(concatL)
+  );
+
+export default ({ describe, it }) => [
+  describe(`$$isValidFxScaleSVGTransformList`, function () {
+    it(`In other cases not in false cases below, the function will return true`, function () {
+      const { $el, index } = makeMockRectInitiatedScaleTransform();
+      const transform_list = $$getBaseTransformList($el);
+
+      const result = $$isValidFxScaleSVGTransformList(transform_list, {
+        index,
+      });
+      expect(result).to.be.true;
+    });
+
+    go(
+      [
+        [
+          `The input index should [0 < index < SVGTransformList.numberOfItems - 1].`,
+          makeInvalidIndexCases,
+        ],
+        [
+          `The SVGTransform should be a valid type.`,
+          makeInvalidSVGTransformTypeCases,
+        ],
+        [
+          `The SVGMatrix values should be valid.`,
+          makeInvalidSVGMatrixValueCases,
+        ],
+      ],
+      mapL(([title, makeInvalidCases]) =>
+        go(
+          makeInvalidCases(),
+          mapL(([title, $el, index]) =>
+            go(
+              $el,
+              $$getBaseTransformList,
+              (transform_list) =>
+                $$isValidFxScaleSVGTransformList(transform_list, { index }),
+              (result) => [
+                `If [${title}], the function will return false.`,
+                function () {
+                  expect(result).to.be.false;
+                },
+              ]
+            )
+          ),
+          (iter) =>
+            function () {
+              each(([title, f]) => it(title, f), iter);
+            },
+          (f) => [title, f]
+        )
+      ),
+      each(([title, f]) => describe(title, f))
     );
-    const transform_list = $$getBaseTransformList($el);
-
-    const result = $$isValidFxScaleSVGTransformList(transform_list, {
-      index,
-    });
-    expect(result).to.be.true;
-  });
-
-  describe(`The input index should [0] < [index] < [SVGTransformList.numberOfItems - 1].`, function () {
-    let transform_list;
-
-    beforeEach(function () {
-      const $el = createMockEl(makeRandomTransformAttributeValue(10));
-      transform_list = $$getBaseTransformList($el);
-    });
-
-    it(`If the input index [<=] 0, the function will return false.`, function () {
-      const index = go1(makeRandomInt(), (n) => (n > 0 ? -n : n));
-
-      const result = $$isValidFxScaleSVGTransformList(transform_list, {
-        index,
-      });
-      expect(result).to.be.false;
-    });
-
-    it(`If the input index is [>=] SVGTransformList.numberOfItems - 1, the function will return false.`, function () {
-      const index = makeRandomInt(
-        transform_list.numberOfItems - 1,
-        transform_list.numberOfItems + 1000
-      );
-
-      const result = $$isValidFxScaleSVGTransformList(transform_list, {
-        index,
-      });
-      expect(result).to.be.false;
-    });
-  });
-
-  describe(`The SVGTransform should be a valid type.`, function () {
-    let transform_list;
-    let index;
-
-    beforeEach(function () {
-      const { $el, index: _index } = createMockElInitScaleTransform(
-        makeRandomTransformAttributeValue()
-      );
-      transform_list = $$getBaseTransformList($el);
-      index = _index;
-    });
-
-    describe(`The SVGTransform at index - 1 should be a translate SVGTransform.`, function () {
-      it(`If the SVGTransform at index - 1 is a matrix SVGTransform, the function will return false.`, function () {
-        const matrix = makeRandomSVGMatrix();
-        const matrix_t = $$createSVGTransformMatrix()({ matrix });
-        transform_list.removeItem(index - 1);
-        transform_list.insertItemBefore(matrix_t, index - 1);
-
-        const result = $$isValidFxScaleSVGTransformList(transform_list, {
-          index,
-        });
-        expect(result).to.be.false;
-      });
-
-      it(`If the SVGTransform at index - 1 is a rotate SVGTransform, the function will return false.`, function () {
-        const [angle, cx, cy] = mapL(() => makeRandomNumber(), rangeL(3));
-        const rotate_t = $$createSVGTransformRotate()({ angle, cx, cy });
-        transform_list.removeItem(index - 1);
-        transform_list.insertItemBefore(rotate_t, index - 1);
-
-        const result = $$isValidFxScaleSVGTransformList(transform_list, {
-          index,
-        });
-        expect(result).to.be.false;
-      });
-
-      it(`If the SVGTransform at index - 1 is a scale SVGTransform, the function will return false.`, function () {
-        const [sx, sy] = mapL(() => makeRandomNumber(), rangeL(2));
-        const scale_t = $$createSVGTransformScale()({ sx, sy });
-        transform_list.removeItem(index - 1);
-        transform_list.insertItemBefore(scale_t, index - 1);
-
-        const result = $$isValidFxScaleSVGTransformList(transform_list, {
-          index,
-        });
-        expect(result).to.be.false;
-      });
-    });
-
-    describe(`The SVGTransform at index should be a scale SVGTransform.`, function () {
-      it(`If the SVGTransform at index is a matrix SVGTransform, the function will return false.`, function () {
-        const matrix = makeRandomSVGMatrix();
-        const matrix_t = $$createSVGTransformMatrix()({ matrix });
-        transform_list.removeItem(index);
-        transform_list.insertItemBefore(matrix_t, index);
-
-        const result = $$isValidFxScaleSVGTransformList(transform_list, {
-          index,
-        });
-        expect(result).to.be.false;
-      });
-
-      it(`If the SVGTransform at index is a rotate SVGTransform, the function will return false.`, function () {
-        const [angle, cx, cy] = mapL(() => makeRandomNumber(), rangeL(3));
-        const rotate_t = $$createSVGTransformRotate()({ angle, cx, cy });
-        transform_list.removeItem(index);
-        transform_list.insertItemBefore(rotate_t, index);
-
-        const result = $$isValidFxScaleSVGTransformList(transform_list, {
-          index,
-        });
-        expect(result).to.be.false;
-      });
-
-      it(`If the SVGTransform at index is a translate SVGTransform, the function will return false.`, function () {
-        const [tx, ty] = mapL(() => makeRandomNumber(), rangeL(2));
-        const translate_t = $$createSVGTransformTranslate()({ tx, ty });
-        transform_list.removeItem(index);
-        transform_list.insertItemBefore(translate_t, index);
-
-        const result = $$isValidFxScaleSVGTransformList(transform_list, {
-          index,
-        });
-        expect(result).to.be.false;
-      });
-    });
-
-    describe(`The SVGTransform at index + 1 should be a translate SVGTransform.`, function () {
-      it(`If the SVGTransform at index + 1 is a matrix SVGTransform, the function will return false.`, function () {
-        const matrix = makeRandomSVGMatrix();
-        const matrix_t = $$createSVGTransformMatrix()({ matrix });
-        transform_list.removeItem(index + 1);
-        transform_list.insertItemBefore(matrix_t, index + 1);
-
-        const result = $$isValidFxScaleSVGTransformList(transform_list, {
-          index,
-        });
-        expect(result).to.be.false;
-      });
-
-      it(`If the SVGTransform at index + 1 is a rotate SVGTransform, the function will return false.`, function () {
-        const [angle, cx, cy] = mapL(() => makeRandomNumber(), rangeL(3));
-        const rotate_t = $$createSVGTransformRotate()({ angle, cx, cy });
-        transform_list.removeItem(index + 1);
-        transform_list.insertItemBefore(rotate_t, index + 1);
-
-        const result = $$isValidFxScaleSVGTransformList(transform_list, {
-          index,
-        });
-        expect(result).to.be.false;
-      });
-
-      it(`If the SVGTransform at index + 1 is a scale SVGTransform, the function will return false.`, function () {
-        const [sx, sy] = mapL(() => makeRandomNumber(), rangeL(2));
-        const scale_t = $$createSVGTransformScale()({ sx, sy });
-        transform_list.removeItem(index + 1);
-        transform_list.insertItemBefore(scale_t, index + 1);
-
-        const result = $$isValidFxScaleSVGTransformList(transform_list, {
-          index,
-        });
-        expect(result).to.be.false;
-      });
-    });
-  });
-
-  describe(`The matrix of the SVGTransform at index - 1 should have the values ({a: 1, b: 0, c: 0, d: 1}).`, function () {
-    let transform_list;
-    let index;
-
-    beforeEach(function () {
-      const { $el, index: _index } = createMockElInitScaleTransform(
-        makeRandomTransformAttributeValue()
-      );
-      transform_list = $$getBaseTransformList($el);
-      index = _index;
-    });
-
-    it(`If the matrix's a value is not 1, the function will return false.`, function () {
-      const t = transform_list.getItem(index - 1);
-      t.matrix.a = go(
-        rangeL(Infinity),
-        mapL(() => makeRandomNumber(-100, 100)),
-        rejectL(equals2(1)),
-        head
-      );
-
-      const result = $$isValidFxScaleSVGTransformList(transform_list, {
-        index,
-      });
-      expect(result).to.be.false;
-    });
-
-    it(`If the matrix's b value is not 0, the function will return false.`, function () {
-      const t = transform_list.getItem(index - 1);
-      t.matrix.b = go(
-        rangeL(Infinity),
-        mapL(() => makeRandomNumber(-100, 100)),
-        rejectL(equals2(0)),
-        head
-      );
-
-      const result = $$isValidFxScaleSVGTransformList(transform_list, {
-        index,
-      });
-      expect(result).to.be.false;
-    });
-
-    it(`If the matrix's c value is not 0, the function will return false.`, function () {
-      const t = transform_list.getItem(index - 1);
-      t.matrix.c = go(
-        rangeL(Infinity),
-        mapL(() => makeRandomNumber(-100, 100)),
-        rejectL(equals2(0)),
-        head
-      );
-
-      const result = $$isValidFxScaleSVGTransformList(transform_list, {
-        index,
-      });
-      expect(result).to.be.false;
-    });
-
-    it(`If the matrix's d value is not 1, the function will return false.`, function () {
-      const t = transform_list.getItem(index - 1);
-      t.matrix.d = go(
-        rangeL(Infinity),
-        mapL(() => makeRandomNumber(-100, 100)),
-        rejectL(equals2(1)),
-        head
-      );
-
-      const result = $$isValidFxScaleSVGTransformList(transform_list, {
-        index,
-      });
-      expect(result).to.be.false;
-    });
-  });
-
-  describe(`The matrix of the SVGTransform at index + 1 should have the values ({a: 1, b: 0, c: 0, d: 1}).`, function () {
-    let transform_list;
-    let index;
-
-    beforeEach(function () {
-      const { $el, index: _index } = createMockElInitScaleTransform(
-        makeRandomTransformAttributeValue()
-      );
-      transform_list = $$getBaseTransformList($el);
-      index = _index;
-    });
-
-    it(`If the matrix's a value is not 1, the function will return false.`, function () {
-      const t = transform_list.getItem(index + 1);
-      t.matrix.a = go(
-        rangeL(Infinity),
-        mapL(() => makeRandomNumber(-100, 100)),
-        rejectL(equals2(1)),
-        head
-      );
-
-      const result = $$isValidFxScaleSVGTransformList(transform_list, {
-        index,
-      });
-      expect(result).to.be.false;
-    });
-
-    it(`If the matrix's b value is not 0, the function will return false.`, function () {
-      const t = transform_list.getItem(index + 1);
-      t.matrix.b = go(
-        rangeL(Infinity),
-        mapL(() => makeRandomNumber(-100, 100)),
-        rejectL(equals2(0)),
-        head
-      );
-
-      const result = $$isValidFxScaleSVGTransformList(transform_list, {
-        index,
-      });
-      expect(result).to.be.false;
-    });
-
-    it(`If the matrix's c value is not 0, the function will return false.`, function () {
-      const t = transform_list.getItem(index + 1);
-      t.matrix.c = go(
-        rangeL(Infinity),
-        mapL(() => makeRandomNumber(-100, 100)),
-        rejectL(equals2(0)),
-        head
-      );
-
-      const result = $$isValidFxScaleSVGTransformList(transform_list, {
-        index,
-      });
-      expect(result).to.be.false;
-    });
-
-    it(`If the matrix's d value is not 1, the function will return false.`, function () {
-      const t = transform_list.getItem(index + 1);
-      t.matrix.d = go(
-        rangeL(Infinity),
-        mapL(() => makeRandomNumber(-100, 100)),
-        rejectL(equals2(1)),
-        head
-      );
-
-      const result = $$isValidFxScaleSVGTransformList(transform_list, {
-        index,
-      });
-      expect(result).to.be.false;
-    });
-  });
-
-  describe(`The matrix at index -1 and the matrix at index + 1 should satisfy the following conditions.`, function () {
-    let transform_list;
-    let index;
-
-    beforeEach(function () {
-      const { $el, index: _index } = createMockElInitScaleTransform(
-        makeRandomTransformAttributeValue()
-      );
-      transform_list = $$getBaseTransformList($el);
-      index = _index;
-    });
-
-    it(`
-    When t1 is the SVGMatrix at index - 1 and t3 is the SVGMatrix at index + 1,
-    if not [t1.matrix.e + t3.matrix.e = 0], the function will return false.
-    `, function () {
-      const t1 = transform_list.getItem(index - 1);
-      t1.matrix.e++;
-
-      const result = $$isValidFxScaleSVGTransformList(transform_list, {
-        index,
-      });
-      expect(result).to.be.false;
-    });
-
-    it(`
-    When t1 is the SVGMatrix at index - 1 and t3 is the SVGMatrix at index + 1,
-    if not [t1.matrix.f + t3.matrix.f = 0], the function will return false.
-    `, function () {
-      const t1 = transform_list.getItem(index - 1);
-      t1.matrix.f++;
-
-      const result = $$isValidFxScaleSVGTransformList(transform_list, {
-        index,
-      });
-      expect(result).to.be.false;
-    });
-  });
-});
+  }),
+];

@@ -39,24 +39,26 @@ const makeCases = () =>
     ]
   );
 
-describe(`$$createSVGRect`, function () {
-  it(`The return value will be a SVGRect.`, function () {
-    go(
-      makeCases(),
-      mapL(({ rect: r }) => r),
-      each((r) => expect(r).to.instanceof(SVGRect))
-    );
-  });
+export default ({ describe, it }) => [
+  describe(`$$createSVGRect`, function () {
+    it(`The return value will be a SVGRect.`, function () {
+      go(
+        makeCases(),
+        mapL(({ rect: r }) => r),
+        each((r) => expect(r).to.instanceof(SVGRect))
+      );
+    });
 
-  it(`
+    it(`
   The SVGRect's each values are same with input values.
   The omitted values will be 0.
   `, function () {
-    each(({ rect, values: { x = 0, y = 0, width = 0, height = 0 } = {} }) => {
-      expect(rect.x).to.equal(x);
-      expect(rect.y).to.equal(y);
-      expect(rect.width).to.equal(width);
-      expect(rect.height).to.equal(height);
-    }, makeCases());
-  });
-});
+      each(({ rect, values: { x = 0, y = 0, width = 0, height = 0 } = {} }) => {
+        expect(rect.x).to.equal(x);
+        expect(rect.y).to.equal(y);
+        expect(rect.width).to.equal(width);
+        expect(rect.height).to.equal(height);
+      }, makeCases());
+    });
+  }),
+];

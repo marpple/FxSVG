@@ -11,12 +11,13 @@ app.use(
     webpack({
       mode: "development",
       context: __dirname,
-      entry: "./spec.js",
+      entry: "./run_tests_in_browser.js",
       output: {
-        filename: "spec.bundle.js",
+        filename: "run_tests_in_browser.bundle.js",
       },
     })
   )
 );
+app.get("/", (req, res) => res.redirect("/test"));
 
 app.listen(8080, () => console.log("TEST SERVER LISTENING ON 8080 PORT"));

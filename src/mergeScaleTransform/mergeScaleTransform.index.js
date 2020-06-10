@@ -6,7 +6,7 @@ import { $$isValidFxScaleSVGTransformList } from "../isValidFxScaleSVGTransformL
 
 export const $$mergeScaleTransform = ($svg = $$getSVG()) => (
   $el,
-  { index = 0 } = {}
+  { index = 1 } = {}
 ) => {
   const transform_list = $$getBaseTransformList($el);
   if (!$$isValidFxScaleSVGTransformList(transform_list, { index })) {

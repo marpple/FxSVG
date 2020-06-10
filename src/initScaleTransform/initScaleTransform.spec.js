@@ -102,68 +102,85 @@ const expectAllCorrect = ($el, config) =>
     expectCorrectOtherSVGTransforms,
   ]);
 
-describe(`$$initScaleTransform`, function () {
-  describe(`No omitted arguments.`, function () {
-    it(`The length of the element's SVGTransformList will be increased by 3.`, function () {
-      const $el = createMockEl();
-      const index = makeRandomInt(0, $$getBaseTransformList($el).numberOfItems);
-      const [cx, cy, sx, sy] = mapL(() => makeRandomNumber(), rangeL(4));
-      expectCorrectSVGTransformListLength($el, { index, cx, cy, sx, sy });
+export default ({ describe, it }) => [
+  describe(`$$initScaleTransform`, function () {
+    describe(`No omitted arguments.`, function () {
+      it(`The length of the element's SVGTransformList will be increased by 3.`, function () {
+        const $el = createMockEl();
+        const index = makeRandomInt(
+          0,
+          $$getBaseTransformList($el).numberOfItems
+        );
+        const [cx, cy, sx, sy] = mapL(() => makeRandomNumber(), rangeL(4));
+        expectCorrectSVGTransformListLength($el, { index, cx, cy, sx, sy });
+      });
+
+      it(`The SVGTransform at input index will be a translate SVGTransform with cx, cy.`, function () {
+        const $el = createMockEl();
+        const index = makeRandomInt(
+          0,
+          $$getBaseTransformList($el).numberOfItems
+        );
+        const [cx, cy] = mapL(() => makeRandomInt(), rangeL(2));
+        const [sx, sy] = mapL(() => makeRandomNumber(), rangeL(2));
+        expectCorrectSVGTransform1($el, { index, cx, cy, sx, sy });
+      });
+
+      it(`The SVGTransform at index + 1 will be a scale SVGTransform with sx, sy.`, function () {
+        const $el = createMockEl();
+        const index = makeRandomInt(
+          0,
+          $$getBaseTransformList($el).numberOfItems
+        );
+        const [cx, cy] = mapL(() => makeRandomNumber(), rangeL(2));
+        const [sx, sy] = mapL(() => makeRandomInt(), rangeL(2));
+        expectCorrectSVGTransform2($el, { index, cx, cy, sx, sy });
+      });
+
+      it(`The SVGTransform at index + 2 will be a translate SVGTransform with -cx, -cy.`, function () {
+        const $el = createMockEl();
+        const index = makeRandomInt(
+          0,
+          $$getBaseTransformList($el).numberOfItems
+        );
+        const [cx, cy] = mapL(() => makeRandomInt(), rangeL(2));
+        const [sx, sy] = mapL(() => makeRandomNumber(), rangeL(2));
+        expectCorrectSVGTransform3($el, { index, cx, cy, sx, sy });
+      });
+
+      it(`The function do nothing on other SVGTransforms of the element.`, function () {
+        const $el = createMockEl();
+        const index = makeRandomInt(
+          0,
+          $$getBaseTransformList($el).numberOfItems
+        );
+        const [sx, sy, cx, cy] = mapL(() => makeRandomNumber(), rangeL(4));
+        expectCorrectOtherSVGTransforms($el, { index, cx, cy, sx, sy });
+      });
     });
 
-    it(`The SVGTransform at input index will be a translate SVGTransform with cx, cy.`, function () {
-      const $el = createMockEl();
-      const index = makeRandomInt(0, $$getBaseTransformList($el).numberOfItems);
-      const [cx, cy] = mapL(() => makeRandomInt(), rangeL(2));
-      const [sx, sy] = mapL(() => makeRandomNumber(), rangeL(2));
-      expectCorrectSVGTransform1($el, { index, cx, cy, sx, sy });
+    it(`If the second argument is omitted, use default values ({ sx: 1, sy: 1, cx: 0, cy: 0, index: 0 }).`, function () {
+      this.slow(1000);
+      go(
+        ["sx", "sy", "cx", "cy", "index"],
+        makeAllCombinations,
+        mapL((ks) => [createMockEl(), ks]),
+        mapL(([$el, ks]) =>
+          go(
+            ks,
+            mapL((k) => [
+              k,
+              equals2(k, "index")
+                ? makeRandomInt(0, $$getBaseTransformList($el).numberOfItems)
+                : makeRandomInt(),
+            ]),
+            object,
+            (config) => [$el, config]
+          )
+        ),
+        appendL([createMockEl()]),
+        each(([$el, config]) => expectAllCorrect($el, config))
+      );
     });
-
-    it(`The SVGTransform at index + 1 will be a scale SVGTransform with sx, sy.`, function () {
-      const $el = createMockEl();
-      const index = makeRandomInt(0, $$getBaseTransformList($el).numberOfItems);
-      const [cx, cy] = mapL(() => makeRandomNumber(), rangeL(2));
-      const [sx, sy] = mapL(() => makeRandomInt(), rangeL(2));
-      expectCorrectSVGTransform2($el, { index, cx, cy, sx, sy });
-    });
-
-    it(`The SVGTransform at index + 2 will be a translate SVGTransform with -cx, -cy.`, function () {
-      const $el = createMockEl();
-      const index = makeRandomInt(0, $$getBaseTransformList($el).numberOfItems);
-      const [cx, cy] = mapL(() => makeRandomInt(), rangeL(2));
-      const [sx, sy] = mapL(() => makeRandomNumber(), rangeL(2));
-      expectCorrectSVGTransform3($el, { index, cx, cy, sx, sy });
-    });
-
-    it(`The function do nothing on other SVGTransforms of the element.`, function () {
-      const $el = createMockEl();
-      const index = makeRandomInt(0, $$getBaseTransformList($el).numberOfItems);
-      const [sx, sy, cx, cy] = mapL(() => makeRandomNumber(), rangeL(4));
-      expectCorrectOtherSVGTransforms($el, { index, cx, cy, sx, sy });
-    });
-  });
-
-  it(`If the second argument is omitted, use default values ({ sx: 1, sy: 1, cx: 0, cy: 0, index: 0 }).`, function () {
-    this.slow(1000);
-    go(
-      ["sx", "sy", "cx", "cy", "index"],
-      makeAllCombinations,
-      mapL((ks) => [createMockEl(), ks]),
-      mapL(([$el, ks]) =>
-        go(
-          ks,
-          mapL((k) => [
-            k,
-            equals2(k, "index")
-              ? makeRandomInt(0, $$getBaseTransformList($el).numberOfItems)
-              : makeRandomInt(),
-          ]),
-          object,
-          (config) => [$el, config]
-        )
-      ),
-      appendL([createMockEl()]),
-      each(([$el, config]) => expectAllCorrect($el, config))
-    );
-  });
-});
+  }),
+];
