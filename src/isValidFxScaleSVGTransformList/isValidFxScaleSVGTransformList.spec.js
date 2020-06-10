@@ -1,18 +1,16 @@
 import { expect } from "chai";
 import {
-  appendL,
   concatL,
   each,
   flatMapL,
   go,
-  go1,
+  join,
   mapL,
-  pipe,
   rangeL,
   reduce,
+  tap,
 } from "fxjs2";
 import {
-  makeMockRect,
   makeMockRectInitiatedScaleTransform,
   makeRandomBool,
   makeRandomInt,
@@ -30,43 +28,33 @@ export const makeInvalidIndexCases = () =>
   go(
     rangeL(2),
     mapL(() =>
-      makeMockRect({ transform: makeRandomTransformAttributeValue(10) })
+      makeMockRectInitiatedScaleTransform({
+        transform: makeRandomTransformAttributeValue(10),
+      })
     ),
+    mapL(({ $el }) => $el),
     ([$el1, $el2]) => [
-      ["index <= 0", $el1, go1(makeRandomInt(), (n) => (n > 0 ? -n : n))],
-      [
-        "index >= SVGTransformList.numberOfItems - 1",
+      go(
+        makeRandomInt(),
+        (n) => (n > 0 ? -n : n),
+        (i) => [`index <= 0`, $el1, i]
+      ),
+      go(
         $el2,
-        go1($$getBaseTransformList($el2), (transform_list) =>
-          makeRandomInt(
-            transform_list.numberOfItems - 1,
-            transform_list.numberOfItems + 1000
-          )
-        ),
-      ],
+        $$getBaseTransformList,
+        ({ numberOfItems: n }) => n,
+        (n) => [n - 1, n + 1000],
+        ([min, max]) => makeRandomInt(min, max),
+        (i) => [`index >= SVGTransformList.numberOfItems - 1`, $el2, i]
+      ),
     ]
   );
 
 export const makeInvalidSVGTransformTypeCases = () =>
-  flatMapL(
-    ([[title_index, title_expect], index_delta, transforms]) =>
-      mapL(
-        ([title_receive, t]) =>
-          go1(makeMockRectInitiatedScaleTransform(), ({ $el, index }) => {
-            const transform_list = $$getBaseTransformList($el);
-            transform_list.removeItem(index + index_delta);
-            transform_list.insertItemBefore(t, index + index_delta);
-            return [
-              `index=${title_index}::expect=${title_expect}::receive=${title_receive}`,
-              $el,
-              index,
-            ];
-          }),
-        transforms
-      ),
+  go(
     [
       [
-        [`i-1`, `translate`],
+        `translate`,
         -1,
         [
           [`matrix`, makeRandomSVGTransformMatrix()],
@@ -75,7 +63,7 @@ export const makeInvalidSVGTransformTypeCases = () =>
         ],
       ],
       [
-        [`i`, `scale`],
+        `scale`,
         0,
         [
           [`matrix`, makeRandomSVGTransformMatrix()],
@@ -84,7 +72,7 @@ export const makeInvalidSVGTransformTypeCases = () =>
         ],
       ],
       [
-        [`i+1`, `translate`],
+        `translate`,
         1,
         [
           [`matrix`, makeRandomSVGTransformMatrix()],
@@ -92,38 +80,83 @@ export const makeInvalidSVGTransformTypeCases = () =>
           [`scale`, makeRandomSVGTransformScale()],
         ],
       ],
-    ]
+    ],
+    flatMapL(([title_expect, index_delta, transforms]) =>
+      mapL(
+        ([title_receive, t]) => [title_expect, title_receive, index_delta, t],
+        transforms
+      )
+    ),
+    mapL(([title_expect, title_receive, index_delta, t]) =>
+      go(
+        makeMockRectInitiatedScaleTransform(),
+        tap(({ $el, index }) => {
+          const transform_list = $$getBaseTransformList($el);
+          transform_list.removeItem(index + index_delta);
+          transform_list.insertItemBefore(t, index + index_delta);
+        }),
+        ({ $el, index }) => [
+          title_expect,
+          title_receive,
+          index_delta,
+          $el,
+          index,
+        ]
+      )
+    ),
+    mapL(([title_expect, title_receive, index_delta, $el, index]) =>
+      go(
+        index_delta,
+        (index_delta) => {
+          if (index_delta > 0) return `+${index_delta}`;
+          if (index_delta < 0) return `${index_delta}`;
+          return "";
+        },
+        (s) => `i${s}`,
+        (title_index) => [
+          `index=${title_index}`,
+          `expect=${title_expect}`,
+          `receive=${title_receive}`,
+        ],
+        join("::"),
+        (title) => [title, $el, index]
+      )
+    )
   );
 
 export const makeInvalidSVGMatrixValueCases = () => {
   const iter1 = go(
     rangeL(-1, 2, 2),
-    mapL((index_delta) => [
-      `i${index_delta > 0 ? `+${index_delta}` : `${index_delta}`}`,
-      index_delta,
-    ]),
-    flatMapL(([title_index, index_delta]) =>
-      mapL(
-        ([k, expect_value]) =>
-          go1(makeMockRectInitiatedScaleTransform(), ({ $el, index }) => {
-            const receive_value = makeRandomNumberExcept(-100, 100, [
-              expect_value,
-            ]);
-            $$getBaseTransformList($el).getItem(index + index_delta).matrix[
-              k
-            ] = receive_value;
-            return [
-              `index=${title_index}::key=${k}::expect=${expect_value}::receive=${receive_value}`,
-              $el,
-              index,
-            ];
-          }),
-        [
-          ["a", 1],
-          ["b", 0],
-          ["c", 0],
-          ["d", 1],
-        ]
+    flatMapL((index_delta) =>
+      mapL(([k, expect_value]) => [index_delta, k, expect_value], [
+        ["a", 1],
+        ["b", 0],
+        ["c", 0],
+        ["d", 1],
+      ])
+    ),
+    mapL(([index_delta, k, expect_value]) => {
+      const { $el, index } = makeMockRectInitiatedScaleTransform();
+      const receive_value = makeRandomNumberExcept(-100, 100, [expect_value]);
+      const { matrix } = $$getBaseTransformList($el).getItem(
+        index + index_delta
+      );
+      matrix[k] = receive_value;
+      return [index_delta, k, expect_value, receive_value, $el, index];
+    }),
+    mapL(([index_delta, k, expect_value, receive_value, $el, index]) =>
+      go(
+        index_delta,
+        (index_delta) =>
+          index_delta > 0 ? `+${index_delta}` : `${index_delta}`,
+        (title_index) => [
+          `index=${title_index}`,
+          `key=${k}`,
+          `expect=${expect_value}`,
+          `receive=${receive_value}`,
+        ],
+        join("::"),
+        (title) => [title, $el, index]
       )
     )
   );
@@ -132,19 +165,27 @@ export const makeInvalidSVGMatrixValueCases = () => {
       ["e", 0],
       ["f", 0],
     ],
-    mapL(appendL(makeMockRectInitiatedScaleTransform())),
-    mapL(appendL(makeRandomBool() ? -1 : 1)),
-    mapL(appendL(makeRandomNumberExcept(-100, 100, [0]))),
-    mapL(([k, expect_value, { $el, index }, index_delta, receive_value]) => {
-      const l = $$getBaseTransformList($el);
-      const t = l.getItem(index + index_delta);
-      t.matrix[k] += receive_value;
-      return [
-        `expresion=(i-1).matrix.${k}+(i+1).matrix.${k}::expect=${expect_value}::receive=${receive_value}`,
-        $el,
-        index,
-      ];
-    })
+    mapL(([k, expect_value]) => {
+      const { $el, index } = makeMockRectInitiatedScaleTransform();
+      const index_delta = makeRandomBool() ? -1 : 1;
+      const receive_value = makeRandomNumberExcept(-100, 100, [0]);
+      const { matrix } = $$getBaseTransformList($el).getItem(
+        index + index_delta
+      );
+      matrix[k] += receive_value;
+      return [k, expect_value, receive_value, $el, index];
+    }),
+    mapL(([k, expect_value, receive_value, $el, index]) =>
+      go(
+        [
+          `expresion=(i-1).matrix.${k}+(i+1).matrix.${k}`,
+          `expect=${expect_value}`,
+          `receive=${receive_value}`,
+        ],
+        join("::"),
+        (title) => [title, $el, index]
+      )
+    )
   );
 
   return concatL(iter1, iter2);
@@ -161,24 +202,6 @@ export const makeInvalidCases = () =>
     reduce(concatL)
   );
 
-const runInvalidTestCases = (it) =>
-  pipe(
-    mapL(([title, $el, index]) =>
-      go(
-        $el,
-        $$getBaseTransformList,
-        (transform_list) =>
-          $$isValidFxScaleSVGTransformList(transform_list, { index }),
-        (result) => [title, result]
-      )
-    ),
-    each(([title, result]) =>
-      it(title, function () {
-        expect(result).to.be.false;
-      })
-    )
-  );
-
 export default ({ describe, it }) => [
   describe(`$$isValidFxScaleSVGTransformList`, function () {
     it(`In other cases not in false cases below, the function will return true`, function () {
@@ -191,40 +214,46 @@ export default ({ describe, it }) => [
       expect(result).to.be.true;
     });
 
-    describe(`The input index should [0 < index < SVGTransformList.numberOfItems - 1].`, function () {
-      go(
-        makeInvalidIndexCases(),
-        mapL(([title, $el, index]) => [
-          `If [${title}], the function will return false.`,
-          $el,
-          index,
-        ]),
-        runInvalidTestCases(it)
-      );
-    });
-
-    describe(`The SVGTransform should be a valid type.`, function () {
-      go(
-        makeInvalidSVGTransformTypeCases(),
-        mapL(([title, $el, index]) => [
-          `If [${title}], the function will return false.`,
-          $el,
-          index,
-        ]),
-        runInvalidTestCases(it)
-      );
-    });
-
-    describe(`The SVGMatrix values should be valid.`, function () {
-      go(
-        makeInvalidSVGMatrixValueCases(),
-        mapL(([title, $el, index]) => [
-          `If [${title}], the function will return false`,
-          $el,
-          index,
-        ]),
-        runInvalidTestCases(it)
-      );
-    });
+    go(
+      [
+        [
+          `The input index should [0 < index < SVGTransformList.numberOfItems - 1].`,
+          makeInvalidIndexCases,
+        ],
+        [
+          `The SVGTransform should be a valid type.`,
+          makeInvalidSVGTransformTypeCases,
+        ],
+        [
+          `The SVGMatrix values should be valid.`,
+          makeInvalidSVGMatrixValueCases,
+        ],
+      ],
+      mapL(([title, makeInvalidCases]) =>
+        go(
+          makeInvalidCases(),
+          mapL(([title, $el, index]) =>
+            go(
+              $el,
+              $$getBaseTransformList,
+              (transform_list) =>
+                $$isValidFxScaleSVGTransformList(transform_list, { index }),
+              (result) => [
+                `If [${title}], the function will return false.`,
+                function () {
+                  expect(result).to.be.false;
+                },
+              ]
+            )
+          ),
+          (iter) =>
+            function () {
+              each(([title, f]) => it(title, f), iter);
+            },
+          (f) => [title, f]
+        )
+      ),
+      each(([title, f]) => describe(title, f))
+    );
   }),
 ];
