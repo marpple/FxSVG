@@ -9,6 +9,7 @@ import {
   mapL,
   pipe,
   rangeL,
+  reduce,
 } from "fxjs2";
 import {
   makeMockRect,
@@ -148,6 +149,17 @@ export const makeInvalidSVGMatrixValueCases = () => {
 
   return concatL(iter1, iter2);
 };
+
+export const makeInvalidCases = () =>
+  go(
+    [
+      makeInvalidIndexCases,
+      makeInvalidSVGTransformTypeCases,
+      makeInvalidSVGMatrixValueCases,
+    ],
+    mapL((f) => f()),
+    reduce(concatL)
+  );
 
 const runInvalidTestCases = (it) =>
   pipe(

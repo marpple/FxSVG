@@ -19,11 +19,7 @@ import {
 } from "../../test/utils/index.js";
 import { makeMockRectInitiatedScaleTransform } from "../../test/utils/makeMockRectInitializedScaleTransform.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
-import {
-  makeInvalidIndexCases,
-  makeInvalidSVGMatrixValueCases,
-  makeInvalidSVGTransformTypeCases,
-} from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.spec.js";
+import { makeInvalidCases as makeInvalidIsValidFxSVGTransformListCases } from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.spec.js";
 import { $$mergeScaleTransform2 } from "./mergeScaleTransform2.index.js";
 
 const DIRECTIONS = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
@@ -39,30 +35,6 @@ const expectSameElementAndSameTransformListAfterMerge = ($el, config) => {
   expect(result).to.equal($el);
   expect(after_list).to.deep.equal(before_list);
 };
-
-const runInvalidTestCases = (it, makeInvalidCases) =>
-  go(
-    DIRECTIONS,
-    flatMapL((direction) =>
-      mapL(
-        ([title, $el, index]) => [
-          `If [[${title}] + [direction=${direction}]]...`,
-          $el,
-          index,
-          direction,
-        ],
-        makeInvalidCases()
-      )
-    ),
-    each(([title, $el, index, direction]) =>
-      it(title, function () {
-        expectSameElementAndSameTransformListAfterMerge($el, {
-          index,
-          direction,
-        });
-      })
-    )
-  );
 
 export default ({ describe, it }) => [
   describe(`$$mergeScaleTransform2`, function () {
@@ -412,17 +384,28 @@ export default ({ describe, it }) => [
       });
 
       describe(`When the input element's SVGTransformList and the input index is not pass $$isValidFxScaleSVGTransformList...`, function () {
-        describe(`The input index should [0 < index < SVGTransformList.numberOfItems - 1].`, function () {
-          runInvalidTestCases(it, makeInvalidIndexCases);
-        });
-
-        describe(`The SVGTransform should be a valid type.`, function () {
-          runInvalidTestCases(it, makeInvalidSVGTransformTypeCases);
-        });
-
-        describe(`The SVGMatrix values should be valid.`, function () {
-          runInvalidTestCases(it, makeInvalidSVGMatrixValueCases);
-        });
+        go(
+          DIRECTIONS,
+          flatMapL((direction) =>
+            mapL(
+              ([title, $el, index]) => [
+                `If [[${title}] + [direction=${direction}]]...`,
+                $el,
+                index,
+                direction,
+              ],
+              makeInvalidIsValidFxSVGTransformListCases()
+            )
+          ),
+          each(([title, $el, index, direction]) =>
+            it(title, function () {
+              expectSameElementAndSameTransformListAfterMerge($el, {
+                index,
+                direction,
+              });
+            })
+          )
+        );
       });
     });
   }),
