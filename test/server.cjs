@@ -18,5 +18,6 @@ app.use(
     })
   )
 );
+app.get("/", (req, res) => res.redirect("/test"));
 
 app.listen(8080, () => console.log("TEST SERVER LISTENING ON 8080 PORT"));
