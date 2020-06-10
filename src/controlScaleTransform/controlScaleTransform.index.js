@@ -1,4 +1,3 @@
-import { defaultTo, go, mapL } from "fxjs2";
 import { $$consolidateTransformList } from "../consolidateTransformList/consolidateTransformList.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
@@ -21,7 +20,7 @@ export const $$controlScaleTransform = ($svg = $$getSVG()) => (
     width_name: _width_name,
     height_name: _height_name,
     direction: _direction,
-  }
+  } = {}
 ) => {
   const transform = $$initScaleTransform($svg)($el, {
     cx,
@@ -32,38 +31,27 @@ export const $$controlScaleTransform = ($svg = $$getSVG()) => (
   });
 
   const controller = {};
-  controller.update = ({ sx, sy }) => {
+  controller.update = ({ sx, sy } = {}) => {
     $$updateScaleTransform(transform, { sx, sy });
     return controller;
   };
   controller.end = ({
-    merge_type,
-    x_name,
-    y_name,
-    width_name,
-    height_name,
-    direction,
-  }) => {
-    defaultTo(_merge_type, merge_type) === 2
-      ? go(
-          [
-            [_x_name, x_name],
-            [_y_name, y_name],
-            [_width_name, width_name],
-            [_height_name, height_name],
-            [_direction, direction],
-          ],
-          mapL(([a, b]) => defaultTo(a, b)),
-          ([x_name, y_name, width_name, height_name, direction]) => ({
-            index: index + 1,
-            x_name,
-            y_name,
-            width_name,
-            height_name,
-            direction,
-          }),
-          (config) => $$mergeScaleTransform2($el, config)
-        )
+    merge_type = _merge_type,
+    x_name = _x_name,
+    y_name = _y_name,
+    width_name = _width_name,
+    height_name = _height_name,
+    direction = _direction,
+  } = {}) => {
+    merge_type === 2
+      ? $$mergeScaleTransform2($el, {
+          index: index + 1,
+          x_name,
+          y_name,
+          width_name,
+          height_name,
+          direction,
+        })
       : $$mergeScaleTransform($svg)($el, { index: index + 1 });
     $$consolidateTransformList($$getBaseTransformList($el));
     return $el;
