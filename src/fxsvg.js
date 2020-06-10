@@ -2,6 +2,7 @@ import { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTra
 import { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 import { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";
 import { $$controlRotateTransform } from "./controlRotateTransform/controlRotateTransform.index.js";
+import { $$controlScaleTransform } from "./controlScaleTransform/controlScaleTransform.index.js";
 import { $$controlTranslateTransform } from "./controlTranslateTransform/controlTranslateTransform.index.js";
 import { $$createSVGMatrix } from "./createSVGMatrix/createSVGMatrix.index.js";
 import { $$createSVGPoint } from "./createSVGPoint/createSVGPoint.index.js";
@@ -41,6 +42,7 @@ export const FxSVG = {
   appendTranslateTransform: $$appendTranslateTransform,
   consolidateTransformList: $$consolidateTransformList,
   controlRotateTransform: $$controlRotateTransform,
+  controlScaleTransform: $$controlScaleTransform,
   controlTranslateTransform: $$controlTranslateTransform,
   createSVGMatrix: $$createSVGMatrix,
   createSVGPoint: $$createSVGPoint,
