@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { each, equals2, go, head, mapL, rangeL, reduce, rejectL } from "fxjs2";
+import { each, go, mapL, rangeL, reduce } from "fxjs2";
 import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import {
   makeRandomTransformAttributeValue,
@@ -14,6 +14,7 @@ import { $$isMatrixSVGTransform } from "../isMatrixSVGTransform/isMatrixSVGTrans
 import {
   makeInvalidIndexCases,
   makeInvalidSVGTransformTypeCases,
+  makeInvalidSVGMatrixValueCases,
 } from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.spec.js";
 import { $$mergeScaleTransform } from "./mergeScaleTransform.index.js";
 
@@ -41,26 +42,11 @@ const expectSameElementAndSameTransformListAfterMerge = ($el, config) => {
   expect(after_list).to.deep.equal(before_list);
 };
 
-const createMockElInitScaleTransform = (t) => {
-  const $el = createMockEl(t);
-  const init_index = makeRandomInt(
-    0,
-    $$getBaseTransformList($el).numberOfItems + 1
-  );
-  go(
-    rangeL(4),
-    mapL(() => makeRandomNumber()),
-    ([cx, cy, sx, sy]) => ({ cx, cy, sx, sy, index: init_index }),
-    (config) => $$initScaleTransform()($el, config)
-  );
-  return { $el, index: init_index + 1 };
-};
-
 export default ({ describe, it, beforeEach }) => [
   describe(`$$mergeScaleTransform`, function () {
     describe(`
-  If the input values failed to pass $$isValidFxScaleSVGTransformList, the function do nothing but return the element.
-  `, function () {
+    If the input values failed to pass $$isValidFxScaleSVGTransformList, the function do nothing but return the element.
+    `, function () {
       describe(`The input index should [0 < index < SVGTransformList.numberOfItems - 1].`, function () {
         go(
           makeInvalidIndexCases(),
@@ -85,157 +71,16 @@ export default ({ describe, it, beforeEach }) => [
         );
       });
 
-      describe(`The matrix of the SVGTransform at index - 1 should have the values ({a: 1, b: 0, c: 0, d: 1}).`, function () {
-        let $el;
-        let index;
-
-        beforeEach(function () {
-          ({ $el, index } = createMockElInitScaleTransform(
-            makeRandomTransformAttributeValue()
-          ));
-        });
-
-        it(`If the matrix's a value is not 1.`, function () {
-          const transform_list = $$getBaseTransformList($el);
-          const t = transform_list.getItem(index - 1);
-          t.matrix.a = go(
-            rangeL(Infinity),
-            mapL(() => makeRandomNumber(-100, 100)),
-            rejectL(equals2(1)),
-            head
-          );
-
-          expectSameElementAndSameTransformListAfterMerge($el, { index });
-        });
-
-        it(`If the matrix's b value is not 0.`, function () {
-          const transform_list = $$getBaseTransformList($el);
-          const t = transform_list.getItem(index - 1);
-          t.matrix.b = go(
-            rangeL(Infinity),
-            mapL(() => makeRandomNumber(-100, 100)),
-            rejectL(equals2(0)),
-            head
-          );
-
-          expectSameElementAndSameTransformListAfterMerge($el, { index });
-        });
-
-        it(`If the matrix's c value is not 0.`, function () {
-          const transform_list = $$getBaseTransformList($el);
-          const t = transform_list.getItem(index - 1);
-          t.matrix.c = go(
-            rangeL(Infinity),
-            mapL(() => makeRandomNumber(-100, 100)),
-            rejectL(equals2(0)),
-            head
-          );
-
-          expectSameElementAndSameTransformListAfterMerge($el, { index });
-        });
-
-        it(`If the matrix's d value is not 1.`, function () {
-          const transform_list = $$getBaseTransformList($el);
-          const t = transform_list.getItem(index - 1);
-          t.matrix.d = go(
-            rangeL(Infinity),
-            mapL(() => makeRandomNumber(-100, 100)),
-            rejectL(equals2(1)),
-            head
-          );
-
-          expectSameElementAndSameTransformListAfterMerge($el, { index });
-        });
-      });
-
-      describe(`The matrix of the SVGTransform at index + 1 should have the values ({a: 1, b: 0, c: 0, d: 1}).`, function () {
-        let $el;
-        let index;
-
-        beforeEach(function () {
-          ({ $el, index } = createMockElInitScaleTransform(
-            makeRandomTransformAttributeValue()
-          ));
-        });
-
-        it(`If the matrix's a value is not 1.`, function () {
-          const transform_list = $$getBaseTransformList($el);
-          const t = transform_list.getItem(index + 1);
-          t.matrix.a = go(
-            rangeL(Infinity),
-            mapL(() => makeRandomNumber(-100, 100)),
-            rejectL(equals2(1)),
-            head
-          );
-
-          expectSameElementAndSameTransformListAfterMerge($el, { index });
-        });
-
-        it(`If the matrix's b value is not 0.`, function () {
-          const transform_list = $$getBaseTransformList($el);
-          const t = transform_list.getItem(index + 1);
-          t.matrix.b = go(
-            rangeL(Infinity),
-            mapL(() => makeRandomNumber(-100, 100)),
-            rejectL(equals2(0)),
-            head
-          );
-
-          expectSameElementAndSameTransformListAfterMerge($el, { index });
-        });
-
-        it(`If the matrix's c value is not 0.`, function () {
-          const transform_list = $$getBaseTransformList($el);
-          const t = transform_list.getItem(index + 1);
-          t.matrix.c = go(
-            rangeL(Infinity),
-            mapL(() => makeRandomNumber(-100, 100)),
-            rejectL(equals2(0)),
-            head
-          );
-
-          expectSameElementAndSameTransformListAfterMerge($el, { index });
-        });
-
-        it(`If the matrix's d value is not 1.`, function () {
-          const transform_list = $$getBaseTransformList($el);
-          const t = transform_list.getItem(index + 1);
-          t.matrix.d = go(
-            rangeL(Infinity),
-            mapL(() => makeRandomNumber(-100, 100)),
-            rejectL(equals2(1)),
-            head
-          );
-
-          expectSameElementAndSameTransformListAfterMerge($el, { index });
-        });
-      });
-
-      describe(`The matrix at index -1 and the matrix at index + 1 should satisfy the following conditions.`, function () {
-        let $el;
-        let index;
-
-        beforeEach(function () {
-          ({ $el, index } = createMockElInitScaleTransform(
-            makeRandomTransformAttributeValue()
-          ));
-        });
-
-        it(`When t1 is the SVGMatrix at index - 1 and t3 is the SVGMatrix at index + 1, if not [t1.matrix.e + t3.matrix.e = 0].`, function () {
-          const transform_list = $$getBaseTransformList($el);
-          const t1 = transform_list.getItem(index - 1);
-          t1.matrix.e++;
-
-          expectSameElementAndSameTransformListAfterMerge($el, { index });
-        });
-
-        it(`When t1 is the SVGMatrix at index - 1 and t3 is the SVGMatrix at index + 1, if not [t1.matrix.f + t3.matrix.f = 0].`, function () {
-          const transform_list = $$getBaseTransformList($el);
-          const t1 = transform_list.getItem(index - 1);
-          t1.matrix.f++;
-
-          expectSameElementAndSameTransformListAfterMerge($el, { index });
-        });
+      describe(`The SVGMatrix values should be valid.`, function () {
+        go(
+          makeInvalidSVGMatrixValueCases(),
+          mapL(([title, $el, index]) => [`If [${title}]...`, $el, index]),
+          each(([title, $el, index]) =>
+            it(title, function () {
+              expectSameElementAndSameTransformListAfterMerge($el, { index });
+            })
+          )
+        );
       });
     });
 
