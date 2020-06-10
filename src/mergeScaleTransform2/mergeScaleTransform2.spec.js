@@ -24,104 +24,81 @@ import { $$mergeScaleTransform2 } from "./mergeScaleTransform2.index.js";
 
 const DIRECTIONS = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
 
-const expectSameElementAndSameTransformListAfterMerge = ($el, config) => {
-  const before_list = deepCopyTransformListToMatrixList(
-    $$getBaseTransformList($el)
-  );
-  const result = $$mergeScaleTransform2($el, config);
-  const after_list = deepCopyTransformListToMatrixList(
-    $$getBaseTransformList($el)
-  );
-  expect(result).to.equal($el);
-  expect(after_list).to.deep.equal(before_list);
-};
-
 export default ({ describe, it }) => [
   describe(`$$mergeScaleTransform2`, function () {
     describe(`The input values are valid for the function. (Use $$initScaleTransform)`, function () {
-      it(`
-    The three target "SVGTransform"s will be removed from the SVGTransformList.
-    `, function () {
-        each(
-          (direction) => {
-            const { $el, index } = makeMockRectInitiatedScaleTransform();
+      it(`The three target "SVGTransform"s will be removed from the SVGTransformList.`, function () {
+        each((direction) => {
+          const { $el, index } = makeMockRectInitiatedScaleTransform();
 
-            const before_list = deepCopyTransformListToMatrixList(
-              $$getBaseTransformList($el)
-            );
+          const before_list = deepCopyTransformListToMatrixList(
+            $$getBaseTransformList($el)
+          );
 
-            $$mergeScaleTransform2($el, { index, direction });
+          $$mergeScaleTransform2($el, { index, direction });
 
-            const after_list = deepCopyTransformListToMatrixList(
-              $$getBaseTransformList($el)
-            );
-            expect(
-              go(
-                rangeL(before_list.length),
-                rejectL((i) => i >= index - 1 && i <= index + 1),
-                mapL((i) => before_list[i]),
-                takeAll
-              )
-            ).to.deep.equal(after_list);
-          },
-          ["n", "ne", "e", "se", "s", "sw", "w", "nw"]
-        );
+          const after_list = deepCopyTransformListToMatrixList(
+            $$getBaseTransformList($el)
+          );
+          expect(
+            go(
+              rangeL(before_list.length),
+              rejectL((i) => i >= index - 1 && i <= index + 1),
+              mapL((i) => before_list[i]),
+              takeAll
+            )
+          ).to.deep.equal(after_list);
+        }, DIRECTIONS);
       });
 
       it(`The element's width is calculated by [scaled_width = original_width * abs(sx)].`, function () {
-        each(
-          (direction) => {
-            const {
-              $el,
-              index,
-              sx,
-              width: before_width,
-            } = makeMockRectInitiatedScaleTransform();
+        each((direction) => {
+          const {
+            $el,
+            index,
+            sx,
+            width: before_width,
+          } = makeMockRectInitiatedScaleTransform();
 
-            $$mergeScaleTransform2($el, {
-              index,
-              direction,
-              x_name: "x",
-              y_name: "y",
-              width_name: "width",
-              height_name: "height",
-            });
+          $$mergeScaleTransform2($el, {
+            index,
+            direction,
+            x_name: "x",
+            y_name: "y",
+            width_name: "width",
+            height_name: "height",
+          });
 
-            const after_width = parseFloat($el.getAttributeNS(null, "width"));
-            expect(after_width, `direction=${direction}`).to.equal(
-              before_width * Math.abs(sx)
-            );
-          },
-          ["n", "ne", "e", "se", "s", "sw", "w", "nw"]
-        );
+          const after_width = parseFloat($el.getAttributeNS(null, "width"));
+          expect(after_width, `direction=${direction}`).to.equal(
+            before_width * Math.abs(sx)
+          );
+        }, DIRECTIONS);
       });
 
       it(`The element's height is calculated by [scaled_height = original_height * abs(sy)].`, function () {
-        each(
-          (direction) => {
-            const {
-              $el,
-              index,
-              sy,
-              height: before_height,
-            } = makeMockRectInitiatedScaleTransform();
+        each((direction) => {
+          const {
+            $el,
+            index,
+            sy,
+            height: before_height,
+          } = makeMockRectInitiatedScaleTransform();
 
-            $$mergeScaleTransform2($el, {
-              index,
-              direction,
-              x_name: "x",
-              y_name: "y",
-              width_name: "width",
-              height_name: "height",
-            });
+          $$mergeScaleTransform2($el, {
+            index,
+            direction,
+            x_name: "x",
+            y_name: "y",
+            width_name: "width",
+            height_name: "height",
+          });
 
-            const after_height = parseFloat($el.getAttributeNS(null, "height"));
-            expect(after_height, `direction=${direction}`).to.equal(
-              before_height * Math.abs(sy)
-            );
-          },
-          ["n", "ne", "e", "se", "s", "sw", "w", "nw"]
-        );
+          const after_height = parseFloat($el.getAttributeNS(null, "height"));
+          expect(after_height, `direction=${direction}`).to.equal(
+            before_height * Math.abs(sy)
+          );
+        }, DIRECTIONS);
       });
 
       describe(`The element's x value is calculated by...`, function () {
@@ -356,11 +333,7 @@ export default ({ describe, it }) => [
                     rangeL(Infinity),
                     mapL(() => makeRandomInt(97, 123)),
                     mapL((n) => String.fromCharCode(n)),
-                    rejectL((s) =>
-                      new Set(["n", "ne", "e", "se", "s", "sw", "w", "nw"]).has(
-                        s
-                      )
-                    ),
+                    rejectL((s) => new Set(DIRECTIONS).has(s)),
                     head
                   )
                 ),
@@ -373,11 +346,7 @@ export default ({ describe, it }) => [
             [`If the direction is a boolean...`, makeRandomBool()],
             [
               `If the direction is a symbol...`,
-              go(
-                ["n", "ne", "e", "se", "s", "sw", "w", "nw"],
-                (list) => list[makeRandomInt(0, 8)],
-                (s) => Symbol(s)
-              ),
+              Symbol(DIRECTIONS[makeRandomInt(0, 8)]),
             ],
           ]
         );
@@ -399,10 +368,15 @@ export default ({ describe, it }) => [
           ),
           each(([title, $el, index, direction]) =>
             it(title, function () {
-              expectSameElementAndSameTransformListAfterMerge($el, {
-                index,
-                direction,
-              });
+              const before_list = deepCopyTransformListToMatrixList(
+                $$getBaseTransformList($el)
+              );
+              const result = $$mergeScaleTransform2($el, { index, direction });
+              const after_list = deepCopyTransformListToMatrixList(
+                $$getBaseTransformList($el)
+              );
+              expect(result).to.equal($el);
+              expect(after_list).to.deep.equal(before_list);
             })
           )
         );
