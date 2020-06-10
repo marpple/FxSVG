@@ -53,7 +53,7 @@ export const $$controlScaleTransform = ($svg = $$getSVG()) => (
             [_height_name, height_name],
             [_direction, direction],
           ],
-          mapL((a, b) => defaultTo(a, b)),
+          mapL(([a, b]) => defaultTo(a, b)),
           ([x_name, y_name, width_name, height_name, direction]) => ({
             index: index + 1,
             x_name,
