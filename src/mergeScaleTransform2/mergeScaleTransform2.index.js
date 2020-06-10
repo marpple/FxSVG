@@ -7,7 +7,7 @@ const VALID_DIRECTION = new Set(["n", "ne", "e", "se", "s", "sw", "w", "nw"]);
 export const $$mergeScaleTransform2 = (
   $el,
   {
-    index = 0,
+    index = 1,
     x_name = "x",
     y_name = "y",
     width_name = "width",
