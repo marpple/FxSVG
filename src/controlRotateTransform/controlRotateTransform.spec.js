@@ -1,14 +1,13 @@
 import { expect } from "chai";
-import { dropL, each, go, go1, map, mapL, rangeL, reduce } from "fxjs2";
+import { dropL, each, go, map, mapL, rangeL, reduce } from "fxjs2";
 import {
   deepCopyTransformListToMatrixList,
+  makeMockRect,
   makeRandomBool,
   makeRandomInt,
-  makeRandomNumber,
   makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
-import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isRotateSVGTransform } from "../isRotateSVGTransform/isRotateSVGTransform.index.js";
 import { $$controlRotateTransform } from "./controlRotateTransform.index.js";
@@ -23,27 +22,19 @@ export default ({ describe, it, beforeEach }) => [
 
     beforeEach(function () {
       angle = makeRandomInt(0, 360);
-      cx = makeRandomInt();
-      cy = makeRandomInt();
-      $el = $$el()(`
-      <rect
-        x="${makeRandomNumber()}"
-        y="${makeRandomNumber()}"
-        width="${makeRandomNumber(1)}"
-        height="${makeRandomNumber(1)}"
-        ${go1(makeRandomTransformAttributeValue(), (t) =>
-          t ? `transform="${t}"` : ""
-        )} 
-      >
-      </rect> 
-    `);
+      [cx, cy] = mapL(() => makeRandomInt(), rangeL(2));
+      $el = makeMockRect({ transform: makeRandomTransformAttributeValue() });
       result = $$controlRotateTransform()($el, { angle, cx, cy });
     });
 
     it(`The return object has $el, controller, transform properties.`, function () {
-      expect(result).to.have.property("$el");
-      expect(result).to.have.property("controller");
-      expect(result).to.have.property("transform");
+      const keys = new Set(Object.keys(result));
+      expect(keys.size).to.equal(3);
+      each((k) => expect(keys.has(k)).to.be.true, [
+        "$el",
+        "controller",
+        "transform",
+      ]);
     });
 
     it(`The return $el is same with the input $el.`, function () {
@@ -63,28 +54,21 @@ export default ({ describe, it, beforeEach }) => [
       expect(controller.end).is.a("function");
     });
 
-    it(`
-  The return transform object is a rotate transform
-  whose angle is the input angle.
-  `, function () {
+    it(`The return transform object is a rotate transform whose angle is the input angle.`, function () {
       const { transform } = result;
 
       expect($$isRotateSVGTransform(transform)).to.be.true;
       expect(transform.angle).to.equal(angle);
     });
 
-    it(`
-  The return transform object is the SVGTransform at 1 index in SVGTransformList of $el.
-  `, function () {
+    it(`The return transform object is the SVGTransform at 1 index in SVGTransformList of $el.`, function () {
       const { $el, transform } = result;
       const l = $$getBaseTransformList($el);
 
       expect(l.getItem(1)).to.deep.equal(transform);
     });
 
-    it(`
-  The controller.update method update the return transform with the input angle.
-  `, function () {
+    it(`The controller.update method update the return transform with the input angle.`, function () {
       const { $el, transform, controller } = result;
       const new_angle = makeRandomInt(0, 360);
       controller.update({ angle: new_angle });
@@ -93,9 +77,7 @@ export default ({ describe, it, beforeEach }) => [
       expect(transform).to.deep.equal($$getBaseTransformList($el).getItem(1));
     });
 
-    it(`
-  The controller.append method add the input angle to the return transform. 
-  `, function () {
+    it(`The controller.append method add the input angle to the return transform.`, function () {
       const { $el, transform, controller } = result;
       const angle_to_add = makeRandomInt(0, 360);
       controller.append({ angle: angle_to_add });
@@ -104,9 +86,7 @@ export default ({ describe, it, beforeEach }) => [
       expect(transform).to.deep.equal($$getBaseTransformList($el).getItem(1));
     });
 
-    it(`
-  The controller.end method merge the all transforms of the element.
-  `, function () {
+    it(`The controller.end method merge the all transforms of the element.`, function () {
       const { $el, controller } = result;
       const before_l = deepCopyTransformListToMatrixList(
         $$getBaseTransformList($el)

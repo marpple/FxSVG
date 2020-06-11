@@ -2,14 +2,13 @@ import { expect } from "chai";
 import { dropL, each, go, map, mapL, rangeL, reduce } from "fxjs2";
 import {
   deepCopyTransformListToMatrixList,
+  makeMockRect,
   makeRandomBool,
   makeRandomInt,
-  makeRandomNumber,
   makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
-import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 import { $$controlTranslateTransform } from "./controlTranslateTransform.index.js";
@@ -24,21 +23,12 @@ export default ({ describe, it, beforeEach }) => [
     let result;
 
     beforeEach(function () {
-      x = makeRandomInt();
-      y = makeRandomInt();
-      $el = $$el()(`
-      <rect
-        x="${x}"
-        y="${y}"
-        width="${makeRandomNumber(1)}"
-        height="${makeRandomNumber(1)}"
-        transform="${makeRandomTransformAttributeValue(1)}"
-      >
-      </rect> 
-    `);
-
-      init_tx = makeRandomInt();
-      init_ty = makeRandomInt();
+      [x, y, init_tx, init_ty] = mapL(() => makeRandomInt(), rangeL(4));
+      $el = makeMockRect({
+        x,
+        y,
+        transform: makeRandomTransformAttributeValue(),
+      });
       result = $$controlTranslateTransform()($el, {
         tx: init_tx,
         ty: init_ty,
@@ -48,9 +38,13 @@ export default ({ describe, it, beforeEach }) => [
     });
 
     it(`The return object has $el, controller, transform properties.`, function () {
-      expect(result).to.have.property("$el");
-      expect(result).to.have.property("controller");
-      expect(result).to.have.property("transform");
+      const keys = new Set(Object.keys(result));
+      expect(keys.size).to.equal(3);
+      each((k) => expect(keys.has(k)).to.be.true, [
+        "$el",
+        "controller",
+        "transform",
+      ]);
     });
 
     it(`The return $el is same with the input $el.`, function () {
@@ -70,10 +64,7 @@ export default ({ describe, it, beforeEach }) => [
       expect(controller.end).is.a("function");
     });
 
-    it(`
-  The return transform object is a translate transform
-  whose matrix is represent the input tx, ty.
-  `, function () {
+    it(`The return transform object is a translate transform whose matrix is represent the input tx, ty.`, function () {
       const { transform } = result;
 
       expect($$isTranslateSVGTransform(transform)).to.be.true;
@@ -81,18 +72,14 @@ export default ({ describe, it, beforeEach }) => [
       expect(transform.matrix.f).to.equal(init_ty);
     });
 
-    it(`
-  The return transform object is the SVGTransform at 0 index in SVGTransformList of $el.
-  `, function () {
+    it(`The return transform object is the SVGTransform at 0 index in SVGTransformList of $el.`, function () {
       const { $el, transform } = result;
       const l = $$getBaseTransformList($el);
 
       expect(l.getItem(0)).to.deep.equal(transform);
     });
 
-    it(`
-  The controller.update method update the return transform with the input tx, ty.
-  `, function () {
+    it(`The controller.update method update the return transform with the input tx, ty.`, function () {
       const { $el, transform, controller } = result;
 
       const tx = makeRandomInt();
@@ -105,9 +92,7 @@ export default ({ describe, it, beforeEach }) => [
       expect(transform).to.deep.equal($$getBaseTransformList($el).getItem(0));
     });
 
-    it(`
-  The controller.append method add the input tx, ty to the return transform. 
-  `, function () {
+    it(`The controller.append method add the input tx, ty to the return transform.`, function () {
       const { $el, transform, controller } = result;
 
       const tx = makeRandomInt();
@@ -120,9 +105,7 @@ export default ({ describe, it, beforeEach }) => [
       expect(transform).to.deep.equal($$getBaseTransformList($el).getItem(0));
     });
 
-    it(`
-  The controller.end method update x, y of the element. 
-  `, function () {
+    it(`The controller.end method update x, y of the element.`, function () {
       const { $el, controller } = result;
 
       controller.end();
@@ -132,9 +115,9 @@ export default ({ describe, it, beforeEach }) => [
     });
 
     it(`
-  The controller.end method compress all SVGTransforms except the created one by the first function call.
-  Every other SVGTransforms are applied [-translate] then [+translate] transform.
-  `, function () {
+      The controller.end method compress all SVGTransforms except the created one by the first function call.
+      Every other SVGTransforms are applied [-translate] then [+translate] transform.
+    `, function () {
       const { $el, controller } = result;
       const [plus_t_m, minus_t_m] = go(
         [
