@@ -8,16 +8,16 @@ import { $$updateRotateTransform } from "../updateRotateTransform/updateRotateTr
 
 export const $$controlRotateTransform = ($svg = $$getSVG()) => (
   $el,
-  { angle = 0, cx = 0, cy = 0, index = 0 } = {}
+  { angle, cx, cy, index = 0 } = {}
 ) => {
   const transform = $$initRotateTransform($svg)($el, { angle, cx, cy, index });
 
   const controller = {};
-  controller.update = ({ angle }) => {
+  controller.update = ({ angle } = {}) => {
     $$updateRotateTransform(transform, { angle, cx: 0, cy: 0 });
     return controller;
   };
-  controller.append = ({ angle }) => {
+  controller.append = ({ angle } = {}) => {
     $$appendRotateTransform(transform, { angle });
     return controller;
   };
