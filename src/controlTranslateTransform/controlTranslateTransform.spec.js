@@ -147,7 +147,7 @@ export default ({ describe, it }) => [
       } = setupMock();
       const t2 = $$getBaseTransformList($el).getItem(index);
 
-      const [tx, ty] = mapL(() => makeRandomInt(), rangeL(2));
+      const [tx, ty] = mapL(() => makeRandomInt(-100, 100), rangeL(2));
       controller.update({ tx, ty });
 
       expect(t1.matrix.e).to.equal(tx);
@@ -164,7 +164,7 @@ export default ({ describe, it }) => [
       } = setupMock();
       const t2 = $$getBaseTransformList($el).getItem(index);
 
-      const [tx2, ty2] = mapL(() => makeRandomInt(), rangeL(2));
+      const [tx2, ty2] = mapL(() => makeRandomInt(-100, 100), rangeL(2));
       controller.append({ tx: tx2, ty: ty2 });
 
       expect(t1.matrix.e).to.equal(tx1 + tx2);
