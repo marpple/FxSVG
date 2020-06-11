@@ -1,4 +1,13 @@
-import { defaultTo, go, isNil, mapL, object, rangeL, rejectL } from "fxjs2";
+import {
+  defaultTo,
+  go,
+  isNil,
+  isUndefined,
+  mapL,
+  object,
+  rangeL,
+  rejectL,
+} from "fxjs2";
 import { $$getBaseTransformList } from "../../src/getBaseTransformList/getBaseTransformList.index.js";
 import { $$initScaleTransform } from "../../src/initScaleTransform/initScaleTransform.index.js";
 import { makeMockRect } from "./makeMockRect.js";
@@ -23,7 +32,12 @@ export const makeMockRectInitiatedScaleTransform = ({
       ["y", _y],
       ["width", _width],
       ["height", _height],
-      ["transform", defaultTo(makeRandomTransformAttributeValue(), _transform)],
+      [
+        "transform",
+        isUndefined(_transform)
+          ? makeRandomTransformAttributeValue()
+          : _transform,
+      ],
     ],
     rejectL(([, v]) => isNil(v)),
     object,
