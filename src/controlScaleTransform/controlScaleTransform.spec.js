@@ -2,6 +2,7 @@ import { expect } from "chai";
 import {
   defaultTo,
   each,
+  equals2,
   go,
   isNil,
   isUndefined,
@@ -10,6 +11,7 @@ import {
   rangeL,
   reduce,
   rejectL,
+  tap,
 } from "fxjs2";
 import { deepCopyTransformListToMatrixList } from "../../test/utils/deepCopyTransformListToMatrixList.js";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
@@ -17,6 +19,7 @@ import { makeRandomBool } from "../../test/utils/makeRandomBool.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
 import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTransformAttributeValue.js";
+import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
 import { $$controlScaleTransform } from "./controlScaleTransform.index.js";
@@ -195,6 +198,98 @@ export default ({ describe, it }) => [
     });
 
     describe(`The controller.end method merge the all transforms of the element.`, function () {
+      describe(`When other transforms exist...`, function () {
+        it(`When merge_type = 1...`, function () {
+          each((direction) => {
+            const {
+              index,
+              result: { $el, controller },
+            } = setupMock({
+              transform: makeRandomTransformAttributeValue(1),
+              merge_type: 1,
+              direction,
+            });
+
+            const compressed_m = go(
+              $el.cloneNode(true),
+              $$getBaseTransformList,
+              tap((tl) => tl.clear()),
+              tap((tl) =>
+                go(
+                  $el,
+                  $$getBaseTransformList,
+                  ({ numberOfItems: n }) => n,
+                  rangeL,
+                  rejectL((i) => equals2(i, index) || equals2(i, index + 2)),
+                  mapL((i) =>
+                    equals2(i, index + 1)
+                      ? go(
+                          rangeL(3),
+                          mapL((i) => index + i),
+                          mapL((i) => $$getBaseTransformList($el).getItem(i)),
+                          mapL(({ matrix: m }) => m),
+                          reduce((m1, m2) => m1.multiply(m2)),
+                          (matrix) => ({ matrix }),
+                          $$createSVGTransformMatrix()
+                        )
+                      : $$getBaseTransformList($el).getItem(i)
+                  ),
+                  each((t) => tl.appendItem(t))
+                )
+              ),
+              (tl) => tl.consolidate(),
+              ({ matrix }) => matrix
+            );
+
+            controller.end();
+
+            expect($$getBaseTransformList($el).numberOfItems).to.equal(1);
+            expect($$getBaseTransformList($el).getItem(0).matrix).to.deep.equal(
+              compressed_m
+            );
+          }, VALID_DIRECTION);
+        });
+
+        it(`When merge_type = 2...`, function () {
+          each((direction) => {
+            const {
+              index,
+              result: { $el, controller },
+            } = setupMock({
+              transform: makeRandomTransformAttributeValue(1),
+              merge_type: 2,
+              direction,
+            });
+
+            const compressed_m = go(
+              $el.cloneNode(true),
+              $$getBaseTransformList,
+              tap((tl) => tl.clear()),
+              tap((tl) =>
+                go(
+                  $el,
+                  $$getBaseTransformList,
+                  ({ numberOfItems: n }) => n,
+                  rangeL,
+                  rejectL((i) => i >= index && i <= index + 2),
+                  mapL((i) => $$getBaseTransformList($el).getItem(i)),
+                  each((t) => tl.appendItem(t))
+                )
+              ),
+              (tl) => tl.consolidate(),
+              ({ matrix: m }) => m
+            );
+
+            controller.end();
+
+            expect($$getBaseTransformList($el).numberOfItems).to.equal(1);
+            expect($$getBaseTransformList($el).getItem(0).matrix).to.deep.equal(
+              compressed_m
+            );
+          }, VALID_DIRECTION);
+        });
+      });
+
       describe(`When no other transforms...`, function () {
         it(`When merge_type = 1...`, function () {
           each((direction) => {
@@ -239,7 +334,5 @@ export default ({ describe, it }) => [
         });
       });
     });
-
-    describe(``, function () {});
   }),
 ];
