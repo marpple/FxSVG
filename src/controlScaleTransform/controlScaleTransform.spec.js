@@ -313,7 +313,7 @@ export default ({ describe, it }) => [
           );
           each(({ sx, sy }) => controller.update({ sx, sy }), list);
 
-          const { sx, sy } = list[list.length - 1];
+          const { sx, sy } = list[list.length - 1] || {};
           const [x, y] = go(
             [
               [x0, sx, cx, width0, new Set(["ne", "e", "se", "sw", "w", "nw"])],
