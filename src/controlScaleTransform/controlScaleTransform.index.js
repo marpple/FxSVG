@@ -9,10 +9,10 @@ import { $$updateScaleTransform } from "../updateScaleTransform/updateScaleTrans
 export const $$controlScaleTransform = ($svg = $$getSVG()) => (
   $el,
   {
-    cx = 0,
-    cy = 0,
-    sx = 1,
-    sy = 1,
+    cx,
+    cy,
+    sx,
+    sy,
     index = 0,
     merge_type: _merge_type = 1,
     x_name: _x_name,

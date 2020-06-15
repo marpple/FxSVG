@@ -8,16 +8,16 @@ import { $$updateTranslateTransform } from "../updateTranslateTransform/updateTr
 
 export const $$controlTranslateTransform = ($svg = $$getSVG()) => (
   $el,
-  { index = 0, tx = 0, ty = 0, x_name, y_name } = {}
+  { index = 0, tx, ty, x_name, y_name } = {}
 ) => {
   const transform = $$initTranslateTransform($svg)($el, { tx, ty, index });
 
   const controller = {};
-  controller.update = ({ tx, ty }) => {
+  controller.update = ({ tx, ty } = {}) => {
     $$updateTranslateTransform(transform, { tx, ty });
     return controller;
   };
-  controller.append = ({ tx, ty }) => {
+  controller.append = ({ tx, ty } = {}) => {
     $$appendTranslateTransform(transform, { tx, ty });
     return controller;
   };
