@@ -2,16 +2,16 @@ import { expect } from "chai";
 import {
   defaultTo,
   each,
-  extend,
-  flatMapL,
   go,
   isNil,
   isUndefined,
   mapL,
   object,
   rangeL,
+  reduce,
   rejectL,
 } from "fxjs2";
+import { deepCopyTransformListToMatrixList } from "../../test/utils/deepCopyTransformListToMatrixList.js";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
 import { makeRandomBool } from "../../test/utils/makeRandomBool.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
@@ -194,32 +194,52 @@ export default ({ describe, it }) => [
       expect(t1).to.deep.equal(t2);
     });
 
-    it(`The controller.end method merge the all transforms of the element.`, function () {
-      go(
-        [null, makeRandomTransformAttributeValue(1)],
-        flatMapL((transform) =>
-          mapL((direction) => ({ transform, direction }), VALID_DIRECTION)
-        ),
-        flatMapL((config) =>
-          mapL((merge_type) => extend(config, { merge_type }), rangeL(1, 3))
-        ),
-        each(({ transform, direction, merge_type }) => {
-          const {
-            index,
-            result: { $el, controller },
-          } = setupMock({ transform, direction, merge_type });
+    describe(`The controller.end method merge the all transforms of the element.`, function () {
+      describe(`When no other transforms...`, function () {
+        it(`When merge_type = 1...`, function () {
+          each((direction) => {
+            const {
+              result: { $el, controller },
+            } = setupMock({
+              transform: null,
+              merge_type: 1,
+              direction,
+            });
 
-          // TODO
-          const compressed_m = null;
+            const compressed_m = go(
+              $el,
+              $$getBaseTransformList,
+              deepCopyTransformListToMatrixList,
+              reduce((m1, m2) => m1.multiply(m2))
+            );
 
-          controller.end();
+            controller.end();
 
-          expect($$getBaseTransformList($el).numberOfItems).to.equal(1);
-          expect($$getBaseTransformList($el).getItem(0).matrix).to.deep.equal(
-            compressed_m
-          );
-        })
-      );
+            expect($$getBaseTransformList($el).numberOfItems).to.equal(1);
+            expect($$getBaseTransformList($el).getItem(0).matrix).to.deep.equal(
+              compressed_m
+            );
+          }, VALID_DIRECTION);
+        });
+
+        it(`When merge_type = 2...`, function () {
+          each((direction) => {
+            const {
+              result: { $el, controller },
+            } = setupMock({
+              transform: null,
+              merge_type: 2,
+              direction,
+            });
+
+            controller.end();
+
+            expect($$getBaseTransformList($el).numberOfItems).to.equal(0);
+          }, VALID_DIRECTION);
+        });
+      });
     });
+
+    describe(``, function () {});
   }),
 ];
