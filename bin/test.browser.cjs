@@ -33,6 +33,11 @@ const runTests = async (browser_type, repeat_count) => {
       `${browser_type}::[success:${success_count}][fail:${fail_count}][total:${repeat_count}]`
     );
   }
+
+  if (!fail_count) {
+    await browser.close();
+    console.log(`${browser_type}::ALL_SUCCESS`);
+  }
 };
 
 (async () => {
