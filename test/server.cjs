@@ -11,9 +11,12 @@ app.use(
     webpack({
       mode: "development",
       context: __dirname,
-      entry: "./run_tests_in_browser.js",
+      entry: {
+        run_tests_in_browser: "./run_tests_in_browser.js",
+        mount_fxsvg_in_browser: "./mount_fxsvg_in_browser.js",
+      },
       output: {
-        filename: "run_tests_in_browser.bundle.js",
+        filename: "[name].bundle.js",
       },
     })
   )

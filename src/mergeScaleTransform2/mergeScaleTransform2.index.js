@@ -8,6 +8,7 @@ export const $$mergeScaleTransform2 = (
   $el,
   {
     index = 1,
+    is_need_correction = true,
     x_name = "x",
     y_name = "y",
     width_name = "width",
@@ -47,7 +48,9 @@ export const $$mergeScaleTransform2 = (
         some((condition) => direction.includes(condition)),
         (is_changed) =>
           is_changed
-            ? go1((v + c1) * s + c2, (v) => (s < 0 ? v + l * s : v))
+            ? go1((v + c1) * s + c2, (v) =>
+                s < 0 && is_need_correction ? v + l * s : v
+              )
             : v
       )
     ),

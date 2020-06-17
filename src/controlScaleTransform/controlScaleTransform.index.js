@@ -14,6 +14,7 @@ export const $$controlScaleTransform = ($svg = $$getSVG()) => (
     sx,
     sy,
     index = 0,
+    is_need_correction: _is_need_correction = true,
     merge_type: _merge_type = 1,
     x_name: _x_name,
     y_name: _y_name,
@@ -36,6 +37,7 @@ export const $$controlScaleTransform = ($svg = $$getSVG()) => (
     return controller;
   };
   controller.end = ({
+    is_need_correction = _is_need_correction,
     merge_type = _merge_type,
     x_name = _x_name,
     y_name = _y_name,
@@ -46,6 +48,7 @@ export const $$controlScaleTransform = ($svg = $$getSVG()) => (
     merge_type === 2
       ? $$mergeScaleTransform2($el, {
           index: index + 1,
+          is_need_correction,
           x_name,
           y_name,
           width_name,

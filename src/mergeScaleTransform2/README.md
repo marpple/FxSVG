@@ -12,6 +12,9 @@
 `direction` 값을 통해 scale 의 방향을 설정할 수 있습니다.
 기본값을 설정하지 않기 때문에 필수 입력사항입니다.
 
+`is_need_correction` 값을 통해 `x`, `y` 값을 `s` 가 음수일 경우 조절할 것인지 여부를 설정할 수 있습니다.
+지정하지 않을 경우 `true` 로 초기화됩니다.
+
 ```javascript
 const $el = $$el()(`
   <rect
