@@ -143,39 +143,64 @@ export default ({ describe, it }) => [
               describe(`When direction is one of ${JSON.stringify(
                 change_directions
               )}...`, function () {
-                it(`The scaled ${xy_name} is [(${xy_name} - ${c_name}) * ${s_name} + ${c_name}] if [${s_name} >= 0].`, function () {
-                  each((direction) => {
-                    const [$el, index, before_xy, c, s] = go1(
-                      makeMockRectInitiatedScaleTransform({
-                        [s_name]: makeRandomNumber(),
-                      }),
-                      (mock) =>
-                        mapL((k) => mock[k], [
-                          "$el",
-                          "index",
-                          xy_name,
-                          c_name,
-                          s_name,
-                        ])
-                    );
+                it(`
+                  The scaled ${xy_name} is [(${xy_name} - ${c_name}) * ${s_name} + ${c_name}]
+                  if [${s_name} >= 0 || is_need_correction = false].
+                `, function () {
+                  go(
+                    change_directions,
+                    flatMapL((direction) =>
+                      go(
+                        [true, false],
+                        mapL((is_need_correction) => ({
+                          is_need_correction,
+                          direction,
+                          s: makeRandomNumber(),
+                        })),
+                        appendL({
+                          is_need_correction: false,
+                          direction,
+                          s: -makeRandomNumber(1),
+                        })
+                      )
+                    ),
+                    each(({ direction, is_need_correction, s: mock_s }) => {
+                      const [$el, index, before_xy, c, s] = go1(
+                        makeMockRectInitiatedScaleTransform({
+                          [s_name]: mock_s,
+                        }),
+                        (mock) =>
+                          mapL((k) => mock[k], [
+                            "$el",
+                            "index",
+                            xy_name,
+                            c_name,
+                            s_name,
+                          ])
+                      );
 
-                    $$mergeScaleTransform2($el, {
-                      index,
-                      direction,
-                      x_name: "x",
-                      y_name: "y",
-                      width_name: "width",
-                      height_name: "height",
-                    });
+                      $$mergeScaleTransform2($el, {
+                        index,
+                        is_need_correction,
+                        direction,
+                        x_name: "x",
+                        y_name: "y",
+                        width_name: "width",
+                        height_name: "height",
+                      });
 
-                    const after_xy = parseFloat(
-                      $el.getAttributeNS(null, xy_name)
-                    );
-                    expect(after_xy).to.equal((before_xy - c) * s + c);
-                  }, change_directions);
+                      const after_xy = parseFloat(
+                        $el.getAttributeNS(null, xy_name)
+                      );
+                      expect(after_xy).to.equal((before_xy - c) * s + c);
+                    })
+                  );
                 });
 
-                it(`The scaled ${xy_name} is [((${xy_name} - ${c_name}) * ${s_name} + ${c_name}) + ${length_name} * ${s_name}] if [${s_name} < 0].`, function () {
+                it(`
+                  The scaled ${xy_name} is [((${xy_name} - ${c_name}) * ${s_name} + ${c_name}) + ${length_name} * ${s_name}]
+                  if [${s_name} < 0 && is_need_correction = true].
+                `, function () {
                   each((direction) => {
                     const [$el, index, before_xy, c, s, length] = go1(
                       makeMockRectInitiatedScaleTransform({
@@ -195,6 +220,7 @@ export default ({ describe, it }) => [
                     $$mergeScaleTransform2($el, {
                       index,
                       direction,
+                      is_need_correction: true,
                       x_name: "x",
                       y_name: "y",
                       width_name: "width",
