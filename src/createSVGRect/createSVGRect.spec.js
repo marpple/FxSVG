@@ -41,7 +41,7 @@ const makeCases = () =>
 
 export default ({ describe, it }) => [
   describe(`$$createSVGRect`, function () {
-    it(`The return value will be a SVGRect.`, function () {
+    it(`The return value is a SVGRect.`, function () {
       go(
         makeCases(),
         mapL(({ rect: r }) => r),
@@ -49,16 +49,26 @@ export default ({ describe, it }) => [
       );
     });
 
-    it(`
-  The SVGRect's each values are same with input values.
-  The omitted values will be 0.
-  `, function () {
-      each(({ rect, values: { x = 0, y = 0, width = 0, height = 0 } = {} }) => {
-        expect(rect.x).to.equal(x);
-        expect(rect.y).to.equal(y);
-        expect(rect.width).to.equal(width);
-        expect(rect.height).to.equal(height);
-      }, makeCases());
+    it(`Each value of the rect will be same with the given value.
+        If there is omitted values or no argument,
+        the values will be {x: 0, y: 0, width: 0, height: 0} individually by default.`, function () {
+      go(
+        makeCases(),
+        mapL(({ rect, values }) =>
+          go(
+            values,
+            defaultTo({}),
+            (values) => extend({ x: 0, y: 0, width: 0, height: 0 }, values),
+            (values) => ({ rect, values })
+          )
+        ),
+        each(({ rect, values }) => {
+          expect(rect.x).to.equal(values.x);
+          expect(rect.y).to.equal(values.y);
+          expect(rect.width).to.equal(values.width);
+          expect(rect.height).to.equal(values.height);
+        })
+      );
     });
   }),
 ];
