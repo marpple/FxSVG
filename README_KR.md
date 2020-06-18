@@ -53,7 +53,7 @@ controller.append({ tx: 10 }).append({ ty: 10 }).end();
 ## Documentation
 
 - [API Reference](./doc/API.md)
-- [Test](./doc/TEST.md)
+- [Test](./doc/TEST_KR.md)
 
 ## Contributing
 
