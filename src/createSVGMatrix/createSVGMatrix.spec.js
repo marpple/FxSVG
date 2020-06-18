@@ -12,10 +12,7 @@ import {
   reduce,
 } from "fxjs2";
 import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
-import {
-  makeAllCombinations,
-  makeRandomNumber,
-} from "../../test/utils/index.js";
+import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
 import { $$createSVGMatrix } from "./createSVGMatrix.index.js";
 
 const makeCases = () =>
@@ -26,7 +23,7 @@ const makeCases = () =>
         makeAllCombinations,
         mapL(
           pipe(
-            mapL((k) => [k, makeRandomNumber()]),
+            mapL((k) => [k, makeRandomInt(-100, 100)]),
             mapL((kv) => object([kv])),
             reduce(extend),
             defaultTo({})
@@ -53,23 +50,9 @@ export default ({ describe, it }) => [
       );
     });
 
-    it(`The matrix will be a identity matrix if there is no arguments.`, function () {
-      go(
-        [
-          $$createSVGMatrix(),
-          $$createSVGMatrix(
-            document.createElementNS("http://www.w3.org/2000/svg", "svg")
-          ),
-        ],
-        mapL((f) => f()),
-        each((m) =>
-          expectSameValueSVGMatrix(m, { a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 })
-        )
-      );
-    });
-
     it(`Each value of the matrix will be same with the given value.
-        If there is omitted values, the values will be {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0} individually by default.`, function () {
+        If there is omitted values or no argument,
+        the values will be {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0} individually by default.`, function () {
       this.slow(100);
       go(
         makeCases(),
