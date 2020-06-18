@@ -1,6 +1,6 @@
 # API
 
-[`<svg></svg>` 엘리먼트 커링](./SVG_CURRYING.md)
+[`<svg></svg>` 엘리먼트 커링](SVG_INJECTION.md)
 
 ---
 

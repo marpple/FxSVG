@@ -9,7 +9,7 @@
 
 입력한 `x`, `y`, `width`, `height` 값과 실제 적용된 값은 정확도 차이가 발생할 수 있습니다.
 
-[`<svg></svg>` 커링](../../doc/SVG_CURRYING.md)이 적용된 함수입니다.
+[`<svg></svg>` 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
 
 ```javascript
 console.log($$createSVGRect()());

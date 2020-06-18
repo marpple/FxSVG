@@ -10,7 +10,7 @@ svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_MATRIX` 타입의 `SVGTransform`
 `matrix` 값을 설정할 수 있으며 설정하지 않는 경우 Identity Matrix 로 초기화됩니다.
 `SVGTransform`을 삽입할 `index` 를 설정할 수 있으며 설정하지 않는 경우 `0` 으로 초기화됩니다.
 
-[`<svg></svg>` 커링](../../doc/SVG_CURRYING.md)이 적용된 함수입니다.
+[`<svg></svg>` 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
 
 ```javascript
 const $el = $$el()(`

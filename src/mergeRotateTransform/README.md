@@ -7,7 +7,7 @@
 한 번 병합한 `SVGTransform`을 `$$updateRotateTransform` 이나 `$$appendRotateTransform` 으로 변경하는 것은 안전하지 않습니다.
 `cx`, `cy`가 `0` 이 아닌 경우 회전 변환 중심이 의도치 않게 수정될 수 있습니다.
 
-[`<svg></svg>` 커링](../../doc/SVG_CURRYING.md)이 적용된 함수입니다.
+[`<svg></svg>` 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
 
 ```javascript
 const $el = $$el()(`

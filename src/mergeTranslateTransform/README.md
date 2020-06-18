@@ -9,7 +9,7 @@ svg 엘리먼트에 다른 `SVGTransform` 이 있는 경우 각 `SVGTransform` �
 
 `cx`, `cy` 처럼 `x`, `y` 위치를 나타내는 속성명이 다른 경우 `x_name`, `y_name` 으로 해당 속성명을 설정할 수 있습니다.
 
-[`<svg></svg>` 커링](../../doc/SVG_CURRYING.md)이 적용된 함수입니다.
+[`<svg></svg>` 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
 
 ```javascript
 const $el = $$el()(`
