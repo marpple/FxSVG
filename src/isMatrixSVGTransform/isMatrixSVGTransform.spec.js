@@ -68,7 +68,7 @@ export default ({ describe, it }) => [
     describe(`The function will return true...`, function () {
       it(`When the input value is a SVGTransform and the type is SVGTransform.SVG_TRANSFORM_MATRIX.`, function () {
         const matrix_t = $$createSVGTransformMatrix()({
-          matrix: makeRandomSVGMatrix(),
+          matrix: makeRandomSVGMatrix(() => makeRandomNumber(-100, 100)),
         });
         const result = $$isMatrixSVGTransform(matrix_t);
 
