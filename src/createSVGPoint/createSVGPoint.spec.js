@@ -22,7 +22,7 @@ const makeCases = () =>
         makeAllCombinations,
         mapL(
           pipe(
-            mapL((k) => [k, makeRandomInt()]),
+            mapL((k) => [k, makeRandomInt(-100, 100)]),
             mapL((kv) => object([kv])),
             reduce(extend),
             defaultTo({})
@@ -41,7 +41,7 @@ const makeCases = () =>
 
 export default ({ describe, it }) => [
   describe(`$$createSVGPoint`, function () {
-    it(`The return value will be a SVGPoint.`, function () {
+    it(`The return value is a SVGPoint.`, function () {
       go(
         makeCases(),
         mapL(({ point: p }) => p),
@@ -49,14 +49,24 @@ export default ({ describe, it }) => [
       );
     });
 
-    it(`
-  The point's x, y value will be same with input value.
-  The omitted value will be 0.
-  `, function () {
-      each(({ point, values: { x = 0, y = 0 } = {} }) => {
-        expect(point.x).to.equal(x);
-        expect(point.y).to.equal(y);
-      }, makeCases());
+    it(`Each value of the point will be same with the given value.
+        If there is omitted values or no argument,
+        the values will be {x: 0, y: 0} individually by default.`, function () {
+      go(
+        makeCases(),
+        mapL(({ point, values }) =>
+          go(
+            values,
+            defaultTo({}),
+            (values) => extend({ x: 0, y: 0 }, values),
+            (values) => ({ point, values })
+          )
+        ),
+        each(({ point, values }) => {
+          expect(point.x).to.equal(values.x);
+          expect(point.y).to.equal(values.y);
+        })
+      );
     });
   }),
 ];
