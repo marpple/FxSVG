@@ -1,49 +1,52 @@
 import { expect } from "chai";
-import { go, mapL, reduce } from "fxjs2";
-import { makeRandomTransformAttributeValue } from "../../test/utils/index.js";
-import { $$el } from "../el/el.index.js";
+import { go, go1, mapL, reduce } from "fxjs2";
+import {
+  makeMockRect,
+  makeRandomTransformAttributeValue,
+} from "../../test/utils/index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$consolidateTransformList } from "./consolidateTransformList.index.js";
 
-export default ({ describe, it, beforeEach }) => [
+const setupMock = ({ transform = makeRandomTransformAttributeValue() } = {}) =>
+  go1(makeMockRect({ transform }), $$getBaseTransformList);
+
+export default ({ describe, it }) => [
   describe(`$$consolidateTransformList`, function () {
-    let transform_list;
+    it(`The return transform list is the same reference with the input transform list.`, function () {
+      const input_list = setupMock();
 
-    beforeEach(function () {
-      const $el = $$el()(`
-      <circle
-        cx="10"
-        cy="20"
-        r="30"
-        transform="${makeRandomTransformAttributeValue(1)}"
-      >
-      </circle>
-    `);
-      transform_list = $$getBaseTransformList($el);
+      const output_list = $$consolidateTransformList(input_list);
+
+      expect(output_list).to.equal(input_list);
     });
 
-    it(`The function will return the same reference SVGTransformList with the input SVGTransformList`, function () {
-      const return_transform_list = $$consolidateTransformList(transform_list);
+    it(`The return transform list has 0 or 1 transform.`, function () {
+      const transform_cases = [
+        [null, 0],
+        [makeRandomTransformAttributeValue(1), 1],
+      ];
+      for (const [transform, n] of transform_cases) {
+        const input_list = setupMock({ transform });
 
-      expect(return_transform_list).to.equal(transform_list);
+        const output_list = $$consolidateTransformList(input_list);
+
+        expect(output_list.numberOfItems).to.equal(n);
+      }
     });
 
-    it(`The consolidated SVGTransformList has only one SVGTransform.`, function () {
-      $$consolidateTransformList(transform_list);
-
-      expect(transform_list.numberOfItems).to.equal(1);
-    });
-
-    it(`The consolidated SVGTransform's matrix is same with the result that multiply all SVGTransform's matrix.`, function () {
-      const m = go(
-        transform_list,
+    it(`The consolidated transform's matrix is same with the matrix from multiplying all transform's matrix.`, function () {
+      const input_list = setupMock({
+        transform: makeRandomTransformAttributeValue(1),
+      });
+      const matrix = go(
+        input_list,
         mapL(({ matrix: m }) => m),
         reduce((m1, m2) => m1.multiply(m2))
       );
 
-      $$consolidateTransformList(transform_list);
+      const output_list = $$consolidateTransformList(input_list);
 
-      expect(transform_list.getItem(0).matrix).to.deep.equal(m);
+      expect(output_list.getItem(0).matrix).to.deep.equal(matrix);
     });
   }),
 ];
