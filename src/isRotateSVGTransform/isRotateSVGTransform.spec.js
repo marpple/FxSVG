@@ -68,9 +68,9 @@ export default ({ describe, it }) => [
     describe(`The function will return true...`, function () {
       it(`When the input value is a SVGTransform and the type is SVGTransform.SVG_TRANSFORM_ROTATE.`, function () {
         const rotate_t = $$createSVGTransformRotate()({
-          angle: makeRandomNumber(),
-          cx: makeRandomNumber(),
-          cy: makeRandomNumber(),
+          angle: makeRandomNumber(-700, 700),
+          cx: makeRandomNumber(-100, 100),
+          cy: makeRandomNumber(-100, 100),
         });
         const result = $$isRotateSVGTransform(rotate_t);
 
