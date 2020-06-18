@@ -35,9 +35,9 @@ export default ({ describe, it }) => [
 
       it(`When the input value is a SVGTransform whose type is the SVGTransform.SVG_TRANSFORM_ROTATE.`, function () {
         const rotate_t = $$createSVGTransformRotate()({
-          angle: makeRandomNumber(),
-          cx: makeRandomNumber(),
-          cy: makeRandomNumber(),
+          angle: makeRandomNumber(-700, 700),
+          cx: makeRandomNumber(-100, 100),
+          cy: makeRandomNumber(-100, 100),
         });
         const result = $$isMatrixSVGTransform(rotate_t);
 
@@ -46,8 +46,8 @@ export default ({ describe, it }) => [
 
       it(`When the input value is a SVGTransform whose type is the SVGTransform.SVG_TRANSFORM_TRANSLATE.`, function () {
         const translate_t = $$createSVGTransformTranslate()({
-          tx: makeRandomNumber(),
-          ty: makeRandomNumber(),
+          tx: makeRandomNumber(-100, 100),
+          ty: makeRandomNumber(-100, 100),
         });
         const result = $$isMatrixSVGTransform(translate_t);
 
@@ -56,8 +56,8 @@ export default ({ describe, it }) => [
 
       it(`When the input value is a SVGTransform whose type is the SVGTransform.SVG_TRANSFORM_SCALE.`, function () {
         const scale_t = $$createSVGTransformScale()({
-          sx: makeRandomNumber(),
-          sy: makeRandomNumber(),
+          sx: makeRandomNumber(-100, 100),
+          sy: makeRandomNumber(-100, 100),
         });
         const result = $$isMatrixSVGTransform(scale_t);
 
