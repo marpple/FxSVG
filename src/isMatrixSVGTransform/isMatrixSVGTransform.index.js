@@ -1,6 +1,6 @@
 export const $$isMatrixSVGTransform = (transform) => {
   if (!(transform instanceof SVGTransform)) {
-    throw new Error("It's not a SVGTransform.");
+    return false;
   }
 
   const { type, SVG_TRANSFORM_MATRIX } = transform;

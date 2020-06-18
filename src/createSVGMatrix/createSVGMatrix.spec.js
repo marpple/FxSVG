@@ -11,23 +11,12 @@ import {
   pipe,
   reduce,
 } from "fxjs2";
+import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import {
   makeAllCombinations,
   makeRandomNumber,
 } from "../../test/utils/index.js";
 import { $$createSVGMatrix } from "./createSVGMatrix.index.js";
-
-const expectSameMatrix = (
-  m,
-  { a = 1, b = 0, c = 0, d = 1, e = 0, f = 0 } = {}
-) => {
-  expect(m.a).to.equal(a);
-  expect(m.b).to.equal(b);
-  expect(m.c).to.equal(c);
-  expect(m.d).to.equal(d);
-  expect(m.e).to.equal(e);
-  expect(m.f).to.equal(f);
-};
 
 const makeCases = () =>
   flatMapL(
@@ -65,23 +54,34 @@ export default ({ describe, it }) => [
     });
 
     it(`The matrix will be a identity matrix if there is no arguments.`, function () {
-      const m1 = $$createSVGMatrix()();
-      expectSameMatrix(m1, { a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 });
-
-      const m2 = $$createSVGMatrix(
-        document.createElementNS("http://www.w3.org/2000/svg", "svg")
-      )();
-      expectSameMatrix(m2, { a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 });
+      go(
+        [
+          $$createSVGMatrix(),
+          $$createSVGMatrix(
+            document.createElementNS("http://www.w3.org/2000/svg", "svg")
+          ),
+        ],
+        mapL((f) => f()),
+        each((m) =>
+          expectSameValueSVGMatrix(m, { a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 })
+        )
+      );
     });
 
-    it(`
-  Each value of the matrix will be same with the given value.
-  If there is omitted values, the values will be {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0} individually by default.
-  `, function () {
+    it(`Each value of the matrix will be same with the given value.
+        If there is omitted values, the values will be {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0} individually by default.`, function () {
       this.slow(100);
-      each(
-        ({ matrix, values }) => expectSameMatrix(matrix, values),
-        makeCases()
+      go(
+        makeCases(),
+        mapL(({ matrix, values }) =>
+          go(
+            values,
+            defaultTo({}),
+            (values) => extend({ a: 1, b: 0, c: 0, d: 1, e: 0, f: 0 }, values),
+            (values) => ({ matrix, values })
+          )
+        ),
+        each(({ matrix, values }) => expectSameValueSVGMatrix(matrix, values))
       );
     });
   }),

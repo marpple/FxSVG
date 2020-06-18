@@ -11,69 +11,70 @@ import { $$isRotateSVGTransform } from "./isRotateSVGTransform.index.js";
 
 export default ({ describe, it }) => [
   describe(`$$isRotateSVGTransform`, function () {
-    describe(`The function will throw an error when the input value is not a SVGTransform.`, function () {
-      it(`Input null.`, function () {
-        expect(() => $$isRotateSVGTransform(null)).to.throw();
+    describe(`The function will return false...`, function () {
+      it(`When the input value is null.`, function () {
+        const result = $$isRotateSVGTransform(null);
+
+        expect(result).to.be.false;
       });
 
-      it(`Input plain empty object.`, function () {
-        expect(() => $$isRotateSVGTransform({})).to.throw();
+      it(`When the input value is a plain empty object.`, function () {
+        const result = $$isRotateSVGTransform({});
+
+        expect(result).to.be.false;
       });
 
-      it(`Input plain object with type and SVG_TRANSFORM_ROTATE properties.`, function () {
+      it(`When the input value is a plain object like
+          { type: SVGTransform.SVG_TRANSFORM_ROTATE, SVG_TRANSFORM_ROTATE: SVGTransform.SVG_TRANSFORM_ROTATE }.`, function () {
         const obj = {
           type: SVGTransform.SVG_TRANSFORM_ROTATE,
           SVG_TRANSFORM_ROTATE: SVGTransform.SVG_TRANSFORM_ROTATE,
         };
-        expect(() => $$isRotateSVGTransform(obj)).to.throw();
+        const result = $$isRotateSVGTransform(obj);
+
+        expect(result).to.be.false;
       });
-    });
 
-    it(`
-  The function returns true
-  if the SVGTransform's type is same with a SVGTransform.SVG_TRANSFORM_ROTATE.
-  `, function () {
-      const rotate_t = $$createSVGTransformRotate()({
-        angle: makeRandomNumber(),
-        cx: makeRandomNumber(),
-        cy: makeRandomNumber(),
-      });
-      const result = $$isRotateSVGTransform(rotate_t);
-
-      expect(result).to.be.true;
-    });
-
-    describe(`
-  The function returns false
-  if the SVGTransform's type is not same with a SVGTransform.SVG_TRANSFORM_ROTATE.
-  `, function () {
-      it(`Use a SVGTransform whose type is a SVGTransform.SVG_TRANSFORM_MATRIX.`, function () {
+      it(`When the input value is a SVGTransform whose type is the SVGTransform.SVG_TRANSFORM_MATRIX.`, function () {
         const matrix_t = $$createSVGTransformMatrix()({
-          matrix: makeRandomSVGMatrix(),
+          matrix: makeRandomSVGMatrix(() => makeRandomNumber(-100, 100)),
         });
         const result = $$isRotateSVGTransform(matrix_t);
 
         expect(result).to.be.false;
       });
 
-      it(`Use a SVGTransform whose type is a SVGTransform.SVG_TRANSFORM_TRANSLATE.`, function () {
+      it(`When the input value is a SVGTransform whose type is the SVGTransform.SVG_TRANSFORM_SCALE.`, function () {
+        const scale_t = $$createSVGTransformScale()({
+          sx: makeRandomNumber(-100, 100),
+          sy: makeRandomNumber(-100, 100),
+        });
+        const result = $$isRotateSVGTransform(scale_t);
+
+        expect(result).to.be.false;
+      });
+
+      it(`When the input value is a SVGTransform whose type is the SVGTransform.SVG_TRANSFORM_TRANSLATE.`, function () {
         const translate_t = $$createSVGTransformTranslate()({
-          tx: makeRandomNumber(),
-          ty: makeRandomNumber(),
+          tx: makeRandomNumber(-100, 100),
+          ty: makeRandomNumber(-100, 100),
         });
         const result = $$isRotateSVGTransform(translate_t);
 
         expect(result).to.be.false;
       });
+    });
 
-      it(`Use a SVGTransform whose type is a SVGTransform.SVG_TRANSFORM_SCALE.`, function () {
-        const scale_t = $$createSVGTransformScale()({
-          sx: makeRandomNumber(),
-          sy: makeRandomNumber(),
+    describe(`The function will return true...`, function () {
+      it(`When the input value is a SVGTransform and the type is SVGTransform.SVG_TRANSFORM_ROTATE.`, function () {
+        const rotate_t = $$createSVGTransformRotate()({
+          angle: makeRandomNumber(-700, 700),
+          cx: makeRandomNumber(-100, 100),
+          cy: makeRandomNumber(-100, 100),
         });
-        const result = $$isRotateSVGTransform(scale_t);
+        const result = $$isRotateSVGTransform(rotate_t);
 
-        expect(result).to.be.false;
+        expect(result).to.be.true;
       });
     });
   }),
