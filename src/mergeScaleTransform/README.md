@@ -7,7 +7,7 @@
 병합된 `SVGTransform` 은 `SVGTransform.SVG_TRANSFORM_MATRIX` 타입입니다.
 따라서 한 번 병합한 `SVGTransform`을 `$$updateScaleTransform` 이나 `$$appendScaleTransform` 으로 변경할 수 없습니다.
 
-[`<svg></svg>` 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
+[SVG 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
 
 ```javascript
 const $el = $$el()(`

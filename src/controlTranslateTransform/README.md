@@ -10,7 +10,7 @@
 
 `x_name`, `y_name` 설정을 인자로 전달하지 않는 경우 `end` 메소드에서 `$$mergeTranslateTransform` 를 실행하지 않습니다.
 
-[`<svg></svg>` 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
+[SVG 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
 
 ```javascript
 const $el = $$el()(

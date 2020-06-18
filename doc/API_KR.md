@@ -2,7 +2,7 @@
 
 [EN](./API.md) | [KR](./API_KR.md)
 
-[SVG 주입](SVG_INJECTION.md)
+[SVG 주입](SVG_INJECTION_KR.md)
 
 ---
 
