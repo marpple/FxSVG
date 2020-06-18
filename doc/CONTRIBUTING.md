@@ -1,5 +1,7 @@
 # Contributing
 
+[EN](./CONTRIBUTING.md) | [KR](./CONTRIBUTING_KR.md)
+
 ## Test Code
 
 Please use `function() {}` when write test runner function for `mocha`.
