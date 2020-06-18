@@ -60,4 +60,4 @@ controller.append({ tx: 10 }).append({ ty: 10 }).end();
 FxSVG 개발에 참여하고 싶은 모든 분들을 환영합니다.
 FxSVG 코드에 기여하고 싶은 분은 아래 가이드를 참고해주세요.
 
-- [Contributing Guide](./doc/CONTRIBUTING.md)
+- [Contributing Guide](./doc/CONTRIBUTING_KR.md)
