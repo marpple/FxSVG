@@ -35,7 +35,7 @@ const setupMock = ({
 };
 
 export default ({ describe, it }) => [
-  describe.only(`$$getBaseTransformList`, function () {
+  describe(`$$getBaseTransformList`, function () {
     it(`The return value is a SVGTransformList`, function () {
       const { transform_list } = setupMock();
 
