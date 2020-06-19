@@ -17,7 +17,11 @@ export default ({ describe, it }) => [
     `, function () {
       go(
         makeInvalidIsValidFxSVGTransformListCases(),
-        mapL(([title, $el, index]) => [`If [${title}]...`, $el, index]),
+        mapL(({ description: title, $el, index }) => [
+          `If [${title}]...`,
+          $el,
+          index,
+        ]),
         each(([title, $el, index]) =>
           it(title, function () {
             const before_list = deepCopyTransformListToMatrixList(

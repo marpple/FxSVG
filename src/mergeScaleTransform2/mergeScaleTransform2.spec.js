@@ -310,7 +310,7 @@ export default ({ describe, it }) => [
           DIRECTIONS,
           flatMapL((direction) =>
             mapL(
-              ([title, $el, index]) => [
+              ({ description: title, $el, index }) => [
                 `If [[${title}] + [direction=${direction}]]...`,
                 $el,
                 index,
