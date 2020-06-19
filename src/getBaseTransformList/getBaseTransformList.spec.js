@@ -2,6 +2,7 @@ import { expect } from "chai";
 import {
   defaultTo,
   each,
+  eachL,
   equals2,
   go,
   head,
@@ -78,12 +79,12 @@ export default ({ describe, it }) => [
       expect(transform_list.numberOfItems).to.equal(transform_str_list.length);
       go(
         zip(transform_str_list, transform_list),
-        each(([, transform]) => {
+        eachL(([, transform]) => {
           if (transform.type === transform.SVG_TRANSFORM_UNKNOWN) {
             expect(true, "INVALID TRANSFORM").to.be.false;
           }
         }),
-        each(([transform_str, transform]) => {
+        eachL(([transform_str, transform]) => {
           if (transform.type === transform.SVG_TRANSFORM_MATRIX) {
             const transform2 = go(
               transform_str.match(/(-?\d+(\.\d+)?)/gi),
@@ -97,7 +98,7 @@ export default ({ describe, it }) => [
             expectSameValueSVGMatrix(transform.matrix, transform2.matrix);
           }
         }),
-        each(([transform_str, transform]) => {
+        eachL(([transform_str, transform]) => {
           if (transform.type === transform.SVG_TRANSFORM_TRANSLATE) {
             const transform2 = go(
               transform_str.match(/(-?\d+(\.\d+)?)/gi),
@@ -109,7 +110,7 @@ export default ({ describe, it }) => [
             expectSameValueSVGMatrix(transform.matrix, transform2.matrix);
           }
         }),
-        each(([transform_str, transform]) => {
+        eachL(([transform_str, transform]) => {
           if (transform.type === transform.SVG_TRANSFORM_SCALE) {
             const transform2 = go(
               transform_str.match(/(-?\d+(\.\d+)?)/gi),
@@ -121,7 +122,7 @@ export default ({ describe, it }) => [
             expectSameValueSVGMatrix(transform.matrix, transform2.matrix);
           }
         }),
-        each(([transform_str, transform]) => {
+        eachL(([transform_str, transform]) => {
           if (transform.type === transform.SVG_TRANSFORM_ROTATE) {
             const transform2 = go(
               transform_str.match(/(-?\d+(\.\d+)?)/gi),
@@ -133,7 +134,7 @@ export default ({ describe, it }) => [
             expectSameValueSVGMatrix(transform.matrix, transform2.matrix);
           }
         }),
-        each(([transform_str, transform]) => {
+        eachL(([transform_str, transform]) => {
           if (transform.type === transform.SVG_TRANSFORM_SKEWX) {
             const transform2 = go(
               transform_str.match(/(-?\d+(\.\d+)?)/gi),

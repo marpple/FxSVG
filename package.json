@@ -41,6 +41,6 @@
     "webpack-dev-middleware": "^3.7.2"
   },
   "dependencies": {
-    "fxjs2": "^0.15.0"
+    "fxjs2": "^0.16.2"
   }
 }
