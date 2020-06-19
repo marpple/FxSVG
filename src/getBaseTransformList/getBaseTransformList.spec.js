@@ -1,55 +1,79 @@
 import { expect } from "chai";
-import { each, go, go1, mapL, zip } from "fxjs2";
-import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
-import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
-import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTransformAttributeValue.js";
+import {
+  defaultTo,
+  each,
+  equals2,
+  go,
+  head,
+  join,
+  mapL,
+  rangeL,
+  zip,
+} from "fxjs2";
+import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
+import {
+  makeMockRect,
+  makeRandomInt,
+  makeRandomTransformAttributeValue,
+  makeRandomTransformString,
+} from "../../test/utils/index.js";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
-import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "./getBaseTransformList.index.js";
 
-export default ({ describe, it, beforeEach }) => [
-  describe(`$$getBaseTransformList`, function () {
-    let $el;
+const setupMock = ({
+  transform = makeRandomTransformAttributeValue(),
+} = {}) => {
+  const $el = makeMockRect({ transform });
+  const transform_list = $$getBaseTransformList($el);
+  return { transform, transform_list };
+};
 
-    beforeEach(function () {
-      $el = $$el()(`
-      <rect
-        x="${makeRandomNumber()}" 
-        y="${makeRandomNumber()}"
-        width="${makeRandomNumber(1)}"
-        height="${makeRandomNumber(1)}"
-        ${go1(makeRandomTransformAttributeValue(0, 100, makeRandomInt), (t) =>
-          t ? `transform="${t}"` : ""
-        )}
-      >
-      </rect> 
-    `);
-    });
-
+export default ({ describe, it }) => [
+  describe.only(`$$getBaseTransformList`, function () {
     it(`The return value is a SVGTransformList`, function () {
-      const tl = $$getBaseTransformList($el);
+      const { transform_list } = setupMock();
 
-      expect(tl).is.instanceof(SVGTransformList);
+      expect(transform_list).is.instanceof(SVGTransformList);
     });
 
-    it(`The return list is empty, if the element have no transform attribute.`, function () {
-      $el.removeAttributeNS(null, "transform");
-      const tl = $$getBaseTransformList($el);
+    it(`The return transform list is empty, if the element have no transform.`, function () {
+      const { transform_list } = setupMock({ transform: null });
 
-      expect(tl.numberOfItems).to.equal(0);
+      expect(transform_list.numberOfItems).to.equal(0);
     });
 
-    it(`The return list have matched SVGTransforms with transform attribute.`, function () {
-      const transform_attr = $el.getAttributeNS(null, "transform") || "";
-      const transform_str_list =
-        transform_attr.match(/[a-zA-Z]+\((-?\d+(\.\d+)?\s?)+\)/gi) || [];
+    it(`The return transform list have matched transforms with transform attribute.`, function () {
+      this.slow(1000);
+      const { transform_list, transform_str_list } = go(
+        makeRandomInt(),
+        rangeL,
+        mapL(() => makeRandomInt(0, 3)),
+        mapL((flag) => {
+          if (equals2(flag, 1)) {
+            return `skewX(${makeRandomInt(-700, 700)})`;
+          }
 
-      const transform_list = $$getBaseTransformList($el);
+          if (equals2(flag, 2)) {
+            return `skewY(${makeRandomInt(-700, 700)})`;
+          }
+
+          return makeRandomTransformString(() => makeRandomInt(-700, 700));
+        }),
+        join(" "),
+        defaultTo(null),
+        (transform) => setupMock({ transform }),
+        ({ transform, transform_list }) => {
+          const transform_str_list = transform
+            ? transform.match(/[a-zA-Z]+\((-?\d+(\.\d+)?\s?)+\)/gi) || []
+            : [];
+          return { transform_list, transform_str_list };
+        }
+      );
 
       expect(transform_list.numberOfItems).to.equal(transform_str_list.length);
       go(
@@ -61,7 +85,7 @@ export default ({ describe, it, beforeEach }) => [
         }),
         each(([transform_str, transform]) => {
           if (transform.type === transform.SVG_TRANSFORM_MATRIX) {
-            const t = go(
+            const transform2 = go(
               transform_str.match(/(-?\d+(\.\d+)?)/gi),
               mapL(parseFloat),
               ([a, b, c, d, e, f]) => ({ a, b, c, d, e, f }),
@@ -70,73 +94,75 @@ export default ({ describe, it, beforeEach }) => [
               $$createSVGTransformMatrix()
             );
             expect(transform_str).to.have.string("matrix");
-            expect(transform.matrix).to.deep.equal(t.matrix);
+            expectSameValueSVGMatrix(transform.matrix, transform2.matrix);
           }
         }),
         each(([transform_str, transform]) => {
           if (transform.type === transform.SVG_TRANSFORM_TRANSLATE) {
-            const t = go(
+            const transform2 = go(
               transform_str.match(/(-?\d+(\.\d+)?)/gi),
               mapL(parseFloat),
               ([tx, ty]) => ({ tx, ty }),
               $$createSVGTransformTranslate()
             );
             expect(transform_str).to.have.string("translate");
-            expect(transform.matrix).to.deep.equal(t.matrix);
+            expectSameValueSVGMatrix(transform.matrix, transform2.matrix);
           }
         }),
         each(([transform_str, transform]) => {
           if (transform.type === transform.SVG_TRANSFORM_SCALE) {
-            const t = go(
+            const transform2 = go(
               transform_str.match(/(-?\d+(\.\d+)?)/gi),
               mapL(parseFloat),
               ([sx, sy]) => ({ sx, sy }),
               $$createSVGTransformScale()
             );
             expect(transform_str).to.have.string("scale");
-            expect(transform.matrix).to.deep.equal(t.matrix);
+            expectSameValueSVGMatrix(transform.matrix, transform2.matrix);
           }
         }),
         each(([transform_str, transform]) => {
           if (transform.type === transform.SVG_TRANSFORM_ROTATE) {
-            const t = go(
+            const transform2 = go(
               transform_str.match(/(-?\d+(\.\d+)?)/gi),
               mapL(parseFloat),
               ([angle, cx, cy]) => ({ angle, cx, cy }),
               $$createSVGTransformRotate()
             );
             expect(transform_str).to.have.string("rotate");
-            expect(transform.matrix).to.deep.equal(t.matrix);
+            expectSameValueSVGMatrix(transform.matrix, transform2.matrix);
           }
         }),
         each(([transform_str, transform]) => {
           if (transform.type === transform.SVG_TRANSFORM_SKEWX) {
-            const [t] = go(
+            const transform2 = go(
               transform_str.match(/(-?\d+(\.\d+)?)/gi),
               mapL(parseFloat),
               mapL((angle) => {
                 const t = $$createSVGTransform();
                 t.setSkewX(angle);
                 return t;
-              })
+              }),
+              head
             );
             expect(transform_str).to.have.string("skewX");
-            expect(transform.matrix).to.deep.equal(t.matrix);
+            expectSameValueSVGMatrix(transform.matrix, transform2.matrix);
           }
         }),
         each(([transform_str, transform]) => {
           if (transform.type === transform.SVG_TRANSFORM_SKEWY) {
-            const t = go(
+            const transform2 = go(
               transform_str.match(/(-?\d+(\.\d+)?)/gi),
               mapL(parseFloat),
               mapL((angle) => {
                 const t = $$createSVGTransform();
                 t.setSkewY(angle);
                 return t;
-              })
+              }),
+              head
             );
             expect(transform_str).to.have.string("skewY");
-            expect(transform.matrix).to.deep.equal(t.matrix);
+            expectSameValueSVGMatrix(transform.matrix, transform2.matrix);
           }
         })
       );
