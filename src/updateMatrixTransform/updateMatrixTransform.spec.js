@@ -32,7 +32,7 @@ export default ({ describe, it }) => [
       expect(transform.matrix).to.deep.equal(matrix);
     });
 
-    it(`The matrix of transform is same with before when there is no input matrix`, function () {
+    it(`The matrix of transform is same with before when there is no input matrix.`, function () {
       go1([undefined, {}], (input) =>
         go(
           setupMockTransform(),
