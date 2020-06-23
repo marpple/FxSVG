@@ -23,14 +23,8 @@ const setupMock = () => ({
   matrix: setupMockMatrix(),
 });
 
-export default ({ describe, it, beforeEach }) => [
+export default ({ describe, it }) => [
   describe(`$$updateMatrixTransform`, function () {
-    let t;
-
-    beforeEach(function () {
-      t = $$createSVGTransformMatrix()({ matrix: makeRandomSVGMatrix() });
-    });
-
     it(`The matrix of the input transform is changed to input matrix.`, function () {
       const { transform, matrix } = setupMock();
       $$updateMatrixTransform(transform, { matrix });
