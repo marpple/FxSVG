@@ -10,6 +10,7 @@ import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSV
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
+import { $$isRotateSVGTransform } from "../isRotateSVGTransform/isRotateSVGTransform.index.js";
 import { $$updateRotateTransform } from "./updateRotateTransform.index.js";
 
 const setupMockTransform = () => {
@@ -40,6 +41,7 @@ const expectTransformWithAngleCxCy = ({ transform, angle, cx, cy }) => {
     ({ matrix }) => matrix
   );
 
+  expect($$isRotateSVGTransform(transform)).to.be.true;
   expect(transform.angle).to.equal(angle);
   expect(transform.matrix).to.deep.equal(matrix);
 };
