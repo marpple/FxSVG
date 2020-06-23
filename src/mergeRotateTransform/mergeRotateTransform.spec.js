@@ -400,7 +400,7 @@ export default ({ describe, it }) => [
     it(`The transform "translate(cx, cy)" at the input index - 1,
         the transform "rotate(angle, 0, 0)" at the input index,
         the transform "translate(-cx, -cy)" at the input index + 1
-        are merge to the transform "rotate(angle, cx, cy."
+        are merge to the transform "rotate(angle, cx, cy)"
         So the length of the transform list is decreased by 2.`, function () {
       const fs = mapL(($svg) => $$mergeRotateTransform($svg), [
         undefined,
