@@ -1,129 +1,148 @@
 import { expect } from "chai";
-import { appendL, each, equals2, go, go1, mapL, object } from "fxjs2";
-import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
+import { equals2, go, map, mapL, rejectL, zipWithIndexL } from "fxjs2";
 import {
   makeRandomSVGMatrix,
   makeRandomNumber,
   makeRandomInt,
   deepCopyTransformList,
   makeRandomTransformAttributeValue,
-  makeAllCombinations,
+  makeMockRect,
 } from "../../test/utils/index.js";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
-import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
-import { $$isMatrixSVGTransform } from "../isMatrixSVGTransform/isMatrixSVGTransform.index.js";
 import { $$initMatrixTransform } from "./initMatrixTransform.index.js";
 
-const createMockEl = () =>
-  $$el()(`
-    <rect
-      x="${makeRandomNumber()}"
-      y="${makeRandomNumber()}"
-      width="${makeRandomNumber(1)}"
-      height="${makeRandomNumber(1)}"
-      ${go1(makeRandomTransformAttributeValue(), (t) =>
-        t ? `transform="${t}"` : ""
-      )}
-    >
-    </rect> 
-  `);
-
-const expectCorrectSVGTransformListLength = ($el, config) => {
-  const { numberOfItems: before_n } = $$getBaseTransformList($el);
-
-  $$initMatrixTransform()($el, config);
-
-  const { numberOfItems: after_n } = $$getBaseTransformList($el);
-  expect(after_n, "expectCorrectSVGTransformListLength").to.equal(before_n + 1);
+const setupMockEl = ({ transform } = {}) => {
+  const $el = makeMockRect({ transform });
+  const index = makeRandomInt(0, $$getBaseTransformList($el).numberOfItems + 1);
+  return { $el, index };
 };
-
-const expectCorrectSVGTransform = ($el, config) => {
-  const { matrix = $$createSVGMatrix()(), index = 0 } = config || {};
-
-  $$initMatrixTransform()($el, config);
-
-  const t = $$getBaseTransformList($el).getItem(index);
-  expect($$isMatrixSVGTransform(t), "expectCorrectSVGTransform").to.be.true;
-  expectSameValueSVGMatrix(t.matrix, matrix, "expectCorrectSVGTransform");
-};
-
-const expectCorrectOtherSVGTransforms = ($el, config) => {
-  const { index = 0 } = config || {};
-
-  const before_l = deepCopyTransformList(
-    $$getBaseTransformList($el)
-  );
-
-  $$initMatrixTransform()($el, config);
-
-  let after_l = deepCopyTransformList($$getBaseTransformList($el));
-  after_l = [...after_l.slice(0, index), ...after_l.slice(index + 1)];
-  expect(after_l, "expectCorrectOtherSVGTransforms").to.deep.equal(before_l);
-};
-
-const expectAllCorrect = ($el, config) =>
-  each((f) => f($el, config), [
-    expectCorrectSVGTransformListLength,
-    expectCorrectSVGTransform,
-    expectCorrectOtherSVGTransforms,
-  ]);
 
 export default ({ describe, it }) => [
   describe(`$$initMatrixTransform`, function () {
-    describe(`No omitted arguments,`, function () {
-      it(`The length of the element's SVGTransformList will be increased by 1.`, function () {
-        const $el = createMockEl();
-        const matrix = makeRandomSVGMatrix();
-        const index = makeRandomInt(
-          0,
-          $$getBaseTransformList($el).numberOfItems
-        );
-        expectCorrectSVGTransformListLength($el, { matrix, index });
-      });
+    it(`The length of the SVG transform list is increased by 1. `, function () {
+      const fs = mapL(($svg) => $$initMatrixTransform($svg), [
+        undefined,
+        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+      ]);
 
-      it(`The SVGTransform at input index is a matrix SVGTransform with the input SVGMatrix.`, function () {
-        const $el = createMockEl();
-        const matrix = makeRandomSVGMatrix();
-        const index = makeRandomInt(
-          0,
-          $$getBaseTransformList($el).numberOfItems
-        );
-        expectCorrectSVGTransform($el, { matrix, index });
-      });
+      for (const f of fs) {
+        const { $el, index } = setupMockEl({
+          transform: makeRandomTransformAttributeValue(),
+        });
+        const matrix = makeRandomSVGMatrix(() => makeRandomNumber(-100, 100));
+        const { numberOfItems: before_length } = $$getBaseTransformList($el);
 
-      it(`The function do nothing on other SVGTransforms of the element.`, function () {
-        const $el = createMockEl();
-        const matrix = makeRandomSVGMatrix();
-        const index = makeRandomInt(
-          0,
-          $$getBaseTransformList($el).numberOfItems
-        );
-        expectCorrectOtherSVGTransforms($el, { matrix, index });
-      });
+        f($el, { matrix, index });
+
+        const { numberOfItems: after_length } = $$getBaseTransformList($el);
+        expect(after_length).equal(before_length + 1);
+      }
     });
 
-    it(`If the second argument is omitted, use default values ({ matrix: Identity Matrix, index: 0 }).`, function () {
-      go(
-        ["matrix", "index"],
-        makeAllCombinations,
-        mapL((ks) => [createMockEl(), ks]),
-        mapL(([$el, ks]) =>
+    it(`The transform at input index is a matrix transform with the input matrix.`, function () {
+      const fs = mapL(($svg) => $$initMatrixTransform($svg), [
+        undefined,
+        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+      ]);
+
+      for (const f of fs) {
+        const { $el, index } = setupMockEl({
+          transform: makeRandomTransformAttributeValue(),
+        });
+        const matrix = makeRandomSVGMatrix(() => makeRandomNumber(-100, 100));
+
+        f($el, { matrix, index });
+
+        const transform = $$getBaseTransformList($el).getItem(index);
+        expect(transform.matrix).deep.equal(matrix);
+      }
+    });
+
+    it(`The function do nothing on other transforms.`, function () {
+      const fs = mapL(($svg) => $$initMatrixTransform($svg), [
+        undefined,
+        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+      ]);
+
+      for (const f of fs) {
+        const { $el, index } = setupMockEl({
+          transform: makeRandomTransformAttributeValue(),
+        });
+        const matrix = makeRandomSVGMatrix(() => makeRandomNumber(-100, 100));
+        const before_transform_list = deepCopyTransformList(
+          $$getBaseTransformList($el)
+        );
+
+        f($el, { matrix, index });
+
+        const after_transform_list = deepCopyTransformList(
+          $$getBaseTransformList($el)
+        );
+        expect(
           go(
-            ks,
-            mapL((k) => [
-              k,
-              equals2(k, "index")
-                ? makeRandomInt(0, $$getBaseTransformList($el).numberOfItems)
-                : makeRandomSVGMatrix(),
-            ]),
-            object,
-            (config) => [$el, config]
+            after_transform_list,
+            zipWithIndexL,
+            rejectL(([i]) => equals2(index, i)),
+            map(([, transform]) => transform)
           )
-        ),
-        appendL([createMockEl()]),
-        each(([$el, config]) => expectAllCorrect($el, config))
-      );
+        ).deep.equal(before_transform_list);
+      }
+    });
+
+    it(`The transform at input index is an identity matrix when there is no input matrix.`, function () {
+      const fs = mapL(($svg) => $$initMatrixTransform($svg), [
+        undefined,
+        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+      ]);
+
+      for (const f of fs) {
+        const { $el, index } = setupMockEl({
+          transform: makeRandomTransformAttributeValue(),
+        });
+
+        f($el, { index });
+
+        const transform = $$getBaseTransformList($el).getItem(index);
+        expect(transform.matrix).deep.equal($$createSVGMatrix()());
+      }
+    });
+
+    it(`The transform is at index 0 when there is no input index.`, function () {
+      const fs = mapL(($svg) => $$initMatrixTransform($svg), [
+        undefined,
+        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+      ]);
+
+      for (const f of fs) {
+        const { $el } = setupMockEl({
+          transform: makeRandomTransformAttributeValue(),
+        });
+        const matrix = makeRandomSVGMatrix(() => makeRandomNumber(-100, 100));
+
+        f($el, { matrix });
+
+        const transform = $$getBaseTransformList($el).getItem(0);
+        expect(transform.matrix).deep.equal(matrix);
+      }
+    });
+
+    it(`The transform at index 0 is an identity matrix when there is no input object.`, function () {
+      const fs = mapL(($svg) => $$initMatrixTransform($svg), [
+        undefined,
+        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+      ]);
+
+      for (const f of fs) {
+        const { $el } = setupMockEl({
+          transform: makeRandomTransformAttributeValue(),
+        });
+
+        f($el);
+
+        const transform = $$getBaseTransformList($el).getItem(0);
+        expect(transform.matrix).deep.equal($$createSVGMatrix()());
+      }
     });
   }),
 ];
