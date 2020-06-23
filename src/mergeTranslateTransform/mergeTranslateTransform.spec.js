@@ -1,7 +1,7 @@
 import { expect } from "chai";
-import { go1 } from "fxjs2";
+import { go1, map } from "fxjs2";
 import {
-  deepCopyTransformListToMatrixList,
+  deepCopyTransformList,
   makeRandomInt,
   makeRandomNumber,
   makeRandomSVGMatrix,
@@ -17,7 +17,7 @@ import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransform
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform.index.js";
 
 const expectSameTransformsAfterMerge = ($el) => {
-  const before_list = deepCopyTransformListToMatrixList(
+  const before_list = deepCopyTransformList(
     $$getBaseTransformList($el)
   );
 
@@ -26,7 +26,7 @@ const expectSameTransformsAfterMerge = ($el) => {
     y_name: "y",
   });
 
-  const after_list = deepCopyTransformListToMatrixList(
+  const after_list = deepCopyTransformList(
     $$getBaseTransformList($el)
   );
 
@@ -143,7 +143,7 @@ export default ({ describe, it, beforeEach }) => [
   Other SVGTransforms will be changed by the following formula. 
   [after SVGTransform matrix = translate(tx, ty) matrix * before SVGTransform matrix * translate(-tx, -ty) matrix]
   `, function () {
-      const before_list = deepCopyTransformListToMatrixList(
+      const before_list = deepCopyTransformList(
         $$getBaseTransformList($el)
       );
 
@@ -156,11 +156,11 @@ export default ({ describe, it, beforeEach }) => [
 
       $$mergeTranslateTransform()($el, { x_name: "x", y_name: "y" });
 
-      const after_list = deepCopyTransformListToMatrixList(
+      const after_list = deepCopyTransformList(
         $$getBaseTransformList($el)
       );
-      expect(after_list).to.deep.equal(
-        before_list.map((m) => m1.multiply(m).multiply(m2))
+      expect(map(({ matrix }) => matrix, after_list)).to.deep.equal(
+        map(({ matrix }) => m1.multiply(matrix).multiply(m2), before_list)
       );
     });
   }),

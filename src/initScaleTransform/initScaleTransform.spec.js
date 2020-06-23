@@ -3,7 +3,7 @@ import { appendL, each, equals2, go, go1, mapL, object, rangeL } from "fxjs2";
 import {
   makeRandomTransformAttributeValue,
   makeRandomNumber,
-  deepCopyTransformListToMatrixList,
+  deepCopyTransformList,
   makeAllCombinations,
   makeRandomInt,
 } from "../../test/utils/index.js";
@@ -82,13 +82,13 @@ const expectCorrectSVGTransform3 = ($el, config) => {
 const expectCorrectOtherSVGTransforms = ($el, config) => {
   const { index = 0 } = config || {};
 
-  const before_l = deepCopyTransformListToMatrixList(
+  const before_l = deepCopyTransformList(
     $$getBaseTransformList($el)
   );
 
   $$initScaleTransform()($el, config);
 
-  let after_l = deepCopyTransformListToMatrixList($$getBaseTransformList($el));
+  let after_l = deepCopyTransformList($$getBaseTransformList($el));
   after_l = [...after_l.slice(0, index), ...after_l.slice(index + 3)];
   expect(after_l, "expectCorrectOtherSVGTransforms").to.deep.equal(before_l);
 };

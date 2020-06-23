@@ -12,7 +12,7 @@ import {
 } from "fxjs2";
 import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import {
-  deepCopyTransformListToMatrixList,
+  deepCopyTransformList,
   makeAllCombinations,
   makeRandomInt,
   makeRandomNumber,
@@ -90,13 +90,13 @@ const expectCorrectSVGTransform3 = ($el, config) => {
 const expectCorrectOtherSVGTransforms = ($el, config) => {
   const { index = 0 } = config || {};
 
-  const before_l = deepCopyTransformListToMatrixList(
+  const before_l = deepCopyTransformList(
     $$getBaseTransformList($el)
   );
 
   $$initRotateTransform()($el, config);
 
-  let after_l = deepCopyTransformListToMatrixList($$getBaseTransformList($el));
+  let after_l = deepCopyTransformList($$getBaseTransformList($el));
   after_l = [...after_l.slice(0, index), ...after_l.slice(index + 3)];
   expect(after_l, "expectCorrectOtherSVGTransforms").to.deep.equal(before_l);
 };

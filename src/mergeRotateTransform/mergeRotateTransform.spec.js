@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { appendL, each, go, mapL, object, rangeL, reduce } from "fxjs2";
 import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import {
-  deepCopyTransformListToMatrixList,
+  deepCopyTransformList,
   makeAllCombinations,
   makeRandomInt,
   makeRandomNumber,
@@ -33,11 +33,11 @@ const createMockEl = ({ transform_attr = "" } = {}) =>
   `);
 
 const expectSameElementAndSameTransformListAfterMerge = ($el, config) => {
-  const before_list = deepCopyTransformListToMatrixList(
+  const before_list = deepCopyTransformList(
     $$getBaseTransformList($el)
   );
   const result = $$mergeRotateTransform()($el, config);
-  const after_list = deepCopyTransformListToMatrixList(
+  const after_list = deepCopyTransformList(
     $$getBaseTransformList($el)
   );
   expect(result).to.equal($el);

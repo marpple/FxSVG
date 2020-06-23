@@ -15,7 +15,7 @@ import {
   takeAll,
 } from "fxjs2";
 import {
-  deepCopyTransformListToMatrixList,
+  deepCopyTransformList,
   makeRandomBool,
   makeRandomInt,
   makeRandomNumber,
@@ -34,13 +34,13 @@ export default ({ describe, it }) => [
         each((direction) => {
           const { $el, index } = makeMockRectInitiatedScaleTransform();
 
-          const before_list = deepCopyTransformListToMatrixList(
+          const before_list = deepCopyTransformList(
             $$getBaseTransformList($el)
           );
 
           $$mergeScaleTransform2($el, { index, direction });
 
-          const after_list = deepCopyTransformListToMatrixList(
+          const after_list = deepCopyTransformList(
             $$getBaseTransformList($el)
           );
           expect(
@@ -254,13 +254,13 @@ export default ({ describe, it }) => [
                 width: before_width,
                 height: before_height,
               } = makeMockRectInitiatedScaleTransform();
-              const before_list = deepCopyTransformListToMatrixList(
+              const before_list = deepCopyTransformList(
                 $$getBaseTransformList($el)
               );
 
               $$mergeScaleTransform2($el, { index, direction });
 
-              const after_list = deepCopyTransformListToMatrixList(
+              const after_list = deepCopyTransformList(
                 $$getBaseTransformList($el)
               );
               const [after_x, after_y, after_width, after_height] = go(
@@ -321,11 +321,11 @@ export default ({ describe, it }) => [
           ),
           each(([title, $el, index, direction]) =>
             it(title, function () {
-              const before_list = deepCopyTransformListToMatrixList(
+              const before_list = deepCopyTransformList(
                 $$getBaseTransformList($el)
               );
               const result = $$mergeScaleTransform2($el, { index, direction });
-              const after_list = deepCopyTransformListToMatrixList(
+              const after_list = deepCopyTransformList(
                 $$getBaseTransformList($el)
               );
               expect(result).to.equal($el);

@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { each, go, mapL, rangeL, reduce } from "fxjs2";
 import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import {
-  deepCopyTransformListToMatrixList,
+  deepCopyTransformList,
   makeMockRectInitiatedScaleTransform,
 } from "../../test/utils/index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
@@ -24,11 +24,11 @@ export default ({ describe, it }) => [
         ]),
         each(([title, $el, index]) =>
           it(title, function () {
-            const before_list = deepCopyTransformListToMatrixList(
+            const before_list = deepCopyTransformList(
               $$getBaseTransformList($el)
             );
             const result = $$mergeScaleTransform()($el, { index });
-            const after_list = deepCopyTransformListToMatrixList(
+            const after_list = deepCopyTransformList(
               $$getBaseTransformList($el)
             );
             expect(result).to.equal($el);

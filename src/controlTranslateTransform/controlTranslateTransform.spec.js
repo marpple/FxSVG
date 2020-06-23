@@ -13,7 +13,7 @@ import {
   zipWithIndexL,
 } from "fxjs2";
 import {
-  deepCopyTransformListToMatrixList,
+  deepCopyTransformList,
   makeMockRect,
   makeRandomBool,
   makeRandomInt,
@@ -67,7 +67,8 @@ const compressSVGTransformListToMatrix = ({ tx, ty, index, transform_list }) =>
     ([plus_t_m, minus_t_m]) =>
       go(
         transform_list,
-        deepCopyTransformListToMatrixList,
+        deepCopyTransformList,
+        mapL(({ matrix }) => matrix),
         zipWithIndexL,
         rejectL(([i]) => equals2(i, index)),
         mapL(([, m]) => m),
