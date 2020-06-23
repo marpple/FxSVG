@@ -10,6 +10,7 @@ export { deepCopyTransformList } from "./deepCopyTransformList.js";
 export { makeRandomSVGMatrix } from "./makeRandomSVGMatrix.js";
 export { makeMockRect } from "./makeMockRect.js";
 export { makeMockRectInitiatedScaleTransform } from "./makeMockRectInitializedScaleTransform.js";
+export { makeMockRectInitializedTranslateTransform } from "./makeMockRectInitializedTranslateTransform.js";
 export { makeRandomSVGTransformMatrix } from "./makeRandomSVGTransformMatrix.js";
 export { makeRandomSVGTransformRotate } from "./makeRandomSVGTransformRotate.js";
 export { makeRandomSVGTransformScale } from "./makeRandomSVGTransformScale.js";
