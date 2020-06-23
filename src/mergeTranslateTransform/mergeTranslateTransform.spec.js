@@ -28,6 +28,10 @@ export default ({ describe, it }) => [
         const { numberOfItems: transform_list_length } = $$getBaseTransformList(
           $input
         );
+        const [before_x, before_y] = mapL(
+          (k) => $input.getAttributeNS(null, k),
+          ["x", "y"]
+        );
         const before_transform_list = deepCopyTransformList(
           $$getBaseTransformList($input)
         );
@@ -40,10 +44,16 @@ export default ({ describe, it }) => [
           x_name: "x",
           y_name: "y",
         });
+        const [after_x, after_y] = mapL(
+          (k) => $output.getAttributeNS(null, k),
+          ["x", "y"]
+        );
         const after_transform_list = deepCopyTransformList(
-          $$getBaseTransformList($input)
+          $$getBaseTransformList($output)
         );
         expect($output).equal($input);
+        expect(after_x).equal(before_x);
+        expect(after_y).equal(before_y);
         expect(after_transform_list).deep.equal(before_transform_list);
       }
     });
@@ -71,6 +81,10 @@ export default ({ describe, it }) => [
             }),
             index
           );
+          const [before_x, before_y] = mapL(
+            (k) => $input.getAttributeNS(null, k),
+            ["x", "y"]
+          );
           const before_transform_list = deepCopyTransformList(
             $$getBaseTransformList($input)
           );
@@ -80,11 +94,17 @@ export default ({ describe, it }) => [
             x_name: "x",
             y_name: "y",
           });
+          const [after_x, after_y] = mapL(
+            (k) => $output.getAttributeNS(null, k),
+            ["x", "y"]
+          );
           const after_transform_list = deepCopyTransformList(
-            $$getBaseTransformList($input)
+            $$getBaseTransformList($output)
           );
 
           expect($output).equal($input);
+          expect(after_x).equal(before_x);
+          expect(after_y).equal(before_y);
           expect(after_transform_list).deep.equal(before_transform_list);
         }
       });
@@ -112,6 +132,10 @@ export default ({ describe, it }) => [
             }),
             index
           );
+          const [before_x, before_y] = mapL(
+            (k) => $input.getAttributeNS(null, k),
+            ["x", "y"]
+          );
           const before_transform_list = deepCopyTransformList(
             $$getBaseTransformList($input)
           );
@@ -121,11 +145,17 @@ export default ({ describe, it }) => [
             x_name: "x",
             y_name: "y",
           });
+          const [after_x, after_y] = mapL(
+            (k) => $output.getAttributeNS(null, k),
+            ["x", "y"]
+          );
           const after_transform_list = deepCopyTransformList(
-            $$getBaseTransformList($input)
+            $$getBaseTransformList($output)
           );
 
           expect($output).equal($input);
+          expect(after_x).equal(before_x);
+          expect(after_y).equal(before_y);
           expect(after_transform_list).deep.equal(before_transform_list);
         }
       });
@@ -152,6 +182,10 @@ export default ({ describe, it }) => [
             }),
             index
           );
+          const [before_x, before_y] = mapL(
+            (k) => $input.getAttributeNS(null, k),
+            ["x", "y"]
+          );
           const before_transform_list = deepCopyTransformList(
             $$getBaseTransformList($input)
           );
@@ -161,11 +195,17 @@ export default ({ describe, it }) => [
             x_name: "x",
             y_name: "y",
           });
+          const [after_x, after_y] = mapL(
+            (k) => $output.getAttributeNS(null, k),
+            ["x", "y"]
+          );
           const after_transform_list = deepCopyTransformList(
-            $$getBaseTransformList($input)
+            $$getBaseTransformList($output)
           );
 
           expect($output).equal($input);
+          expect(after_x).equal(before_x);
+          expect(after_y).equal(before_y);
           expect(after_transform_list).deep.equal(before_transform_list);
         }
       });
@@ -179,19 +219,19 @@ export default ({ describe, it }) => [
       ]);
       for (const f of fs) {
         const {
-          $el,
+          $el: $input,
           index,
           tx,
           ty,
         } = makeMockRectInitializedTranslateTransform();
         const before_transform_list = deepCopyTransformList(
-          $$getBaseTransformList($el)
+          $$getBaseTransformList($input)
         );
 
-        f($el, { index, x_name: "x", y_name: "y" });
+        const $output = f($input, { index, x_name: "x", y_name: "y" });
 
         const after_transform_list = deepCopyTransformList(
-          $$getBaseTransformList($el)
+          $$getBaseTransformList($output)
         );
 
         go(
@@ -229,7 +269,7 @@ export default ({ describe, it }) => [
       ]);
       for (const f of fs) {
         const {
-          $el,
+          $el: $input,
           index,
           tx,
           ty,
@@ -237,10 +277,10 @@ export default ({ describe, it }) => [
           y,
         } = makeMockRectInitializedTranslateTransform();
 
-        f($el, { index, x_name: "x", y_name: "y" });
+        const $output = f($input, { index, x_name: "x", y_name: "y" });
 
-        expect($el.getAttributeNS(null, "x")).equal(`${x + tx}`);
-        expect($el.getAttributeNS(null, "y")).equal(`${y + ty}`);
+        expect($output.getAttributeNS(null, "x")).equal(`${x + tx}`);
+        expect($output.getAttributeNS(null, "y")).equal(`${y + ty}`);
       }
     });
   }),
