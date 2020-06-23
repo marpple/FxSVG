@@ -9,6 +9,7 @@ import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSV
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
+import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
 import { $$updateScaleTransform } from "./updateScaleTransform.index.js";
 
 const setupMockTransform = () => {
@@ -32,6 +33,7 @@ const expectTransformWithSxSy = ({ transform, sx, sy }) => {
     ({ matrix }) => matrix
   );
 
+  expect($$isScaleSVGTransform(transform)).to.be.true;
   expect(transform.matrix).to.deep.equal(matrix);
 };
 
