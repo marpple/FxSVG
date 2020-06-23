@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import { go, go1, pick, tap } from "fxjs2";
 import {
   makeRandomNumber,
   makeRandomSVGMatrix,
@@ -8,54 +7,46 @@ import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSV
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
+import { $$isMatrixSVGTransform } from "../isMatrixSVGTransform/isMatrixSVGTransform.index.js";
 import { $$updateMatrixTransform } from "./updateMatrixTransform.index.js";
 
-const setupMockTransform = () =>
-  $$createSVGTransformMatrix()({
-    matrix: makeRandomSVGMatrix(() => makeRandomNumber(-100, 100)),
-  });
+const setupMockTransform = () => {
+  const matrix = makeRandomSVGMatrix(() => makeRandomNumber(-100, 100));
+  const transform = $$createSVGTransformMatrix()({ matrix });
+  return { transform, matrix };
+};
 
-const setupMockMatrix = () =>
-  makeRandomSVGMatrix(() => makeRandomNumber(-100, 100));
-
-const setupMock = () => ({
-  transform: setupMockTransform(),
-  matrix: setupMockMatrix(),
+const setupMockInputValues = () => ({
+  matrix: makeRandomSVGMatrix(() => makeRandomNumber(-100, 100)),
 });
+
+const expectTransformWithMatrix = ({ transform, matrix }) => {
+  expect($$isMatrixSVGTransform(transform)).to.be.true;
+  expect(transform.matrix).deep.equal(matrix);
+};
 
 export default ({ describe, it }) => [
   describe(`$$updateMatrixTransform`, function () {
     it(`The matrix of the input transform is changed to input matrix.`, function () {
-      const { transform, matrix } = setupMock();
+      const { transform } = setupMockTransform();
+      const { matrix } = setupMockInputValues();
       $$updateMatrixTransform(transform, { matrix });
 
-      expect(transform.matrix).to.deep.equal(matrix);
+      expectTransformWithMatrix({ transform, matrix });
     });
 
     it(`The matrix of the transform is same with before when there is no input matrix.`, function () {
-      go1([undefined, {}], (input) =>
-        go(
-          setupMockTransform(),
-          (transform) => ({
-            transform,
-            before_matrix_values: pick(
-              ["a", "b", "c", "d", "e", "f"],
-              transform.matrix
-            ),
-          }),
-          tap(({ transform }) => $$updateMatrixTransform(transform, input)),
-          ({ transform, before_matrix_values }) => ({
-            before_matrix_values,
-            after_matrix_values: pick(
-              ["a", "b", "c", "d", "e", "f"],
-              transform.matrix
-            ),
-          }),
-          tap(({ before_matrix_values, after_matrix_values }) =>
-            expect(after_matrix_values).to.deep.equal(before_matrix_values)
-          )
-        )
-      );
+      const { transform, matrix } = setupMockTransform();
+      $$updateMatrixTransform(transform, {});
+
+      expectTransformWithMatrix({ transform, matrix });
+    });
+
+    it(`The matrix of the transform is same with before when there is no input object.`, function () {
+      const { transform, matrix } = setupMockTransform();
+      $$updateMatrixTransform(transform);
+
+      expectTransformWithMatrix({ transform, matrix });
     });
 
     describe(`If the transform is another type transform, the function will do nothing but return the input.`, function () {
