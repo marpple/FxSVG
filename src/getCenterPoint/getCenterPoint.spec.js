@@ -1,65 +1,91 @@
 import { expect } from "chai";
+import { go, mapL, reduce } from "fxjs2";
+import { makeMockRect } from "../../test/utils/makeMockRect.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
-import { $$el } from "../el/el.index.js";
+import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
+import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTransformAttributeValue.js";
+import { $$createSVGPoint } from "../createSVGPoint/createSVGPoint.index.js";
 import { $$getBoxPoints } from "../getBoxPoints/getBoxPoints.index.js";
 import { $$getCenterPoint } from "./getCenterPoint.index.js";
 
-export default ({ describe, it, beforeEach, afterEach }) => [
+const setupMock = ({ transform } = {}) => {
+  const $svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+
+  const $el = makeMockRect({
+    x: `${makeRandomInt(-1000, 1000)}`,
+    y: `${makeRandomInt(-1000, 1000)}`,
+    width: `${makeRandomInt(1, 1000)}`,
+    height: `${makeRandomInt(1, 1000)}`,
+    transform,
+  });
+
+  document.body.appendChild($svg);
+  $svg.appendChild($el);
+
+  return { $el, $svg };
+};
+
+const clearMock = ({ $svg }) => {
+  document.body.removeChild($svg);
+};
+
+export default ({ describe, it }) => [
   describe(`$$getCenterPoint`, function () {
-    let $svg;
-    let $el;
+    it(`The return "original", "transformed" values are centers
+        of the return "original", "transformed" values from "$$getBoxPoints()".`, function () {
+      const cases = [
+        setupMock(),
+        setupMock({
+          transform: makeRandomTransformAttributeValue(1, 100, () =>
+            makeRandomNumber(-700, 700)
+          ),
+        }),
+      ];
+      for (const { $el, $svg } of cases) {
+        const [
+          { x: expect_original_x, y: expect_original_y },
+          { x: expect_transformed_x, y: expect_transformed_y },
+        ] = go(
+          $$getBoxPoints()($el),
+          ({ original, transformed }) =>
+            mapL(
+              ({ top_left, top_right, bottom_right, bottom_left }) => [
+                top_left,
+                top_right,
+                bottom_right,
+                bottom_left,
+              ],
+              [original, transformed]
+            ),
+          mapL(
+            reduce(({ x: x1, y: y1 }, { x: x2, y: y2 }) => ({
+              x: x1 + x2,
+              y: y1 + y2,
+            }))
+          ),
+          mapL(({ x, y }) => ({ x: x / 4, y: y / 4 })),
+          mapL($$createSVGPoint())
+        );
+        const {
+          original: { x: receive_original_x, y: receive_original_y },
+          transformed: { x: receive_transformed_x, y: receive_transformed_y },
+        } = $$getCenterPoint()($el);
 
-    beforeEach(function () {
-      $svg = $$el()(`
-      <svg width="1000" height="1000" viewBox="0 0 2000 2000" preserveAspectRatio="xMinYMin meet"></svg> 
-    `);
-      $el = $$el()(`
-      <rect
-        x="${makeRandomInt(-1000, 1000)}"
-        y="${makeRandomInt(-1000, 1000)}"
-        width="${makeRandomInt(10, 1000)}"
-        height="${makeRandomInt(10, 1000)}"
-      >
-      </rect> 
-    `);
+        expect(receive_original_x, "invalid_original_x").equal(
+          expect_original_x
+        );
+        expect(receive_original_y, "invalid_original_y").equal(
+          expect_original_y
+        );
+        expect(receive_transformed_x, "invalid_transformed_x").equal(
+          expect_transformed_x
+        );
+        expect(receive_transformed_y, "invalid_transformed_y").equal(
+          expect_transformed_y
+        );
 
-      document.body.appendChild($svg);
-      $svg.appendChild($el);
-    });
-
-    afterEach(function () {
-      $svg.removeChild($el);
-      document.body.removeChild($svg);
-    });
-
-    it(`The original point is a center of points from $$getBoxPoints().original.`, function () {
-      const {
-        original: {
-          top_left: { x: x1, y: y1 },
-          top_right: { x: x2, y: y2 },
-          bottom_right: { x: x3, y: y3 },
-          bottom_left: { x: x4, y: y4 },
-        },
-      } = $$getBoxPoints()($el);
-      const { original } = $$getCenterPoint()($el);
-
-      expect(original.x * 4).to.equal(x1 + x2 + x3 + x4);
-      expect(original.y * 4).to.equal(y1 + y2 + y3 + y4);
-    });
-
-    it(`The transformed point is a center of points from $$getBoxPoints().transformed.`, function () {
-      const {
-        transformed: {
-          top_left: { x: x1, y: y1 },
-          top_right: { x: x2, y: y2 },
-          bottom_right: { x: x3, y: y3 },
-          bottom_left: { x: x4, y: y4 },
-        },
-      } = $$getBoxPoints()($el);
-      const { transformed } = $$getCenterPoint()($el);
-
-      expect(transformed.x * 4).to.equal(x1 + x2 + x3 + x4);
-      expect(transformed.y * 4).to.equal(y1 + y2 + y3 + y4);
+        clearMock({ $svg });
+      }
     });
   }),
 ];
