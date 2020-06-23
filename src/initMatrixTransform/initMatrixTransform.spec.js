@@ -20,7 +20,7 @@ const setupMockEl = ({ transform } = {}) => {
 
 export default ({ describe, it }) => [
   describe(`$$initMatrixTransform`, function () {
-    it(`The length of the SVG transform list is increased by 1. `, function () {
+    it(`The length of the SVG transform list is increased by 1.`, function () {
       const fs = mapL(($svg) => $$initMatrixTransform($svg), [
         undefined,
         document.createElementNS("http://www.w3.org/2000/svg", "svg"),
