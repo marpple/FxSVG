@@ -14,40 +14,10 @@ import {
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { $$els } from "./els.index.js";
 
-const setupMock = ({ length = makeRandomInt(1) } = {}) =>
-  go(
-    rangeL(length),
-    mapL(() => makeRandomInt(0, 3)),
-    map((flag) => {
-      if (equals2(flag, 1)) {
-      }
-
-      if (equals2(flag, 2)) {
-      }
-
-      const name = "rect";
-      const [x, y] = go(
-        rangeL(2),
-        mapL(() => makeRandomInt(-100, 100)),
-        mapL((n) => `${n}`)
-      );
-      const [width, height] = go(
-        rangeL(2),
-        mapL(() => makeRandomInt(1)),
-        mapL((n) => `${n}`)
-      );
-      return {
-        name,
-        attrs: { x, y, width, height },
-        str: `<${name} x="${x}" y="${y}" width="${width}" height="${height}"></${name}>`,
-      };
-    })
-  );
-
 export default ({ describe, it }) => [
   describe(`$$els`, function () {
     it(`The return value is a list of SVG elements using the input SVG string.`, function () {
-      this.slow(500);
+      this.slow(1000);
 
       const cases = go(
         [
@@ -55,7 +25,65 @@ export default ({ describe, it }) => [
           $$els(document.createElementNS("http://www.w3.org/2000/svg", "svg")),
         ],
         mapL((f) => {
-          const list = setupMock();
+          const list = go(
+            makeRandomInt(1),
+            rangeL,
+            mapL(() => makeRandomInt(0, 3)),
+            map((flag) => {
+              if (equals2(flag, 1)) {
+                const name = "circle";
+                const [cx, cy] = go(
+                  rangeL(2),
+                  mapL(() => makeRandomInt(-100, 100)),
+                  mapL((n) => `${n}`)
+                );
+                const r = `${makeRandomInt(1)}`;
+                const clazz = "circle dot";
+                return {
+                  name,
+                  attrs: { cx, cy, r, class: clazz },
+                  str: `<${name} cx="${cx}" cy="${cy}" r="${r}" class="${clazz}"></${name}>`,
+                };
+              }
+
+              if (equals2(flag, 2)) {
+                const name = "ellipse";
+                const [cx, cy] = go(
+                  rangeL(2),
+                  mapL(() => makeRandomInt(-100, 100)),
+                  mapL((n) => `${n}`)
+                );
+                const [rx, ry] = go(
+                  rangeL(2),
+                  mapL(() => makeRandomInt(1)),
+                  mapL((n) => `${n}`)
+                );
+                const style = "stroke: red;";
+                return {
+                  name,
+                  attrs: { cx, cy, rx, ry, style },
+                  str: `<${name} cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" style="${style}"></${name}>`,
+                };
+              }
+
+              const name = "rect";
+              const [x, y] = go(
+                rangeL(2),
+                mapL(() => makeRandomInt(-100, 100)),
+                mapL((n) => `${n}`)
+              );
+              const [width, height] = go(
+                rangeL(2),
+                mapL(() => makeRandomInt(1)),
+                mapL((n) => `${n}`)
+              );
+              return {
+                name,
+                attrs: { x, y, width, height },
+                str: `<${name} x="${x}" y="${y}" width="${width}" height="${height}"></${name}>`,
+              };
+            })
+          );
           const $list_el = go(
             list,
             mapL(({ str: s }) => s),
