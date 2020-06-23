@@ -36,7 +36,7 @@ const expectTransformWithTxTy = ({ transform, tx, ty }) => {
 };
 
 export default ({ describe, it }) => [
-  describe.only(`$$updateTranslateTransform`, function () {
+  describe(`$$updateTranslateTransform`, function () {
     it(`The tx, ty of the input transform is changed to input tx, ty.`, function () {
       const { transform } = setupMockTransform();
       const { tx, ty } = setupMockInputValues();
