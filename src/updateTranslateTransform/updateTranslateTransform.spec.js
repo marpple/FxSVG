@@ -1,16 +1,15 @@
 import { expect } from "chai";
-import { go, mapL, rangeL, tap } from "fxjs2";
+import { mapL, rangeL } from "fxjs2";
+import { expectTransformWithTranslateTxTy } from "../../test/assertions/index.js";
 import {
   makeRandomInt,
   makeRandomNumber,
   makeRandomSVGMatrix,
 } from "../../test/utils/index.js";
-import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
-import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 import { $$updateTranslateTransform } from "./updateTranslateTransform.index.js";
 
 const setupMockTransform = () => {
@@ -24,17 +23,6 @@ const setupMockInputValues = () => {
   return { tx, ty };
 };
 
-const expectTransformWithTxTy = ({ transform, tx, ty }) => {
-  const matrix = go(
-    $$createSVGTransform(),
-    tap((transform) => transform.setTranslate(tx, ty)),
-    ({ matrix }) => matrix
-  );
-
-  expect($$isTranslateSVGTransform(transform)).true;
-  expect(transform.matrix).deep.equal(matrix);
-};
-
 export default ({ describe, it }) => [
   describe(`$$updateTranslateTransform`, function () {
     it(`The tx, ty of the input transform is changed to input tx, ty.`, function () {
@@ -42,7 +30,7 @@ export default ({ describe, it }) => [
       const { tx, ty } = setupMockInputValues();
       $$updateTranslateTransform(transform, { tx, ty });
 
-      expectTransformWithTxTy({ transform, tx, ty });
+      expectTransformWithTranslateTxTy({ transform, tx, ty });
     });
 
     it(`The tx of the transform is same with before when there is no input tx.`, function () {
@@ -50,7 +38,7 @@ export default ({ describe, it }) => [
       const { ty } = setupMockInputValues();
       $$updateTranslateTransform(transform, { ty });
 
-      expectTransformWithTxTy({ transform, tx, ty });
+      expectTransformWithTranslateTxTy({ transform, tx, ty });
     });
 
     it(`The ty of the transform is same with before when there is no input ty.`, function () {
@@ -58,14 +46,14 @@ export default ({ describe, it }) => [
       const { tx } = setupMockInputValues();
       $$updateTranslateTransform(transform, { tx });
 
-      expectTransformWithTxTy({ transform, tx, ty });
+      expectTransformWithTranslateTxTy({ transform, tx, ty });
     });
 
     it(`The tx, ty of the transform is same with before when there is no input object.`, function () {
       const { transform, tx, ty } = setupMockTransform();
       $$updateTranslateTransform(transform);
 
-      expectTransformWithTxTy({ transform, tx, ty });
+      expectTransformWithTranslateTxTy({ transform, tx, ty });
     });
 
     describe(`If the transform is another type transform, the function will do nothing but return the input.`, function () {

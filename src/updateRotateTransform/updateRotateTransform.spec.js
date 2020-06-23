@@ -1,16 +1,15 @@
 import { expect } from "chai";
-import { go, mapL, rangeL, tap } from "fxjs2";
+import { mapL, rangeL } from "fxjs2";
+import { expectTransformWithRotateAngleCxCy } from "../../test/assertions/index.js";
 import {
   makeRandomInt,
   makeRandomNumber,
   makeRandomSVGMatrix,
 } from "../../test/utils/index.js";
-import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
-import { $$isRotateSVGTransform } from "../isRotateSVGTransform/isRotateSVGTransform.index.js";
 import { $$updateRotateTransform } from "./updateRotateTransform.index.js";
 
 const setupMockTransform = () => {
@@ -34,18 +33,6 @@ const setupMockInputValues = () => ({
   cy: makeRandomInt(-100, 100),
 });
 
-const expectTransformWithAngleCxCy = ({ transform, angle, cx, cy }) => {
-  const matrix = go(
-    $$createSVGTransform(),
-    tap((transform) => transform.setRotate(angle, cx, cy)),
-    ({ matrix }) => matrix
-  );
-
-  expect($$isRotateSVGTransform(transform)).to.be.true;
-  expect(transform.angle).to.equal(angle);
-  expect(transform.matrix).to.deep.equal(matrix);
-};
-
 export default ({ describe, it }) => [
   describe(`$$updateRotateTransform`, function () {
     it(`The angle, cx, cy of the input transform is changed to input angle, cx, cy.`, function () {
@@ -53,7 +40,7 @@ export default ({ describe, it }) => [
       const { angle, cx, cy } = setupMockInputValues();
       $$updateRotateTransform(transform, { angle, cx, cy });
 
-      expectTransformWithAngleCxCy({ transform, angle, cx, cy });
+      expectTransformWithRotateAngleCxCy({ transform, angle, cx, cy });
     });
 
     it(`The angle of the transform is same with before when there is no input angle.`, function () {
@@ -61,7 +48,7 @@ export default ({ describe, it }) => [
       const { cx, cy } = setupMockInputValues();
       $$updateRotateTransform(transform, { cx, cy });
 
-      expectTransformWithAngleCxCy({ transform, angle, cx, cy });
+      expectTransformWithRotateAngleCxCy({ transform, angle, cx, cy });
     });
 
     it(`The cx, cy of the transform is 0 when there is no input cx, cy.`, function () {
@@ -69,7 +56,7 @@ export default ({ describe, it }) => [
       const { angle } = setupMockInputValues();
       $$updateRotateTransform(transform, { angle });
 
-      expectTransformWithAngleCxCy({ transform, angle, cx: 0, cy: 0 });
+      expectTransformWithRotateAngleCxCy({ transform, angle, cx: 0, cy: 0 });
     });
 
     it(`The angle of the transform is same with before and the cx, cy of the transform is 0
@@ -77,7 +64,7 @@ export default ({ describe, it }) => [
       const { transform, angle } = setupMockTransform();
       $$updateRotateTransform(transform);
 
-      expectTransformWithAngleCxCy({ transform, angle, cx: 0, cy: 0 });
+      expectTransformWithRotateAngleCxCy({ transform, angle, cx: 0, cy: 0 });
     });
 
     describe(`If the transform is another type transform, the function will do nothing but return the input.`, function () {
