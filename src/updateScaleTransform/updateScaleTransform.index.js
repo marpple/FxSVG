@@ -1,3 +1,4 @@
+import { defaultTo } from "fxjs2";
 import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
 
 export const $$updateScaleTransform = (
@@ -9,5 +10,29 @@ export const $$updateScaleTransform = (
   }
 
   transform.setScale(sx, sy);
+  return transform;
+};
+
+export const $$updateScaleTransform2 = ({ sx, sy } = {}) => (transform) => {
+  if (!$$isScaleSVGTransform(transform)) {
+    return transform;
+  }
+
+  transform.setScale(
+    defaultTo(transform.matrix.a, sx),
+    defaultTo(transform.matrix.d, sy)
+  );
+  return transform;
+};
+
+export const $$updateScaleTransform3 = ({ sx, sy } = {}, transform) => {
+  if (!$$isScaleSVGTransform(transform)) {
+    return transform;
+  }
+
+  transform.setScale(
+    defaultTo(transform.matrix.a, sx),
+    defaultTo(transform.matrix.d, sy)
+  );
   return transform;
 };
