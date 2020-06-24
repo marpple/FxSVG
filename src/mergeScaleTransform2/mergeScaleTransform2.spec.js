@@ -339,6 +339,46 @@ export default ({ describe, it }) => [
       }
     });
 
+    it(`The x of the element is same when the direction is one of ["n", "s"]`, function () {
+      const cases = go(
+        ["n", "s"],
+        flatMapL((direction) =>
+          mapL((is_need_correction) => ({ is_need_correction, direction }), [
+            true,
+            false,
+          ])
+        ),
+        flatMapL((o) =>
+          mapL((transform) => extend(o, { transform }), [
+            null,
+            makeRandomTransformAttributeValue(1),
+          ])
+        )
+      );
+
+      for (const { direction, is_need_correction, transform } of cases) {
+        const { $el, index, x: before_x } = makeMockRectInitiatedScaleTransform(
+          {
+            transform,
+          }
+        );
+
+        $$mergeScaleTransform2($el, {
+          index,
+          direction,
+          is_need_correction,
+          x_name: "x",
+          y_name: "y",
+          width_name: "width",
+          height_name: "height",
+        });
+
+        const after_x = parseFloat($el.getAttributeNS(null, "x"));
+
+        expect(after_x).equal(before_x);
+      }
+    });
+
     describe(`The input values are valid for the function. (Use $$initScaleTransform)`, function () {
       it(`The three target "SVGTransform"s will be removed from the SVGTransformList.`, function () {
         each((direction) => {
