@@ -3,6 +3,7 @@ import {
   appendL,
   difference,
   each,
+  extend,
   flatMapL,
   go,
   go1,
@@ -28,7 +29,148 @@ import { $$mergeScaleTransform2 } from "./mergeScaleTransform2.index.js";
 const DIRECTIONS = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
 
 export default ({ describe, it }) => [
-  describe(`$$mergeScaleTransform2`, function () {
+  describe.only(`$$mergeScaleTransform2`, function () {
+    it(`The function do nothing but return the input element
+        when the input values failed to pass "$$isValidFxScaleSVGTransformList".`, function () {
+      // TODO x, y, width, height 값들이 before / after 같은 지 확인 필요
+      this.slow(1500);
+
+      const cases = go(
+        makeInvalidIsValidFxSVGTransformListCases(),
+        flatMapL((o) =>
+          mapL((is_need_correction) => extend({ is_need_correction }, o), [
+            true,
+            false,
+          ])
+        ),
+        flatMapL((o) =>
+          mapL((direction) => extend({ direction }, o), DIRECTIONS)
+        )
+      );
+      for (const {
+        description,
+        $el: $input,
+        index,
+        is_need_correction,
+        direction,
+      } of cases) {
+        const before_transform_list = deepCopyTransformList(
+          $$getBaseTransformList($input)
+        );
+
+        const $output = $$mergeScaleTransform2($input, {
+          index,
+          is_need_correction,
+          direction,
+          x_name: "x",
+          y_name: "y",
+          width_name: "width",
+          height_name: "height",
+        });
+
+        const after_transform_list = deepCopyTransformList(
+          $$getBaseTransformList($input)
+        );
+
+        expect($output, description).equal($input);
+        expect(after_transform_list, description).deep.equal(
+          before_transform_list
+        );
+      }
+    });
+
+    it(`The function do nothing but return the input element
+        when the input direction is not in ["n", "ne", "e", "se", "s", "sw", "w", "nw"].`, function () {
+      const cases = go1(
+        [
+          { description: `the direction is null.`, direction: null },
+          { description: `the direction is undefined.`, direction: undefined },
+          {
+            description: `the direction is other string.`,
+            direction: go(
+              rangeL(2),
+              mapL(() =>
+                go(
+                  rangeL(Infinity),
+                  mapL(() => makeRandomInt(97, 123)),
+                  mapL((n) => String.fromCharCode(n)),
+                  rejectL((s) => new Set(DIRECTIONS).has(s)),
+                  head
+                )
+              ),
+              ([a, b]) => [a, makeRandomBool() ? b : null],
+              rejectL(isNil),
+              join("")
+            ),
+          },
+          {
+            description: `the direction is a number.`,
+            direction: makeRandomNumber(-100, 100),
+          },
+          {
+            description: `the direction is a boolean.`,
+            direction: makeRandomBool(),
+          },
+          {
+            description: `the direction is a symbol.`,
+            direction: Symbol(DIRECTIONS[makeRandomInt(0, 8)]),
+          },
+        ],
+        flatMapL(({ direction, description }) =>
+          mapL(
+            (is_need_correction) => ({
+              is_need_correction,
+              direction,
+              description,
+            }),
+            [true, false]
+          )
+        )
+      );
+
+      for (const { direction, description, is_need_correction } of cases) {
+        const {
+          $el: $input,
+          index,
+          x: before_x,
+          y: before_y,
+          width: before_width,
+          height: before_height,
+        } = makeMockRectInitiatedScaleTransform();
+        const before_transform_list = deepCopyTransformList(
+          $$getBaseTransformList($input)
+        );
+
+        const $output = $$mergeScaleTransform2($input, {
+          index,
+          direction,
+          x_name: "x",
+          y_name: "y",
+          width_name: "width",
+          height_name: "height",
+          is_need_correction,
+        });
+
+        const after_transform_list = deepCopyTransformList(
+          $$getBaseTransformList($input)
+        );
+        const [after_x, after_y, after_width, after_height] = go(
+          ["x", "y", "width", "height"],
+          mapL((k) => $output.getAttributeNS(null, k)),
+          mapL(parseFloat)
+        );
+
+        expect($output, description).equal($input);
+        expect(after_transform_list, description).deep.equal(
+          before_transform_list
+        );
+        expect(after_x, description).equal(before_x);
+        expect(after_y, description).equal(before_y);
+        expect(after_width, description).equal(before_width);
+        expect(after_height, description).equal(before_height);
+      }
+    });
+
     describe(`The input values are valid for the function. (Use $$initScaleTransform)`, function () {
       it(`The three target "SVGTransform"s will be removed from the SVGTransformList.`, function () {
         each((direction) => {
@@ -40,9 +182,7 @@ export default ({ describe, it }) => [
 
           $$mergeScaleTransform2($el, { index, direction });
 
-          const after_list = deepCopyTransformList(
-            $$getBaseTransformList($el)
-          );
+          const after_list = deepCopyTransformList($$getBaseTransformList($el));
           expect(
             go(
               rangeL(before_list.length),
@@ -239,101 +379,6 @@ export default ({ describe, it }) => [
             })
         )
       );
-    });
-
-    describe(`If the input values are invalid for the function, the function do nothing but return the input element.`, function () {
-      describe(`When the input direction is not in ["n", "ne", "e", "se", "s", "sw", "w", "nw"]...`, function () {
-        each(
-          ([title, direction]) =>
-            it(title, function () {
-              const {
-                $el,
-                index,
-                x: before_x,
-                y: before_y,
-                width: before_width,
-                height: before_height,
-              } = makeMockRectInitiatedScaleTransform();
-              const before_list = deepCopyTransformList(
-                $$getBaseTransformList($el)
-              );
-
-              $$mergeScaleTransform2($el, { index, direction });
-
-              const after_list = deepCopyTransformList(
-                $$getBaseTransformList($el)
-              );
-              const [after_x, after_y, after_width, after_height] = go(
-                ["x", "y", "width", "height"],
-                mapL((name) => $el.getAttributeNS(null, name)),
-                mapL(parseFloat)
-              );
-              expect(after_list).to.deep.equal(before_list);
-              expect(after_x).to.equal(before_x);
-              expect(after_y).to.equal(before_y);
-              expect(after_width).to.equal(before_width);
-              expect(after_height).to.equal(before_height);
-            }),
-          [
-            [`If the direction is null...`, null],
-            [`If the direction is undefined...`, undefined],
-            [
-              `If the direction is other string...`,
-              go(
-                rangeL(2),
-                mapL(() =>
-                  go(
-                    rangeL(Infinity),
-                    mapL(() => makeRandomInt(97, 123)),
-                    mapL((n) => String.fromCharCode(n)),
-                    rejectL((s) => new Set(DIRECTIONS).has(s)),
-                    head
-                  )
-                ),
-                ([a, b]) => [a, makeRandomBool() ? b : null],
-                rejectL(isNil),
-                join("")
-              ),
-            ],
-            [`If the direction is a number...`, makeRandomNumber(-100, 100)],
-            [`If the direction is a boolean...`, makeRandomBool()],
-            [
-              `If the direction is a symbol...`,
-              Symbol(DIRECTIONS[makeRandomInt(0, 8)]),
-            ],
-          ]
-        );
-      });
-
-      describe(`When the input element's SVGTransformList and the input index is not pass $$isValidFxScaleSVGTransformList...`, function () {
-        go(
-          DIRECTIONS,
-          flatMapL((direction) =>
-            mapL(
-              ({ description: title, $el, index }) => [
-                `If [[${title}] + [direction=${direction}]]...`,
-                $el,
-                index,
-                direction,
-              ],
-              makeInvalidIsValidFxSVGTransformListCases()
-            )
-          ),
-          each(([title, $el, index, direction]) =>
-            it(title, function () {
-              const before_list = deepCopyTransformList(
-                $$getBaseTransformList($el)
-              );
-              const result = $$mergeScaleTransform2($el, { index, direction });
-              const after_list = deepCopyTransformList(
-                $$getBaseTransformList($el)
-              );
-              expect(result).to.equal($el);
-              expect(after_list).to.deep.equal(before_list);
-            })
-          )
-        );
-      });
     });
   }),
 ];
