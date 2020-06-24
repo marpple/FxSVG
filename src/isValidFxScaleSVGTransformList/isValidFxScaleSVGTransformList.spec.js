@@ -2,6 +2,7 @@ import { expect } from "chai";
 import {
   concatL,
   equals2,
+  extend,
   flatMapL,
   go,
   go1,
@@ -33,24 +34,24 @@ export const makeInvalidIndexCases = () =>
     rangeL(2),
     mapL(() => makeRandomTransformAttributeValue(10)),
     mapL((transform) => makeMockRectInitiatedScaleTransform({ transform })),
-    mapL(({ $el }) => $el),
-    ([$el1, $el2]) => [
+    ([mock1, mock2]) => [
       go(
         makeRandomInt(),
         (n) => (n > 0 ? -n : n),
-        (index) => ({ description: `index <= 0`, $el: $el1, index })
+        (index) => extend(mock1, { description: `index <= 0`, index })
       ),
       go(
-        $el2,
+        mock2,
+        ({ $el }) => $el,
         $$getBaseTransformList,
         ({ numberOfItems: n }) => n,
         (n) => [n - 1, n + 1000],
         ([min, max]) => makeRandomInt(min, max),
-        (index) => ({
-          description: `index >= SVGTransformList.numberOfItems - 1`,
-          $el: $el2,
-          index,
-        })
+        (index) =>
+          extend(mock2, {
+            description: `index >= SVGTransformList.numberOfItems - 1`,
+            index,
+          })
       ),
     ]
   );
@@ -122,16 +123,13 @@ export const makeInvalidSVGTransformTypeCases = () => {
           transform_list.removeItem(index + index_delta);
           transform_list.insertItemBefore(transform, index + index_delta);
         }),
-        ({ $el, index }) => ({
-          name_expect,
-          name_receive,
-          index_delta,
-          $el,
-          index,
+        (mock) => ({
+          mock,
+          description: { name_expect, name_receive, index_delta },
         })
       )
     ),
-    mapL(({ name_expect, name_receive, index_delta, $el, index }) =>
+    mapL(({ mock, description: { name_expect, name_receive, index_delta } }) =>
       go(
         index_delta,
         (index_delta) => {
@@ -147,7 +145,7 @@ export const makeInvalidSVGTransformTypeCases = () => {
         },
         (name_index) =>
           `index : ${name_index}, expect : ${name_expect} receive : ${name_receive}`,
-        (description) => ({ description, $el, index })
+        (description) => extend(mock, { description })
       )
     )
   );
@@ -168,30 +166,39 @@ export const makeInvalidSVGMatrixValueCases = () => {
       )
     ),
     mapL(({ index_delta, key, expect_value }) => {
-      const { $el, index } = makeMockRectInitiatedScaleTransform();
+      const mock = makeMockRectInitiatedScaleTransform();
+      const { $el, index } = mock;
       const receive_value = makeRandomNumberExcept(-100, 100, [expect_value]);
       go1(
         $$getBaseTransformList($el).getItem(index + index_delta),
         ({ matrix }) => (matrix[key] = receive_value)
       );
-      return { index_delta, key, expect_value, receive_value, $el, index };
+      return {
+        mock,
+        description: { index_delta, key, expect_value, receive_value },
+      };
     }),
-    mapL(({ index_delta, key, expect_value, receive_value, $el, index }) =>
-      go(
-        index_delta,
-        (index_delta) =>
-          index_delta > 0 ? `i + ${index_delta}` : `i - ${-index_delta}`,
-        (name_index) =>
-          `eval : transforms[${name_index}]["matrix"]["${key}"], expect : ${expect_value}, receive : ${receive_value}`,
-        (description) => ({ description, $el, index })
-      )
+    mapL(
+      ({
+        mock,
+        description: { index_delta, key, expect_value, receive_value },
+      }) =>
+        go(
+          index_delta,
+          (index_delta) =>
+            index_delta > 0 ? `i + ${index_delta}` : `i - ${-index_delta}`,
+          (name_index) =>
+            `eval : transforms[${name_index}]["matrix"]["${key}"], expect : ${expect_value}, receive : ${receive_value}`,
+          (description) => extend(mock, { description })
+        )
     )
   );
   const iter2 = go(
     ["e", "f"],
     mapL((key) => ({ key, expect_value: 0 })),
     mapL(({ key, expect_value }) => {
-      const { $el, index } = makeMockRectInitiatedScaleTransform();
+      const mock = makeMockRectInitiatedScaleTransform();
+      const { $el, index } = mock;
       const receive_value = makeRandomNumberExcept(-100, 100, [0]);
       go(
         makeRandomBool() ? -1 : 1,
@@ -199,9 +206,9 @@ export const makeInvalidSVGMatrixValueCases = () => {
         (i) => $$getBaseTransformList($el).getItem(i),
         ({ matrix }) => (matrix[key] += receive_value)
       );
-      return { key, expect_value, receive_value, $el, index };
+      return { mock, description: { key, expect_value, receive_value } };
     }),
-    mapL(({ key, expect_value, receive_value, $el, index }) =>
+    mapL(({ mock, description: { key, expect_value, receive_value } }) =>
       go(
         [
           `eval : transforms[i - 1]["matrix"]["${key}"] + transforms[i + 1]["matrix"]["${key}"]`,
@@ -209,7 +216,7 @@ export const makeInvalidSVGMatrixValueCases = () => {
           `receive : ${receive_value}`,
         ],
         join(", "),
-        (description) => ({ description, $el, index })
+        (description) => extend(mock, { description })
       )
     )
   );

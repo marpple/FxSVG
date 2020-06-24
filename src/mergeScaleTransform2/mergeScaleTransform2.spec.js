@@ -32,7 +32,6 @@ export default ({ describe, it }) => [
   describe(`$$mergeScaleTransform2`, function () {
     it(`The function do nothing but return the input element
         when the input values failed to pass "$$isValidFxScaleSVGTransformList".`, function () {
-      // TODO x, y, width, height 값들이 before / after 같은 지 확인 필요
       this.slow(1500);
 
       const cases = go(
@@ -53,6 +52,10 @@ export default ({ describe, it }) => [
         index,
         is_need_correction,
         direction,
+        x: before_x,
+        y: before_y,
+        width: before_width,
+        height: before_height,
       } of cases) {
         const before_transform_list = deepCopyTransformList(
           $$getBaseTransformList($input)
@@ -68,6 +71,11 @@ export default ({ describe, it }) => [
           height_name: "height",
         });
 
+        const [after_x, after_y, after_width, after_height] = go(
+          ["x", "y", "width", "height"],
+          mapL((k) => $output.getAttributeNS(null, k)),
+          mapL(parseFloat)
+        );
         const after_transform_list = deepCopyTransformList(
           $$getBaseTransformList($input)
         );
@@ -76,6 +84,10 @@ export default ({ describe, it }) => [
         expect(after_transform_list, description).deep.equal(
           before_transform_list
         );
+        expect(after_x, description).equal(before_x);
+        expect(after_y, description).equal(before_y);
+        expect(after_width, description).equal(before_width);
+        expect(after_height, description).equal(before_height);
       }
     });
 
