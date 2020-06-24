@@ -8,3 +8,21 @@ export const $$updateMatrixTransform = (transform, { matrix } = {}) => {
   matrix && transform.setMatrix(matrix);
   return transform;
 };
+
+export const $$updateMatrixTransform2 = ({ matrix } = {}) => (transform) => {
+  if (!$$isMatrixSVGTransform(transform)) {
+    return transform;
+  }
+
+  matrix && transform.setMatrix(matrix);
+  return transform;
+};
+
+export const $$updateMatrixTransform3 = ({ matrix } = {}, transform) => {
+  if (!$$isMatrixSVGTransform(transform)) {
+    return transform;
+  }
+
+  matrix && transform.setMatrix(matrix);
+  return transform;
+};
