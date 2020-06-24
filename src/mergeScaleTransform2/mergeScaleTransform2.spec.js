@@ -21,7 +21,8 @@ import {
   deepCopyTransformList,
   makeRandomBool,
   makeRandomInt,
-  makeRandomNumber, makeRandomTransformAttributeValue,
+  makeRandomNumber,
+  makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
 import { makeMockRectInitiatedScaleTransform } from "../../test/utils/makeMockRectInitializedScaleTransform.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
@@ -285,6 +286,56 @@ export default ({ describe, it }) => [
             expect(after_transform).deep.equal(before_transform)
           )
         );
+      }
+    });
+
+    it(`The width, height of the element are scaled by absolute values of sx, sy.`, function () {
+      const cases = go(
+        DIRECTIONS,
+        flatMapL((direction) =>
+          mapL((is_need_correction) => ({ is_need_correction, direction }), [
+            true,
+            false,
+          ])
+        ),
+        flatMapL((o) =>
+          mapL((transform) => extend(o, { transform }), [
+            null,
+            makeRandomTransformAttributeValue(1),
+          ])
+        )
+      );
+
+      for (const { direction, is_need_correction, transform } of cases) {
+        const {
+          $el,
+          index,
+          width: before_width,
+          height: before_height,
+          sx,
+          sy,
+        } = makeMockRectInitiatedScaleTransform({
+          transform,
+        });
+
+        $$mergeScaleTransform2($el, {
+          index,
+          direction,
+          is_need_correction,
+          x_name: "x",
+          y_name: "y",
+          width_name: "width",
+          height_name: "height",
+        });
+
+        const [after_width, after_height] = go(
+          ["width", "height"],
+          mapL((k) => $el.getAttributeNS(null, k)),
+          mapL(parseFloat)
+        );
+
+        expect(after_width).equal(before_width * Math.abs(sx));
+        expect(after_height).equal(before_height * Math.abs(sy));
       }
     });
 
