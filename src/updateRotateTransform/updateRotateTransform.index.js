@@ -1,3 +1,4 @@
+import { defaultTo } from "fxjs2";
 import { $$isRotateSVGTransform } from "../isRotateSVGTransform/isRotateSVGTransform.index.js";
 
 export const $$updateRotateTransform = (
@@ -9,5 +10,28 @@ export const $$updateRotateTransform = (
   }
 
   transform.setRotate(angle, cx, cy);
+  return transform;
+};
+
+export const $$updateRotateTransform2 = ({ angle, cx = 0, cy = 0 } = {}) => (
+  transform
+) => {
+  if (!$$isRotateSVGTransform(transform)) {
+    return transform;
+  }
+
+  transform.setRotate(defaultTo(transform.angle, angle), cx, cy);
+  return transform;
+};
+
+export const $$updateRotateTransform3 = (
+  { angle, cx = 0, cy = 0 } = {},
+  transform
+) => {
+  if (!$$isRotateSVGTransform(transform)) {
+    return transform;
+  }
+
+  transform.setRotate(defaultTo(transform.angle, angle), cx, cy);
   return transform;
 };
