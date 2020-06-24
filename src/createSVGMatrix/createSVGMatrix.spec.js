@@ -13,11 +13,15 @@ import {
 } from "fxjs2";
 import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
-import { $$createSVGMatrix } from "./createSVGMatrix.index.js";
+import {
+  $$createSVGMatrix,
+  $$createSVGMatrix2,
+  $$createSVGMatrix3,
+} from "./createSVGMatrix.index.js";
 
 const makeCases = () =>
   flatMapL(
-    (f) =>
+    ($svg) =>
       go(
         ["a", "b", "c", "d", "e", "f"],
         makeAllCombinations,
@@ -29,15 +33,18 @@ const makeCases = () =>
             defaultTo({})
           )
         ),
-        mapL((values) => ({ values, matrix: f(values) })),
-        appendL({ matrix: f() })
+        flatMapL((values) =>
+          mapL((matrix) => ({ values, matrix }), [
+            $$createSVGMatrix($svg)(values),
+            $$createSVGMatrix2(values)($svg),
+            $$createSVGMatrix3(values, $svg),
+          ])
+        ),
+        appendL({ matrix: $$createSVGMatrix($svg)() }),
+        appendL({ matrix: $$createSVGMatrix2()($svg) }),
+        appendL({ matrix: $$createSVGMatrix3(undefined, $svg) })
       ),
-    [
-      $$createSVGMatrix(),
-      $$createSVGMatrix(
-        document.createElementNS("http://www.w3.org/2000/svg", "svg")
-      ),
-    ]
+    [undefined, document.createElementNS("http://www.w3.org/2000/svg", "svg")]
   );
 
 export default ({ describe, it }) => [

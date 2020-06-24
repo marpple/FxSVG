@@ -12,11 +12,15 @@ import {
 } from "fxjs2";
 import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
-import { $$createSVGTransformScale } from "./createSVGTransformScale.index.js";
+import {
+  $$createSVGTransformScale,
+  $$createSVGTransformScale2,
+  $$createSVGTransformScale3,
+} from "./createSVGTransformScale.index.js";
 
 const makeCases = () =>
   flatMapL(
-    (f) =>
+    ($svg) =>
       go(
         ["sx", "sy"],
         makeAllCombinations,
@@ -26,15 +30,18 @@ const makeCases = () =>
             object
           )
         ),
-        mapL((values) => ({ transform: f(values), values })),
-        appendL({ transform: f() })
+        flatMapL((values) =>
+          mapL((transform) => ({ values, transform }), [
+            $$createSVGTransformScale($svg)(values),
+            $$createSVGTransformScale2(values)($svg),
+            $$createSVGTransformScale3(values, $svg),
+          ])
+        ),
+        appendL({ transform: $$createSVGTransformScale($svg)() }),
+        appendL({ transform: $$createSVGTransformScale2()($svg) }),
+        appendL({ transform: $$createSVGTransformScale3(undefined, $svg) })
       ),
-    [
-      $$createSVGTransformScale(),
-      $$createSVGTransformScale(
-        document.createElementNS("http://www.w3.org/2000/svg", "svg")
-      ),
-    ]
+    [undefined, document.createElementNS("http://www.w3.org/2000/svg", "svg")]
   );
 
 export default ({ describe, it }) => [

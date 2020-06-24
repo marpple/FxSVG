@@ -9,3 +9,20 @@ export const $$createSVGTransformTranslate = ($svg = $$getSVG()) => ({
   transform.setTranslate(tx, ty);
   return transform;
 };
+
+export const $$createSVGTransformTranslate2 = ({ tx = 0, ty = 0 } = {}) => (
+  $svg = $$getSVG()
+) => {
+  const transform = $$createSVGTransform($svg);
+  transform.setTranslate(tx, ty);
+  return transform;
+};
+
+export const $$createSVGTransformTranslate3 = (
+  { tx = 0, ty = 0 } = {},
+  $svg = $$getSVG()
+) => {
+  const transform = $$createSVGTransform($svg);
+  transform.setTranslate(tx, ty);
+  return transform;
+};

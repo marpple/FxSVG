@@ -15,11 +15,15 @@ import {
   makeRandomNumber,
 } from "../../test/utils/index.js";
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
-import { $$createSVGTransformRotate } from "./createSVGTransformRotate.index.js";
+import {
+  $$createSVGTransformRotate,
+  $$createSVGTransformRotate2,
+  $$createSVGTransformRotate3,
+} from "./createSVGTransformRotate.index.js";
 
 const makeCases = () =>
   flatMapL(
-    (f) =>
+    ($svg) =>
       go(
         ["angle", "cx", "cy"],
         makeAllCombinations,
@@ -29,15 +33,18 @@ const makeCases = () =>
             object
           )
         ),
-        mapL((values) => ({ values, transform: f(values) })),
-        appendL({ transform: f() })
+        flatMapL((values) =>
+          mapL((transform) => ({ transform, values }), [
+            $$createSVGTransformRotate($svg)(values),
+            $$createSVGTransformRotate2(values)($svg),
+            $$createSVGTransformRotate3(values, $svg),
+          ])
+        ),
+        appendL({ transform: $$createSVGTransformRotate($svg)() }),
+        appendL({ transform: $$createSVGTransformRotate2()($svg) }),
+        appendL({ transform: $$createSVGTransformRotate3(undefined, $svg) })
       ),
-    [
-      $$createSVGTransformRotate(),
-      $$createSVGTransformRotate(
-        document.createElementNS("http://www.w3.org/2000/svg", "svg")
-      ),
-    ]
+    [undefined, document.createElementNS("http://www.w3.org/2000/svg", "svg")]
   );
 
 export default ({ describe, it }) => [

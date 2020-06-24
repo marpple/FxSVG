@@ -17,11 +17,15 @@ import {
   makeRandomSVGMatrix,
 } from "../../test/utils/index.js";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
-import { $$createSVGTransformMatrix } from "./createSVGTransformMatrix.index.js";
+import {
+  $$createSVGTransformMatrix,
+  $$createSVGTransformMatrix2,
+  $$createSVGTransformMatrix3,
+} from "./createSVGTransformMatrix.index.js";
 
 const makeCases = () =>
   flatMapL(
-    (f) =>
+    ($svg) =>
       go(
         ["matrix"],
         makeAllCombinations,
@@ -34,15 +38,18 @@ const makeCases = () =>
             object
           )
         ),
-        mapL((values) => ({ values, transform: f(values) })),
-        appendL({ transform: f() })
+        flatMapL((values) =>
+          mapL((transform) => ({ transform, values }), [
+            $$createSVGTransformMatrix($svg)(values),
+            $$createSVGTransformMatrix2(values)($svg),
+            $$createSVGTransformMatrix3(values, $svg),
+          ])
+        ),
+        appendL({ transform: $$createSVGTransformMatrix($svg)() }),
+        appendL({ transform: $$createSVGTransformMatrix2()($svg) }),
+        appendL({ transform: $$createSVGTransformMatrix3(undefined, $svg) })
       ),
-    [
-      $$createSVGTransformMatrix(),
-      $$createSVGTransformMatrix(
-        document.createElementNS("http://www.w3.org/2000/svg", "svg")
-      ),
-    ]
+    [undefined, document.createElementNS("http://www.w3.org/2000/svg", "svg")]
   );
 
 export default ({ describe, it }) => [

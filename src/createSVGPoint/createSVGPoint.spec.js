@@ -12,11 +12,15 @@ import {
   reduce,
 } from "fxjs2";
 import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
-import { $$createSVGPoint } from "./createSVGPoint.index.js";
+import {
+  $$createSVGPoint,
+  $$createSVGPoint2,
+  $$createSVGPoint3,
+} from "./createSVGPoint.index.js";
 
 const makeCases = () =>
   flatMapL(
-    (f) =>
+    ($svg) =>
       go(
         ["x", "y"],
         makeAllCombinations,
@@ -28,15 +32,18 @@ const makeCases = () =>
             defaultTo({})
           )
         ),
-        mapL((values) => ({ values, point: f(values) })),
-        appendL({ point: f() })
+        flatMapL((values) =>
+          mapL((point) => ({ values, point }), [
+            $$createSVGPoint($svg)(values),
+            $$createSVGPoint2(values)($svg),
+            $$createSVGPoint3(values, $svg),
+          ])
+        ),
+        appendL({ point: $$createSVGPoint($svg)() }),
+        appendL({ point: $$createSVGPoint2()($svg) }),
+        appendL({ point: $$createSVGPoint3(undefined, $svg) })
       ),
-    [
-      $$createSVGPoint(),
-      $$createSVGPoint(
-        document.createElementNS("http://www.w3.org/2000/svg", "svg")
-      ),
-    ]
+    [undefined, document.createElementNS("http://www.w3.org/2000/svg", "svg")]
   );
 
 export default ({ describe, it }) => [
