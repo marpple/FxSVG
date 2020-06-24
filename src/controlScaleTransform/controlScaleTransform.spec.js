@@ -269,5 +269,26 @@ export default ({ describe, it }) => [
         )
       );
     });
+
+    it(`The controller.end method scales the width, height of the element by sx, sy.`, function () {
+      const {
+        result: { $el, controller },
+        sx,
+        sy,
+        width: before_width,
+        height: before_height,
+      } = setupMock({ merge_type: 2 });
+
+      controller.end();
+
+      const [after_width, after_height] = go(
+        ["width", "height"],
+        mapL((k) => $el.getAttributeNS(null, k)),
+        mapL(parseFloat)
+      );
+
+      expect(after_width).equal(before_width * Math.abs(sx));
+      expect(after_height).equal(before_height * Math.abs(sy));
+    });
   }),
 ];
