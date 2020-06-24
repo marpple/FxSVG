@@ -1,8 +1,10 @@
 import { expect } from "chai";
 import {
+  appendL,
   defaultTo,
   each,
   equals2,
+  flatMapL,
   go,
   isNil,
   isUndefined,
@@ -39,6 +41,7 @@ const setupMock = ({
   sy: _sy,
   index: _index,
   merge_type: _merge_type,
+  is_need_correction: _is_need_correction,
   direction: _direction,
   transform: _transform,
 } = {}) => {
@@ -62,6 +65,7 @@ const setupMock = ({
     _index
   );
   const merge_type = defaultTo(makeRandomBool() ? 1 : 2, _merge_type);
+  const is_need_correction = defaultTo(makeRandomBool(), _is_need_correction);
   const direction = defaultTo(
     VALID_DIRECTION[makeRandomInt(0, VALID_DIRECTION.length)],
     _direction
@@ -84,6 +88,7 @@ const setupMock = ({
         sy,
         index,
         merge_type,
+        is_need_correction,
         x_name: "x",
         y_name: "y",
         width_name: "width",
@@ -112,6 +117,7 @@ const setupMock = ({
     sx,
     sy,
     index,
+    is_need_correction,
     merge_type,
     direction,
     transform,
@@ -121,7 +127,7 @@ const setupMock = ({
 };
 
 export default ({ describe, it }) => [
-  describe.only(`$$controlScaleTransform`, function () {
+  describe(`$$controlScaleTransform`, function () {
     it(`The return object has "$el", "controller", "transform" properties.`, function () {
       const { result } = setupMock();
 
@@ -270,7 +276,8 @@ export default ({ describe, it }) => [
       );
     });
 
-    it(`The controller.end method scales the width, height of the element by sx, sy.`, function () {
+    it(`The controller.end method scales the width, height of the element by sx, sy
+        when the merge_type is 2.`, function () {
       const {
         result: { $el, controller },
         sx,
@@ -289,6 +296,153 @@ export default ({ describe, it }) => [
 
       expect(after_width).equal(before_width * Math.abs(sx));
       expect(after_height).equal(before_height * Math.abs(sy));
+    });
+
+    it(`The controller.end method scales the x, y of the element by sx, sy, cx, cy
+        when the merge_type is 2.`, function () {
+      this.slow(3000);
+
+      // x not change when direction is one of ["n", "s"].
+      go(
+        ["n", "s"],
+        flatMapL((direction) =>
+          mapL((is_need_correction) => ({ direction, is_need_correction }), [
+            true,
+            false,
+          ])
+        ),
+        mapL(({ direction, is_need_correction }) =>
+          setupMock({ direction, is_need_correction, merge_type: 2 })
+        ),
+        each(({ result: { $el, controller }, x: before_x }) => {
+          controller.end();
+
+          const after_x = parseFloat($el.getAttributeNS(null, "x"));
+
+          expect(after_x).equal(before_x);
+        })
+      );
+
+      // y not change when direction is one of ["e", "w"].
+      go(
+        ["e", "w"],
+        flatMapL((direction) =>
+          mapL((is_need_correction) => ({ direction, is_need_correction }), [
+            true,
+            false,
+          ])
+        ),
+        mapL(({ direction, is_need_correction }) =>
+          setupMock({ direction, is_need_correction, merge_type: 2 })
+        ),
+        each(({ result: { $el, controller }, y: before_y }) => {
+          controller.end();
+
+          const after_y = parseFloat($el.getAttributeNS(null, "y"));
+
+          expect(after_y).equal(before_y);
+        })
+      );
+
+      // x is scaled by [(x - cx) * sx + cx]
+      // when the direction is one of ["ne", "e", "se", "sw", "w", "nw"]
+      // and [sx >= 0 || is_need_correction = false].
+      go(
+        ["ne", "e", "se", "sw", "w", "nw"],
+        flatMapL((direction) =>
+          go(
+            [true, false],
+            mapL((is_need_correction) => ({
+              is_need_correction,
+              direction,
+              sx: makeRandomNumber(),
+            })),
+            appendL({
+              is_need_correction: false,
+              direction,
+              sx: -makeRandomNumber(1),
+            })
+          )
+        ),
+        mapL(({ is_need_correction, direction, sx }) =>
+          setupMock({ direction, is_need_correction, sx, merge_type: 2 })
+        ),
+        each(({ result: { $el, controller }, x: before_x, cx, sx }) => {
+          controller.end();
+
+          const after_x = parseFloat($el.getAttributeNS(null, "x"));
+
+          expect(after_x).equal((before_x - cx) * sx + cx);
+        })
+      );
+
+      // y is scaled by [(y - cy) * sy + cy]
+      // when the direction is one of ["n", "ne", "se", "s", "sw", "nw"]
+      // and [sy >= 0 || is_need_correction = false].
+      go(
+        ["n", "ne", "se", "s", "sw", "nw"],
+        flatMapL((direction) =>
+          go(
+            [true, false],
+            mapL((is_need_correction) => ({
+              is_need_correction,
+              direction,
+              sy: makeRandomNumber(),
+            })),
+            appendL({
+              is_need_correction: false,
+              direction,
+              sy: -makeRandomNumber(1),
+            })
+          )
+        ),
+        mapL(({ is_need_correction, direction, sy }) =>
+          setupMock({ direction, is_need_correction, sy, merge_type: 2 })
+        ),
+        each(({ result: { $el, controller }, y: before_y, cy, sy }) => {
+          controller.end();
+
+          const after_y = parseFloat($el.getAttributeNS(null, "y"));
+
+          expect(after_y).equal((before_y - cy) * sy + cy);
+        })
+      );
+
+      // x is scaled by [((x - cx) * sx + cx) + (width * sx)]
+      // when the direction is one of ["ne", "e", "se", "sw", "w", "nw"]
+      // and [sx < 0 && is_need_correction = true].
+      go(
+        ["ne", "e", "se", "sw", "w", "nw"],
+        mapL((direction) => ({ direction, sx: -makeRandomNumber() })),
+        mapL(({ direction, sx }) =>
+          setupMock({ direction, sx, is_need_correction: true, merge_type: 2 })
+        ),
+        each(({ result: { $el, controller }, x: before_x, sx, cx, width }) => {
+          controller.end();
+
+          const after_x = parseFloat($el.getAttributeNS(null, "x"));
+
+          expect(after_x).equal((before_x - cx) * sx + cx + width * sx);
+        })
+      );
+
+      // y is scaled by [((y - cy) * sy + cy) + (height * sy)]
+      // when the direction is one of ["n", "ne", "se", "s", "sw", "nw"]
+      // and [sy < 0 && is_need_correction = true].
+      go(
+        ["n", "ne", "se", "s", "sw", "nw"],
+        mapL((direction) => ({ direction, sy: -makeRandomNumber() })),
+        mapL(({ direction, sy }) =>
+          setupMock({ direction, sy, is_need_correction: true, merge_type: 2 })
+        ),
+        each(({ result: { $el, controller }, y: before_y, sy, cy, height }) => {
+          controller.end();
+
+          const after_y = parseFloat($el.getAttributeNS(null, "y"));
+
+          expect(after_y).equal((before_y - cy) * sy + cy + height * sy);
+        })
+      );
     });
   }),
 ];
