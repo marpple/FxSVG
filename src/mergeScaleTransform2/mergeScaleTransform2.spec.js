@@ -1,7 +1,6 @@
 import { expect } from "chai";
 import {
   appendL,
-  difference,
   each,
   extend,
   flatMapL,
@@ -22,8 +21,8 @@ import {
   makeRandomInt,
   makeRandomNumber,
   makeRandomTransformAttributeValue,
+  makeMockRectInitiatedScaleTransform,
 } from "../../test/utils/index.js";
-import { makeMockRectInitiatedScaleTransform } from "../../test/utils/makeMockRectInitializedScaleTransform.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { makeInvalidCases as makeInvalidIsValidFxSVGTransformListCases } from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.spec.js";
 import { $$mergeScaleTransform2 } from "./mergeScaleTransform2.index.js";
@@ -58,7 +57,7 @@ const expectNotChange = (
 };
 
 export default ({ describe, it }) => [
-  describe.only(`$$mergeScaleTransform2`, function () {
+  describe(`$$mergeScaleTransform2`, function () {
     it(`The function do nothing but return the input element
         when the input values failed to pass "$$isValidFxScaleSVGTransformList".`, function () {
       this.slow(1500);
@@ -538,60 +537,88 @@ export default ({ describe, it }) => [
       }
     });
 
-    describe(`The input values are valid for the function. (Use $$initScaleTransform)`, function () {
-      go(
-        [
-          ["x", "cx", "sx", "width", ["n", "s"]],
-          ["y", "cy", "sy", "height", ["e", "w"]],
-        ],
-        mapL((config) => appendL(difference(config[4], DIRECTIONS), config)),
-        each(([xy_name, c_name, s_name, length_name, , change_directions]) =>
-          describe(`The element's ${xy_name} value is calculated by...`, function () {
-            describe(`When direction is one of ${JSON.stringify(
-              change_directions
-            )}...`, function () {
-              it(`
-                  The scaled ${xy_name} is [((${xy_name} - ${c_name}) * ${s_name} + ${c_name}) + ${length_name} * ${s_name}]
-                  if [${s_name} < 0 && is_need_correction = true].
-                `, function () {
-                each((direction) => {
-                  const [$el, index, before_xy, c, s, length] = go1(
-                    makeMockRectInitiatedScaleTransform({
-                      [s_name]: -makeRandomNumber(),
-                    }),
-                    (mock) =>
-                      mapL((k) => mock[k], [
-                        "$el",
-                        "index",
-                        xy_name,
-                        c_name,
-                        s_name,
-                        length_name,
-                      ])
-                  );
-
-                  $$mergeScaleTransform2($el, {
-                    index,
-                    direction,
-                    is_need_correction: true,
-                    x_name: "x",
-                    y_name: "y",
-                    width_name: "width",
-                    height_name: "height",
-                  });
-
-                  const after_xy = parseFloat(
-                    $el.getAttributeNS(null, xy_name)
-                  );
-                  expect(after_xy).to.equal(
-                    (before_xy - c) * s + c + length * s
-                  );
-                }, change_directions);
-              });
-            });
-          })
+    it(`The x of the element is scaled by [((x - cx) * sx + cx) + (width * sx)]
+        when the direction is one of ["ne", "e", "se", "sw", "w", "nw"]
+        and [sx < 0 && is_need_correction = true].`, function () {
+      const cases = go(
+        ["ne", "e", "se", "sw", "w", "nw"],
+        mapL((direction) => ({ direction, sx: -makeRandomNumber() })),
+        flatMapL((o) =>
+          mapL((transform) => extend(o, { transform }), [
+            null,
+            makeRandomTransformAttributeValue(1),
+          ])
         )
       );
+      for (const { direction, transform, sx: _sx } of cases) {
+        const {
+          $el,
+          index,
+          x: before_x,
+          cx,
+          sx,
+          width,
+        } = makeMockRectInitiatedScaleTransform({
+          transform,
+          sx: _sx,
+        });
+
+        $$mergeScaleTransform2($el, {
+          index,
+          direction,
+          is_need_correction: true,
+          x_name: "x",
+          y_name: "y",
+          width_name: "width",
+          height_name: "height",
+        });
+
+        const after_x = parseFloat($el.getAttributeNS(null, "x"));
+
+        expect(after_x).equal((before_x - cx) * sx + cx + width * sx);
+      }
+    });
+
+    it(`The y of the element is scaled by [((y - cy) * sy + cy) + (height * sy)]
+        when the direction is one of ["n", "ne", "se", "s", "sw", "nw"]
+        and [sy < 0 && is_need_correction = true].`, function () {
+      const cases = go(
+        ["n", "ne", "se", "s", "sw", "nw"],
+        mapL((direction) => ({ direction, sy: -makeRandomNumber() })),
+        flatMapL((o) =>
+          mapL((transform) => extend(o, { transform }), [
+            null,
+            makeRandomTransformAttributeValue(1),
+          ])
+        )
+      );
+      for (const { direction, transform, sy: _sy } of cases) {
+        const {
+          $el,
+          index,
+          y: before_y,
+          cy,
+          sy,
+          height,
+        } = makeMockRectInitiatedScaleTransform({
+          transform,
+          sy: _sy,
+        });
+
+        $$mergeScaleTransform2($el, {
+          index,
+          direction,
+          is_need_correction: true,
+          x_name: "x",
+          y_name: "y",
+          width_name: "width",
+          height_name: "height",
+        });
+
+        const after_y = parseFloat($el.getAttributeNS(null, "y"));
+
+        expect(after_y).equal((before_y - cy) * sy + cy + height * sy);
+      }
     });
   }),
 ];
