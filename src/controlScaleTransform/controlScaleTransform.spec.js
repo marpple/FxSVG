@@ -242,5 +242,32 @@ export default ({ describe, it }) => [
         )
       );
     });
+
+    it(`The controller.end method removes the transforms from index to index + 2 when the merge_type is 2.`, function () {
+      const {
+        result: { $el, controller },
+        index,
+      } = setupMock({ merge_type: 2 });
+      const before_transform_list = deepCopyTransformList(
+        $$getBaseTransformList($el)
+      );
+
+      controller.end();
+
+      const after_transform_list = deepCopyTransformList(
+        $$getBaseTransformList($el)
+      );
+
+      go(
+        before_transform_list,
+        zipWithIndexL,
+        rejectL(([i]) => i >= index && i <= index + 2),
+        mapL(([, transform]) => transform),
+        zipL(after_transform_list),
+        each(([receive_transform, expect_transform]) =>
+          expect(receive_transform).deep.equal(expect_transform)
+        )
+      );
+    });
   }),
 ];
