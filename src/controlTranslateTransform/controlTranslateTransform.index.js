@@ -1,6 +1,4 @@
 import { $$appendTranslateTransform } from "../appendTranslateTransform/appendTranslateTransform.index.js";
-import { $$consolidateTransformList } from "../consolidateTransformList/consolidateTransformList.index.js";
-import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 import { $$initTranslateTransform } from "../initTranslateTransform/initTranslateTransform.index.js";
 import { $$mergeTranslateTransform } from "../mergeTranslateTransform/mergeTranslateTransform.index.js";
@@ -25,7 +23,6 @@ export const $$controlTranslateTransform = ($svg = $$getSVG()) => (
     if (x_name && y_name) {
       $$mergeTranslateTransform($svg)($el, { index, x_name, y_name });
     }
-    $$consolidateTransformList($$getBaseTransformList($el));
     return $el;
   };
 
