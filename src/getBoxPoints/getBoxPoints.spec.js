@@ -1,166 +1,158 @@
 import { expect } from "chai";
-import { go, map } from "fxjs2";
+import { each, map, reduce } from "fxjs2";
+import { makeMockRect } from "../../test/utils/makeMockRect.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
+import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
 import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTransformAttributeValue.js";
-import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getBoxPoints } from "./getBoxPoints.index.js";
 
-export default ({ describe, it, beforeEach, afterEach }) => [
+const setupMock = ({ transform } = {}) => {
+  const x = makeRandomInt(-1000, 1000);
+  const y = makeRandomInt(-1000, 1000);
+  const width = makeRandomInt(1, 1000);
+  const height = makeRandomInt(1, 1000);
+
+  const $svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+
+  const $el = makeMockRect({
+    x: `${x}`,
+    y: `${y}`,
+    width: `${width}`,
+    height: `${height}`,
+    transform,
+  });
+
+  document.body.appendChild($svg);
+  $svg.appendChild($el);
+
+  return { x, y, width, height, $el, $svg };
+};
+
+const clearMock = ({ $svg }) => {
+  document.body.removeChild($svg);
+};
+
+export default ({ describe, it }) => [
   describe(`$$getBoxPoints`, function () {
-    let x;
-    let y;
-    let width;
-    let height;
-    let $svg;
-    let $el;
+    it(`The return "original" values are calculated from the initial input element position.`, function () {
+      const cases = [
+        setupMock(),
+        setupMock({
+          transform: makeRandomTransformAttributeValue(1, 100, () =>
+            makeRandomNumber(-700, 700)
+          ),
+        }),
+      ];
+      for (const { $el, $svg, x, y, width, height } of cases) {
+        const {
+          original: { top_left, top_right, bottom_right, bottom_left },
+        } = $$getBoxPoints()($el);
 
-    beforeEach(function () {
-      x = makeRandomInt(-1000, 1000);
-      y = makeRandomInt(-1000, 1000);
-      width = makeRandomInt(10, 1000);
-      height = makeRandomInt(10, 1000);
+        expect(top_left.x).to.equal(x);
+        expect(top_left.y).to.equal(y);
 
-      $svg = $$el()(`
-      <svg width="1000" height="1000" viewBox="0 0 2000 2000" preserveAspectRatio="xMinYMin meet"></svg> 
-    `);
-      $el = $$el()(`
-      <rect
-        x="${x}"
-        y="${y}"
-        width="${width}"
-        height="${height}"
-      >
-      </rect> 
-    `);
+        expect(top_right.x).to.equal(x + width);
+        expect(top_right.y).to.equal(y);
 
-      document.body.appendChild($svg);
-      $svg.appendChild($el);
+        expect(bottom_right.x).to.equal(x + width);
+        expect(bottom_right.y).to.equal(y + height);
+
+        expect(bottom_left.x).to.equal(x);
+        expect(bottom_left.y).to.equal(y + height);
+
+        clearMock({ $svg });
+      }
     });
 
-    afterEach(function () {
-      $svg.removeChild($el);
-      document.body.removeChild($svg);
+    it(`The return "transformed" values are calculated from the transformed input element's position.`, function () {
+      const cases = [
+        setupMock(),
+        setupMock({
+          transform: makeRandomTransformAttributeValue(1, 100, () =>
+            makeRandomNumber(-700, 700)
+          ),
+        }),
+      ];
+      for (const { $el, $svg } of cases) {
+        const transform_list = $$getBaseTransformList($el);
+
+        const {
+          original: { top_left, top_right, bottom_right, bottom_left },
+          transformed: {
+            top_left: { x: x1_1, y: y1_1 },
+            top_right: { x: x2_1, y: y2_1 },
+            bottom_right: { x: x3_1, y: y3_1 },
+            bottom_left: { x: x4_1, y: y4_1 },
+          },
+        } = $$getBoxPoints()($el);
+        const [
+          { x: x1_2, y: y1_2 },
+          { x: x2_2, y: y2_2 },
+          { x: x3_2, y: y3_2 },
+          { x: x4_2, y: y4_2 },
+        ] = reduce(
+          (points, { matrix }) =>
+            map((point) => point.matrixTransform(matrix), points),
+          [top_left, top_right, bottom_right, bottom_left],
+          transform_list
+        );
+
+        each(
+          ([expect_value, receive_value]) =>
+            expect(receive_value).equal(expect_value),
+          [
+            [x1_2, x1_1],
+            [y1_2, y1_1],
+            [x2_2, x2_1],
+            [y2_2, y2_1],
+            [x3_2, x3_1],
+            [y3_2, y3_1],
+            [x4_2, x4_1],
+            [y4_2, y4_1],
+          ]
+        );
+
+        clearMock({ $svg });
+      }
     });
 
-    it(`
-  The return value's original points are calculated from the initial attributes about the element's position.
-  `, function () {
-      const {
-        original: { top_left, top_right, bottom_right, bottom_left },
-      } = $$getBoxPoints()($el);
+    it(`The return "bounding" values are calculated
+        from the minimum and maximum values of the return "transformed" values.`, function () {
+      const cases = [
+        setupMock(),
+        setupMock({
+          transform: makeRandomTransformAttributeValue(1, 100, () =>
+            makeRandomNumber(-700, 700)
+          ),
+        }),
+      ];
+      for (const { $el, $svg } of cases) {
+        const {
+          transformed: {
+            top_left: { x: x1, y: y1 },
+            top_right: { x: x2, y: y2 },
+            bottom_right: { x: x3, y: y3 },
+            bottom_left: { x: x4, y: y4 },
+          },
+          bounding: {
+            min: { x: min_x_1, y: min_y_1 },
+            max: { x: max_x_1, y: max_y_1 },
+          },
+        } = $$getBoxPoints()($el);
 
-      expect(top_left.x).to.equal(x);
-      expect(top_left.y).to.equal(y);
+        const min_x_2 = Math.min(x1, x2, x3, x4);
+        const min_y_2 = Math.min(y1, y2, y3, y4);
+        const max_x_2 = Math.max(x1, x2, x3, x4);
+        const max_y_2 = Math.max(y1, y2, y3, y4);
 
-      expect(top_right.x).to.equal(x + width);
-      expect(top_right.y).to.equal(y);
+        expect(min_x_1).equal(min_x_2);
+        expect(min_y_1).equal(min_y_2);
+        expect(max_x_1).equal(max_x_2);
+        expect(max_y_1).equal(max_y_2);
 
-      expect(bottom_right.x).to.equal(x + width);
-      expect(bottom_right.y).to.equal(y + height);
-
-      expect(bottom_left.x).to.equal(x);
-      expect(bottom_left.y).to.equal(y + height);
-    });
-
-    it(`
-  If there is no transform, transformed points and original points will be same. 
-  `, function () {
-      $el.removeAttributeNS(null, "transform");
-
-      const { original, transformed } = $$getBoxPoints()($el);
-
-      expect(transformed).to.deep.equal(original);
-    });
-
-    it(`
-  If there are transforms,
-  transformed points are same with the points that applied by the transforms.
-  `, function () {
-      $el.setAttributeNS(
-        null,
-        "transform",
-        makeRandomTransformAttributeValue(1)
-      );
-
-      const { matrix } = $$getBaseTransformList($el).consolidate();
-      const { original, transformed } = $$getBoxPoints()($el);
-
-      expect(transformed.top_left).to.deep.equal(
-        original.top_left.matrixTransform(matrix)
-      );
-      expect(transformed.top_right).to.deep.equal(
-        original.top_right.matrixTransform(matrix)
-      );
-      expect(transformed.bottom_right).to.deep.equal(
-        original.bottom_right.matrixTransform(matrix)
-      );
-      expect(transformed.bottom_left).to.deep.equal(
-        original.bottom_left.matrixTransform(matrix)
-      );
-    });
-
-    describe(`
-  The bounding points are same with the points whose x, y are minimum and maximum of transformed points.
-  
-  bounding.min = (min(transformed.xs), min(transformed.ys))
-  bounding.max = (max(transformed.xs), max(transformed.ys))
-  `, function () {
-      it(`The element have no transforms.`, function () {
-        $el.removeAttributeNS(null, "transform");
-
-        const { transformed, bounding } = $$getBoxPoints()($el);
-        const transformed_list = [
-          transformed.top_left,
-          transformed.top_right,
-          transformed.bottom_right,
-          transformed.bottom_left,
-        ];
-        const [min_x, max_x] = go(
-          transformed_list,
-          map(({ x }) => x),
-          (xs) => [Math.min(...xs), Math.max(...xs)]
-        );
-        const [min_y, max_y] = go(
-          transformed_list,
-          map(({ y }) => y),
-          (ys) => [Math.min(...ys), Math.max(...ys)]
-        );
-        expect(bounding.min.x).to.equal(min_x);
-        expect(bounding.min.y).to.equal(min_y);
-        expect(bounding.max.x).to.equal(max_x);
-        expect(bounding.max.y).to.equal(max_y);
-      });
-
-      it(`The element have transforms.`, function () {
-        $el.setAttributeNS(
-          null,
-          "transform",
-          makeRandomTransformAttributeValue(1, 10, () => makeRandomInt(-10, 10))
-        );
-
-        const { transformed, bounding } = $$getBoxPoints()($el);
-        const transformed_list = [
-          transformed.top_left,
-          transformed.top_right,
-          transformed.bottom_right,
-          transformed.bottom_left,
-        ];
-        const [min_x, max_x] = go(
-          transformed_list,
-          map(({ x }) => x),
-          (xs) => [Math.min(...xs), Math.max(...xs)]
-        );
-        const [min_y, max_y] = go(
-          transformed_list,
-          map(({ y }) => y),
-          (ys) => [Math.min(...ys), Math.max(...ys)]
-        );
-        expect(bounding.min.x).to.equal(min_x);
-        expect(bounding.min.y).to.equal(min_y);
-        expect(bounding.max.x).to.equal(max_x);
-        expect(bounding.max.y).to.equal(max_y);
-      });
+        clearMock({ $svg });
+      }
     });
   }),
 ];

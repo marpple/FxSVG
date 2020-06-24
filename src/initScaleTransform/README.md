@@ -16,7 +16,7 @@ scale 중심 `cx`, `cy` 를 설정할 수 있습니다. 설정하지 않는 경�
 초기 scale 정도 `sx`, `sy` 를 설정할 수 있습니다. 설정하지 않는 경우 모두 `1` 으로 초기화됩니다.
 `SVGTransform` 을 추가할 `index` 를 설정할 수 있습니다. 설정하지 않는 경우 `0` 으로 초기화됩니다.
 
-[`<svg></svg>` 커링](../../doc/SVG_CURRYING.md)이 적용된 함수입니다.
+[SVG 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
 
 ```javascript
 const $el = $$el()(`

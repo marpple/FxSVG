@@ -1,29 +1,31 @@
 import { expect } from "chai";
 import {
+  appendL,
   defaultTo,
   each,
   equals2,
   flatMapL,
   go,
-  go1,
   isNil,
   isUndefined,
-  map,
   mapL,
   object,
   rangeL,
   reduce,
   rejectL,
-  tap,
+  zipL,
+  zipWithIndexL,
 } from "fxjs2";
+import { deepCopyTransformList } from "../../test/utils/deepCopyTransformList.js";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
 import { makeRandomBool } from "../../test/utils/makeRandomBool.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
 import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTransformAttributeValue.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
+import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
+import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
-import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
 import { $$controlScaleTransform } from "./controlScaleTransform.index.js";
 
 const VALID_DIRECTION = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
@@ -39,6 +41,7 @@ const setupMock = ({
   sy: _sy,
   index: _index,
   merge_type: _merge_type,
+  is_need_correction: _is_need_correction,
   direction: _direction,
   transform: _transform,
 } = {}) => {
@@ -62,6 +65,7 @@ const setupMock = ({
     _index
   );
   const merge_type = defaultTo(makeRandomBool() ? 1 : 2, _merge_type);
+  const is_need_correction = defaultTo(makeRandomBool(), _is_need_correction);
   const direction = defaultTo(
     VALID_DIRECTION[makeRandomInt(0, VALID_DIRECTION.length)],
     _direction
@@ -84,6 +88,7 @@ const setupMock = ({
         sy,
         index,
         merge_type,
+        is_need_correction,
         x_name: "x",
         y_name: "y",
         width_name: "width",
@@ -112,6 +117,7 @@ const setupMock = ({
     sx,
     sy,
     index,
+    is_need_correction,
     merge_type,
     direction,
     transform,
@@ -122,7 +128,7 @@ const setupMock = ({
 
 export default ({ describe, it }) => [
   describe(`$$controlScaleTransform`, function () {
-    it(`The return object has $el, controller, transform properties.`, function () {
+    it(`The return object has "$el", "controller", "transform" properties.`, function () {
       const { result } = setupMock();
 
       const keys = new Set(Object.keys(result));
@@ -135,16 +141,16 @@ export default ({ describe, it }) => [
       ]);
     });
 
-    it(`The return $el is same with the input $el.`, function () {
+    it(`The return element is same with the input element.`, function () {
       const {
-        result: { $el: $el1 },
-        $el: $el2,
+        result: { $el: $receive },
+        $el: $expect,
       } = setupMock();
 
-      expect($el1).to.equal($el2);
+      expect($receive).to.equal($expect);
     });
 
-    it(`The return controller object has update, end methods.`, function () {
+    it(`The return controller object has "update", "end" methods.`, function () {
       const {
         result: { controller },
       } = setupMock();
@@ -161,235 +167,280 @@ export default ({ describe, it }) => [
       );
     });
 
-    it(`The return transform object is a scale transform whose angle is the input sx, sy.`, function () {
+    it(`The return transform object is a scale transform whose sx, sy are the input sx, sy.`, function () {
       const {
-        result: { transform },
+        result: { transform: receive_transform },
         sx,
         sy,
       } = setupMock();
 
-      expect($$isScaleSVGTransform(transform)).to.be.true;
-      expect(transform.matrix.a).to.equal(sx);
-      expect(transform.matrix.d).to.equal(sy);
+      const expect_transform = $$createSVGTransformScale()({ sx, sy });
+
+      expect(receive_transform).deep.equal(expect_transform);
     });
 
-    it(`The return transform object is the SVGTransform at [index + 1] in SVGTransformList of $el.`, function () {
+    it(`The return transform object is the transform at the input index + 1.`, function () {
       const {
-        result: { transform: t1 },
+        result: { transform: receive_transform },
         $el,
         index,
       } = setupMock();
-      const t2 = $$getBaseTransformList($el).getItem(index + 1);
+      const expect_transform = $$getBaseTransformList($el).getItem(index + 1);
 
-      expect(t2).to.deep.equal(t1);
+      expect(receive_transform).to.deep.equal(expect_transform);
     });
 
     it(`The controller.update method update the return transform with the input sx, sy.`, function () {
       const {
-        result: { $el, transform: t1, controller },
-        index,
+        result: { transform: receive_transform, controller },
       } = setupMock();
-      const t2 = $$getBaseTransformList($el).getItem(index + 1);
 
       const [sx, sy] = mapL(() => makeRandomInt(-100, 100), rangeL(2));
       controller.update({ sx, sy });
 
-      expect(t1.matrix.a).to.equal(sx);
-      expect(t1.matrix.d).to.equal(sy);
-      expect(t1).to.deep.equal(t2);
+      const expect_transform = $$createSVGTransformScale()({ sx, sy });
+
+      expect(receive_transform).deep.equal(expect_transform);
     });
 
-    it(`The controller.end method merge the all transforms of the element.`, function () {
-      this.slow(300);
+    it(`The controller.end method merge the transforms from index to index + 2
+        to a matrix transform when the merge_type is 1.`, function () {
+      const {
+        result: { $el, controller },
+        index,
+        sx,
+        sy,
+        cx,
+        cy,
+      } = setupMock({ merge_type: 1 });
+      const before_transform_list = deepCopyTransformList(
+        $$getBaseTransformList($el)
+      );
+
+      controller.end();
+
+      const after_transform_list = deepCopyTransformList(
+        $$getBaseTransformList($el)
+      );
 
       go(
-        [null, makeRandomTransformAttributeValue(1)],
-        flatMapL((transform) =>
-          mapL((merge_type) => ({ transform, merge_type }), [1, 2])
-        ),
-        flatMapL((config) =>
-          mapL((direction) => ({ ...config, direction }), VALID_DIRECTION)
-        ),
-        mapL((config) => [
-          config,
-          !config.transform && equals2(config.merge_type, 2) ? 0 : 1,
-        ]),
-        each(([{ transform, merge_type, direction }, expect_n]) => {
-          const {
-            index,
-            result: { $el, controller },
-          } = setupMock({
-            transform,
-            merge_type,
-            direction,
-          });
-
-          const compressed_m = go(
-            $el.cloneNode(true),
-            $$getBaseTransformList,
-            tap((tl) => tl.clear()),
-            tap((tl) =>
-              go(
-                $el,
-                $$getBaseTransformList,
-                ({ numberOfItems: n }) => n,
-                rangeL,
-                mapL((i) => {
-                  if (i < index || i > index + 2) {
-                    return $$getBaseTransformList($el).getItem(i);
-                  }
-
-                  if (equals2(merge_type, 1) && equals2(i, index + 1)) {
-                    return go(
-                      rangeL(3),
-                      mapL((i) => index + i),
-                      mapL((i) => $$getBaseTransformList($el).getItem(i)),
-                      mapL(({ matrix: m }) => m),
-                      reduce((m1, m2) => m1.multiply(m2)),
-                      (matrix) => ({ matrix }),
-                      $$createSVGTransformMatrix()
-                    );
-                  }
-
-                  return null;
-                }),
-                rejectL(isNil),
-                each((t) => tl.appendItem(t))
-              )
+        [
+          $$createSVGTransformTranslate()({ tx: cx, ty: cy }),
+          $$createSVGTransformScale()({ sx, sy }),
+          $$createSVGTransformTranslate()({ tx: -cx, ty: -cy }),
+        ],
+        mapL(({ matrix }) => matrix),
+        reduce((m1, m2) => m1.multiply(m2)),
+        (matrix) => $$createSVGTransformMatrix()({ matrix }),
+        (merged_transform) =>
+          go(
+            before_transform_list,
+            zipWithIndexL,
+            rejectL(([i]) => i >= index + 1 && i <= index + 2),
+            mapL(([i, transform]) =>
+              equals2(i, index) ? merged_transform : transform
             ),
-            (tl) => tl.consolidate(),
-            (t) => t && t.matrix
-          );
-
-          controller.end();
-
-          expect($$getBaseTransformList($el).numberOfItems).to.equal(expect_n);
-          expect_n &&
-            expect($$getBaseTransformList($el).getItem(0).matrix).to.deep.equal(
-              compressed_m
-            );
-        })
+            mapL(({ type, matrix }) => ({ type, matrix }))
+          ),
+        zipL(after_transform_list),
+        each(([receive_transform, expect_transform]) =>
+          expect(receive_transform).deep.equal(expect_transform)
+        )
       );
     });
 
-    it(`Arbitrary use case test.`, function () {
-      this.slow(500);
+    it(`The controller.end method removes the transforms from index to index + 2 when the merge_type is 2.`, function () {
+      const {
+        result: { $el, controller },
+        index,
+      } = setupMock({ merge_type: 2 });
+      const before_transform_list = deepCopyTransformList(
+        $$getBaseTransformList($el)
+      );
+
+      controller.end();
+
+      const after_transform_list = deepCopyTransformList(
+        $$getBaseTransformList($el)
+      );
 
       go(
-        [null, makeRandomTransformAttributeValue(1)],
-        flatMapL((transform) =>
-          mapL((merge_type) => ({ transform, merge_type }), [1, 2])
+        before_transform_list,
+        zipWithIndexL,
+        rejectL(([i]) => i >= index && i <= index + 2),
+        mapL(([, transform]) => transform),
+        zipL(after_transform_list),
+        each(([receive_transform, expect_transform]) =>
+          expect(receive_transform).deep.equal(expect_transform)
+        )
+      );
+    });
+
+    it(`The controller.end method scales the width, height of the element by sx, sy
+        when the merge_type is 2.`, function () {
+      const {
+        result: { $el, controller },
+        sx,
+        sy,
+        width: before_width,
+        height: before_height,
+      } = setupMock({ merge_type: 2 });
+
+      controller.end();
+
+      const [after_width, after_height] = go(
+        ["width", "height"],
+        mapL((k) => $el.getAttributeNS(null, k)),
+        mapL(parseFloat)
+      );
+
+      expect(after_width).equal(before_width * Math.abs(sx));
+      expect(after_height).equal(before_height * Math.abs(sy));
+    });
+
+    it(`The controller.end method scales the x, y of the element by sx, sy, cx, cy
+        when the merge_type is 2.`, function () {
+      this.slow(3000);
+
+      // x not change when direction is one of ["n", "s"].
+      go(
+        ["n", "s"],
+        flatMapL((direction) =>
+          mapL((is_need_correction) => ({ direction, is_need_correction }), [
+            true,
+            false,
+          ])
         ),
-        flatMapL((config) =>
-          mapL((direction) => ({ ...config, direction }), VALID_DIRECTION)
+        mapL(({ direction, is_need_correction }) =>
+          setupMock({ direction, is_need_correction, merge_type: 2 })
         ),
-        mapL((config) => [
-          config,
-          !config.transform && equals2(config.merge_type, 2) ? 0 : 1,
-        ]),
-        each(([{ transform, merge_type, direction }, expect_n]) => {
-          const {
-            index,
-            cx,
-            cy,
-            x: x0,
-            y: y0,
-            width: width0,
-            height: height0,
-            result: { $el, controller },
-          } = setupMock({
-            transform,
-            merge_type,
-            direction,
-          });
-
-          const list = go(
-            makeRandomInt(),
-            rangeL,
-            map(() => ({
-              sx: makeRandomInt(-100, 100),
-              sy: makeRandomInt(-100, 100),
-            }))
-          );
-          each(({ sx, sy }) => controller.update({ sx, sy }), list);
-
-          const { sx, sy } = list[list.length - 1] || {};
-          const [x, y] = go(
-            [
-              [x0, sx, cx, width0, new Set(["ne", "e", "se", "sw", "w", "nw"])],
-              [
-                y0,
-                sy,
-                cy,
-                height0,
-                new Set(["n", "ne", "se", "s", "sw", "nw"]),
-              ],
-            ],
-            mapL(([v, s, c, l, conditions]) =>
-              conditions.has(direction)
-                ? go1((v - c) * s + c, (v) => (s < 0 ? v + l * s : v))
-                : v
-            ),
-            mapL((v) => `${v}`)
-          );
-          const [width, height] = go(
-            [
-              [width0, sx],
-              [height0, sy],
-            ],
-            mapL(([l, s]) => l * Math.abs(s)),
-            mapL((v) => `${v}`)
-          );
-          const compressed_m = go(
-            $el.cloneNode(true),
-            $$getBaseTransformList,
-            tap((tl) => tl.clear()),
-            tap((tl) =>
-              go(
-                $el,
-                $$getBaseTransformList,
-                ({ numberOfItems: n }) => n,
-                rangeL,
-                mapL((i) => {
-                  if (i < index || i > index + 2) {
-                    return $$getBaseTransformList($el).getItem(i);
-                  }
-
-                  if (equals2(merge_type, 1) && equals2(i, index + 1)) {
-                    return go(
-                      rangeL(3),
-                      mapL((i) => index + i),
-                      mapL((i) => $$getBaseTransformList($el).getItem(i)),
-                      mapL(({ matrix: m }) => m),
-                      reduce((m1, m2) => m1.multiply(m2)),
-                      (matrix) => ({ matrix }),
-                      $$createSVGTransformMatrix()
-                    );
-                  }
-
-                  return null;
-                }),
-                rejectL(isNil),
-                each((t) => tl.appendItem(t))
-              )
-            ),
-            (tl) => tl.consolidate(),
-            (t) => t && t.matrix
-          );
-
+        each(({ result: { $el, controller }, x: before_x }) => {
           controller.end();
 
-          if (merge_type === 2) {
-            expect($el.getAttributeNS(null, "x")).to.equal(x);
-            expect($el.getAttributeNS(null, "y")).to.equal(y);
-            expect($el.getAttributeNS(null, "width")).to.equal(width);
-            expect($el.getAttributeNS(null, "height")).to.equal(height);
-          }
-          expect($$getBaseTransformList($el).numberOfItems).to.equal(expect_n);
-          expect_n &&
-            expect($$getBaseTransformList($el).getItem(0).matrix).to.deep.equal(
-              compressed_m
-            );
+          const after_x = parseFloat($el.getAttributeNS(null, "x"));
+
+          expect(after_x).equal(before_x);
+        })
+      );
+
+      // y not change when direction is one of ["e", "w"].
+      go(
+        ["e", "w"],
+        flatMapL((direction) =>
+          mapL((is_need_correction) => ({ direction, is_need_correction }), [
+            true,
+            false,
+          ])
+        ),
+        mapL(({ direction, is_need_correction }) =>
+          setupMock({ direction, is_need_correction, merge_type: 2 })
+        ),
+        each(({ result: { $el, controller }, y: before_y }) => {
+          controller.end();
+
+          const after_y = parseFloat($el.getAttributeNS(null, "y"));
+
+          expect(after_y).equal(before_y);
+        })
+      );
+
+      // x is scaled by [(x - cx) * sx + cx]
+      // when the direction is one of ["ne", "e", "se", "sw", "w", "nw"]
+      // and [sx >= 0 || is_need_correction = false].
+      go(
+        ["ne", "e", "se", "sw", "w", "nw"],
+        flatMapL((direction) =>
+          go(
+            [true, false],
+            mapL((is_need_correction) => ({
+              is_need_correction,
+              direction,
+              sx: makeRandomNumber(),
+            })),
+            appendL({
+              is_need_correction: false,
+              direction,
+              sx: -makeRandomNumber(1),
+            })
+          )
+        ),
+        mapL(({ is_need_correction, direction, sx }) =>
+          setupMock({ direction, is_need_correction, sx, merge_type: 2 })
+        ),
+        each(({ result: { $el, controller }, x: before_x, cx, sx }) => {
+          controller.end();
+
+          const after_x = parseFloat($el.getAttributeNS(null, "x"));
+
+          expect(after_x).equal((before_x - cx) * sx + cx);
+        })
+      );
+
+      // y is scaled by [(y - cy) * sy + cy]
+      // when the direction is one of ["n", "ne", "se", "s", "sw", "nw"]
+      // and [sy >= 0 || is_need_correction = false].
+      go(
+        ["n", "ne", "se", "s", "sw", "nw"],
+        flatMapL((direction) =>
+          go(
+            [true, false],
+            mapL((is_need_correction) => ({
+              is_need_correction,
+              direction,
+              sy: makeRandomNumber(),
+            })),
+            appendL({
+              is_need_correction: false,
+              direction,
+              sy: -makeRandomNumber(1),
+            })
+          )
+        ),
+        mapL(({ is_need_correction, direction, sy }) =>
+          setupMock({ direction, is_need_correction, sy, merge_type: 2 })
+        ),
+        each(({ result: { $el, controller }, y: before_y, cy, sy }) => {
+          controller.end();
+
+          const after_y = parseFloat($el.getAttributeNS(null, "y"));
+
+          expect(after_y).equal((before_y - cy) * sy + cy);
+        })
+      );
+
+      // x is scaled by [((x - cx) * sx + cx) + (width * sx)]
+      // when the direction is one of ["ne", "e", "se", "sw", "w", "nw"]
+      // and [sx < 0 && is_need_correction = true].
+      go(
+        ["ne", "e", "se", "sw", "w", "nw"],
+        mapL((direction) => ({ direction, sx: -makeRandomNumber() })),
+        mapL(({ direction, sx }) =>
+          setupMock({ direction, sx, is_need_correction: true, merge_type: 2 })
+        ),
+        each(({ result: { $el, controller }, x: before_x, sx, cx, width }) => {
+          controller.end();
+
+          const after_x = parseFloat($el.getAttributeNS(null, "x"));
+
+          expect(after_x).equal((before_x - cx) * sx + cx + width * sx);
+        })
+      );
+
+      // y is scaled by [((y - cy) * sy + cy) + (height * sy)]
+      // when the direction is one of ["n", "ne", "se", "s", "sw", "nw"]
+      // and [sy < 0 && is_need_correction = true].
+      go(
+        ["n", "ne", "se", "s", "sw", "nw"],
+        mapL((direction) => ({ direction, sy: -makeRandomNumber() })),
+        mapL(({ direction, sy }) =>
+          setupMock({ direction, sy, is_need_correction: true, merge_type: 2 })
+        ),
+        each(({ result: { $el, controller }, y: before_y, sy, cy, height }) => {
+          controller.end();
+
+          const after_y = parseFloat($el.getAttributeNS(null, "y"));
+
+          expect(after_y).equal((before_y - cy) * sy + cy + height * sy);
         })
       );
     });

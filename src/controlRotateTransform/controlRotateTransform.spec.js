@@ -5,23 +5,20 @@ import {
   equals2,
   go,
   isUndefined,
-  map,
   mapL,
   rangeL,
-  reduce,
   rejectL,
+  zipL,
   zipWithIndexL,
 } from "fxjs2";
 import {
-  deepCopyTransformListToMatrixList,
+  deepCopyTransformList,
   makeMockRect,
-  makeRandomBool,
   makeRandomInt,
   makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
-import { $$isRotateSVGTransform } from "../isRotateSVGTransform/isRotateSVGTransform.index.js";
 import { $$controlRotateTransform } from "./controlRotateTransform.index.js";
 
 const setupMock = ({
@@ -45,29 +42,9 @@ const setupMock = ({
   return { angle, cx, cy, index, $el, result };
 };
 
-const compressSVGTransformListToMatrix = ({
-  transform_list,
-  index,
-  angle,
-  cx,
-  cy,
-}) =>
-  go(
-    transform_list,
-    deepCopyTransformListToMatrixList,
-    zipWithIndexL,
-    rejectL(([i]) => equals2(i, index) || equals2(i, index + 2)),
-    mapL(([i, m]) =>
-      equals2(i, index + 1)
-        ? $$createSVGTransformRotate()({ angle, cx, cy }).matrix
-        : m
-    ),
-    reduce((m1, m2) => m1.multiply(m2))
-  );
-
 export default ({ describe, it }) => [
   describe(`$$controlRotateTransform`, function () {
-    it(`The return object has $el, controller, transform properties.`, function () {
+    it(`The return object has "$el", "controller", "transform" properties.`, function () {
       const { result } = setupMock();
 
       const keys = new Set(Object.keys(result));
@@ -80,16 +57,16 @@ export default ({ describe, it }) => [
       ]);
     });
 
-    it(`The return $el is same with the input $el.`, function () {
+    it(`The return element is same with the input element.`, function () {
       const {
-        result: { $el: $el1 },
-        $el: $el2,
+        result: { $el: $receive },
+        $el: $expect,
       } = setupMock();
 
-      expect($el1).to.equal($el2);
+      expect($receive).to.equal($expect);
     });
 
-    it(`The return controller object has update, append, end methods.`, function () {
+    it(`The return controller object has "update", "append", "end" methods.`, function () {
       const {
         result: { controller },
       } = setupMock();
@@ -106,132 +83,101 @@ export default ({ describe, it }) => [
       );
     });
 
-    it(`The return transform object is a rotate transform whose angle is the input angle.`, function () {
+    it(`The return transform object is a rotate transform whose angle is the input angle and cx, cy are 0.`, function () {
       const {
-        result: { transform },
+        result: { transform: receive_transform },
         angle,
       } = setupMock();
 
-      expect($$isRotateSVGTransform(transform)).to.be.true;
-      expect(transform.angle).to.equal(angle);
+      const expect_transform = $$createSVGTransformRotate()({
+        angle,
+        cx: 0,
+        cy: 0,
+      });
+
+      expect(receive_transform).deep.equal(expect_transform);
     });
 
-    it(`The return transform object is the SVGTransform at [index + 1] in SVGTransformList of $el.`, function () {
+    it(`The return transform object is the transform at the input index + 1.`, function () {
       const {
-        result: { transform: t1 },
+        result: { transform: receive_transform },
         $el,
         index,
       } = setupMock();
-      const t2 = $$getBaseTransformList($el).getItem(index + 1);
+      const expect_transform = $$getBaseTransformList($el).getItem(index + 1);
 
-      expect(t2).to.deep.equal(t1);
+      expect(receive_transform).to.deep.equal(expect_transform);
     });
 
     it(`The controller.update method update the return transform with the input angle.`, function () {
       const {
-        result: { $el, transform: t1, controller },
-        index,
+        result: { transform: receive_transform, controller },
       } = setupMock();
-      const t2 = $$getBaseTransformList($el).getItem(index + 1);
 
       const angle = makeRandomInt(-700, 700);
       controller.update({ angle });
 
-      expect(t1.angle).to.equal(angle);
-      expect(t1).to.deep.equal(t2);
+      const expect_transform = $$createSVGTransformRotate()({
+        angle,
+        cx: 0,
+        cy: 0,
+      });
+
+      expect(receive_transform).deep.equal(expect_transform);
     });
 
     it(`The controller.append method add the input angle to the return transform.`, function () {
       const {
-        result: { $el, transform: t1, controller },
-        index,
+        result: { transform: receive_transform, controller },
         angle: angle1,
       } = setupMock();
-      const t2 = $$getBaseTransformList($el).getItem(index + 1);
 
       const angle2 = makeRandomInt(-700, 700);
       controller.append({ angle: angle2 });
 
-      expect(t1.angle).to.equal(angle1 + angle2);
-      expect(t1).to.deep.equal(t2);
+      const expect_transform = $$createSVGTransformRotate()({
+        angle: angle1 + angle2,
+        cx: 0,
+        cy: 0,
+      });
+
+      expect(receive_transform).deep.equal(expect_transform);
     });
 
-    it(`The controller.end method merge the all transforms of the element.`, function () {
-      each(
-        (transform) => {
-          const {
-            cx,
-            cy,
-            angle,
-            index,
-            result: { $el, controller },
-          } = setupMock({ transform });
-
-          const compressed_m = compressSVGTransformListToMatrix({
-            index,
-            angle,
-            cx,
-            cy,
-            transform_list: $$getBaseTransformList($el),
-          });
-
-          controller.end();
-
-          expect($$getBaseTransformList($el).numberOfItems).to.equal(1);
-          expect($$getBaseTransformList($el).getItem(0).matrix).to.deep.equal(
-            compressed_m
-          );
-        },
-        [null, makeRandomTransformAttributeValue(1)]
+    it(`The controller.end method merge the transforms from index to index + 2 to a rotate transform.`, function () {
+      const {
+        result: { $el, controller },
+        index,
+        angle,
+        cx,
+        cy,
+      } = setupMock();
+      const before_transform_list = deepCopyTransformList(
+        $$getBaseTransformList($el)
       );
-    });
 
-    it(`Arbitrary use case test.`, function () {
-      each(
-        (transform) => {
-          const {
-            cx,
-            cy,
-            angle: angle0,
-            index,
-            result: { $el, controller },
-          } = setupMock({ transform });
+      controller.end();
 
-          const list = go(
-            rangeL(makeRandomInt()),
-            mapL(makeRandomBool),
-            mapL((a) => (a ? "append" : "update")),
-            map((operation) => ({ operation, angle: makeRandomInt(-700, 700) }))
-          );
-          each(
-            ({ operation, angle }) => controller[operation]({ angle }),
-            list
-          );
+      const after_transform_list = deepCopyTransformList(
+        $$getBaseTransformList($el)
+      );
 
-          const { angle } = reduce(
-            ({ angle: angle1 }, { operation, angle: angle2 }) =>
-              operation === "update"
-                ? { angle: angle2 }
-                : { angle: angle1 + angle2 },
-            { angle: angle0 },
-            list
-          );
-          const compressed_m = compressSVGTransformListToMatrix({
-            index,
-            angle,
-            cx,
-            cy,
-            transform_list: $$getBaseTransformList($el),
-          });
-
-          controller.end();
-
-          expect($$getBaseTransformList($el).numberOfItems).to.equal(1);
-          expect($$getBaseTransformList($el).getItem(0).matrix).to.deep.equal(
-            compressed_m
-          );
-        },
-        [null, makeRandomTransformAttributeValue(1)]
+      go(
+        $$createSVGTransformRotate()({ angle, cx, cy }),
+        (rotate_transform) =>
+          go(
+            before_transform_list,
+            zipWithIndexL,
+            rejectL(([i]) => i >= index + 1 && i <= index + 2),
+            mapL(([i, transform]) =>
+              equals2(i, index) ? rotate_transform : transform
+            ),
+            mapL(({ type, matrix }) => ({ type, matrix }))
+          ),
+        zipL(after_transform_list),
+        each(([after_transform, before_transform]) =>
+          expect(after_transform).deep.equal(before_transform)
+        )
       );
     });
   }),

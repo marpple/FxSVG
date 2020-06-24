@@ -9,9 +9,9 @@ import {
   mapL,
   object,
   pipe,
-  reduce,
 } from "fxjs2";
 import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
+import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
 import { $$createSVGTransformScale } from "./createSVGTransformScale.index.js";
 
 const makeCases = () =>
@@ -23,13 +23,11 @@ const makeCases = () =>
         mapL(
           pipe(
             mapL((k) => [k, makeRandomInt()]),
-            mapL((kv) => object([kv])),
-            reduce(extend),
-            defaultTo({})
+            object
           )
         ),
-        mapL((values) => ({ t: f(values), values })),
-        appendL({ t: f() })
+        mapL((values) => ({ transform: f(values), values })),
+        appendL({ transform: f() })
       ),
     [
       $$createSVGTransformScale(),
@@ -41,31 +39,45 @@ const makeCases = () =>
 
 export default ({ describe, it }) => [
   describe(`$$createSVGTransformScale`, function () {
-    it(`The return value will be a SVGTransform.`, function () {
+    it(`The return value is a SVGTransform.`, function () {
       go(
         makeCases(),
-        mapL(({ t }) => t),
+        mapL(({ transform: t }) => t),
         each((t) => expect(t).to.instanceof(SVGTransform))
       );
     });
 
-    it(`The SVGTransform's type will be the SVGTransform.SVG_TRANSFORM_SCALE.`, function () {
+    it(`The transform's type is the SVGTransform.SVG_TRANSFORM_SCALE.`, function () {
       go(
         makeCases(),
-        mapL(({ t }) => t),
+        mapL(({ transform: t }) => t),
         mapL(({ type: t }) => t),
-        each((t) => expect(t).to.equal(SVGTransform.SVG_TRANSFORM_SCALE))
+        each((type) => expect(type).to.equal(SVGTransform.SVG_TRANSFORM_SCALE))
       );
     });
 
-    it(`
-  The SVGTransform's scale value will be set to the input value. (matrix.a = sx, matrix.d = sy)
-  The omitted values will be 1.
-  `, function () {
-      each(({ t, values: { sx = 1, sy = 1 } = {} }) => {
-        expect(t.matrix.a).to.equal(sx);
-        expect(t.matrix.d).to.equal(sy);
-      }, makeCases());
+    it(`The transform is initialized with the given sx, sy.
+        If there are omitted values or no argument,
+        the values will be {sx: 1, sy: 1} individually by default.`, function () {
+      go(
+        makeCases(),
+        mapL(({ transform, values }) =>
+          go(
+            values,
+            defaultTo({}),
+            (values) => extend({ sx: 1, sy: 1 }, values),
+            (values) => ({ values, transform })
+          )
+        ),
+        mapL(({ transform: receive_transform, values: { sx, sy } }) => {
+          const expect_transform = $$createSVGTransform();
+          expect_transform.setScale(sx, sy);
+          return { receive_transform, expect_transform };
+        }),
+        each(({ expect_transform, receive_transform }) =>
+          expect(receive_transform).to.deep.equal(expect_transform)
+        )
+      );
     });
   }),
 ];

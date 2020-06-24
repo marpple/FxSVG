@@ -5,23 +5,21 @@ import {
   equals2,
   go,
   isUndefined,
-  map,
   mapL,
   rangeL,
-  reduce,
   rejectL,
+  zipL,
   zipWithIndexL,
 } from "fxjs2";
 import {
-  deepCopyTransformListToMatrixList,
+  deepCopyTransformList,
   makeMockRect,
-  makeRandomBool,
   makeRandomInt,
   makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
+import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
-import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 import { $$controlTranslateTransform } from "./controlTranslateTransform.index.js";
 
 const setupMock = ({
@@ -56,29 +54,9 @@ const setupMock = ({
   return { x, y, tx, ty, index, $el, result };
 };
 
-const compressSVGTransformListToMatrix = ({ tx, ty, index, transform_list }) =>
-  go(
-    [
-      { tx, ty },
-      { tx: -tx, ty: -ty },
-    ],
-    mapL($$createSVGTransformTranslate()),
-    mapL(({ matrix: m }) => m),
-    ([plus_t_m, minus_t_m]) =>
-      go(
-        transform_list,
-        deepCopyTransformListToMatrixList,
-        zipWithIndexL,
-        rejectL(([i]) => equals2(i, index)),
-        mapL(([, m]) => m),
-        mapL((m) => plus_t_m.multiply(m).multiply(minus_t_m)),
-        (iter) => reduce((m1, m2) => m1.multiply(m2), iter)
-      )
-  );
-
 export default ({ describe, it }) => [
   describe(`$$controlTranslateTransform`, function () {
-    it(`The return object has $el, controller, transform properties.`, function () {
+    it(`The return object has "$el", "controller", "transform" properties.`, function () {
       const { result } = setupMock();
 
       const keys = new Set(Object.keys(result));
@@ -91,16 +69,16 @@ export default ({ describe, it }) => [
       ]);
     });
 
-    it(`The return $el is same with the input $el.`, function () {
+    it(`The return element is same with the input element.`, function () {
       const {
-        result: { $el: $el1 },
-        $el: $el2,
+        result: { $el: $receive },
+        $el: $expect,
       } = setupMock();
 
-      expect($el1).to.equal($el2);
+      expect($receive).to.equal($expect);
     });
 
-    it(`The return controller object has update, append, end methods.`, function () {
+    it(`The return controller object has "update", "append", "end" methods.`, function () {
       const {
         result: { controller },
       } = setupMock();
@@ -117,59 +95,58 @@ export default ({ describe, it }) => [
       );
     });
 
-    it(`The return transform object is a translate transform whose matrix is represent the input tx, ty.`, function () {
+    it(`The return transform object is a translate transform whose tx, ty are the input tx, ty.`, function () {
       const {
-        result: { transform },
+        result: { transform: receive_transform },
         tx,
         ty,
       } = setupMock();
 
-      expect($$isTranslateSVGTransform(transform)).to.be.true;
-      expect(transform.matrix.e).to.equal(tx);
-      expect(transform.matrix.f).to.equal(ty);
+      const expect_transform = $$createSVGTransformTranslate()({ tx, ty });
+
+      expect(receive_transform).deep.equal(expect_transform);
     });
 
-    it(`The return transform object is the SVGTransform at [index] in SVGTransformList of $el.`, function () {
+    it(`The return transform object is the transform at the input index.`, function () {
       const {
-        result: { transform: t1 },
+        result: { transform: receive_transform },
         $el,
         index,
       } = setupMock();
-      const t2 = $$getBaseTransformList($el).getItem(index);
+      const expect_transform = $$getBaseTransformList($el).getItem(index);
 
-      expect(t2).to.deep.equal(t1);
+      expect(receive_transform).deep.equal(expect_transform);
     });
 
     it(`The controller.update method update the return transform with the input tx, ty.`, function () {
       const {
-        result: { $el, transform: t1, controller },
-        index,
+        result: { transform: receive_transform, controller },
       } = setupMock();
-      const t2 = $$getBaseTransformList($el).getItem(index);
 
       const [tx, ty] = mapL(() => makeRandomInt(-100, 100), rangeL(2));
       controller.update({ tx, ty });
 
-      expect(t1.matrix.e).to.equal(tx);
-      expect(t1.matrix.f).to.equal(ty);
-      expect(t1).to.deep.equal(t2);
+      const expect_transform = $$createSVGTransformTranslate()({ tx, ty });
+
+      expect(receive_transform).deep.equal(expect_transform);
     });
 
     it(`The controller.append method add the input tx, ty to the return transform.`, function () {
       const {
-        result: { $el, transform: t1, controller },
-        index,
+        result: { transform: receive_transform, controller },
         tx: tx1,
         ty: ty1,
       } = setupMock();
-      const t2 = $$getBaseTransformList($el).getItem(index);
 
       const [tx2, ty2] = mapL(() => makeRandomInt(-100, 100), rangeL(2));
       controller.append({ tx: tx2, ty: ty2 });
 
-      expect(t1.matrix.e).to.equal(tx1 + tx2);
-      expect(t1.matrix.f).to.equal(ty1 + ty2);
-      expect(t1).to.deep.equal(t2);
+      const expect_transform = $$createSVGTransformTranslate()({
+        tx: tx1 + tx2,
+        ty: ty1 + ty2,
+      });
+
+      expect(receive_transform).deep.equal(expect_transform);
     });
 
     it(`The controller.end method update x, y of the element.`, function () {
@@ -187,92 +164,52 @@ export default ({ describe, it }) => [
       expect($el.getAttributeNS(null, "y")).to.equal(`${y + ty}`);
     });
 
-    it(`The controller.end method compress all SVGTransforms.`, function () {
-      each(
-        (transform) => {
-          const {
-            tx,
-            ty,
-            index,
-            result: { $el, controller },
-          } = setupMock({ transform });
-
-          const compressed_m = compressSVGTransformListToMatrix({
-            tx,
-            ty,
-            index,
-            transform_list: $$getBaseTransformList($el),
-          });
-
-          controller.end();
-
-          expect($$getBaseTransformList($el).numberOfItems).to.equal(
-            transform ? 1 : 0
-          );
-          transform &&
-            expect($$getBaseTransformList($el).getItem(0).matrix).to.deep.equal(
-              compressed_m
-            );
-        },
-        [null, makeRandomTransformAttributeValue(1)]
+    it(`The controller.end method remove the translate transform.`, function () {
+      const {
+        result: { $el, controller },
+        index,
+        tx,
+        ty,
+      } = setupMock();
+      const before_transform_list = deepCopyTransformList(
+        $$getBaseTransformList($el)
       );
-    });
 
-    it(`Arbitrary use case test.`, function () {
-      each(
-        (transform) => {
-          const {
-            result: { controller, $el },
-            x,
-            y,
-            tx: tx0,
-            ty: ty0,
-            index,
-          } = setupMock({ transform });
+      controller.end();
 
-          const list = go(
-            rangeL(makeRandomInt()),
-            mapL(makeRandomBool),
-            mapL((a) => (a ? "append" : "update")),
-            map((operation) => ({
-              operation,
-              tx: makeRandomInt(-100, 100),
-              ty: makeRandomInt(-100, 100),
-            }))
-          );
-          each(
-            ({ operation, tx, ty }) => controller[operation]({ tx, ty }),
-            list
-          );
+      const after_transform_list = deepCopyTransformList(
+        $$getBaseTransformList($el)
+      );
 
-          const { tx, ty } = reduce(
-            ({ tx: tx1, ty: ty1 }, { operation, tx: tx2, ty: ty2 }) =>
-              operation === "update"
-                ? { tx: tx2, ty: ty2 }
-                : { tx: tx1 + tx2, ty: ty1 + ty2 },
-            { tx: tx0, ty: ty0 },
-            list
-          );
-          const compressed_m = compressSVGTransformListToMatrix({
-            tx,
-            ty,
-            index,
-            transform_list: $$getBaseTransformList($el),
-          });
-
-          controller.end();
-
-          expect($el.getAttributeNS(null, "x")).to.equal(`${x + tx}`);
-          expect($el.getAttributeNS(null, "y")).to.equal(`${y + ty}`);
-          expect($$getBaseTransformList($el).numberOfItems).to.equal(
-            transform ? 1 : 0
-          );
-          transform &&
-            expect($$getBaseTransformList($el).getItem(0).matrix).to.deep.equal(
-              compressed_m
-            );
-        },
-        [null, makeRandomTransformAttributeValue(1)]
+      go(
+        [
+          { tx, ty },
+          { tx: -tx, ty: -ty },
+        ],
+        mapL($$createSVGTransformTranslate()),
+        mapL(({ matrix: m }) => m),
+        ([plus_matrix, minus_matrix]) =>
+          go(
+            before_transform_list,
+            zipWithIndexL,
+            rejectL(([i]) => equals2(i, index)),
+            mapL(([, transform]) => transform),
+            mapL(({ matrix }) =>
+              $$createSVGTransformMatrix()({
+                matrix: plus_matrix.multiply(matrix).multiply(minus_matrix),
+              })
+            ),
+            zipL(after_transform_list)
+          ),
+        each(
+          ([
+            { type: after_type, matrix: after_matrix },
+            { type: before_type, matrix: before_matrix },
+          ]) => {
+            expect(after_type).equal(before_type);
+            expect(after_matrix).deep.equal(before_matrix);
+          }
+        )
       );
     });
   }),

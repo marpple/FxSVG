@@ -6,7 +6,7 @@ import { $$isRotateSVGTransform } from "../isRotateSVGTransform/isRotateSVGTrans
 import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 
 const $$isValidFxRotateSVGTransformList = (transform_list, { index }) => {
-  if (index > transform_list.numberOfItems - 2) {
+  if (index > transform_list.numberOfItems - 2 || index < 1) {
     return false;
   }
 

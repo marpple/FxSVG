@@ -1,6 +1,6 @@
 import { $$isRotateSVGTransform } from "../isRotateSVGTransform/isRotateSVGTransform.index.js";
 
-export const $$appendRotateTransform = (transform, { angle = 0 }) => {
+export const $$appendRotateTransform = (transform, { angle = 0 } = {}) => {
   if (!$$isRotateSVGTransform(transform)) {
     return transform;
   }

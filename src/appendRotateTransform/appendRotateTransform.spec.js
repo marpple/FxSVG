@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { equals2, go, head, mapL, rangeL, rejectL } from "fxjs2";
 import {
   makeRandomInt,
   makeRandomNumber,
@@ -10,98 +11,106 @@ import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGT
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$appendRotateTransform } from "./appendRotateTransform.index.js";
 
-export default ({ describe, it, beforeEach }) => [
+const setupMock = ({
+  angle = makeRandomInt(-700, 700),
+  cx = makeRandomNumber(-100, 100),
+  cy = makeRandomNumber(-100, 100),
+} = {}) => {
+  const transform = $$createSVGTransformRotate()({ angle, cx, cy });
+  return { transform, angle, cx, cy };
+};
+
+export default ({ describe, it }) => [
   describe(`$$appendRotateTransform`, function () {
-    let t;
+    it(`The return value is the same reference with the input value.`, function () {
+      const { transform: input } = setupMock();
+      const angle = makeRandomNumber(-700, 700);
 
-    beforeEach(function () {
-      t = $$createSVGTransformRotate()({
-        angle: makeRandomInt(),
-        cx: 0,
-        cy: 0,
-      });
+      const output = $$appendRotateTransform(input, { angle });
+
+      expect(output).to.equal(input);
     });
 
-    it(`The SVGTransform's angle value will be added with input angle value.`, function () {
-      const { angle: prev_angle } = t;
-      const angle = makeRandomInt();
-      $$appendRotateTransform(t, { angle });
+    it(`The transform's angle is added with the input angle.`, function () {
+      const { transform, angle: prev_angle } = setupMock();
+      const angle = makeRandomInt(-700, 700);
 
-      expect(t.angle).to.equal(prev_angle + angle);
+      $$appendRotateTransform(transform, { angle });
+
+      expect(transform.angle).to.equal(prev_angle + angle);
     });
 
-    it(`The SVGTransform's cx, cy will be 0.`, function () {
-      const angle1 = makeRandomInt();
-      const angle2 = makeRandomInt();
-      t = $$createSVGTransformRotate()({
-        angle: angle1,
-        cx: 10,
-        cy: 10,
-      });
-      $$appendRotateTransform(t, { angle: angle2 });
+    it(`The transform's angle will not change if no input angle.`, function () {
+      for (const option of [undefined, {}]) {
+        const { transform, angle } = setupMock();
 
-      expect(t.angle).to.equal(angle1 + angle2);
-      expect(t.matrix.e).to.equal(0);
-      expect(t.matrix.f).to.equal(0);
+        $$appendRotateTransform(transform, option);
+
+        expect(transform.angle).to.equal(angle);
+      }
     });
 
-    it(`If no second argument, the function will throw an error.`, function () {
-      expect(() => $$appendRotateTransform(t)).to.throw();
+    it(`The transform's cx, cy will be 0.`, function () {
+      const { transform } = go(
+        rangeL(2),
+        mapL(() =>
+          go(
+            rangeL(Infinity),
+            mapL(() => makeRandomNumber(-100, 100)),
+            rejectL(equals2(0)),
+            head
+          )
+        ),
+        ([cx, cy]) => setupMock({ cx, cy })
+      );
+      const angle = makeRandomInt(-700, 700);
+
+      $$appendRotateTransform(transform, { angle });
+
+      expect(transform.matrix.e).to.equal(0);
+      expect(transform.matrix.f).to.equal(0);
     });
 
-    it(`If no input angle value, SVGTransform keep original angle value.`, function () {
-      const { angle: before_angle } = t;
-
-      $$appendRotateTransform(t, {});
-
-      const { angle: after_angle } = t;
-
-      expect(after_angle).to.equal(before_angle);
-    });
-
-    describe(`If the SVGTransform is not a rotate transform, the function will do nothing but return the transform.`, function () {
-      it(`Use a matrix transform.`, function () {
+    describe(`If the transform is another type transform, the function will do nothing but return the input.`, function () {
+      it(`When the transform is a matrix transform...`, function () {
         const before_t = $$createSVGTransformMatrix()({
-          matrix: makeRandomSVGMatrix(),
+          matrix: makeRandomSVGMatrix(() => makeRandomNumber(-100, 100)),
         });
-        const { matrix } = before_t;
 
         const after_t = $$appendRotateTransform(before_t, {
-          angle: makeRandomNumber(),
+          angle: makeRandomNumber(-700, 700),
         });
 
         expect(after_t).to.equal(before_t);
-        expect(before_t.matrix).to.deep.equal(matrix);
+        expect(after_t.matrix).to.deep.equal(before_t.matrix);
       });
 
-      it(`Use a translate transform.`, function () {
-        const before_t = $$createSVGTransformTranslate()({
-          tx: makeRandomNumber(),
-          ty: makeRandomNumber(),
-        });
-        const { matrix } = before_t;
-
-        const after_t = $$appendRotateTransform(before_t, {
-          angle: makeRandomNumber(),
-        });
-
-        expect(after_t).to.equal(before_t);
-        expect(before_t.matrix).to.deep.equal(matrix);
-      });
-
-      it(`Use a scale transform.`, function () {
+      it(`When the transform is a scale transform...`, function () {
         const before_t = $$createSVGTransformScale()({
-          sx: makeRandomNumber(),
-          sy: makeRandomNumber(),
+          sx: makeRandomNumber(-100, 100),
+          sy: makeRandomNumber(-100, 100),
         });
-        const { matrix } = before_t;
 
         const after_t = $$appendRotateTransform(before_t, {
-          angle: makeRandomNumber(),
+          angle: makeRandomNumber(-700, 700),
         });
 
         expect(after_t).to.equal(before_t);
-        expect(before_t.matrix).to.deep.equal(matrix);
+        expect(after_t.matrix).to.deep.equal(before_t.matrix);
+      });
+
+      it(`When the transform is a translate transform...`, function () {
+        const before_t = $$createSVGTransformTranslate()({
+          tx: makeRandomNumber(-100, 100),
+          ty: makeRandomNumber(-100, 100),
+        });
+
+        const after_t = $$appendRotateTransform(before_t, {
+          angle: makeRandomNumber(-700, 700),
+        });
+
+        expect(after_t).to.equal(before_t);
+        expect(after_t.matrix).to.deep.equal(before_t.matrix);
       });
     });
   }),

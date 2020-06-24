@@ -9,7 +9,7 @@ export const $$mergeTranslateTransform = ($svg = $$getSVG()) => (
   { index = 0, x_name = "x", y_name = "y" } = {}
 ) => {
   const base_tl = $$getBaseTransformList($el);
-  if (index > base_tl.numberOfItems - 1) {
+  if (index > base_tl.numberOfItems - 1 || index < 0) {
     return $el;
   }
 

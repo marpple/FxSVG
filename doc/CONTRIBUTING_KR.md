@@ -1,5 +1,7 @@
 # Contributing
 
+[EN](./CONTRIBUTING.md) | [KR](./CONTRIBUTING_KR.md)
+
 ## Test Code
 
 테스트 코드를 작성할 때 `mocha` 테스트 러너의 실행 함수는 모두 `function() {}` 으로 작성해주세요.

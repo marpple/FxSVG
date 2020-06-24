@@ -1,5 +1,7 @@
 # Test
 
+[EN](./TEST.md) | [KR](./TEST_KR.md)
+
 We write unit tests for all functions in FxSVG.
 
 Unit test file name is `name.spec.js`.

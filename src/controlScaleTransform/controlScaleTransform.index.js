@@ -1,5 +1,3 @@
-import { $$consolidateTransformList } from "../consolidateTransformList/consolidateTransformList.index.js";
-import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 import { $$initScaleTransform } from "../initScaleTransform/initScaleTransform.index.js";
 import { $$mergeScaleTransform } from "../mergeScaleTransform/mergeScaleTransform.index.js";
@@ -56,7 +54,6 @@ export const $$controlScaleTransform = ($svg = $$getSVG()) => (
           direction,
         })
       : $$mergeScaleTransform($svg)($el, { index: index + 1 });
-    $$consolidateTransformList($$getBaseTransformList($el));
     return $el;
   };
 

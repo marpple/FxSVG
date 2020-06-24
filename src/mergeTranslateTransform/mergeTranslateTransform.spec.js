@@ -1,167 +1,287 @@
 import { expect } from "chai";
-import { go1 } from "fxjs2";
+import { each, equals2, go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs2";
 import {
-  deepCopyTransformListToMatrixList,
+  deepCopyTransformList,
+  makeMockRectInitializedTranslateTransform,
+  makeRandomBool,
   makeRandomInt,
   makeRandomNumber,
   makeRandomSVGMatrix,
   makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
-import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
-import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform.index.js";
 
-const expectSameTransformsAfterMerge = ($el) => {
-  const before_list = deepCopyTransformListToMatrixList(
-    $$getBaseTransformList($el)
-  );
-
-  const result = $$mergeTranslateTransform()($el, {
-    x_name: "x",
-    y_name: "y",
-  });
-
-  const after_list = deepCopyTransformListToMatrixList(
-    $$getBaseTransformList($el)
-  );
-
-  expect(result).to.equal($el);
-  expect(after_list).to.deep.equal(before_list);
-};
-
-export default ({ describe, it, beforeEach }) => [
+export default ({ describe, it }) => [
   describe(`$$mergeTranslateTransform`, function () {
-    let $el;
-    let x;
-    let y;
-
-    beforeEach(function () {
-      x = makeRandomInt();
-      y = makeRandomInt();
-
-      $el = $$el()(`
-      <rect
-        x="${x}"
-        y="${y}"
-        width="${makeRandomNumber(1)}"
-        height="${makeRandomNumber(1)}"
-        ${go1(makeRandomTransformAttributeValue(), (t) =>
-          t ? `transform="${t}"` : ""
-        )}
-      >
-      </rect> 
-    `);
-    });
-
-    describe(`
-  If the first SVGTransform is not a translate SVGTransform,
-  the function do nothing but return the element.
-  `, function () {
-      it(`The element have no SVGTransform.`, function () {
-        $el.removeAttributeNS(null, "transform");
-
-        expectSameTransformsAfterMerge($el);
-      });
-
-      it(`Use a matrix transform.`, function () {
-        $$getBaseTransformList($el).insertItemBefore(
-          $$createSVGTransformMatrix()({ matrix: makeRandomSVGMatrix() }),
-          0
+    it(`The function do nothing but return the input $el when the input index is out of bounds.`, function () {
+      const fs = mapL(($svg) => $$mergeTranslateTransform($svg), [
+        undefined,
+        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+      ]);
+      for (const f of fs) {
+        const { $el: $input } = makeMockRectInitializedTranslateTransform();
+        const { numberOfItems: transform_list_length } = $$getBaseTransformList(
+          $input
+        );
+        const [before_x, before_y] = mapL(
+          (k) => $input.getAttributeNS(null, k),
+          ["x", "y"]
+        );
+        const before_transform_list = deepCopyTransformList(
+          $$getBaseTransformList($input)
         );
 
-        expectSameTransformsAfterMerge($el);
+        const index = makeRandomBool()
+          ? transform_list_length + makeRandomInt(1)
+          : -makeRandomInt(1);
+        const $output = $$mergeTranslateTransform()($input, {
+          index,
+          x_name: "x",
+          y_name: "y",
+        });
+        const [after_x, after_y] = mapL(
+          (k) => $output.getAttributeNS(null, k),
+          ["x", "y"]
+        );
+        const after_transform_list = deepCopyTransformList(
+          $$getBaseTransformList($output)
+        );
+        expect($output).equal($input);
+        expect(after_x).equal(before_x);
+        expect(after_y).equal(before_y);
+        expect(after_transform_list).deep.equal(before_transform_list);
+      }
+    });
+
+    describe(`The function do nothing but return the input $el
+              when the transform at input index is not a translate transform.`, function () {
+      it(`When the transform is a matrix transform...`, function () {
+        const fs = mapL(($svg) => $$mergeTranslateTransform($svg), [
+          undefined,
+          document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+        ]);
+        for (const f of fs) {
+          const {
+            $el: $input,
+            index,
+          } = makeMockRectInitializedTranslateTransform({
+            transform: makeRandomTransformAttributeValue(1, 100, () =>
+              makeRandomNumber(-700, 700)
+            ),
+          });
+          $$getBaseTransformList($input).removeItem(index);
+          $$getBaseTransformList($input).insertItemBefore(
+            $$createSVGTransformMatrix()({
+              matrix: makeRandomSVGMatrix(() => makeRandomNumber(-100, 100)),
+            }),
+            index
+          );
+          const [before_x, before_y] = mapL(
+            (k) => $input.getAttributeNS(null, k),
+            ["x", "y"]
+          );
+          const before_transform_list = deepCopyTransformList(
+            $$getBaseTransformList($input)
+          );
+
+          const $output = $$mergeTranslateTransform()($input, {
+            index,
+            x_name: "x",
+            y_name: "y",
+          });
+          const [after_x, after_y] = mapL(
+            (k) => $output.getAttributeNS(null, k),
+            ["x", "y"]
+          );
+          const after_transform_list = deepCopyTransformList(
+            $$getBaseTransformList($output)
+          );
+
+          expect($output).equal($input);
+          expect(after_x).equal(before_x);
+          expect(after_y).equal(before_y);
+          expect(after_transform_list).deep.equal(before_transform_list);
+        }
       });
 
-      it(`Use a rotate transform.`, function () {
-        $$getBaseTransformList($el).insertItemBefore(
-          $$createSVGTransformRotate()({
-            angle: makeRandomNumber(),
-            cx: makeRandomNumber(),
-            cy: makeRandomNumber(),
-          }),
-          0
+      it(`When the transform is a rotate transform...`, function () {
+        const fs = mapL(($svg) => $$mergeTranslateTransform($svg), [
+          undefined,
+          document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+        ]);
+        for (const f of fs) {
+          const {
+            $el: $input,
+            index,
+          } = makeMockRectInitializedTranslateTransform({
+            transform: makeRandomTransformAttributeValue(1, 100, () =>
+              makeRandomNumber(-700, 700)
+            ),
+          });
+          $$getBaseTransformList($input).removeItem(index);
+          $$getBaseTransformList($input).insertItemBefore(
+            $$createSVGTransformRotate()({
+              angle: makeRandomNumber(-700, 700),
+              cx: makeRandomNumber(-100, 100),
+              cy: makeRandomNumber(-100, 100),
+            }),
+            index
+          );
+          const [before_x, before_y] = mapL(
+            (k) => $input.getAttributeNS(null, k),
+            ["x", "y"]
+          );
+          const before_transform_list = deepCopyTransformList(
+            $$getBaseTransformList($input)
+          );
+
+          const $output = $$mergeTranslateTransform()($input, {
+            index,
+            x_name: "x",
+            y_name: "y",
+          });
+          const [after_x, after_y] = mapL(
+            (k) => $output.getAttributeNS(null, k),
+            ["x", "y"]
+          );
+          const after_transform_list = deepCopyTransformList(
+            $$getBaseTransformList($output)
+          );
+
+          expect($output).equal($input);
+          expect(after_x).equal(before_x);
+          expect(after_y).equal(before_y);
+          expect(after_transform_list).deep.equal(before_transform_list);
+        }
+      });
+
+      it(`When the transform is a scale transform...`, function () {
+        const fs = mapL(($svg) => $$mergeTranslateTransform($svg), [
+          undefined,
+          document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+        ]);
+        for (const f of fs) {
+          const {
+            $el: $input,
+            index,
+          } = makeMockRectInitializedTranslateTransform({
+            transform: makeRandomTransformAttributeValue(1, 100, () =>
+              makeRandomNumber(-700, 700)
+            ),
+          });
+          $$getBaseTransformList($input).removeItem(index);
+          $$getBaseTransformList($input).insertItemBefore(
+            $$createSVGTransformScale()({
+              sx: makeRandomNumber(-100, 100),
+              sy: makeRandomNumber(-100, 100),
+            }),
+            index
+          );
+          const [before_x, before_y] = mapL(
+            (k) => $input.getAttributeNS(null, k),
+            ["x", "y"]
+          );
+          const before_transform_list = deepCopyTransformList(
+            $$getBaseTransformList($input)
+          );
+
+          const $output = $$mergeTranslateTransform()($input, {
+            index,
+            x_name: "x",
+            y_name: "y",
+          });
+          const [after_x, after_y] = mapL(
+            (k) => $output.getAttributeNS(null, k),
+            ["x", "y"]
+          );
+          const after_transform_list = deepCopyTransformList(
+            $$getBaseTransformList($output)
+          );
+
+          expect($output).equal($input);
+          expect(after_x).equal(before_x);
+          expect(after_y).equal(before_y);
+          expect(after_transform_list).deep.equal(before_transform_list);
+        }
+      });
+    });
+
+    it(`The transform at the input index is removed from the SVG transform list of the input $el.
+        The other transforms are changed by translate(tx, ty) * transform * translate(-tx, -ty).`, function () {
+      const fs = mapL(($svg) => $$mergeTranslateTransform($svg), [
+        undefined,
+        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+      ]);
+      for (const f of fs) {
+        const {
+          $el: $input,
+          index,
+          tx,
+          ty,
+        } = makeMockRectInitializedTranslateTransform();
+        const before_transform_list = deepCopyTransformList(
+          $$getBaseTransformList($input)
         );
 
-        expectSameTransformsAfterMerge($el);
-      });
+        const $output = f($input, { index, x_name: "x", y_name: "y" });
 
-      it(`Use a scale transform.`, function () {
-        $$getBaseTransformList($el).insertItemBefore(
-          $$createSVGTransformScale()({
-            sx: makeRandomNumber(),
-            sy: makeRandomNumber(),
-          }),
-          0
+        const after_transform_list = deepCopyTransformList(
+          $$getBaseTransformList($output)
         );
 
-        expectSameTransformsAfterMerge($el);
-      });
+        go(
+          before_transform_list,
+          zipWithIndexL,
+          rejectL(([i]) => equals2(i, index)),
+          mapL(([, transform]) => transform),
+          mapL(({ matrix }) => matrix),
+          mapL((matrix) =>
+            $$createSVGTransformTranslate()({ tx, ty })
+              .matrix.multiply(matrix)
+              .multiply(
+                $$createSVGTransformTranslate()({ tx: -tx, ty: -ty }).matrix
+              )
+          ),
+          mapL((matrix) => $$createSVGTransformMatrix()({ matrix })),
+          zipL(after_transform_list),
+          each(
+            ([
+              { type: expect_type, matrix: expect_matrix },
+              { type: receive_type, matrix: receive_matrix },
+            ]) => {
+              expect(receive_type).equal(expect_type);
+              expect(receive_matrix).deep.equal(expect_matrix);
+            }
+          )
+        );
+      }
     });
 
-    it(`
-  If the SVGTransform is merged, the SVGTransform will be removed from the element's SVGTransformList. 
-  `, function () {
-      const t = $$createSVGTransformTranslate()({
-        tx: makeRandomNumber(),
-        ty: makeRandomNumber(),
-      });
-      $$getBaseTransformList($el).insertItemBefore(t, 0);
-      const { numberOfItems: before_n } = $$getBaseTransformList($el);
+    it(`The x, y values is added by the tx, ty of the transform.`, function () {
+      const fs = mapL(($svg) => $$mergeTranslateTransform($svg), [
+        undefined,
+        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+      ]);
+      for (const f of fs) {
+        const {
+          $el: $input,
+          index,
+          tx,
+          ty,
+          x,
+          y,
+        } = makeMockRectInitializedTranslateTransform();
 
-      $$mergeTranslateTransform()($el, { x_name: "x", y_name: "y" });
+        const $output = f($input, { index, x_name: "x", y_name: "y" });
 
-      const { numberOfItems: after_n } = $$getBaseTransformList($el);
-      expect(after_n).to.equal(before_n - 1);
-    });
-
-    it(`The element's x value will be added by SVGTransform's tx value.`, function () {
-      const tx = makeRandomInt();
-      const t = $$createSVGTransformTranslate()({ tx, ty: makeRandomNumber() });
-      $$getBaseTransformList($el).insertItemBefore(t, 0);
-
-      $$mergeTranslateTransform()($el, { x_name: "x", y_name: "y" });
-
-      expect($el.getAttributeNS(null, "x")).to.equal(`${x + tx}`);
-    });
-
-    it(`The element's y value will be added by SVGTransform's ty value.`, function () {
-      const ty = makeRandomInt();
-      const t = $$createSVGTransformTranslate()({ tx: makeRandomNumber(), ty });
-      $$getBaseTransformList($el).insertItemBefore(t, 0);
-
-      $$mergeTranslateTransform()($el, { x_name: "x", y_name: "y" });
-
-      expect($el.getAttributeNS(null, "y")).to.equal(`${y + ty}`);
-    });
-
-    it(`
-  Other SVGTransforms will be changed by the following formula. 
-  [after SVGTransform matrix = translate(tx, ty) matrix * before SVGTransform matrix * translate(-tx, -ty) matrix]
-  `, function () {
-      const before_list = deepCopyTransformListToMatrixList(
-        $$getBaseTransformList($el)
-      );
-
-      const tx = makeRandomInt();
-      const ty = makeRandomInt();
-      const t = $$createSVGTransformTranslate()({ tx, ty });
-      $$getBaseTransformList($el).insertItemBefore(t, 0);
-      const m1 = $$createSVGMatrix()({ e: tx, f: ty });
-      const m2 = $$createSVGMatrix()({ e: -tx, f: -ty });
-
-      $$mergeTranslateTransform()($el, { x_name: "x", y_name: "y" });
-
-      const after_list = deepCopyTransformListToMatrixList(
-        $$getBaseTransformList($el)
-      );
-      expect(after_list).to.deep.equal(
-        before_list.map((m) => m1.multiply(m).multiply(m2))
-      );
+        expect($output.getAttributeNS(null, "x")).equal(`${x + tx}`);
+        expect($output.getAttributeNS(null, "y")).equal(`${y + ty}`);
+      }
     });
   }),
 ];

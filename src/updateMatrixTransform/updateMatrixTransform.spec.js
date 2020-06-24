@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import { pick } from "fxjs2";
 import {
   makeRandomNumber,
   makeRandomSVGMatrix,
@@ -8,87 +7,90 @@ import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSV
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
+import { $$isMatrixSVGTransform } from "../isMatrixSVGTransform/isMatrixSVGTransform.index.js";
 import { $$updateMatrixTransform } from "./updateMatrixTransform.index.js";
 
-export default ({ describe, it, beforeEach }) => [
+const setupMockTransform = () => {
+  const matrix = makeRandomSVGMatrix(() => makeRandomNumber(-100, 100));
+  const transform = $$createSVGTransformMatrix()({ matrix });
+  return { transform, matrix };
+};
+
+const setupMockInputValues = () => ({
+  matrix: makeRandomSVGMatrix(() => makeRandomNumber(-100, 100)),
+});
+
+const expectTransformWithMatrix = ({ transform, matrix }) => {
+  expect($$isMatrixSVGTransform(transform)).to.be.true;
+  expect(transform.matrix).deep.equal(matrix);
+};
+
+export default ({ describe, it }) => [
   describe(`$$updateMatrixTransform`, function () {
-    let t;
+    it(`The matrix of the input transform is changed to input matrix.`, function () {
+      const { transform } = setupMockTransform();
+      const { matrix } = setupMockInputValues();
+      $$updateMatrixTransform(transform, { matrix });
 
-    beforeEach(function () {
-      t = $$createSVGTransformMatrix()({ matrix: makeRandomSVGMatrix() });
+      expectTransformWithMatrix({ transform, matrix });
     });
 
-    it(`The SVGTransform's matrix is changed to input matrix.`, function () {
-      const m = makeRandomSVGMatrix();
-      $$updateMatrixTransform(t, { matrix: m });
+    it(`The matrix of the transform is same with before when there is no input matrix.`, function () {
+      const { transform, matrix } = setupMockTransform();
+      $$updateMatrixTransform(transform, {});
 
-      expect(t.matrix).to.deep.equal(m);
+      expectTransformWithMatrix({ transform, matrix });
     });
 
-    it(`If there is no second argument, the transform's matrix will be same with before.`, function () {
-      const before_m = pick(["a", "b", "c", "d", "e", "f"], t.matrix);
+    it(`The matrix of the transform is same with before when there is no input object.`, function () {
+      const { transform, matrix } = setupMockTransform();
+      $$updateMatrixTransform(transform);
 
-      $$updateMatrixTransform(t);
-
-      const after_m = pick(["a", "b", "c", "d", "e", "f"], t.matrix);
-
-      expect(after_m).to.deep.equal(before_m);
+      expectTransformWithMatrix({ transform, matrix });
     });
 
-    it(`If there is no input matrix, the transform's matrix will be same with before.`, function () {
-      const before_m = pick(["a", "b", "c", "d", "e", "f"], t.matrix);
-
-      $$updateMatrixTransform(t, {});
-
-      const after_m = pick(["a", "b", "c", "d", "e", "f"], t.matrix);
-
-      expect(after_m).to.deep.equal(before_m);
-    });
-
-    describe(`
-  If the SVGTransform's type is not the SVGTransform.SVG_TRANSFORM_MATRIX,
-  the function will do nothing but return SVGTransform.
-  `, function () {
-      it(`Use a translate transform.`, function () {
-        const translate_t = $$createSVGTransformTranslate()({
-          tx: makeRandomNumber(),
-          ty: makeRandomNumber(),
+    describe(`If the transform is another type transform, the function will do nothing but return the input.`, function () {
+      it(`When the transform is a translate transform...`, function () {
+        const before_t = $$createSVGTransformTranslate()({
+          tx: makeRandomNumber(-100, 100),
+          ty: makeRandomNumber(-100, 100),
         });
-        const { matrix } = translate_t;
 
-        expect(
-          $$updateMatrixTransform(translate_t, {
-            matrix: makeRandomSVGMatrix(),
-          })
-        ).to.equal(translate_t);
-        expect(translate_t.matrix).to.deep.equal(matrix);
+        const after_t = $$updateMatrixTransform(before_t, {
+          matrix: makeRandomSVGMatrix(() => makeRandomNumber(-100, 100)),
+        });
+
+        expect(after_t).to.equal(before_t);
+        expect(after_t).to.deep.equal(before_t);
       });
 
-      it(`Use a rotate transform.`, function () {
-        const rotate_t = $$createSVGTransformRotate()({
-          angle: makeRandomNumber(),
-          cx: makeRandomNumber(),
-          cy: makeRandomNumber(),
+      it(`When the transform is a rotate transform...`, function () {
+        const before_t = $$createSVGTransformRotate()({
+          angle: makeRandomNumber(-700, 700),
+          cx: makeRandomNumber(-100, 100),
+          cy: makeRandomNumber(-100, 100),
         });
-        const { matrix } = rotate_t;
 
-        expect(
-          $$updateMatrixTransform(rotate_t, { matrix: makeRandomSVGMatrix() })
-        ).to.equal(rotate_t);
-        expect(rotate_t.matrix).to.deep.equal(matrix);
+        const after_t = $$updateMatrixTransform(before_t, {
+          matrix: makeRandomSVGMatrix(() => makeRandomNumber(-100, 100)),
+        });
+
+        expect(after_t).to.equal(before_t);
+        expect(after_t).to.deep.equal(before_t);
       });
 
-      it(`Use a scale transform.`, function () {
-        const scale_t = $$createSVGTransformScale()({
-          sx: makeRandomNumber(),
-          sy: makeRandomNumber(),
+      it(`When the transform is a scale transform...`, function () {
+        const before_t = $$createSVGTransformScale()({
+          sx: makeRandomNumber(-100, 100),
+          sy: makeRandomNumber(-100, 100),
         });
-        const { matrix } = scale_t;
 
-        expect(
-          $$updateMatrixTransform(scale_t, { matrix: makeRandomSVGMatrix() })
-        ).to.equal(scale_t);
-        expect(scale_t.matrix).to.deep.equal(matrix);
+        const after_t = $$updateMatrixTransform(before_t, {
+          matrix: makeRandomSVGMatrix(() => makeRandomNumber(-100, 100)),
+        });
+
+        expect(after_t).to.equal(before_t);
+        expect(after_t).to.deep.equal(before_t);
       });
     });
   }),

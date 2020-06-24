@@ -1,10 +1,11 @@
 import { expect } from "chai";
-import { mapL, rangeL } from "fxjs2";
+import { each, go, go1, head, mapL, rangeL } from "fxjs2";
+import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { $$getSVG, $$setSVG } from "./getSetSVG.index.js";
 
 export default ({ describe, it, beforeEach }) => [
   describe(`$$setSVG + $$getSVG`, function () {
-    it(`$$setSVG will change return value of $$getSVG.`, function () {
+    it(`"$$setSVG" set the SVG element that "$$getSVG" returns.`, function () {
       const $svg = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "svg"
@@ -15,7 +16,7 @@ export default ({ describe, it, beforeEach }) => [
     });
   }),
   describe(`$$setSVG`, function () {
-    it(`The return value is the 1st argument.`, function () {
+    it(`The return value is the same reference with the input value.`, function () {
       const $svg = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "svg"
@@ -29,16 +30,20 @@ export default ({ describe, it, beforeEach }) => [
       $$setSVG(undefined);
     });
 
-    it(`The return value is a SVGSVGElement.`, function () {
+    it(`The return value is a SVG element.`, function () {
       const $svg = $$getSVG();
 
       expect($svg.nodeName.toLowerCase()).to.equal("svg");
     });
 
-    it(`The return value will be always same.`, function () {
-      const [$svg1, $svg2] = mapL(() => $$getSVG(), rangeL(2));
-
-      expect($svg1).to.equal($svg2);
+    it(`The return value is always same.`, function () {
+      go(
+        makeRandomInt(2),
+        rangeL,
+        mapL(() => $$getSVG()),
+        (iter) =>
+          go1(head(iter), ($a) => each(($b) => expect($b).to.equal($a), iter))
+      );
     });
   }),
 ];
