@@ -29,7 +29,7 @@ import { $$mergeScaleTransform2 } from "./mergeScaleTransform2.index.js";
 const DIRECTIONS = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
 
 export default ({ describe, it }) => [
-  describe.only(`$$mergeScaleTransform2`, function () {
+  describe(`$$mergeScaleTransform2`, function () {
     it(`The function do nothing but return the input element
         when the input values failed to pass "$$isValidFxScaleSVGTransformList".`, function () {
       // TODO x, y, width, height 값들이 before / after 같은 지 확인 필요
