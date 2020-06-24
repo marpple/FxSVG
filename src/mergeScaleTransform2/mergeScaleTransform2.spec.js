@@ -14,12 +14,14 @@ import {
   rangeL,
   rejectL,
   takeAll,
+  zipL,
+  zipWithIndexL,
 } from "fxjs2";
 import {
   deepCopyTransformList,
   makeRandomBool,
   makeRandomInt,
-  makeRandomNumber,
+  makeRandomNumber, makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
 import { makeMockRectInitiatedScaleTransform } from "../../test/utils/makeMockRectInitializedScaleTransform.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
@@ -228,6 +230,60 @@ export default ({ describe, it }) => [
             height: after_height,
           },
           description
+        );
+      }
+    });
+
+    it(`The transforms from index - 1 to index + 1 are removed from the transform list.`, function () {
+      this.slow(1000);
+
+      const cases = go(
+        DIRECTIONS,
+        flatMapL((direction) =>
+          mapL((is_need_correction) => ({ direction, is_need_correction }), [
+            true,
+            false,
+          ])
+        ),
+        flatMapL((o) =>
+          mapL((transform) => extend(o, { transform }), [
+            null,
+            makeRandomTransformAttributeValue(1),
+          ])
+        )
+      );
+      for (const { direction, is_need_correction, transform } of cases) {
+        const { $el, index } = makeMockRectInitiatedScaleTransform({
+          transform,
+        });
+
+        const before_transform_list = deepCopyTransformList(
+          $$getBaseTransformList($el)
+        );
+
+        $$mergeScaleTransform2($el, {
+          index,
+          direction,
+          is_need_correction,
+          x_name: "x",
+          y_name: "y",
+          width_name: "width",
+          height_name: "height",
+        });
+
+        const after_transform_list = deepCopyTransformList(
+          $$getBaseTransformList($el)
+        );
+
+        go(
+          before_transform_list,
+          zipWithIndexL,
+          rejectL(([i]) => i >= index - 1 && i <= index + 1),
+          mapL(([, transform]) => transform),
+          zipL(after_transform_list),
+          each(([after_transform, before_transform]) =>
+            expect(after_transform).deep.equal(before_transform)
+          )
         );
       }
     });
