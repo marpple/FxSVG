@@ -28,8 +28,35 @@ import { $$mergeScaleTransform2 } from "./mergeScaleTransform2.index.js";
 
 const DIRECTIONS = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
 
+const expectNotChange = (
+  {
+    $el: $before,
+    transform_list: before_transform_list,
+    x: before_x,
+    y: before_y,
+    width: before_width,
+    height: before_height,
+  },
+  {
+    $el: $after,
+    transform_list: after_transform_list,
+    x: after_x,
+    y: after_y,
+    width: after_width,
+    height: after_height,
+  },
+  description
+) => {
+  expect($after, description).equal($before);
+  expect(after_transform_list, description).deep.equal(before_transform_list);
+  expect(after_x, description).equal(before_x);
+  expect(after_y, description).equal(before_y);
+  expect(after_width, description).equal(before_width);
+  expect(after_height, description).equal(before_height);
+};
+
 export default ({ describe, it }) => [
-  describe(`$$mergeScaleTransform2`, function () {
+  describe.only(`$$mergeScaleTransform2`, function () {
     it(`The function do nothing but return the input element
         when the input values failed to pass "$$isValidFxScaleSVGTransformList".`, function () {
       this.slow(1500);
@@ -80,14 +107,25 @@ export default ({ describe, it }) => [
           $$getBaseTransformList($input)
         );
 
-        expect($output, description).equal($input);
-        expect(after_transform_list, description).deep.equal(
-          before_transform_list
+        expectNotChange(
+          {
+            $el: $input,
+            transform_list: before_transform_list,
+            x: before_x,
+            y: before_y,
+            width: before_width,
+            height: before_height,
+          },
+          {
+            $el: $output,
+            transform_list: after_transform_list,
+            x: after_x,
+            y: after_y,
+            width: after_width,
+            height: after_height,
+          },
+          description
         );
-        expect(after_x, description).equal(before_x);
-        expect(after_y, description).equal(before_y);
-        expect(after_width, description).equal(before_width);
-        expect(after_height, description).equal(before_height);
       }
     });
 
@@ -172,14 +210,25 @@ export default ({ describe, it }) => [
           mapL(parseFloat)
         );
 
-        expect($output, description).equal($input);
-        expect(after_transform_list, description).deep.equal(
-          before_transform_list
+        expectNotChange(
+          {
+            $el: $input,
+            transform_list: before_transform_list,
+            x: before_x,
+            y: before_y,
+            width: before_width,
+            height: before_height,
+          },
+          {
+            $el: $output,
+            transform_list: after_transform_list,
+            x: after_x,
+            y: after_y,
+            width: after_width,
+            height: after_height,
+          },
+          description
         );
-        expect(after_x, description).equal(before_x);
-        expect(after_y, description).equal(before_y);
-        expect(after_width, description).equal(before_width);
-        expect(after_height, description).equal(before_height);
       }
     });
 
