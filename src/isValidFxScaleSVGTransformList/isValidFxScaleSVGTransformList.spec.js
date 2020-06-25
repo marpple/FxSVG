@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import {
   concatL,
+  each,
   equals2,
   extend,
   flatMapL,
@@ -12,6 +13,7 @@ import {
   reduce,
   rejectL,
   tap,
+  zipL,
 } from "fxjs2";
 import {
   makeMockRectInitiatedScaleTransform,
@@ -27,7 +29,11 @@ import {
 } from "../../test/utils/index.js";
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
-import { $$isValidFxScaleSVGTransformList } from "./isValidFxScaleSVGTransformList.index.js";
+import {
+  $$isValidFxScaleSVGTransformList,
+  $$isValidFxScaleSVGTransformList2,
+  $$isValidFxScaleSVGTransformList3,
+} from "./isValidFxScaleSVGTransformList.index.js";
 
 export const makeInvalidIndexCases = () =>
   go(
@@ -238,52 +244,141 @@ export const makeInvalidCases = () =>
 export default ({ describe, it }) => [
   describe(`$$isValidFxScaleSVGTransformList`, function () {
     it(`The function returns true in other cases not in false cases below.`, function () {
-      const { $el, index } = makeMockRectInitiatedScaleTransform();
-      const transform_list = $$getBaseTransformList($el);
+      const [
+        { $el: $el1, index: index1 },
+        { $el: $el2, index: index2 },
+        { $el: $el3, index: index3 },
+      ] = mapL(makeMockRectInitiatedScaleTransform, rangeL(3));
+      const [
+        transform_list1,
+        transform_list2,
+        transform_list3,
+      ] = mapL($$getBaseTransformList, [$el1, $el2, $el3]);
 
-      const result = $$isValidFxScaleSVGTransformList(transform_list, {
-        index,
+      const result1 = $$isValidFxScaleSVGTransformList(transform_list1, {
+        index: index1,
       });
-      expect(result).to.be.true;
+      const result2 = $$isValidFxScaleSVGTransformList2({
+        index: index2,
+      })(transform_list2);
+      const result3 = $$isValidFxScaleSVGTransformList3(
+        {
+          index: index3,
+        },
+        transform_list3
+      );
+
+      each((result) => expect(result).true, [result1, result2, result3]);
     });
 
-    describe(`The function returns false when the input index is out of bounds.`, function () {
-      for (const { description, $el, index } of makeInvalidIndexCases()) {
-        it(`When [${description}]...`, function () {
-          const transform_list = $$getBaseTransformList($el);
-          const result = $$isValidFxScaleSVGTransformList(transform_list, {
-            index,
-          });
-          expect(result).to.be.false;
+    it(`The function returns false when the input index is out of bounds.`, function () {
+      const cases = go(rangeL(3), mapL(makeInvalidIndexCases), (iterables) =>
+        zipL(...iterables)
+      );
+
+      for (const [
+        { description: description1, $el: $el1, index: index1 },
+        { description: description2, $el: $el2, index: index2 },
+        { description: description3, $el: $el3, index: index3 },
+      ] of cases) {
+        const [
+          transform_list1,
+          transform_list2,
+          transform_list3,
+        ] = mapL($$getBaseTransformList, [$el1, $el2, $el3]);
+
+        const result1 = $$isValidFxScaleSVGTransformList(transform_list1, {
+          index: index1,
         });
+        const result2 = $$isValidFxScaleSVGTransformList2({ index: index2 })(
+          transform_list2
+        );
+        const result3 = $$isValidFxScaleSVGTransformList3(
+          { index: index3 },
+          transform_list3
+        );
+
+        go(
+          [result1, result2, result3],
+          zipL([description1, description2, description3]),
+          each(([description, result]) => expect(result, description).false)
+        );
       }
     });
 
-    describe(`The function returns false when the transforms
+    it(`The function returns false when the transforms
               whose index is from input index - 1 to input index + 1 have invalid type.`, function () {
-      const cases = makeInvalidSVGTransformTypeCases();
-      for (const { description, $el, index } of cases) {
-        it(`When [${description}]...`, function () {
-          const transform_list = $$getBaseTransformList($el);
-          const result = $$isValidFxScaleSVGTransformList(transform_list, {
-            index,
-          });
-          expect(result).to.be.false;
+      const cases = go(
+        rangeL(3),
+        mapL(makeInvalidSVGTransformTypeCases),
+        (iterables) => zipL(...iterables)
+      );
+
+      for (const [
+        { description: description1, $el: $el1, index: index1 },
+        { description: description2, $el: $el2, index: index2 },
+        { description: description3, $el: $el3, index: index3 },
+      ] of cases) {
+        const [
+          transform_list1,
+          transform_list2,
+          transform_list3,
+        ] = mapL($$getBaseTransformList, [$el1, $el2, $el3]);
+
+        const result1 = $$isValidFxScaleSVGTransformList(transform_list1, {
+          index: index1,
         });
+        const result2 = $$isValidFxScaleSVGTransformList2({ index: index2 })(
+          transform_list2
+        );
+        const result3 = $$isValidFxScaleSVGTransformList3(
+          { index: index3 },
+          transform_list3
+        );
+
+        go(
+          [result1, result2, result3],
+          zipL([description1, description2, description3]),
+          each(([description, result]) => expect(result, description).false)
+        );
       }
     });
 
-    describe(`The function returns false when the transforms
+    it(`The function returns false when the transforms
               whose index is from input index - 1 to input index + 1 have invalid matrix.`, function () {
-      const cases = makeInvalidSVGMatrixValueCases();
-      for (const { description, $el, index } of cases) {
-        it(`When [${description}]...`, function () {
-          const transform_list = $$getBaseTransformList($el);
-          const result = $$isValidFxScaleSVGTransformList(transform_list, {
-            index,
-          });
-          expect(result).to.be.false;
+      const cases = go(
+        rangeL(3),
+        mapL(makeInvalidSVGMatrixValueCases),
+        (iterables) => zipL(...iterables)
+      );
+
+      for (const [
+        { description: description1, $el: $el1, index: index1 },
+        { description: description2, $el: $el2, index: index2 },
+        { description: description3, $el: $el3, index: index3 },
+      ] of cases) {
+        const [
+          transform_list1,
+          transform_list2,
+          transform_list3,
+        ] = mapL($$getBaseTransformList, [$el1, $el2, $el3]);
+
+        const result1 = $$isValidFxScaleSVGTransformList(transform_list1, {
+          index: index1,
         });
+        const result2 = $$isValidFxScaleSVGTransformList2({ index: index2 })(
+          transform_list2
+        );
+        const result3 = $$isValidFxScaleSVGTransformList3(
+          { index: index3 },
+          transform_list3
+        );
+
+        go(
+          [result1, result2, result3],
+          zipL([description1, description2, description3]),
+          each(([description, result]) => expect(result, description).false)
+        );
       }
     });
   }),
