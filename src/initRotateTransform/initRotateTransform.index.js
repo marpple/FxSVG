@@ -24,3 +24,50 @@ export const $$initRotateTransform = ($svg = $$getSVG()) => (
 
   return transform;
 };
+
+export const $$initRotateTransform2 = ({
+  angle = 0,
+  cx = 0,
+  cy = 0,
+  index = 0,
+} = {}) => ($el, $svg = $$getSVG()) => {
+  const transform_list = $$getBaseTransformList($el);
+
+  transform_list.insertItemBefore(
+    $$createSVGTransformTranslate($svg)({ tx: -cx, ty: -cy }),
+    index
+  );
+  const transform = transform_list.insertItemBefore(
+    $$createSVGTransformRotate($svg)({ angle }),
+    index
+  );
+  transform_list.insertItemBefore(
+    $$createSVGTransformTranslate($svg)({ tx: cx, ty: cy }),
+    index
+  );
+
+  return transform;
+};
+
+export const $$initRotateTransform3 = (
+  { angle = 0, cx = 0, cy = 0, index = 0 } = {},
+  $el,
+  $svg = $$getSVG()
+) => {
+  const transform_list = $$getBaseTransformList($el);
+
+  transform_list.insertItemBefore(
+    $$createSVGTransformTranslate($svg)({ tx: -cx, ty: -cy }),
+    index
+  );
+  const transform = transform_list.insertItemBefore(
+    $$createSVGTransformRotate($svg)({ angle }),
+    index
+  );
+  transform_list.insertItemBefore(
+    $$createSVGTransformTranslate($svg)({ tx: cx, ty: cy }),
+    index
+  );
+
+  return transform;
+};
