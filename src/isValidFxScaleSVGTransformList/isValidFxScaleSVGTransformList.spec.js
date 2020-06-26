@@ -267,6 +267,9 @@ export default ({ describe, it }) => [
         },
         transform_list3
       );
+      // const result3 = $$isValidFxScaleSVGTransformList3({ index: index3 })(
+      //   transform_list3
+      // );
 
       each((result) => expect(result).true, [result1, result2, result3]);
     });
@@ -297,6 +300,9 @@ export default ({ describe, it }) => [
           { index: index3 },
           transform_list3
         );
+        // const result3 = $$isValidFxScaleSVGTransformList3({ index: index3 })(
+        //   transform_list3
+        // );
 
         go(
           [result1, result2, result3],
@@ -335,6 +341,9 @@ export default ({ describe, it }) => [
           { index: index3 },
           transform_list3
         );
+        // const result3 = $$isValidFxScaleSVGTransformList3({ index: index3 })(
+        //   transform_list3
+        // );
 
         go(
           [result1, result2, result3],
@@ -373,6 +382,9 @@ export default ({ describe, it }) => [
           { index: index3 },
           transform_list3
         );
+        // const result3 = $$isValidFxScaleSVGTransformList3({ index: index3 })(
+        //   transform_list3
+        // );
 
         go(
           [result1, result2, result3],
