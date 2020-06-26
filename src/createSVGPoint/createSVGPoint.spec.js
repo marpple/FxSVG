@@ -42,6 +42,7 @@ const makeCases = () =>
         appendL({ point: $$createSVGPoint($svg)() }),
         appendL({ point: $$createSVGPoint2()($svg) }),
         appendL({ point: $$createSVGPoint3(undefined, $svg) })
+        // $$createSVGPoint3() -> option, $svg 모두 기본값 사용시
       ),
     [undefined, document.createElementNS("http://www.w3.org/2000/svg", "svg")]
   );
