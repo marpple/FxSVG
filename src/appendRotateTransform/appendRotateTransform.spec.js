@@ -40,6 +40,7 @@ export default ({ describe, it }) => [
       const output1 = $$appendRotateTransform(input1, { angle: angle1 });
       const output2 = $$appendRotateTransform2({ angle: angle2 })(input2);
       const output3 = $$appendRotateTransform3({ angle: angle3 }, input3);
+      // const output3 = $$appendRotateTransform3({ angle: angle3 })(input3);
 
       each(([input, output]) => expect(output).equal(input), [
         [input1, output1],
@@ -62,6 +63,7 @@ export default ({ describe, it }) => [
       $$appendRotateTransform(transform1, { angle: angle1 });
       $$appendRotateTransform2({ angle: angle2 })(transform2);
       $$appendRotateTransform3({ angle: angle3 }, transform3);
+      // $$appendRotateTransform3({ angle: angle3 })(transform3);
 
       each(
         ([transform, prev_angle, angle]) =>
@@ -90,7 +92,8 @@ export default ({ describe, it }) => [
 
         $$appendRotateTransform(transform1, option1);
         $$appendRotateTransform2(option2)(transform2);
-        $$appendRotateTransform(option3, transform3);
+        $$appendRotateTransform3(option3, transform3);
+        // $$appendRotateTransform3(option3)(transform3);
 
         each(([transform, angle]) => expect(transform.angle).to.equal(angle), [
           [transform1, angle1],
@@ -122,6 +125,7 @@ export default ({ describe, it }) => [
       $$appendRotateTransform(transform1, { angle: angle1 });
       $$appendRotateTransform2({ angle: angle2 })(transform2);
       $$appendRotateTransform3({ angle: angle3 }, transform3);
+      // $$appendRotateTransform3({ angle: angle3 })(transform3);
 
       each(
         (transform) => {
@@ -147,6 +151,7 @@ export default ({ describe, it }) => [
         const after_t1 = $$appendRotateTransform(before_t1, { angle: angle1 });
         const after_t2 = $$appendRotateTransform2({ angle: angle2 })(before_t2);
         const after_t3 = $$appendRotateTransform3({ angle: angle3 }, before_t3);
+        // const after_t3 = $$appendRotateTransform3({ angle: angle3 })(before_t3);
 
         go(
           [after_t1, after_t2, after_t3],
@@ -178,6 +183,7 @@ export default ({ describe, it }) => [
         const after_t1 = $$appendRotateTransform(before_t1, { angle: angle1 });
         const after_t2 = $$appendRotateTransform2({ angle: angle2 })(before_t2);
         const after_t3 = $$appendRotateTransform3({ angle: angle3 }, before_t3);
+        // const after_t3 = $$appendRotateTransform3({ angle: angle3 })(before_t3);
 
         go(
           [after_t1, after_t2, after_t3],
@@ -209,6 +215,7 @@ export default ({ describe, it }) => [
         const after_t1 = $$appendRotateTransform(before_t1, { angle: angle1 });
         const after_t2 = $$appendRotateTransform2({ angle: angle2 })(before_t2);
         const after_t3 = $$appendRotateTransform3({ angle: angle3 }, before_t3);
+        // const after_t3 = $$appendRotateTransform3({ angle: angle3 })(before_t3);
 
         go(
           [after_t1, after_t2, after_t3],

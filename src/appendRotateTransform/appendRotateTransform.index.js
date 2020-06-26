@@ -1,3 +1,4 @@
+import { curry } from "fxjs2";
 import { $$isRotateSVGTransform } from "../isRotateSVGTransform/isRotateSVGTransform.index.js";
 
 export const $$appendRotateTransform = (transform, { angle = 0 } = {}) => {
@@ -20,12 +21,14 @@ export const $$appendRotateTransform2 = ({ angle = 0 } = {}) => (transform) => {
   return transform;
 };
 
-export const $$appendRotateTransform3 = ({ angle = 0 } = {}, transform) => {
-  if (!$$isRotateSVGTransform(transform)) {
+export const $$appendRotateTransform3 = curry(
+  ({ angle = 0 } = {}, transform) => {
+    if (!$$isRotateSVGTransform(transform)) {
+      return transform;
+    }
+
+    const { angle: prev_angle } = transform;
+    transform.setRotate(prev_angle + angle, 0, 0);
     return transform;
   }
-
-  const { angle: prev_angle } = transform;
-  transform.setRotate(prev_angle + angle, 0, 0);
-  return transform;
-};
+);
