@@ -95,6 +95,12 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initRotateTransform3({
+        //   angle: angle3,
+        //   cx: cx3,
+        //   cy: cy3,
+        //   index: index3,
+        // })($el3, $svg);
 
         const [after_length1, after_length2, after_length3] = go(
           [$el1, $el2, $el3],
@@ -158,6 +164,12 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initRotateTransform3({
+        //   angle: angle3,
+        //   cx: cx3,
+        //   cy: cy3,
+        //   index: index3,
+        // })($el3, $svg);
 
         const [transform1, transform2, transform3] = go(
           [$el1, $el2, $el3],
@@ -220,6 +232,12 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initRotateTransform3({
+        //   angle: angle3,
+        //   cx: cx3,
+        //   cy: cy3,
+        //   index: index3,
+        // })($el3, $svg);
 
         const [transform1, transform2, transform3] = go(
           [$el1, $el2, $el3],
@@ -286,6 +304,12 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initRotateTransform3({
+        //   angle: angle3,
+        //   cx: cx3,
+        //   cy: cy3,
+        //   index: index3,
+        // })($el3, $svg);
 
         const [transform1, transform2, transform3] = go(
           [$el1, $el2, $el3],
@@ -357,6 +381,12 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initRotateTransform3({
+        //   angle: angle3,
+        //   cx: cx3,
+        //   cy: cy3,
+        //   index: index3,
+        // })($el3, $svg);
 
         const [
           after_transform_list1,
@@ -431,6 +461,10 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initRotateTransform3({
+        //   angle: angle3,
+        //   index: index3,
+        // })($el3, $svg);
 
         go(
           [$el1, $el2, $el3],
@@ -489,6 +523,11 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initRotateTransform3({
+        //   cx: cx3,
+        //   cy: cy3,
+        //   index: index3,
+        // })($el3, $svg);
 
         go(
           [$el1, $el2, $el3],
@@ -540,6 +579,11 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initRotateTransform3({
+        //   angle: angle3,
+        //   cx: cx3,
+        //   cy: cy3,
+        // })($el3, $svg);
 
         const [transform_list1, transform_list2, transform_list3] = mapL(
           ($el) => $$getBaseTransformList($el),
@@ -600,6 +644,7 @@ export default ({ describe, it }) => [
         $$initRotateTransform($svg)($el1);
         $$initRotateTransform2()($el2, $svg);
         $$initRotateTransform3(undefined, $el3, $svg);
+        // $$initRotateTransform3()($el3, $svg);
 
         const [transform_list1, transform_list2, transform_list3] = mapL(
           ($el) => $$getBaseTransformList($el),

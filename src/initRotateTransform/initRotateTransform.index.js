@@ -1,3 +1,4 @@
+import { curry } from "fxjs2";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
@@ -49,25 +50,23 @@ export const $$initRotateTransform2 = ({
   return transform;
 };
 
-export const $$initRotateTransform3 = (
-  { angle = 0, cx = 0, cy = 0, index = 0 } = {},
-  $el,
-  $svg = $$getSVG()
-) => {
-  const transform_list = $$getBaseTransformList($el);
+export const $$initRotateTransform3 = curry(
+  ({ angle = 0, cx = 0, cy = 0, index = 0 } = {}, $el, $svg = $$getSVG()) => {
+    const transform_list = $$getBaseTransformList($el);
 
-  transform_list.insertItemBefore(
-    $$createSVGTransformTranslate($svg)({ tx: -cx, ty: -cy }),
-    index
-  );
-  const transform = transform_list.insertItemBefore(
-    $$createSVGTransformRotate($svg)({ angle }),
-    index
-  );
-  transform_list.insertItemBefore(
-    $$createSVGTransformTranslate($svg)({ tx: cx, ty: cy }),
-    index
-  );
+    transform_list.insertItemBefore(
+      $$createSVGTransformTranslate($svg)({ tx: -cx, ty: -cy }),
+      index
+    );
+    const transform = transform_list.insertItemBefore(
+      $$createSVGTransformRotate($svg)({ angle }),
+      index
+    );
+    transform_list.insertItemBefore(
+      $$createSVGTransformTranslate($svg)({ tx: cx, ty: cy }),
+      index
+    );
 
-  return transform;
-};
+    return transform;
+  }
+);
