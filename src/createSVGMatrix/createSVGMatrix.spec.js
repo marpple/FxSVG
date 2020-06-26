@@ -43,6 +43,7 @@ const makeCases = () =>
         appendL({ matrix: $$createSVGMatrix($svg)() }),
         appendL({ matrix: $$createSVGMatrix2()($svg) }),
         appendL({ matrix: $$createSVGMatrix3(undefined, $svg) })
+        // $$createSVGMatrix3() -> option, $svg 모두 기본값 사용시
       ),
     [undefined, document.createElementNS("http://www.w3.org/2000/svg", "svg")]
   );
