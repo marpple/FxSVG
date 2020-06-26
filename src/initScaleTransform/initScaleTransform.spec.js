@@ -98,6 +98,13 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initScaleTransform3({
+        //   sx: sx3,
+        //   sy: sy3,
+        //   cx: cx3,
+        //   cy: cy3,
+        //   index: index3,
+        // })($el3, $svg);
 
         const [after_length1, after_length2, after_length3] = go(
           [$el1, $el2, $el3],
@@ -164,6 +171,13 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initScaleTransform3({
+        //   sx: sx3,
+        //   sy: sy3,
+        //   cx: cx3,
+        //   cy: cy3,
+        //   index: index3,
+        // })($el3, $svg);
 
         go(
           [$el1, $el2, $el3],
@@ -231,6 +245,13 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initScaleTransform3({
+        //   sx: sx3,
+        //   sy: sy3,
+        //   cx: cx3,
+        //   cy: cy3,
+        //   index: index3,
+        // })($el3, $svg);
 
         go(
           [$el1, $el2, $el3],
@@ -298,6 +319,13 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initScaleTransform3({
+        //   sx: sx3,
+        //   sy: sy3,
+        //   cx: cx3,
+        //   cy: cy3,
+        //   index: index3,
+        // })($el3, $svg);
 
         go(
           [$el1, $el2, $el3],
@@ -374,6 +402,13 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initScaleTransform3({
+        //   sx: sx3,
+        //   sy: sy3,
+        //   cx: cx3,
+        //   cy: cy3,
+        //   index: index3,
+        // })($el3, $svg);
 
         const [
           after_transform_list1,
@@ -452,6 +487,11 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initScaleTransform3({
+        //   sx: sx3,
+        //   sy: sy3,
+        //   index: index3,
+        // })($el3, $svg);
 
         go(
           [$el1, $el2, $el3],
@@ -510,6 +550,11 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initScaleTransform3({
+        //   cx: cx3,
+        //   cy: cy3,
+        //   index: index3,
+        // })($el3, $svg);
 
         go(
           [$el1, $el2, $el3],
@@ -564,6 +609,12 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initScaleTransform3({
+        //   sx: sx3,
+        //   sy: sy3,
+        //   cx: cx3,
+        //   cy: cy3,
+        // })($el3, $svg);
 
         go(
           [$el1, $el2, $el3],
@@ -614,6 +665,7 @@ export default ({ describe, it }) => [
         $$initScaleTransform($svg)($el1);
         $$initScaleTransform2()($el2, $svg);
         $$initScaleTransform3(undefined, $el3, $svg);
+        // $$initScaleTransform3()($el3, $svg);
 
         each(
           ($el) => {

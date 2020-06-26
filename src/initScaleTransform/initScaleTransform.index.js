@@ -1,3 +1,4 @@
+import { curry } from "fxjs2";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
@@ -50,25 +51,27 @@ export const $$initScaleTransform2 = ({
   return transform;
 };
 
-export const $$initScaleTransform3 = (
-  { sx = 1, sy = 1, cx = 0, cy = 0, index = 0 } = {},
-  $el,
-  $svg = $$getSVG()
-) => {
-  const transform_list = $$getBaseTransformList($el);
+export const $$initScaleTransform3 = curry(
+  (
+    { sx = 1, sy = 1, cx = 0, cy = 0, index = 0 } = {},
+    $el,
+    $svg = $$getSVG()
+  ) => {
+    const transform_list = $$getBaseTransformList($el);
 
-  transform_list.insertItemBefore(
-    $$createSVGTransformTranslate($svg)({ tx: -cx, ty: -cy }),
-    index
-  );
-  const transform = transform_list.insertItemBefore(
-    $$createSVGTransformScale($svg)({ sx, sy }),
-    index
-  );
-  transform_list.insertItemBefore(
-    $$createSVGTransformTranslate($svg)({ tx: cx, ty: cy }),
-    index
-  );
+    transform_list.insertItemBefore(
+      $$createSVGTransformTranslate($svg)({ tx: -cx, ty: -cy }),
+      index
+    );
+    const transform = transform_list.insertItemBefore(
+      $$createSVGTransformScale($svg)({ sx, sy }),
+      index
+    );
+    transform_list.insertItemBefore(
+      $$createSVGTransformTranslate($svg)({ tx: cx, ty: cy }),
+      index
+    );
 
-  return transform;
-};
+    return transform;
+  }
+);
