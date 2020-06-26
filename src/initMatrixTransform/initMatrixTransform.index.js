@@ -1,4 +1,4 @@
-import { defaultTo } from "fxjs2";
+import { curry, defaultTo } from "fxjs2";
 import {
   $$createSVGMatrix,
   $$createSVGMatrix2,
@@ -27,14 +27,12 @@ export const $$initMatrixTransform2 = ({ matrix, index = 0 } = {}) => (
     index
   );
 
-export const $$initMatrixTransform3 = (
-  { matrix, index = 0 } = {},
-  $el,
-  $svg = $$getSVG()
-) =>
-  $$getBaseTransformList($el).insertItemBefore(
-    $$createSVGTransformMatrix($svg)({
-      matrix: defaultTo($$createSVGMatrix2()($svg), matrix),
-    }),
-    index
-  );
+export const $$initMatrixTransform3 = curry(
+  ({ matrix, index = 0 } = {}, $el, $svg = $$getSVG()) =>
+    $$getBaseTransformList($el).insertItemBefore(
+      $$createSVGTransformMatrix($svg)({
+        matrix: defaultTo($$createSVGMatrix2()($svg), matrix),
+      }),
+      index
+    )
+);

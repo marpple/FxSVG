@@ -65,6 +65,7 @@ export default ({ describe, it }) => [
         $$initMatrixTransform($svg)($el1, { matrix: matrix1, index: index1 });
         $$initMatrixTransform2({ matrix: matrix2, index: index2 })($el2, $svg);
         $$initMatrixTransform3({ matrix: matrix3, index: index3 }, $el3, $svg);
+        // $$initMatrixTransform3({ matrix: matrix3, index: index3 })($el3, $svg);
 
         const [after_length1, after_length2, after_length3] = go(
           [$el1, $el2, $el3],
@@ -110,6 +111,7 @@ export default ({ describe, it }) => [
         $$initMatrixTransform($svg)($el1, { matrix: matrix1, index: index1 });
         $$initMatrixTransform2({ matrix: matrix2, index: index2 })($el2, $svg);
         $$initMatrixTransform3({ matrix: matrix3, index: index3 }, $el3, $svg);
+        // $$initMatrixTransform3({ matrix: matrix3, index: index3 })($el3, $svg);
 
         const [transform1, transform2, transform3] = go(
           [$el1, $el2, $el3],
@@ -163,6 +165,7 @@ export default ({ describe, it }) => [
         $$initMatrixTransform($svg)($el1, { matrix: matrix1, index: index1 });
         $$initMatrixTransform2({ matrix: matrix2, index: index2 })($el2, $svg);
         $$initMatrixTransform3({ matrix: matrix3, index: index3 }, $el3, $svg);
+        // $$initMatrixTransform3({ matrix: matrix3, index: index3 })($el3, $svg);
 
         const [
           after_transform_list1,
@@ -215,6 +218,7 @@ export default ({ describe, it }) => [
         $$initMatrixTransform($svg)($el1, { index: index1 });
         $$initMatrixTransform2({ index: index2 })($el2, $svg);
         $$initMatrixTransform3({ index: index3 }, $el3, $svg);
+        // $$initMatrixTransform3({ index: index3 })($el3, $svg);
 
         const [transform1, transform2, transform3] = go(
           [$el1, $el2, $el3],
@@ -253,6 +257,7 @@ export default ({ describe, it }) => [
         $$initMatrixTransform($svg)($el1, { matrix: matrix1 });
         $$initMatrixTransform2({ matrix: matrix2 })($el2, $svg);
         $$initMatrixTransform3({ matrix: matrix3 }, $el3, $svg);
+        // $$initMatrixTransform3({ matrix: matrix3 })($el3, $svg);
 
         const [transform1, transform2, transform3] = go(
           [$el1, $el2, $el3],
@@ -288,6 +293,7 @@ export default ({ describe, it }) => [
         $$initMatrixTransform($svg)($el1);
         $$initMatrixTransform2()($el2, $svg);
         $$initMatrixTransform3(undefined, $el3, $svg);
+        // $$initMatrixTransform3()($el3, $svg);
 
         const [transform1, transform2, transform3] = go(
           [$el1, $el2, $el3],
