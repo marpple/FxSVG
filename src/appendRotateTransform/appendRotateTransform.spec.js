@@ -109,7 +109,8 @@ export default ({ describe, it }) => [
         rangeL(Infinity),
         mapL(() => makeRandomNumber(-100, 100)),
         rejectL(equals2(0)),
-        (iter) => mapL(() => takeL(2, iter), rangeL(Infinity)),
+        (iter) =>
+          mapL(() => [iter.next().value, iter.next().value], rangeL(Infinity)),
         mapL(([cx, cy]) => setupMock({ cx, cy })),
         takeL(3)
       );
@@ -161,7 +162,11 @@ export default ({ describe, it }) => [
         const [before_t1, before_t2, before_t3] = go(
           rangeL(Infinity),
           mapL(() => makeRandomNumber(-100, 100)),
-          (iter) => mapL(() => takeL(2, iter), rangeL(Infinity)),
+          (iter) =>
+            mapL(
+              () => [iter.next().value, iter.next().value],
+              rangeL(Infinity)
+            ),
           mapL(([sx, sy]) => $$createSVGTransformScale()({ sx, sy })),
           takeL(3)
         );
@@ -188,7 +193,11 @@ export default ({ describe, it }) => [
         const [before_t1, before_t2, before_t3] = go(
           rangeL(Infinity),
           mapL(() => makeRandomNumber(-100, 100)),
-          (iter) => mapL(() => takeL(2, iter), rangeL(Infinity)),
+          (iter) =>
+            mapL(
+              () => [iter.next().value, iter.next().value],
+              rangeL(Infinity)
+            ),
           mapL(([tx, ty]) => $$createSVGTransformTranslate()({ tx, ty })),
           takeL(3)
         );
