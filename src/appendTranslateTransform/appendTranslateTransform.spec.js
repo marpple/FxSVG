@@ -37,6 +37,7 @@ export default ({ describe, it }) => [
       const output1 = $$appendTranslateTransform(input1, { tx: tx1, ty: ty1 });
       const output2 = $$appendTranslateTransform2({ tx: tx2, ty: ty2 })(input2);
       const output3 = $$appendTranslateTransform3({ tx: tx3, ty: ty3 }, input3);
+      // const output3 = $$appendTranslateTransform3({ tx: tx3, ty: ty3 })(input3);
 
       go(
         [output1, output2, output3],
@@ -59,6 +60,7 @@ export default ({ describe, it }) => [
       $$appendTranslateTransform(transform1, { tx: tx1, ty: ty1 });
       $$appendTranslateTransform2({ tx: tx2, ty: ty2 })(transform2);
       $$appendTranslateTransform3({ tx: tx3, ty: ty3 }, transform3);
+      // $$appendTranslateTransform3({ tx: tx3, ty: ty3 })(transform3);
 
       each(
         ([transform, prev_tx, prev_ty, tx, ty]) => {
@@ -89,6 +91,7 @@ export default ({ describe, it }) => [
         $$appendTranslateTransform(transform1, option1);
         $$appendTranslateTransform2(option2)(transform2);
         $$appendTranslateTransform3(option3, transform3);
+        // $$appendTranslateTransform3(option3)(transform3);
 
         each(([transform, tx]) => expect(transform.matrix.e).equal(tx), [
           [transform1, tx1],
@@ -114,6 +117,7 @@ export default ({ describe, it }) => [
         $$appendTranslateTransform(transform1, option1);
         $$appendTranslateTransform2(option2)(transform2);
         $$appendTranslateTransform3(option3, transform3);
+        // $$appendTranslateTransform3(option3)(transform3);
 
         each(([transform, ty]) => expect(transform.matrix.f).equal(ty), [
           [transform1, ty1],
@@ -151,6 +155,10 @@ export default ({ describe, it }) => [
           },
           before_t3
         );
+        // const after_t3 = $$appendTranslateTransform3({
+        //   tx: tx3,
+        //   ty: ty3,
+        // })(before_t3);
 
         each(
           ([before_t, after_t]) => {
@@ -196,6 +204,10 @@ export default ({ describe, it }) => [
           },
           before_t3
         );
+        // const after_t3 = $$appendTranslateTransform3({
+        //   tx: tx3,
+        //   ty: ty3,
+        // })(before_t3);
 
         each(
           ([before_t, after_t]) => {
@@ -240,6 +252,10 @@ export default ({ describe, it }) => [
           },
           before_t3
         );
+        // const after_t3 = $$appendTranslateTransform3({
+        //   tx: tx3,
+        //   ty: ty3,
+        // })(before_t3);
 
         each(
           ([before_t, after_t]) => {
