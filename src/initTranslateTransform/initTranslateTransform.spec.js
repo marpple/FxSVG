@@ -86,6 +86,11 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initTranslateTransform3({
+        //   tx: tx3,
+        //   ty: ty3,
+        //   index: index3,
+        // })($el3, $svg);
 
         const [after_length1, after_length2, after_length3] = go(
           [$el1, $el2, $el3],
@@ -146,6 +151,11 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initTranslateTransform3({
+        //   tx: tx3,
+        //   ty: ty3,
+        //   index: index3,
+        // })($el3, $svg);
 
         const [transform1, transform2, transform3] = go(
           [$el1, $el2, $el3],
@@ -214,6 +224,11 @@ export default ({ describe, it }) => [
           $el3,
           $svg
         );
+        // $$initTranslateTransform3({
+        //   tx: tx3,
+        //   ty: ty3,
+        //   index: index3,
+        // })($el3, $svg);
 
         const [
           after_transform_list1,
@@ -267,6 +282,7 @@ export default ({ describe, it }) => [
         $$initTranslateTransform($svg)($el1, { index: index1 });
         $$initTranslateTransform2({ index: index2 })($el2, $svg);
         $$initTranslateTransform3({ index: index3 }, $el3, $svg);
+        // $$initTranslateTransform3({ index: index3 })($el3, $svg);
 
         const [transform1, transform2, transform3] = go(
           [$el1, $el2, $el3],
@@ -306,6 +322,7 @@ export default ({ describe, it }) => [
         $$initTranslateTransform($svg)($el1, { tx: tx1, ty: ty1 });
         $$initTranslateTransform2({ tx: tx2, ty: ty2 })($el2, $svg);
         $$initTranslateTransform3({ tx: tx3, ty: ty3 }, $el3, $svg);
+        // $$initTranslateTransform3({ tx: tx3, ty: ty3 })($el3, $svg);
 
         const [transform1, transform2, transform3] = go(
           [$el1, $el2, $el3],
@@ -339,6 +356,7 @@ export default ({ describe, it }) => [
         $$initTranslateTransform($svg)($el1);
         $$initTranslateTransform2()($el2, $svg);
         $$initTranslateTransform3(undefined, $el3, $svg);
+        // $$initTranslateTransform3()($el3, $svg);
 
         const [transform1, transform2, transform3] = go(
           [$el1, $el2, $el3],
