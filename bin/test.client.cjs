@@ -1,14 +1,19 @@
+const fs = require("fs");
+const path = require("path");
+const cluster = require("cluster");
 const playwright = require("playwright");
 const yargs = require("yargs");
 
 const argv = yargs
   .alias("r", "repeat")
   .alias("h", "headless")
-  .default("repeat", "10")
+  .alias("w", "watch")
+  .default("repeat", "1")
   .parse();
 
 const TEST_REPEAT_COUNT = parseInt(argv.repeat, 10);
 const TEST_HEADLESS = !!argv.headless;
+const TEST_IS_WATCH = !!argv.watch;
 const TEST_PAGE_DEFAULT_URL = "http://localhost:8080/test/index.html";
 const TEST_PAGE_JSON_URL = "http://localhost:8080/test/index.json.html";
 
@@ -179,7 +184,9 @@ const main = async () => {
     const total_fail = reports
       .map(({ fail }) => fail)
       .reduce((a, b) => a + b, 0);
-    total_fail > 0 && process.exit(1);
+    if (total_fail > 0) {
+      throw new Error("TESTS ARE FAILED!!!");
+    }
     return;
   }
 
@@ -190,4 +197,21 @@ const main = async () => {
   reportTestsDefault(reports);
 };
 
-main();
+if (cluster.isMaster && TEST_IS_WATCH) {
+  let worker = cluster.fork();
+  fs.watch(
+    path.resolve(__dirname, "../src"),
+    { persistent: true, recursive: true, encoding: "utf8" },
+    () => {
+      worker && worker.kill();
+      console.log("\n\n\n==============================\n\n\n");
+      worker = cluster.fork();
+    }
+  );
+} else {
+  main().catch((error) => {
+    console.log("\n");
+    console.error(error.message);
+    process.exit(1);
+  });
+}
