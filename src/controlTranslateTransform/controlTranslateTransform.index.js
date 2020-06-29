@@ -1,3 +1,4 @@
+import { curry } from "fxjs2";
 import { $$appendTranslateTransform } from "../appendTranslateTransform/appendTranslateTransform.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 import { $$initTranslateTransform } from "../initTranslateTransform/initTranslateTransform.index.js";
@@ -28,3 +29,55 @@ export const $$controlTranslateTransform = ($svg = $$getSVG()) => (
 
   return { $el, controller, transform };
 };
+
+export const $$controlTranslateTransform2 = ({
+  index = 0,
+  tx,
+  ty,
+  x_name,
+  y_name,
+} = {}) => ($el, $svg = $$getSVG()) => {
+  const transform = $$initTranslateTransform($svg)($el, { tx, ty, index });
+
+  const controller = {};
+  controller.update = ({ tx, ty } = {}) => {
+    $$updateTranslateTransform(transform, { tx, ty });
+    return controller;
+  };
+  controller.append = ({ tx, ty } = {}) => {
+    $$appendTranslateTransform(transform, { tx, ty });
+    return controller;
+  };
+  controller.end = () => {
+    if (x_name && y_name) {
+      $$mergeTranslateTransform($svg)($el, { index, x_name, y_name });
+    }
+    return $el;
+  };
+
+  return { $el, controller, transform };
+};
+
+export const $$controlTranslateTransform3 = curry(
+  ({ index = 0, tx, ty, x_name, y_name } = {}, $el, $svg = $$getSVG()) => {
+    const transform = $$initTranslateTransform($svg)($el, { tx, ty, index });
+
+    const controller = {};
+    controller.update = ({ tx, ty } = {}) => {
+      $$updateTranslateTransform(transform, { tx, ty });
+      return controller;
+    };
+    controller.append = ({ tx, ty } = {}) => {
+      $$appendTranslateTransform(transform, { tx, ty });
+      return controller;
+    };
+    controller.end = () => {
+      if (x_name && y_name) {
+        $$mergeTranslateTransform($svg)($el, { index, x_name, y_name });
+      }
+      return $el;
+    };
+
+    return { $el, controller, transform };
+  }
+);
