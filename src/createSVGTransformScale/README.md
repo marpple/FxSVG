@@ -9,8 +9,6 @@
 
 입력한 `sx`, `sy` 값과 실제 적용된 Transform 값은 정확도 차이가 발생할 수 있습니다.
 
-[SVG 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
-
 ```javascript
 console.log($$createSVGTransformScale()());
 // SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}

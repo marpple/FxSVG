@@ -5,8 +5,6 @@
 
 `SVGMatrix` 객체를 생성합니다.
 
-[SVG 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
-
 ```javascript
 console.log($$createSVGMatrix()());
 // SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}

@@ -8,8 +8,6 @@
 
 `update`, `append`, `end` 메소드를 체이닝하여 안전하게 조작할 수 있습니다.
 
-[SVG 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
-
 ```javascript
 const $el = $$el()(
   `<rect x="10" y="20" width="100" height="200" transform="scale(2, 4)"></rect>`

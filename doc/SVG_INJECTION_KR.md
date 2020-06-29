@@ -19,26 +19,3 @@ console.log($$createSVGMatrix()());
 console.log($$createSVGMatrix($svg)());
 // SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}
 ```
-
-- `$$controlRotateTransform`
-- `$$controlScaleTransform`
-- `$$controlTranslateTransform`
-- `$$createSVGMatrix`
-- `$$createSVGPoint`
-- `$$createSVGRect`
-- `$$createSVGTransform`
-- `$$createSVGTransformMatrix`
-- `$$createSVGTransformRotate`
-- `$$createSVGTransformScale`
-- `$$createSVGTransformTranslate`
-- `$$el`
-- `$$els`
-- `$$getBoxPoints`
-- `$$getCenterPoint`
-- `$$initMatrixTransform`
-- `$$initRotateTransform`
-- `$$initScaleTransform`
-- `$$initTranslateTransform`
-- `$$mergeRotateTransform`
-- `$$mergeScaleTransform`
-- `$$mergeTranslateTransform`

@@ -7,8 +7,6 @@
 `SVGTransform.SVG_TRANSFORM_MATRIX` 타입을 가집니다.
 `transform.matrix` 값으로 `SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0}` 을 가집니다.
 
-[SVG 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
-
 ```javascript
 console.log($$createSVGTransform());
 // SVGTransform {type: 1, matrix: SVGMatrix, angle: 0}
