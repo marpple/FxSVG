@@ -93,3 +93,11 @@ export const $$getBoxPoints = ($svg = $$getSVG()) => ($el) => {
 
   return { original, transformed, bounding };
 };
+
+export const $$getBoxPoints2 = ($el, $svg = $$getSVG()) => {
+  const original = $$getOriginalBoxPoints($svg)($el);
+  const transformed = $$getTransformedBoxPoints($svg)($el, original);
+  const bounding = $$getBoundingBoxPoints($svg)($el, transformed);
+
+  return { original, transformed, bounding };
+};
