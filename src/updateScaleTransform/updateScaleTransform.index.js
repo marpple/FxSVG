@@ -1,4 +1,4 @@
-import { defaultTo } from "fxjs2";
+import { curry, defaultTo } from "fxjs2";
 import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
 
 export const $$updateScaleTransform = (
@@ -25,7 +25,7 @@ export const $$updateScaleTransform2 = ({ sx, sy } = {}) => (transform) => {
   return transform;
 };
 
-export const $$updateScaleTransform3 = ({ sx, sy } = {}, transform) => {
+export const $$updateScaleTransform3 = curry(({ sx, sy } = {}, transform) => {
   if (!$$isScaleSVGTransform(transform)) {
     return transform;
   }
@@ -35,4 +35,4 @@ export const $$updateScaleTransform3 = ({ sx, sy } = {}, transform) => {
     defaultTo(transform.matrix.d, sy)
   );
   return transform;
-};
+});
