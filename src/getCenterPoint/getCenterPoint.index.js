@@ -32,3 +32,11 @@ export const $$getCenterPoint = ($svg = $$getSVG()) => ($el) =>
     mapL($$calcCenterPoint($svg)),
     ([original, transformed]) => ({ original, transformed })
   );
+
+export const $$getCenterPoint2 = ($el, $svg = $$getSVG()) =>
+  go(
+    $$getBoxPoints($svg)($el),
+    ({ original, transformed }) => [original, transformed],
+    mapL($$calcCenterPoint($svg)),
+    ([original, transformed]) => ({ original, transformed })
+  );
