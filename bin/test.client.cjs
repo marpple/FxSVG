@@ -1,9 +1,13 @@
 const playwright = require("playwright");
 const yargs = require("yargs");
 
-const argv = yargs.alias("r", "repeat").alias("h", "headless").parse();
+const argv = yargs
+  .alias("r", "repeat")
+  .alias("h", "headless")
+  .default("repeat", "10")
+  .parse();
 
-const TEST_REPEAT_COUNT = argv.repeat == null ? 10 : parseInt(argv.repeat, 10);
+const TEST_REPEAT_COUNT = parseInt(argv.repeat, 10);
 const TEST_HEADLESS = !!argv.headless;
 const TEST_PAGE_DEFAULT_URL = "http://localhost:8080/test/index.html";
 const TEST_PAGE_JSON_URL = "http://localhost:8080/test/index.json.html";
