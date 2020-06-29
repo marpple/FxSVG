@@ -1,3 +1,4 @@
+import { curry } from "fxjs2";
 import { $$isMatrixSVGTransform } from "../isMatrixSVGTransform/isMatrixSVGTransform.index.js";
 
 export const $$updateMatrixTransform = (transform, { matrix } = {}) => {
@@ -18,11 +19,11 @@ export const $$updateMatrixTransform2 = ({ matrix } = {}) => (transform) => {
   return transform;
 };
 
-export const $$updateMatrixTransform3 = ({ matrix } = {}, transform) => {
+export const $$updateMatrixTransform3 = curry(({ matrix } = {}, transform) => {
   if (!$$isMatrixSVGTransform(transform)) {
     return transform;
   }
 
   matrix && transform.setMatrix(matrix);
   return transform;
-};
+});
