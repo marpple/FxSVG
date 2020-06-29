@@ -1,4 +1,4 @@
-import { each, go, mapL, rangeL } from "fxjs2";
+import { curry, each, go, mapL, rangeL } from "fxjs2";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
@@ -53,3 +53,44 @@ export const $$mergeRotateTransform = ($svg = $$getSVG()) => (
 
   return $el;
 };
+
+export const $$mergeRotateTransform2 = ({ index = 1 } = {}) => (
+  $el,
+  $svg = $$getSVG()
+) => {
+  const base_tl = $$getBaseTransformList($el);
+  if (!$$isValidFxRotateSVGTransformList(base_tl, { index })) {
+    return $el;
+  }
+
+  const { angle } = base_tl.getItem(index);
+  const { e: cx, f: cy } = base_tl.getItem(index - 1).matrix;
+
+  each(() => base_tl.removeItem(index - 1), rangeL(3));
+  base_tl.insertItemBefore(
+    $$createSVGTransformRotate($svg)({ angle, cx, cy }),
+    index - 1
+  );
+
+  return $el;
+};
+
+export const $$mergeRotateTransform3 = curry(
+  ({ index = 1 } = {}, $el, $svg = $$getSVG()) => {
+    const base_tl = $$getBaseTransformList($el);
+    if (!$$isValidFxRotateSVGTransformList(base_tl, { index })) {
+      return $el;
+    }
+
+    const { angle } = base_tl.getItem(index);
+    const { e: cx, f: cy } = base_tl.getItem(index - 1).matrix;
+
+    each(() => base_tl.removeItem(index - 1), rangeL(3));
+    base_tl.insertItemBefore(
+      $$createSVGTransformRotate($svg)({ angle, cx, cy }),
+      index - 1
+    );
+
+    return $el;
+  }
+);
