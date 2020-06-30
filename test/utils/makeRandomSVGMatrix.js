@@ -8,5 +8,5 @@ export const makeRandomSVGMatrix = (random = makeRandomNumber) =>
     split(""),
     mapL((k) => [k, random()]),
     object,
-    $$createSVGMatrix()
+    (values) => $$createSVGMatrix(values)()
   );

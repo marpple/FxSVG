@@ -11,11 +11,17 @@ console.log($$createSVGMatrix()());
 ```
 
 ```javascript
-console.log($$createSVGMatrix()({ e: 10, f: 20 }));
+console.log($$createSVGMatrix({ e: 10, f: 20 })());
 // SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 20}
 ```
 
 ```javascript
-console.log($$createSVGMatrix()({ a: 2, b: 0, c: 0, d: 4, e: 10, f: 20 }));
+console.log($$createSVGMatrix({ a: 2, b: 0, c: 0, d: 4, e: 10, f: 20 })());
 // SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 10, f: 20}
+```
+
+```javascript
+const $svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+console.log($$createSVGMatrix({ a: 1, b: 2, c: 3, d: 4, e: 5, f: 6 })($svg));
+// SVGMatrix {a: 1, b: 2, c: 3, d: 4, e: 5, f: 6}
 ```

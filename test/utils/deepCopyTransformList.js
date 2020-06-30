@@ -3,6 +3,6 @@ import { $$createSVGMatrix } from "../../src/createSVGMatrix/createSVGMatrix.ind
 
 export const deepCopyTransformList = (transform_list) =>
   map(
-    ({ matrix, type }) => ({ type, matrix: $$createSVGMatrix()(matrix) }),
+    ({ matrix, type }) => ({ type, matrix: $$createSVGMatrix(matrix)() }),
     transform_list
   );

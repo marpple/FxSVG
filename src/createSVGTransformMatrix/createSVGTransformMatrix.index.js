@@ -1,13 +1,10 @@
 import { defaultTo } from "fxjs2";
-import {
-  $$createSVGMatrix,
-  $$createSVGMatrix2, $$createSVGMatrix3,
-} from "../createSVGMatrix/createSVGMatrix.index.js";
+import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 
 export const $$createSVGTransformMatrix = ($svg = $$getSVG()) => ({
-  matrix = $$createSVGMatrix($svg)(),
+  matrix = $$createSVGMatrix()($svg),
 } = {}) => {
   const transform = $$createSVGTransform($svg);
   transform.setMatrix(matrix);
@@ -17,7 +14,7 @@ export const $$createSVGTransformMatrix = ($svg = $$getSVG()) => ({
 export const $$createSVGTransformMatrix2 = ({ matrix } = {}) => (
   $svg = $$getSVG()
 ) => {
-  matrix = defaultTo($$createSVGMatrix2()($svg), matrix);
+  matrix = defaultTo($$createSVGMatrix()($svg), matrix);
 
   const transform = $$createSVGTransform($svg);
   transform.setMatrix(matrix);
@@ -28,7 +25,7 @@ export const $$createSVGTransformMatrix3 = (
   { matrix } = {},
   $svg = $$getSVG()
 ) => {
-  matrix = defaultTo($$createSVGMatrix3(undefined, $svg), matrix);
+  matrix = defaultTo($$createSVGMatrix()($svg), matrix);
 
   const transform = $$createSVGTransform($svg);
   transform.setMatrix(matrix);

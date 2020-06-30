@@ -90,7 +90,7 @@ export default ({ describe, it }) => [
               transform_str.match(/(-?\d+(\.\d+)?)/gi),
               mapL(parseFloat),
               ([a, b, c, d, e, f]) => ({ a, b, c, d, e, f }),
-              $$createSVGMatrix(),
+              (values) => $$createSVGMatrix(values)(),
               (matrix) => ({ matrix }),
               $$createSVGTransformMatrix()
             );
