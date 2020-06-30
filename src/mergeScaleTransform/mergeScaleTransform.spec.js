@@ -10,6 +10,7 @@ import {
   zipL,
   zipWithIndexL,
 } from "fxjs2";
+import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   deepCopyTransformList,
   makeMockRectInitiatedScaleTransform,
@@ -52,8 +53,19 @@ export default ({ describe, it }) => [
         );
 
         expect($output, description).equal($input);
-        expect(after_transform_list, description).deep.equal(
-          before_transform_list
+        expect(after_transform_list.length, description).equal(
+          before_transform_list.length
+        );
+        go(
+          after_transform_list,
+          zipL(before_transform_list),
+          each(([before_transform, after_transform]) =>
+            expectSameValueSVGTransform(
+              after_transform,
+              before_transform,
+              description
+            )
+          )
         );
       }
     });
@@ -110,14 +122,8 @@ export default ({ describe, it }) => [
             return transform;
           }),
           zipL(after_transform_list),
-          each(
-            ([
-              { type: receive_type, matrix: receive_matrix },
-              { type: expect_type, matrix: expect_matrix },
-            ]) => {
-              expect(receive_type).equal(expect_type);
-              expect(receive_matrix).deep.equal(expect_matrix);
-            }
+          each(([receive_transform, expect_transform]) =>
+            expectSameValueSVGTransform(receive_transform, expect_transform)
           )
         );
       }

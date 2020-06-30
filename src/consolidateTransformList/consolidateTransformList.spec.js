@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { go, go1, mapL, reduce } from "fxjs2";
+import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import {
   makeMockRect,
   makeRandomTransformAttributeValue,
@@ -46,7 +47,7 @@ export default ({ describe, it }) => [
 
       const output_list = $$consolidateTransformList(input_list);
 
-      expect(output_list.getItem(0).matrix).to.deep.equal(matrix);
+      expectSameValueSVGMatrix(output_list.getItem(0).matrix, matrix);
     });
   }),
 ];

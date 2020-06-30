@@ -1,5 +1,6 @@
 import { expect } from "chai";
-import { defaultTo, equals2, go, join, mapL, rangeL } from "fxjs2";
+import { defaultTo, each, equals2, go, join, mapL, rangeL, zipL } from "fxjs2";
+import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   makeMockRect,
   makeRandomInt,
@@ -30,12 +31,19 @@ export default ({ describe, it }) => [
         defaultTo(null),
         (transform) => makeMockRect({ transform }),
         ($el) => ({
-          base_transform_list: $$getBaseTransformList($el),
-          anim_transform_list: $$getAnimTransformList($el),
+          base_transform_list: [...$$getBaseTransformList($el)],
+          anim_transform_list: [...$$getAnimTransformList($el)],
         })
       );
 
-      expect(anim_transform_list).to.deep.equal(base_transform_list);
+      expect(anim_transform_list.length).equal(base_transform_list.length);
+      go(
+        anim_transform_list,
+        zipL(base_transform_list),
+        each(([base_transform, anim_transform]) =>
+          expectSameValueSVGTransform(anim_transform, base_transform)
+        )
+      );
     });
   }),
 ];

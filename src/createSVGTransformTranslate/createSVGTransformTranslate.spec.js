@@ -10,6 +10,7 @@ import {
   object,
   pipe,
 } from "fxjs2";
+import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
 import {
@@ -84,7 +85,7 @@ export default ({ describe, it }) => [
           return { receive_transform, expect_transform };
         }),
         each(({ receive_transform, expect_transform }) =>
-          expect(receive_transform).to.deep.equal(expect_transform)
+          expectSameValueSVGTransform(receive_transform, expect_transform)
         )
       );
     });

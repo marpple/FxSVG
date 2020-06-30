@@ -3,7 +3,6 @@ import {
   each,
   equals2,
   go,
-  map,
   mapL,
   rangeL,
   rejectL,
@@ -17,7 +16,10 @@ import {
   makeRandomNumber,
   makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
-import { expectTransformWithTranslateTxTy } from "../../test/assertions/index.js";
+import {
+  expectSameValueSVGTransform,
+  expectTransformWithTranslateTxTy,
+} from "../../test/assertions/index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import {
   $$initTranslateTransform,
@@ -241,15 +243,22 @@ export default ({ describe, it }) => [
         );
 
         each(
-          ([before_transform_list, after_transform_list, index]) =>
-            expect(
-              go(
-                after_transform_list,
-                zipWithIndexL,
-                rejectL(([i]) => equals2(index, i)),
-                map(([, transform]) => transform)
+          ([before_transform_list, after_transform_list, index]) => {
+            expect(after_transform_list.length - 1).equal(
+              before_transform_list.length
+            );
+            go(
+              after_transform_list,
+              zipWithIndexL,
+              rejectL(([i]) => equals2(index, i)),
+              mapL(([, transform]) => transform),
+              zipL(before_transform_list),
+              each(([before_transform, after_transform]) =>
+                expectSameValueSVGTransform(after_transform, before_transform)
               )
-            ).deep.equal(before_transform_list),
+            );
+          },
+
           [
             [before_transform_list1, after_transform_list1, index1],
             [before_transform_list2, after_transform_list2, index2],

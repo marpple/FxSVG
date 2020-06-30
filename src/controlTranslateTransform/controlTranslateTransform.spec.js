@@ -11,6 +11,7 @@ import {
   zipL,
   zipWithIndexL,
 } from "fxjs2";
+import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   deepCopyTransformList,
   makeMockRect,
@@ -104,7 +105,7 @@ export default ({ describe, it }) => [
 
       const expect_transform = $$createSVGTransformTranslate()({ tx, ty });
 
-      expect(receive_transform).deep.equal(expect_transform);
+      expectSameValueSVGTransform(receive_transform, expect_transform);
     });
 
     it(`The return transform object is the transform at the input index.`, function () {
@@ -115,7 +116,7 @@ export default ({ describe, it }) => [
       } = setupMock();
       const expect_transform = $$getBaseTransformList($el).getItem(index);
 
-      expect(receive_transform).deep.equal(expect_transform);
+      expectSameValueSVGTransform(receive_transform, expect_transform);
     });
 
     it(`The controller.update method update the return transform with the input tx, ty.`, function () {
@@ -128,7 +129,7 @@ export default ({ describe, it }) => [
 
       const expect_transform = $$createSVGTransformTranslate()({ tx, ty });
 
-      expect(receive_transform).deep.equal(expect_transform);
+      expectSameValueSVGTransform(receive_transform, expect_transform);
     });
 
     it(`The controller.append method add the input tx, ty to the return transform.`, function () {
@@ -146,7 +147,7 @@ export default ({ describe, it }) => [
         ty: ty1 + ty2,
       });
 
-      expect(receive_transform).deep.equal(expect_transform);
+      expectSameValueSVGTransform(receive_transform, expect_transform);
     });
 
     it(`The controller.end method update x, y of the element.`, function () {
@@ -181,6 +182,9 @@ export default ({ describe, it }) => [
         $$getBaseTransformList($el)
       );
 
+      expect(after_transform_list.length).equal(
+        before_transform_list.length - 1
+      );
       go(
         [
           { tx, ty },
@@ -201,14 +205,8 @@ export default ({ describe, it }) => [
             ),
             zipL(after_transform_list)
           ),
-        each(
-          ([
-            { type: after_type, matrix: after_matrix },
-            { type: before_type, matrix: before_matrix },
-          ]) => {
-            expect(after_type).equal(before_type);
-            expect(after_matrix).deep.equal(before_matrix);
-          }
+        each(([after_transform, before_transform]) =>
+          expectSameValueSVGTransform(after_transform, before_transform)
         )
       );
     });

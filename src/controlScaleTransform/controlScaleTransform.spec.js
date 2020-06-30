@@ -16,6 +16,7 @@ import {
   zipL,
   zipWithIndexL,
 } from "fxjs2";
+import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import { deepCopyTransformList } from "../../test/utils/deepCopyTransformList.js";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
 import { makeRandomBool } from "../../test/utils/makeRandomBool.js";
@@ -176,7 +177,7 @@ export default ({ describe, it }) => [
 
       const expect_transform = $$createSVGTransformScale()({ sx, sy });
 
-      expect(receive_transform).deep.equal(expect_transform);
+      expectSameValueSVGTransform(receive_transform, expect_transform);
     });
 
     it(`The return transform object is the transform at the input index + 1.`, function () {
@@ -187,7 +188,7 @@ export default ({ describe, it }) => [
       } = setupMock();
       const expect_transform = $$getBaseTransformList($el).getItem(index + 1);
 
-      expect(receive_transform).to.deep.equal(expect_transform);
+      expectSameValueSVGTransform(receive_transform, expect_transform);
     });
 
     it(`The controller.update method update the return transform with the input sx, sy.`, function () {
@@ -200,7 +201,7 @@ export default ({ describe, it }) => [
 
       const expect_transform = $$createSVGTransformScale()({ sx, sy });
 
-      expect(receive_transform).deep.equal(expect_transform);
+      expectSameValueSVGTransform(receive_transform, expect_transform);
     });
 
     it(`The controller.end method merge the transforms from index to index + 2
@@ -223,6 +224,9 @@ export default ({ describe, it }) => [
         $$getBaseTransformList($el)
       );
 
+      expect(after_transform_list.length).equal(
+        before_transform_list.length - 2
+      );
       go(
         [
           $$createSVGTransformTranslate()({ tx: cx, ty: cy }),
@@ -244,7 +248,7 @@ export default ({ describe, it }) => [
           ),
         zipL(after_transform_list),
         each(([receive_transform, expect_transform]) =>
-          expect(receive_transform).deep.equal(expect_transform)
+          expectSameValueSVGTransform(receive_transform, expect_transform)
         )
       );
     });
@@ -264,6 +268,9 @@ export default ({ describe, it }) => [
         $$getBaseTransformList($el)
       );
 
+      expect(after_transform_list.length).equal(
+        before_transform_list.length - 3
+      );
       go(
         before_transform_list,
         zipWithIndexL,
@@ -271,7 +278,7 @@ export default ({ describe, it }) => [
         mapL(([, transform]) => transform),
         zipL(after_transform_list),
         each(([receive_transform, expect_transform]) =>
-          expect(receive_transform).deep.equal(expect_transform)
+          expectSameValueSVGTransform(receive_transform, expect_transform)
         )
       );
     });

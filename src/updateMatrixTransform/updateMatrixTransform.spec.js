@@ -1,14 +1,15 @@
 import { expect } from "chai";
 import { each, go, mapL, rangeL, takeL } from "fxjs2";
+import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   makeRandomNumber,
   makeRandomSVGMatrix,
 } from "../../test/utils/index.js";
+import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
-import { $$isMatrixSVGTransform } from "../isMatrixSVGTransform/isMatrixSVGTransform.index.js";
 import {
   $$updateMatrixTransform,
   $$updateMatrixTransform2,
@@ -25,9 +26,17 @@ const setupMockInputValues = () => ({
   matrix: makeRandomSVGMatrix(() => makeRandomNumber(-100, 100)),
 });
 
-const expectTransformWithMatrix = ({ transform, matrix }) => {
-  expect($$isMatrixSVGTransform(transform)).to.be.true;
-  expect(transform.matrix).deep.equal(matrix);
+const expectTransformWithMatrix = ({
+  transform: receive_transform,
+  matrix,
+}) => {
+  const expect_transform = $$createSVGTransform();
+  expect_transform.setMatrix(matrix);
+  expectSameValueSVGTransform(
+    receive_transform,
+    expect_transform,
+    "expectTransformWithMatrix"
+  );
 };
 
 export default ({ describe, it }) => [
@@ -142,7 +151,7 @@ export default ({ describe, it }) => [
         each(
           ([before_t, after_t]) => {
             expect(after_t).to.equal(before_t);
-            expect(after_t).to.deep.equal(before_t);
+            expectSameValueSVGTransform(after_t, before_t);
           },
           [
             [before_t1, after_t1],
@@ -189,7 +198,7 @@ export default ({ describe, it }) => [
         each(
           ([before_t, after_t]) => {
             expect(after_t).to.equal(before_t);
-            expect(after_t).to.deep.equal(before_t);
+            expectSameValueSVGTransform(after_t, before_t);
           },
           [
             [before_t1, after_t1],
@@ -234,7 +243,7 @@ export default ({ describe, it }) => [
         each(
           ([before_t, after_t]) => {
             expect(after_t).to.equal(before_t);
-            expect(after_t).to.deep.equal(before_t);
+            expectSameValueSVGTransform(after_t, before_t);
           },
           [
             [before_t1, after_t1],

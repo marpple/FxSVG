@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { each, equals2, go, mapL, rangeL, rejectL, takeL, zipL } from "fxjs2";
+import { expectSameValueSVGTransform } from "../../test/assertions/expectSameValueSVGTransform.js";
 import {
   makeRandomInt,
   makeRandomNumber,
@@ -158,7 +159,7 @@ export default ({ describe, it }) => [
           zipL([before_t1, before_t2, before_t3]),
           each(([before_t, after_t]) => {
             expect(after_t).to.equal(before_t);
-            expect(after_t.matrix).to.deep.equal(before_t.matrix);
+            expectSameValueSVGTransform(after_t, before_t);
           })
         );
       });
@@ -190,7 +191,7 @@ export default ({ describe, it }) => [
           zipL([before_t1, before_t2, before_t3]),
           each(([before_t, after_t]) => {
             expect(after_t).to.equal(before_t);
-            expect(after_t.matrix).to.deep.equal(before_t.matrix);
+            expectSameValueSVGTransform(after_t, before_t);
           })
         );
       });
@@ -222,7 +223,7 @@ export default ({ describe, it }) => [
           zipL([before_t1, before_t2, before_t3]),
           each(([before_t, after_t]) => {
             expect(after_t).to.equal(before_t);
-            expect(after_t.matrix).to.deep.equal(before_t.matrix);
+            expectSameValueSVGTransform(after_t, before_t);
           })
         );
       });

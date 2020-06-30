@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { each, equals2, go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs2";
+import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   deepCopyTransformList,
   makeMockRectInitializedTranslateTransform,
@@ -54,7 +55,14 @@ export default ({ describe, it }) => [
         expect($output).equal($input);
         expect(after_x).equal(before_x);
         expect(after_y).equal(before_y);
-        expect(after_transform_list).deep.equal(before_transform_list);
+        expect(after_transform_list.length).equal(before_transform_list.length);
+        go(
+          after_transform_list,
+          zipL(before_transform_list),
+          each(([before_transform, after_transform]) =>
+            expectSameValueSVGTransform(after_transform, before_transform)
+          )
+        );
       }
     });
 
@@ -105,7 +113,16 @@ export default ({ describe, it }) => [
           expect($output).equal($input);
           expect(after_x).equal(before_x);
           expect(after_y).equal(before_y);
-          expect(after_transform_list).deep.equal(before_transform_list);
+          expect(after_transform_list.length).equal(
+            before_transform_list.length
+          );
+          go(
+            after_transform_list,
+            zipL(before_transform_list),
+            each(([before_transform, after_transform]) =>
+              expectSameValueSVGTransform(after_transform, before_transform)
+            )
+          );
         }
       });
 
@@ -156,7 +173,16 @@ export default ({ describe, it }) => [
           expect($output).equal($input);
           expect(after_x).equal(before_x);
           expect(after_y).equal(before_y);
-          expect(after_transform_list).deep.equal(before_transform_list);
+          expect(after_transform_list.length).equal(
+            before_transform_list.length
+          );
+          go(
+            after_transform_list,
+            zipL(before_transform_list),
+            each(([before_transform, after_transform]) =>
+              expectSameValueSVGTransform(after_transform, before_transform)
+            )
+          );
         }
       });
 
@@ -206,7 +232,16 @@ export default ({ describe, it }) => [
           expect($output).equal($input);
           expect(after_x).equal(before_x);
           expect(after_y).equal(before_y);
-          expect(after_transform_list).deep.equal(before_transform_list);
+          expect(after_transform_list.length).equal(
+            before_transform_list.length
+          );
+          go(
+            after_transform_list,
+            zipL(before_transform_list),
+            each(([before_transform, after_transform]) =>
+              expectSameValueSVGTransform(after_transform, before_transform)
+            )
+          );
         }
       });
     });
@@ -234,6 +269,9 @@ export default ({ describe, it }) => [
           $$getBaseTransformList($output)
         );
 
+        expect(after_transform_list.length).equal(
+          before_transform_list.length - 1
+        );
         go(
           before_transform_list,
           zipWithIndexL,
@@ -249,14 +287,8 @@ export default ({ describe, it }) => [
           ),
           mapL((matrix) => $$createSVGTransformMatrix()({ matrix })),
           zipL(after_transform_list),
-          each(
-            ([
-              { type: expect_type, matrix: expect_matrix },
-              { type: receive_type, matrix: receive_matrix },
-            ]) => {
-              expect(receive_type).equal(expect_type);
-              expect(receive_matrix).deep.equal(expect_matrix);
-            }
+          each(([expect_transform, receive_transform]) =>
+            expectSameValueSVGTransform(receive_transform, expect_transform)
           )
         );
       }

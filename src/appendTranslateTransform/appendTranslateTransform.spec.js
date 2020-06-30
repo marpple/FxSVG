@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { each, go, mapL, rangeL, zipL } from "fxjs2";
+import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
 import { makeRandomSVGMatrix } from "../../test/utils/makeRandomSVGMatrix.js";
@@ -163,7 +164,7 @@ export default ({ describe, it }) => [
         each(
           ([before_t, after_t]) => {
             expect(after_t).to.equal(before_t);
-            expect(after_t.matrix).to.deep.equal(before_t.matrix);
+            expectSameValueSVGTransform(after_t, before_t);
           },
           [
             [before_t1, after_t1],
@@ -212,7 +213,7 @@ export default ({ describe, it }) => [
         each(
           ([before_t, after_t]) => {
             expect(after_t).to.equal(before_t);
-            expect(after_t.matrix).to.deep.equal(before_t.matrix);
+            expectSameValueSVGTransform(after_t, before_t);
           },
           [
             [before_t1, after_t1],
@@ -260,7 +261,7 @@ export default ({ describe, it }) => [
         each(
           ([before_t, after_t]) => {
             expect(after_t).to.equal(before_t);
-            expect(after_t.matrix).to.deep.equal(before_t.matrix);
+            expectSameValueSVGTransform(after_t, before_t);
           },
           [
             [before_t1, after_t1],

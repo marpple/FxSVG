@@ -15,6 +15,7 @@ import {
   zipL,
   zipWithIndexL,
 } from "fxjs2";
+import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   deepCopyTransformList,
   makeRandomBool,
@@ -49,18 +50,33 @@ const expectNotChange = (
   description
 ) => {
   expect($after, description).equal($before);
-  expect(after_transform_list, description).deep.equal(before_transform_list);
   expect(after_x, description).equal(before_x);
   expect(after_y, description).equal(before_y);
   expect(after_width, description).equal(before_width);
   expect(after_height, description).equal(before_height);
+
+  after_transform_list = [...after_transform_list];
+  before_transform_list = [...before_transform_list];
+  expect(after_transform_list.length).equal(before_transform_list.length);
+  go(
+    after_transform_list,
+    zipL(before_transform_list),
+    each(([before_transform, after_transform]) =>
+      expectSameValueSVGTransform(
+        after_transform,
+        before_transform,
+        `expectNotChange(${description})`
+      )
+    )
+  );
 };
 
 export default ({ describe, it }) => [
   describe(`$$mergeScaleTransform2`, function () {
     it(`The function do nothing but return the input element
         when the input values failed to pass "$$isValidFxScaleSVGTransformList".`, function () {
-      this.slow(1500);
+      this.slow(3000);
+      this.timeout(6000);
 
       const cases = go(
         makeInvalidIsValidFxSVGTransformListCases(),
@@ -274,6 +290,9 @@ export default ({ describe, it }) => [
           $$getBaseTransformList($el)
         );
 
+        expect(after_transform_list.length).equal(
+          before_transform_list.length - 3
+        );
         go(
           before_transform_list,
           zipWithIndexL,
@@ -281,7 +300,7 @@ export default ({ describe, it }) => [
           mapL(([, transform]) => transform),
           zipL(after_transform_list),
           each(([after_transform, before_transform]) =>
-            expect(after_transform).deep.equal(before_transform)
+            expectSameValueSVGTransform(after_transform, before_transform)
           )
         );
       }

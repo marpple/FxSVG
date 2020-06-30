@@ -3,13 +3,16 @@ import {
   each,
   equals2,
   go,
-  map,
   mapL,
   rangeL,
   rejectL,
   zipL,
   zipWithIndexL,
 } from "fxjs2";
+import {
+  expectSameValueSVGMatrix,
+  expectSameValueSVGTransform,
+} from "../../test/assertions/index.js";
 import {
   makeRandomSVGMatrix,
   makeRandomNumber,
@@ -120,7 +123,8 @@ export default ({ describe, it }) => [
           mapL(([index, transform_list]) => transform_list.getItem(index))
         );
         each(
-          ([transform, matrix]) => expect(transform.matrix).deep.equal(matrix),
+          ([transform, matrix]) =>
+            expectSameValueSVGMatrix(transform.matrix, matrix),
           [
             [transform1, matrix1],
             [transform2, matrix2],
@@ -178,15 +182,21 @@ export default ({ describe, it }) => [
         );
 
         each(
-          ([before_transform_list, after_transform_list, index]) =>
-            expect(
-              go(
-                after_transform_list,
-                zipWithIndexL,
-                rejectL(([i]) => equals2(index, i)),
-                map(([, transform]) => transform)
+          ([before_transform_list, after_transform_list, index]) => {
+            expect(after_transform_list.length - 1).equal(
+              before_transform_list.length
+            );
+            go(
+              after_transform_list,
+              zipWithIndexL,
+              rejectL(([i]) => equals2(index, i)),
+              mapL(([, transform]) => transform),
+              zipL(before_transform_list),
+              each(([before_transform, after_transform]) =>
+                expectSameValueSVGTransform(after_transform, before_transform)
               )
-            ).deep.equal(before_transform_list),
+            );
+          },
           [
             [before_transform_list1, after_transform_list1, index1],
             [before_transform_list2, after_transform_list2, index2],
@@ -229,7 +239,7 @@ export default ({ describe, it }) => [
 
         each(
           (transform) =>
-            expect(transform.matrix).deep.equal($$createSVGMatrix()()),
+            expectSameValueSVGMatrix(transform.matrix, $$createSVGMatrix()()),
           [transform1, transform2, transform3]
         );
       }
@@ -269,7 +279,7 @@ export default ({ describe, it }) => [
           [transform1, transform2, transform3],
           zipL([matrix1, matrix2, matrix3]),
           each(([matrix, transform]) =>
-            expect(transform.matrix).deep.equal(matrix)
+            expectSameValueSVGMatrix(transform.matrix, matrix)
           )
         );
       }
@@ -303,7 +313,7 @@ export default ({ describe, it }) => [
 
         each(
           (transform) =>
-            expect(transform.matrix).deep.equal($$createSVGMatrix()()),
+            expectSameValueSVGMatrix(transform.matrix, $$createSVGMatrix()()),
           [transform1, transform2, transform3]
         );
       }

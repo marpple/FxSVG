@@ -4,7 +4,6 @@ import {
   flatL,
   flatMapL,
   go,
-  map,
   mapL,
   rangeL,
   rejectL,
@@ -19,6 +18,7 @@ import {
   makeMockRect,
 } from "../../test/utils/index.js";
 import {
+  expectSameValueSVGTransform,
   expectTransformWithScaleSxSy,
   expectTransformWithTranslateTxTy,
 } from "../../test/assertions/index.js";
@@ -429,16 +429,21 @@ export default ({ describe, it }) => [
           ]),
           zipL([index1, index2, index3]),
           mapL(flatL),
-          each(([index, before_transform_list, after_transform_list]) =>
-            expect(
-              go(
-                after_transform_list,
-                zipWithIndexL,
-                rejectL(([i]) => i >= index && i <= index + 2),
-                map(([, transform]) => transform)
+          each(([index, before_transform_list, after_transform_list]) => {
+            expect(after_transform_list.length - 3).equal(
+              before_transform_list.length
+            );
+            go(
+              after_transform_list,
+              zipWithIndexL,
+              rejectL(([i]) => i >= index && i <= index + 2),
+              mapL(([, transform]) => transform),
+              zipL(before_transform_list),
+              each(([before_transform, after_transform]) =>
+                expectSameValueSVGTransform(after_transform, before_transform)
               )
-            ).deep.equal(before_transform_list)
-          )
+            );
+          })
         );
       }
     });
