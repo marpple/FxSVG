@@ -9,42 +9,28 @@ import {
   mapL,
   object,
   pipe,
-  reduce,
 } from "fxjs2";
 import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
-import {
-  $$createSVGPoint,
-  $$createSVGPoint2,
-  $$createSVGPoint3,
-} from "./createSVGPoint.index.js";
+import { $$createSVGPoint } from "./createSVGPoint.index.js";
 
 const makeCases = () =>
-  flatMapL(
-    ($svg) =>
-      go(
-        ["x", "y"],
-        makeAllCombinations,
-        mapL(
-          pipe(
-            mapL((k) => [k, makeRandomInt(-100, 100)]),
-            mapL((kv) => object([kv])),
-            reduce(extend),
-            defaultTo({})
-          )
-        ),
-        flatMapL((values) =>
-          mapL((point) => ({ values, point }), [
-            $$createSVGPoint($svg)(values),
-            $$createSVGPoint2(values)($svg),
-            $$createSVGPoint3(values, $svg),
-          ])
-        ),
-        appendL({ point: $$createSVGPoint($svg)() }),
-        appendL({ point: $$createSVGPoint2()($svg) }),
-        appendL({ point: $$createSVGPoint3(undefined, $svg) })
-        // $$createSVGPoint3() -> option, $svg 모두 기본값 사용시
-      ),
-    [undefined, document.createElementNS("http://www.w3.org/2000/svg", "svg")]
+  go(
+    ["x", "y"],
+    makeAllCombinations,
+    mapL(
+      pipe(
+        mapL((k) => [k, makeRandomInt(-100, 100)]),
+        object
+      )
+    ),
+    mapL((values) => ({ values, f: $$createSVGPoint(values) })),
+    appendL({ f: $$createSVGPoint() }),
+    flatMapL(({ values, f }) =>
+      mapL(($svg) => ({ values, point: f($svg) }), [
+        undefined,
+        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+      ])
+    )
   );
 
 export default ({ describe, it }) => [
@@ -53,7 +39,7 @@ export default ({ describe, it }) => [
       go(
         makeCases(),
         mapL(({ point: p }) => p),
-        each((p) => expect(p).to.instanceof(SVGPoint))
+        each((p) => expect(p).instanceof(SVGPoint))
       );
     });
 
@@ -71,8 +57,8 @@ export default ({ describe, it }) => [
           )
         ),
         each(({ point, values }) => {
-          expect(point.x).to.equal(values.x);
-          expect(point.y).to.equal(values.y);
+          expect(point.x).equal(values.x);
+          expect(point.y).equal(values.y);
         })
       );
     });

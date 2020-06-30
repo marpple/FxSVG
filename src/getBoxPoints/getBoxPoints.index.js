@@ -6,7 +6,7 @@ import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 const $$getOriginalBoxPoints = ($svg = $$getSVG()) => ($el) => {
   const bbox = $el.getBBox();
   const [top_left, top_right, bottom_left, bottom_right] = mapL(
-    $$createSVGPoint($svg),
+    (xy) => $$createSVGPoint(xy)($svg),
     [
       { x: bbox.x, y: bbox.y },
       { x: bbox.x + bbox.width, y: bbox.y },
@@ -38,7 +38,7 @@ const $$getTransformedBoxPoints = ($svg = $$getSVG()) => (
       original_box_points.bottom_left,
       original_box_points.bottom_right,
     ],
-    mapL($$createSVGPoint($svg)),
+    mapL((p) => $$createSVGPoint(p)($svg)),
     mapL((p) =>
       go(
         rangeL(transform_list.numberOfItems),
@@ -75,7 +75,7 @@ const $$getBoundingBoxPoints = ($svg = $$getSVG()) => (
     map(({ y }) => y, l),
     (ys) => [Math.min(...ys), Math.max(...ys)]
   );
-  const [min, max] = mapL($$createSVGPoint($svg), [
+  const [min, max] = mapL(xy => $$createSVGPoint(xy)($svg), [
     { x: min_x, y: min_y },
     { x: max_x, y: max_y },
   ]);

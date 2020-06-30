@@ -13,16 +13,22 @@ console.log($$createSVGPoint()());
 ```
 
 ```javascript
-console.log($$createSVGPoint()({ x: 10 }));
+console.log($$createSVGPoint({ x: 10 })());
 // SVGPoint {x: 10, y: 0}
 ```
 
 ```javascript
-console.log($$createSVGPoint()({ y: 10 }));
+console.log($$createSVGPoint({ y: 10 })());
 // SVGPoint {x: 0, y: 10}
 ```
 
 ```javascript
-console.log($$createSVGPoint()({ x: 10, y: 10 }));
+console.log($$createSVGPoint({ x: 10, y: 10 })());
 // SVGPoint {x: 10, y: 10}
+```
+
+```javascript
+const $svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+console.log($$createSVGPoint({ x: 15, y: 20 })($svg));
+// SVGPoint {x: 15, y: 20}
 ```

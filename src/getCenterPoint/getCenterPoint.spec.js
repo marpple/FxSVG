@@ -64,7 +64,7 @@ export default ({ describe, it }) => [
             }))
           ),
           mapL(({ x, y }) => ({ x: x / 4, y: y / 4 })),
-          mapL($$createSVGPoint())
+          mapL(xy => $$createSVGPoint(xy)())
         );
         const {
           original: { x: receive_original_x, y: receive_original_y },
