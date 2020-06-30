@@ -37,7 +37,7 @@ export default ({ describe, it }) => [
 
     it(`The consolidated transform's matrix is same with the matrix from multiplying all transform's matrix.`, function () {
       const input_list = setupMock({
-        transform: makeRandomTransformAttributeValue(1),
+        transform: makeRandomTransformAttributeValue(1, 10),
       });
       const matrix = go(
         input_list,
