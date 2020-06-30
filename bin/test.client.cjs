@@ -8,7 +8,10 @@ const argv = yargs
   .alias("r", "repeat")
   .alias("h", "headless")
   .alias("w", "watch")
+  .alias("t", "type")
+  .array("type")
   .default("repeat", "1")
+  .default("type", ["chromium", "webkit", "firefox"])
   .parse();
 
 const TEST_REPEAT_COUNT = parseInt(argv.repeat, 10);
@@ -16,8 +19,7 @@ const TEST_HEADLESS = !!argv.headless;
 const TEST_IS_WATCH = !!argv.watch;
 const TEST_PAGE_DEFAULT_URL = "http://localhost:8080/test/index.html";
 const TEST_PAGE_JSON_URL = "http://localhost:8080/test/index.json.html";
-
-const BROWSER_TYPE_LIST = ["chromium" /*, "firefox", "webkit"*/];
+const TEST_BROWSER_TYPE_LIST = argv.type;
 
 const runTest = async (
   {
@@ -177,7 +179,7 @@ const reportTestsJSON = (reports) => {
 const main = async () => {
   if (TEST_HEADLESS) {
     const reports = await runTestsJSON({
-      browser_type_list: BROWSER_TYPE_LIST,
+      browser_type_list: TEST_BROWSER_TYPE_LIST,
       total_count: TEST_REPEAT_COUNT,
     });
     reportTestsJSON(reports);
@@ -191,7 +193,7 @@ const main = async () => {
   }
 
   const reports = await runTestsDefault({
-    browser_type_list: BROWSER_TYPE_LIST,
+    browser_type_list: TEST_BROWSER_TYPE_LIST,
     total_count: TEST_REPEAT_COUNT,
   });
   reportTestsDefault(reports);
