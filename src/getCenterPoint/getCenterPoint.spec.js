@@ -36,7 +36,7 @@ export default ({ describe, it }) => [
       const cases = [
         setupMock(),
         setupMock({
-          transform: makeRandomTransformAttributeValue(1, 100, () =>
+          transform: makeRandomTransformAttributeValue(1, 10, () =>
             makeRandomNumber(-700, 700)
           ),
         }),
