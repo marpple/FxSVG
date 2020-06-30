@@ -1,3 +1,4 @@
+export { expectSameNumberEpsilon } from "./expectSameNumberEpsilon.js";
 export { expectSameValueSVGMatrix } from "./expectSameValueSVGMatrix.js";
 export { expectSameValueSVGTransform } from "./expectSameValueSVGTransform.js";
 export { expectTransformWithTranslateTxTy } from "./expectTransformWithTranslateTxTy.js";
