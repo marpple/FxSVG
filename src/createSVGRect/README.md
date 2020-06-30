@@ -15,16 +15,22 @@ console.log($$createSVGRect()());
 ```
 
 ```javascript
-console.log($$createSVGRect()({ x: 10 }));
+console.log($$createSVGRect({ x: 10 })());
 // SVGRect {x: 10, y: 0, width: 0, height: 0}
 ```
 
 ```javascript
-console.log($$createSVGRect()({ width: 100 }));
+console.log($$createSVGRect({ width: 100 })());
 // SVGRect {x: 0, y: 0, width: 100, height: 0}
 ```
 
 ```javascript
-console.log($$createSVGRect()({ x: 10, y: 10, width: 100, height: 100 }));
+console.log($$createSVGRect({ x: 10, y: 10, width: 100, height: 100 })());
 // SVGRect {x: 10, y: 10, width: 100, height: 100}
+```
+
+```javascript
+const $svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+console.log($$createSVGRect({ x: 20, y: 20, width: 200, height: 200 })($svg));
+// SVGRect {x: 20, y: 20, width: 200, height: 200}
 ```

@@ -9,41 +9,28 @@ import {
   mapL,
   object,
   pipe,
-  reduce,
 } from "fxjs2";
 import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
-import {
-  $$createSVGRect,
-  $$createSVGRect2,
-  $$createSVGRect3,
-} from "./createSVGRect.index.js";
+import { $$createSVGRect } from "./createSVGRect.index.js";
 
 const makeCases = () =>
-  flatMapL(
-    ($svg) =>
-      go(
-        ["x", "y", "width", "height"],
-        makeAllCombinations,
-        mapL(
-          pipe(
-            mapL((k) => [k, makeRandomInt()]),
-            mapL((ks) => object([ks])),
-            reduce(extend),
-            defaultTo({})
-          )
-        ),
-        flatMapL((values) =>
-          mapL((rect) => ({ rect, values }), [
-            $$createSVGRect($svg)(values),
-            $$createSVGRect2(values)($svg),
-            $$createSVGRect3(values, $svg),
-          ])
-        ),
-        appendL({ rect: $$createSVGRect($svg)() }),
-        appendL({ rect: $$createSVGRect2()($svg) }),
-        appendL({ rect: $$createSVGRect3(undefined, $svg) })
-      ),
-    [undefined, document.createElementNS("http://www.w3.org/2000/svg", "svg")]
+  go(
+    ["x", "y", "width", "height"],
+    makeAllCombinations,
+    mapL(
+      pipe(
+        mapL((k) => [k, makeRandomInt()]),
+        object
+      )
+    ),
+    mapL((values) => ({ values, f: $$createSVGRect(values) })),
+    appendL({ f: $$createSVGRect() }),
+    flatMapL(({ values, f }) =>
+      mapL(($svg) => ({ values, rect: f($svg) }), [
+        undefined,
+        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+      ])
+    )
   );
 
 export default ({ describe, it }) => [
@@ -52,7 +39,7 @@ export default ({ describe, it }) => [
       go(
         makeCases(),
         mapL(({ rect: r }) => r),
-        each((r) => expect(r).to.instanceof(SVGRect))
+        each((r) => expect(r).instanceof(SVGRect))
       );
     });
 
@@ -70,10 +57,10 @@ export default ({ describe, it }) => [
           )
         ),
         each(({ rect, values }) => {
-          expect(rect.x).to.equal(values.x);
-          expect(rect.y).to.equal(values.y);
-          expect(rect.width).to.equal(values.width);
-          expect(rect.height).to.equal(values.height);
+          expect(rect.x).equal(values.x);
+          expect(rect.y).equal(values.y);
+          expect(rect.width).equal(values.width);
+          expect(rect.height).equal(values.height);
         })
       );
     });
