@@ -2,6 +2,7 @@ import { expect } from "chai";
 import { go, tap } from "fxjs2";
 import { $$createSVGTransform } from "../../src/createSVGTransform/createSVGTransform.index.js";
 import { $$isRotateSVGTransform } from "../../src/isRotateSVGTransform/isRotateSVGTransform.index.js";
+import { expectSameValueSVGMatrix } from "./expectSameValueSVGMatrix.js";
 
 export const expectTransformWithRotateAngleCxCy = ({
   transform,
@@ -16,5 +17,9 @@ export const expectTransformWithRotateAngleCxCy = ({
   );
 
   expect($$isRotateSVGTransform(transform)).to.be.true;
-  expect(transform.matrix).to.deep.equal(matrix);
+  expectSameValueSVGMatrix(
+    transform.matrix,
+    matrix,
+    "expectTransformWithRotateAngleCxCy"
+  );
 };
