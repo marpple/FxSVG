@@ -11,3 +11,9 @@
 console.log($$createSVGTransform());
 // SVGTransform {type: 1, matrix: SVGMatrix, angle: 0}
 ```
+
+```javascript
+const $svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+console.log($$createSVGTransform($svg));
+// SVGTransform {type: 1, matrix: SVGMatrix, angle: 0}
+```
