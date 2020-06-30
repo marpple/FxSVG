@@ -200,13 +200,14 @@ const main = async () => {
 };
 
 if (cluster.isMaster && TEST_IS_WATCH) {
+  console.clear();
   let worker = cluster.fork();
   fs.watch(
     path.resolve(__dirname, "../src"),
     { persistent: true, recursive: true, encoding: "utf8" },
     () => {
       worker && worker.kill();
-      console.log("\n\n\n==============================\n\n\n");
+      console.clear();
       worker = cluster.fork();
     }
   );
