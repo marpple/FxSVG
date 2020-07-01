@@ -13,7 +13,7 @@ export const $$controlRotateTransform = ($svg = $$getSVG()) => (
 
   const controller = {};
   controller.update = ({ angle } = {}) => {
-    $$updateRotateTransform(transform, { angle, cx: 0, cy: 0 });
+    $$updateRotateTransform({ angle, cx: 0, cy: 0 })(transform);
     return controller;
   };
   controller.append = ({ angle } = {}) => {
@@ -38,7 +38,7 @@ export const $$controlRotateTransform2 = ({
 
   const controller = {};
   controller.update = ({ angle } = {}) => {
-    $$updateRotateTransform(transform, { angle, cx: 0, cy: 0 });
+    $$updateRotateTransform({ angle, cx: 0, cy: 0 })(transform);
     return controller;
   };
   controller.append = ({ angle } = {}) => {
@@ -64,7 +64,7 @@ export const $$controlRotateTransform3 = curry(
 
     const controller = {};
     controller.update = ({ angle } = {}) => {
-      $$updateRotateTransform(transform, { angle, cx: 0, cy: 0 });
+      $$updateRotateTransform({ angle, cx: 0, cy: 0 })(transform);
       return controller;
     };
     controller.append = ({ angle } = {}) => {
