@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { each, go1, mapL } from "fxjs2";
+import { mapL } from "fxjs2";
 import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import { $$isMatrixSVGTransform } from "../isMatrixSVGTransform/isMatrixSVGTransform.index.js";
 import { $$createSVGTransform } from "./createSVGTransform.index.js";
@@ -15,20 +15,16 @@ const makeCases = () =>
 export default ({ describe, it }) => [
   describe(`$$createSVGTransform`, function () {
     it(`The return value is a SVGTransform.`, function () {
-      go1(
-        makeCases(),
-        each((transform) => expect(transform).instanceof(SVGTransform))
-      );
+      for (const transform of makeCases()) {
+        expect(transform).instanceof(SVGTransform);
+      }
     });
 
     it(`The transform is initialized with an identity matrix.`, function () {
-      go1(
-        makeCases(),
-        each((transform) => {
-          expect($$isMatrixSVGTransform(transform)).equal(true);
-          expectSameValueSVGMatrix(transform.matrix, IDENTITY_MATRIX_VALUE);
-        })
-      );
+      for (const transform of makeCases()) {
+        expect($$isMatrixSVGTransform(transform)).equal(true);
+        expectSameValueSVGMatrix(transform.matrix, IDENTITY_MATRIX_VALUE);
+      }
     });
   }),
 ];
