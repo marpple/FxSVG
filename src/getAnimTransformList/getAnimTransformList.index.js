@@ -1,1 +1,3 @@
-export const $$getAnimTransformList = ({ transform: { animVal: l } }) => l;
+import { sel } from "fxjs2";
+
+export const $$getAnimTransformList = ($el) => sel("transform.animVal", $el);

@@ -38,8 +38,7 @@ export default ({ describe, it }) => [
 
       expect(anim_transform_list.length).equal(base_transform_list.length);
       go(
-        anim_transform_list,
-        zipL(base_transform_list),
+        zipL(base_transform_list, anim_transform_list),
         each(([base_transform, anim_transform]) =>
           expectSameValueSVGTransform(anim_transform, base_transform)
         )
