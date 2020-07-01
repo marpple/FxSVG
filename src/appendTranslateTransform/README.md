@@ -9,12 +9,12 @@
 이 함수는 인자로 받은 `SVGTransform` 객체를 직접 수정합니다.
 
 ```javascript
-const t = $$createSVGTransformTranslate()({ tx: 10, ty: 20 });
-console.log(t);
+const transform = $$createSVGTransformTranslate({ tx: 10, ty: 20 })();
+console.log(transform);
 // SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 // matrix: SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 20}
-$$appendTranslateTransform(t, { tx: 100, ty: 200 });
-console.log(t);
+$$appendTranslateTransform({ tx: 100, ty: 200 })(transform);
+console.log(transform);
 // SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 // matrix: SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 110, f: 220}
 ```
