@@ -9,7 +9,7 @@ export const $$controlTranslateTransform = ($svg = $$getSVG()) => (
   $el,
   { index = 0, tx, ty, x_name, y_name } = {}
 ) => {
-  const transform = $$initTranslateTransform($svg)($el, { tx, ty, index });
+  const transform = $$initTranslateTransform({ tx, ty, index })($el, $svg);
 
   const controller = {};
   controller.update = ({ tx, ty } = {}) => {
@@ -37,7 +37,7 @@ export const $$controlTranslateTransform2 = ({
   x_name,
   y_name,
 } = {}) => ($el, $svg = $$getSVG()) => {
-  const transform = $$initTranslateTransform($svg)($el, { tx, ty, index });
+  const transform = $$initTranslateTransform({ tx, ty, index })($el, $svg);
 
   const controller = {};
   controller.update = ({ tx, ty } = {}) => {
@@ -60,7 +60,7 @@ export const $$controlTranslateTransform2 = ({
 
 export const $$controlTranslateTransform3 = curry(
   ({ index = 0, tx, ty, x_name, y_name } = {}, $el, $svg = $$getSVG()) => {
-    const transform = $$initTranslateTransform($svg)($el, { tx, ty, index });
+    const transform = $$initTranslateTransform({ tx, ty, index })($el, $svg);
 
     const controller = {};
     controller.update = ({ tx, ty } = {}) => {

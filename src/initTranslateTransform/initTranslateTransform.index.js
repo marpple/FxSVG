@@ -1,31 +1,13 @@
-import { curry } from "fxjs2";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 
-export const $$initTranslateTransform = ($svg = $$getSVG()) => (
-  $el,
-  { tx = 0, ty = 0, index = 0 } = {}
-) =>
-  $$getBaseTransformList($el).insertItemBefore(
-    $$createSVGTransformTranslate({ tx, ty })($svg),
-    index
-  );
-
-export const $$initTranslateTransform2 = ({
+export const $$initTranslateTransform = ({
   tx = 0,
   ty = 0,
   index = 0,
-} = {}) => ($el, $svg = $$getSVG()) =>
-  $$getBaseTransformList($el).insertItemBefore(
-    $$createSVGTransformTranslate({ tx, ty })($svg),
-    index
-  );
-
-export const $$initTranslateTransform3 = curry(
-  ({ tx = 0, ty = 0, index = 0 } = {}, $el, $svg = $$getSVG()) =>
-    $$getBaseTransformList($el).insertItemBefore(
-      $$createSVGTransformTranslate({ tx, ty })($svg),
-      index
-    )
-);
+} = {}) => ($el, $svg = $$getSVG()) => {
+  const transform = $$createSVGTransformTranslate({ tx, ty })($svg);
+  $$getBaseTransformList($el).insertItemBefore(transform, index);
+  return transform;
+};
