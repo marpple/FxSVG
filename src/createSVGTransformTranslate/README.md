@@ -14,13 +14,20 @@ console.log($$createSVGTransformTranslate()());
 ```
 
 ```javascript
-console.log($$createSVGTransformTranslate()({ tx: 10 }));
+console.log($$createSVGTransformTranslate({ tx: 10 })());
 // SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 0}
 ```
 
 ```javascript
-console.log($$createSVGTransformTranslate()({ tx: 10, ty: 20 }));
+console.log($$createSVGTransformTranslate({ tx: 10, ty: 20 })());
 // SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 20}
+```
+
+```javascript
+const $svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+console.log($$createSVGTransformTranslate({ tx: 100, ty: 200 })($svg));
+// SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
+//   SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 100, f: 200}
 ```

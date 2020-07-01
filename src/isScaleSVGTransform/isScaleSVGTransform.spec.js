@@ -56,10 +56,10 @@ export default ({ describe, it }) => [
       });
 
       it(`When the input value is a SVGTransform whose type is the SVGTransform.SVG_TRANSFORM_TRANSLATE.`, function () {
-        const translate_t = $$createSVGTransformTranslate()({
+        const translate_t = $$createSVGTransformTranslate({
           tx: makeRandomNumber(-100, 100),
           ty: makeRandomNumber(-100, 100),
-        });
+        })();
         const result = $$isScaleSVGTransform(translate_t);
 
         expect(result).to.be.false;
@@ -68,10 +68,10 @@ export default ({ describe, it }) => [
 
     describe(`The function will return true...`, function () {
       it(`When the input value is a SVGTransform and the type is SVGTransform.SVG_TRANSFORM_SCALE.`, function () {
-        const scale_t = $$createSVGTransformScale()({
+        const scale_t = $$createSVGTransformScale({
           sx: makeRandomNumber(-100, 100),
           sy: makeRandomNumber(-100, 100),
-        });
+        })();
         const result = $$isScaleSVGTransform(scale_t);
 
         expect(result).to.be.true;

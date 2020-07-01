@@ -1,28 +1,7 @@
+import { tap } from "fxjs2";
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 
-export const $$createSVGTransformScale = ($svg = $$getSVG()) => ({
-  sx = 1,
-  sy = 1,
-} = {}) => {
-  const transform = $$createSVGTransform($svg);
-  transform.setScale(sx, sy);
-  return transform;
-};
-
-export const $$createSVGTransformScale2 = ({ sx = 1, sy = 1 } = {}) => (
+export const $$createSVGTransformScale = ({ sx = 1, sy = 1 } = {}) => (
   $svg = $$getSVG()
-) => {
-  const transform = $$createSVGTransform($svg);
-  transform.setScale(sx, sy);
-  return transform;
-};
-
-export const $$createSVGTransformScale3 = (
-  { sx = 1, sy = 1 } = {},
-  $svg = $$getSVG()
-) => {
-  const transform = $$createSVGTransform($svg);
-  transform.setScale(sx, sy);
-  return transform;
-};
+) => tap((transform) => transform.setScale(sx, sy))($$createSVGTransform($svg));

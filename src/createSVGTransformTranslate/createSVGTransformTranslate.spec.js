@@ -9,40 +9,32 @@ import {
   mapL,
   object,
   pipe,
+  tap,
 } from "fxjs2";
 import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
-import {
-  $$createSVGTransformTranslate,
-  $$createSVGTransformTranslate2,
-  $$createSVGTransformTranslate3,
-} from "./createSVGTransformTranslate.index.js";
+import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslateSVGTransform.index.js";
+import { $$createSVGTransformTranslate } from "./createSVGTransformTranslate.index.js";
 
 const makeCases = () =>
-  flatMapL(
-    ($svg) =>
-      go(
-        ["tx", "ty"],
-        makeAllCombinations,
-        mapL(
-          pipe(
-            mapL((k) => [k, makeRandomInt()]),
-            object
-          )
-        ),
-        flatMapL((values) =>
-          mapL((transform) => ({ values, transform }), [
-            $$createSVGTransformTranslate($svg)(values),
-            $$createSVGTransformTranslate2(values)($svg),
-            $$createSVGTransformTranslate3(values, $svg),
-          ])
-        ),
-        appendL({ transform: $$createSVGTransformTranslate($svg)() }),
-        appendL({ transform: $$createSVGTransformTranslate2()($svg) }),
-        appendL({ transform: $$createSVGTransformTranslate3(undefined, $svg) })
-      ),
-    [undefined, document.createElementNS("http://www.w3.org/2000/svg", "svg")]
+  go(
+    ["tx", "ty"],
+    makeAllCombinations,
+    mapL(
+      pipe(
+        mapL((k) => [k, makeRandomInt()]),
+        object
+      )
+    ),
+    mapL((values) => ({ values, f: $$createSVGTransformTranslate(values) })),
+    appendL({ f: $$createSVGTransformTranslate() }),
+    flatMapL(({ values, f }) =>
+      mapL(($svg) => ({ values, transform: f($svg) }), [
+        undefined,
+        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+      ])
+    )
   );
 
 export default ({ describe, it }) => [
@@ -51,7 +43,7 @@ export default ({ describe, it }) => [
       go(
         makeCases(),
         mapL(({ transform: t }) => t),
-        each((t) => expect(t).to.instanceof(SVGTransform))
+        each((t) => expect(t).instanceof(SVGTransform))
       );
     });
 
@@ -59,10 +51,7 @@ export default ({ describe, it }) => [
       go(
         makeCases(),
         mapL(({ transform: t }) => t),
-        mapL(({ type: t }) => t),
-        each((type) =>
-          expect(type).to.equal(SVGTransform.SVG_TRANSFORM_TRANSLATE)
-        )
+        each((transform) => expect($$isTranslateSVGTransform(transform)).true)
       );
     });
 
@@ -79,11 +68,13 @@ export default ({ describe, it }) => [
             (values) => ({ values, transform })
           )
         ),
-        mapL(({ transform: receive_transform, values: { tx, ty } }) => {
-          const expect_transform = $$createSVGTransform();
-          expect_transform.setTranslate(tx, ty);
-          return { receive_transform, expect_transform };
-        }),
+        mapL(({ transform: receive_transform, values: { tx, ty } }) =>
+          go(
+            $$createSVGTransform(),
+            tap((transform) => transform.setTranslate(tx, ty)),
+            (expect_transform) => ({ receive_transform, expect_transform })
+          )
+        ),
         each(({ receive_transform, expect_transform }) =>
           expectSameValueSVGTransform(receive_transform, expect_transform)
         )

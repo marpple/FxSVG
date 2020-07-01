@@ -173,7 +173,7 @@ export default ({ describe, it }) => [
               () => [iter.next().value, iter.next().value],
               rangeL(Infinity)
             ),
-          mapL(([sx, sy]) => $$createSVGTransformScale()({ sx, sy })),
+          mapL(([sx, sy]) => $$createSVGTransformScale({ sx, sy })()),
           takeL(3)
         );
         const [angle1, angle2, angle3] = mapL(
@@ -205,7 +205,7 @@ export default ({ describe, it }) => [
               () => [iter.next().value, iter.next().value],
               rangeL(Infinity)
             ),
-          mapL(([tx, ty]) => $$createSVGTransformTranslate()({ tx, ty })),
+          mapL(([tx, ty]) => $$createSVGTransformTranslate({ tx, ty })()),
           takeL(3)
         );
         const [angle1, angle2, angle3] = mapL(

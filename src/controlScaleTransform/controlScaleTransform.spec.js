@@ -175,7 +175,7 @@ export default ({ describe, it }) => [
         sy,
       } = setupMock();
 
-      const expect_transform = $$createSVGTransformScale()({ sx, sy });
+      const expect_transform = $$createSVGTransformScale({ sx, sy })();
 
       expectSameValueSVGTransform(receive_transform, expect_transform);
     });
@@ -199,7 +199,7 @@ export default ({ describe, it }) => [
       const [sx, sy] = mapL(() => makeRandomInt(-100, 100), rangeL(2));
       controller.update({ sx, sy });
 
-      const expect_transform = $$createSVGTransformScale()({ sx, sy });
+      const expect_transform = $$createSVGTransformScale({ sx, sy })();
 
       expectSameValueSVGTransform(receive_transform, expect_transform);
     });
@@ -229,9 +229,9 @@ export default ({ describe, it }) => [
       );
       go(
         [
-          $$createSVGTransformTranslate()({ tx: cx, ty: cy }),
-          $$createSVGTransformScale()({ sx, sy }),
-          $$createSVGTransformTranslate()({ tx: -cx, ty: -cy }),
+          $$createSVGTransformTranslate({ tx: cx, ty: cy })(),
+          $$createSVGTransformScale({ sx, sy })(),
+          $$createSVGTransformTranslate({ tx: -cx, ty: -cy })(),
         ],
         mapL(({ matrix }) => matrix),
         reduce((m1, m2) => m1.multiply(m2)),

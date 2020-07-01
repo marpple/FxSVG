@@ -110,9 +110,9 @@ export default ({ describe, it }) => [
             if (equals2(i, index)) {
               return go(
                 [
-                  $$createSVGTransformTranslate()({ tx: cx, ty: cy }),
-                  $$createSVGTransformScale()({ sx, sy }),
-                  $$createSVGTransformTranslate()({ tx: -cx, ty: -cy }),
+                  $$createSVGTransformTranslate({ tx: cx, ty: cy })(),
+                  $$createSVGTransformScale({ sx, sy })(),
+                  $$createSVGTransformTranslate({ tx: -cx, ty: -cy })(),
                 ],
                 mapL(({ matrix }) => matrix),
                 reduce((m1, m2) => m1.multiply(m2)),

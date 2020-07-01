@@ -102,8 +102,7 @@ export default ({ describe, it }) => [
             const transform2 = go(
               transform_str.match(/(-?\d+(\.\d+)?)/gi),
               mapL(parseFloat),
-              ([tx, ty]) => ({ tx, ty }),
-              $$createSVGTransformTranslate()
+              ([tx, ty]) => $$createSVGTransformTranslate({ tx, ty })()
             );
             expect(transform_str).to.have.string("translate");
             expectSameValueSVGMatrix(transform.matrix, transform2.matrix);
@@ -114,8 +113,7 @@ export default ({ describe, it }) => [
             const transform2 = go(
               transform_str.match(/(-?\d+(\.\d+)?)/gi),
               mapL(parseFloat),
-              ([sx, sy]) => ({ sx, sy }),
-              $$createSVGTransformScale()
+              ([sx, sy]) => $$createSVGTransformScale({ sx, sy })()
             );
             expect(transform_str).to.have.string("scale");
             expectSameValueSVGMatrix(transform.matrix, transform2.matrix);

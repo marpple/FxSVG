@@ -18,7 +18,7 @@ const setupMock = ({
   tx = makeRandomInt(-100, 100),
   ty = makeRandomInt(-100, 100),
 } = {}) => {
-  const transform = $$createSVGTransformTranslate()({ tx, ty });
+  const transform = $$createSVGTransformTranslate({ tx, ty })();
   return { transform, tx, ty };
 };
 
@@ -230,7 +230,7 @@ export default ({ describe, it }) => [
             sx: makeRandomNumber(-100, 100),
             sy: makeRandomNumber(-100, 100),
           })),
-          mapL((option) => $$createSVGTransformScale()(option))
+          mapL((option) => $$createSVGTransformScale(option)())
         );
 
         const [[tx1, ty1], [tx2, ty2], [tx3, ty3]] = mapL(

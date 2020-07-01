@@ -21,7 +21,7 @@ import {
 
 const setupMockTransform = () => {
   const [tx, ty] = mapL(() => makeRandomInt(-100, 100), rangeL(2));
-  const transform = $$createSVGTransformTranslate()({ tx, ty });
+  const transform = $$createSVGTransformTranslate({ tx, ty })();
   return { transform, tx, ty };
 };
 
@@ -241,7 +241,7 @@ export default ({ describe, it }) => [
               () => [iter.next().value, iter.next().value],
               rangeL(Infinity)
             ),
-          mapL(([sx, sy]) => $$createSVGTransformScale()({ sx, sy })),
+          mapL(([sx, sy]) => $$createSVGTransformScale({ sx, sy })()),
           takeL(3)
         );
 

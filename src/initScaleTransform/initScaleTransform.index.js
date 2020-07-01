@@ -11,15 +11,15 @@ export const $$initScaleTransform = ($svg = $$getSVG()) => (
   const transform_list = $$getBaseTransformList($el);
 
   transform_list.insertItemBefore(
-    $$createSVGTransformTranslate($svg)({ tx: -cx, ty: -cy }),
+    $$createSVGTransformTranslate({ tx: -cx, ty: -cy })($svg),
     index
   );
   const transform = transform_list.insertItemBefore(
-    $$createSVGTransformScale($svg)({ sx, sy }),
+    $$createSVGTransformScale({ sx, sy })($svg),
     index
   );
   transform_list.insertItemBefore(
-    $$createSVGTransformTranslate($svg)({ tx: cx, ty: cy }),
+    $$createSVGTransformTranslate({ tx: cx, ty: cy })($svg),
     index
   );
 
@@ -36,15 +36,15 @@ export const $$initScaleTransform2 = ({
   const transform_list = $$getBaseTransformList($el);
 
   transform_list.insertItemBefore(
-    $$createSVGTransformTranslate($svg)({ tx: -cx, ty: -cy }),
+    $$createSVGTransformTranslate({ tx: -cx, ty: -cy })($svg),
     index
   );
   const transform = transform_list.insertItemBefore(
-    $$createSVGTransformScale($svg)({ sx, sy }),
+    $$createSVGTransformScale({ sx, sy })($svg),
     index
   );
   transform_list.insertItemBefore(
-    $$createSVGTransformTranslate($svg)({ tx: cx, ty: cy }),
+    $$createSVGTransformTranslate({ tx: cx, ty: cy })($svg),
     index
   );
 
@@ -60,15 +60,15 @@ export const $$initScaleTransform3 = curry(
     const transform_list = $$getBaseTransformList($el);
 
     transform_list.insertItemBefore(
-      $$createSVGTransformTranslate($svg)({ tx: -cx, ty: -cy }),
+      $$createSVGTransformTranslate({ tx: -cx, ty: -cy })($svg),
       index
     );
     const transform = transform_list.insertItemBefore(
-      $$createSVGTransformScale($svg)({ sx, sy }),
+      $$createSVGTransformScale({ sx, sy })($svg),
       index
     );
     transform_list.insertItemBefore(
-      $$createSVGTransformTranslate($svg)({ tx: cx, ty: cy }),
+      $$createSVGTransformTranslate({ tx: cx, ty: cy })($svg),
       index
     );
 

@@ -9,40 +9,32 @@ import {
   mapL,
   object,
   pipe,
+  tap,
 } from "fxjs2";
 import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
-import {
-  $$createSVGTransformScale,
-  $$createSVGTransformScale2,
-  $$createSVGTransformScale3,
-} from "./createSVGTransformScale.index.js";
+import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
+import { $$createSVGTransformScale } from "./createSVGTransformScale.index.js";
 
 const makeCases = () =>
-  flatMapL(
-    ($svg) =>
-      go(
-        ["sx", "sy"],
-        makeAllCombinations,
-        mapL(
-          pipe(
-            mapL((k) => [k, makeRandomInt()]),
-            object
-          )
-        ),
-        flatMapL((values) =>
-          mapL((transform) => ({ values, transform }), [
-            $$createSVGTransformScale($svg)(values),
-            $$createSVGTransformScale2(values)($svg),
-            $$createSVGTransformScale3(values, $svg),
-          ])
-        ),
-        appendL({ transform: $$createSVGTransformScale($svg)() }),
-        appendL({ transform: $$createSVGTransformScale2()($svg) }),
-        appendL({ transform: $$createSVGTransformScale3(undefined, $svg) })
-      ),
-    [undefined, document.createElementNS("http://www.w3.org/2000/svg", "svg")]
+  go(
+    ["sx", "sy"],
+    makeAllCombinations,
+    mapL(
+      pipe(
+        mapL((k) => [k, makeRandomInt()]),
+        object
+      )
+    ),
+    mapL((values) => ({ values, f: $$createSVGTransformScale(values) })),
+    appendL({ f: $$createSVGTransformScale() }),
+    flatMapL(({ values, f }) =>
+      mapL(($svg) => ({ values, transform: f($svg) }), [
+        undefined,
+        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+      ])
+    )
   );
 
 export default ({ describe, it }) => [
@@ -51,7 +43,7 @@ export default ({ describe, it }) => [
       go(
         makeCases(),
         mapL(({ transform: t }) => t),
-        each((t) => expect(t).to.instanceof(SVGTransform))
+        each((t) => expect(t).instanceof(SVGTransform))
       );
     });
 
@@ -59,8 +51,7 @@ export default ({ describe, it }) => [
       go(
         makeCases(),
         mapL(({ transform: t }) => t),
-        mapL(({ type: t }) => t),
-        each((type) => expect(type).to.equal(SVGTransform.SVG_TRANSFORM_SCALE))
+        each((transform) => expect($$isScaleSVGTransform(transform)).true)
       );
     });
 
@@ -77,11 +68,13 @@ export default ({ describe, it }) => [
             (values) => ({ values, transform })
           )
         ),
-        mapL(({ transform: receive_transform, values: { sx, sy } }) => {
-          const expect_transform = $$createSVGTransform();
-          expect_transform.setScale(sx, sy);
-          return { receive_transform, expect_transform };
-        }),
+        mapL(({ transform: receive_transform, values: { sx, sy } }) =>
+          go(
+            $$createSVGTransform(),
+            tap((transform) => transform.setScale(sx, sy)),
+            (expect_transform) => ({ receive_transform, expect_transform })
+          )
+        ),
         each(({ expect_transform, receive_transform }) =>
           expectSameValueSVGTransform(receive_transform, expect_transform)
         )

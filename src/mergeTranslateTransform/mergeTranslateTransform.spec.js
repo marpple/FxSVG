@@ -202,10 +202,10 @@ export default ({ describe, it }) => [
           });
           $$getBaseTransformList($input).removeItem(index);
           $$getBaseTransformList($input).insertItemBefore(
-            $$createSVGTransformScale()({
+            $$createSVGTransformScale({
               sx: makeRandomNumber(-100, 100),
               sy: makeRandomNumber(-100, 100),
-            }),
+            })(),
             index
           );
           const [before_x, before_y] = mapL(
@@ -279,10 +279,10 @@ export default ({ describe, it }) => [
           mapL(([, transform]) => transform),
           mapL(({ matrix }) => matrix),
           mapL((matrix) =>
-            $$createSVGTransformTranslate()({ tx, ty })
+            $$createSVGTransformTranslate({ tx, ty })()
               .matrix.multiply(matrix)
               .multiply(
-                $$createSVGTransformTranslate()({ tx: -tx, ty: -ty }).matrix
+                $$createSVGTransformTranslate({ tx: -tx, ty: -ty })().matrix
               )
           ),
           mapL((matrix) => $$createSVGTransformMatrix({ matrix })()),

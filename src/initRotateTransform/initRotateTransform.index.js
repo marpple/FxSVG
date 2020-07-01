@@ -11,7 +11,7 @@ export const $$initRotateTransform = ($svg = $$getSVG()) => (
   const transform_list = $$getBaseTransformList($el);
 
   transform_list.insertItemBefore(
-    $$createSVGTransformTranslate($svg)({ tx: -cx, ty: -cy }),
+    $$createSVGTransformTranslate({ tx: -cx, ty: -cy })($svg),
     index
   );
   const transform = transform_list.insertItemBefore(
@@ -19,7 +19,7 @@ export const $$initRotateTransform = ($svg = $$getSVG()) => (
     index
   );
   transform_list.insertItemBefore(
-    $$createSVGTransformTranslate($svg)({ tx: cx, ty: cy }),
+    $$createSVGTransformTranslate({ tx: cx, ty: cy })($svg),
     index
   );
 
@@ -35,7 +35,7 @@ export const $$initRotateTransform2 = ({
   const transform_list = $$getBaseTransformList($el);
 
   transform_list.insertItemBefore(
-    $$createSVGTransformTranslate($svg)({ tx: -cx, ty: -cy }),
+    $$createSVGTransformTranslate({ tx: -cx, ty: -cy })($svg),
     index
   );
   const transform = transform_list.insertItemBefore(
@@ -43,7 +43,7 @@ export const $$initRotateTransform2 = ({
     index
   );
   transform_list.insertItemBefore(
-    $$createSVGTransformTranslate($svg)({ tx: cx, ty: cy }),
+    $$createSVGTransformTranslate({ tx: cx, ty: cy })($svg),
     index
   );
 
@@ -55,7 +55,7 @@ export const $$initRotateTransform3 = curry(
     const transform_list = $$getBaseTransformList($el);
 
     transform_list.insertItemBefore(
-      $$createSVGTransformTranslate($svg)({ tx: -cx, ty: -cy }),
+      $$createSVGTransformTranslate({ tx: -cx, ty: -cy })($svg),
       index
     );
     const transform = transform_list.insertItemBefore(
@@ -63,7 +63,7 @@ export const $$initRotateTransform3 = curry(
       index
     );
     transform_list.insertItemBefore(
-      $$createSVGTransformTranslate($svg)({ tx: cx, ty: cy }),
+      $$createSVGTransformTranslate({ tx: cx, ty: cy })($svg),
       index
     );
 

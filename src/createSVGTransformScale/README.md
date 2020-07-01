@@ -16,13 +16,20 @@ console.log($$createSVGTransformScale()());
 ```
 
 ```javascript
-console.log($$createSVGTransformScale()({ sx: 2 }));
+console.log($$createSVGTransformScale({ sx: 2 })());
 // SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 2, b: 0, c: 0, d: 1, e: 0, f: 0}
 ```
 
 ```javascript
-console.log($$createSVGTransformScale()({ sx: 2, sy: 4 }));
+console.log($$createSVGTransformScale({ sx: 2, sy: 4 })());
 // SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 0, f: 0}
+```
+
+```javascript
+const $svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+console.log($$createSVGTransformScale({ sx: 3, sy: 5 })($svg));
+// SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
+//   SVGMatrix {a: 3, b: 0, c: 0, d: 5, e: 0, f: 0}
 ```

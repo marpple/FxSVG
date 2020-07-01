@@ -38,9 +38,9 @@ export const $$mergeTranslateTransform = ($svg = $$getSVG()) => (
     rangeL(base_tl.numberOfItems),
     mapL((i) => base_tl.getItem(i)),
     mapL((t) => [
-      $$createSVGTransformTranslate($svg)({ tx, ty }),
+      $$createSVGTransformTranslate({ tx, ty })($svg),
       t,
-      $$createSVGTransformTranslate($svg)({ tx: -tx, ty: -ty }),
+      $$createSVGTransformTranslate({ tx: -tx, ty: -ty })($svg),
     ]),
     each(([t1, t2, t3]) => {
       const matrix = t1.matrix.multiply(t2.matrix).multiply(t3.matrix);
@@ -86,9 +86,9 @@ export const $$mergeTranslateTransform2 = ({
     rangeL(base_tl.numberOfItems),
     mapL((i) => base_tl.getItem(i)),
     mapL((t) => [
-      $$createSVGTransformTranslate($svg)({ tx, ty }),
+      $$createSVGTransformTranslate({ tx, ty })($svg),
       t,
-      $$createSVGTransformTranslate($svg)({ tx: -tx, ty: -ty }),
+      $$createSVGTransformTranslate({ tx: -tx, ty: -ty })($svg),
     ]),
     each(([t1, t2, t3]) => {
       const matrix = t1.matrix.multiply(t2.matrix).multiply(t3.matrix);
@@ -131,9 +131,9 @@ export const $$mergeTranslateTransform3 = curry(
       rangeL(base_tl.numberOfItems),
       mapL((i) => base_tl.getItem(i)),
       mapL((t) => [
-        $$createSVGTransformTranslate($svg)({ tx, ty }),
+        $$createSVGTransformTranslate({ tx, ty })($svg),
         t,
-        $$createSVGTransformTranslate($svg)({ tx: -tx, ty: -ty }),
+        $$createSVGTransformTranslate({ tx: -tx, ty: -ty })($svg),
       ]),
       each(([t1, t2, t3]) => {
         const matrix = t1.matrix.multiply(t2.matrix).multiply(t3.matrix);
