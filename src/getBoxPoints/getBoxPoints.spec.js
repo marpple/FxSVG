@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { each, map, reduce } from "fxjs2";
+import { map, reduce } from "fxjs2";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
@@ -98,20 +98,14 @@ export default ({ describe, it }) => [
           transform_list
         );
 
-        each(
-          ([expect_value, receive_value]) =>
-            expect(receive_value).equal(expect_value),
-          [
-            [x1_2, x1_1],
-            [y1_2, y1_1],
-            [x2_2, x2_1],
-            [y2_2, y2_1],
-            [x3_2, x3_1],
-            [y3_2, y3_1],
-            [x4_2, x4_1],
-            [y4_2, y4_1],
-          ]
-        );
+        expect(x1_2).equal(x1_1);
+        expect(y1_2).equal(y1_1);
+        expect(x2_2).equal(x2_1);
+        expect(y2_2).equal(y2_1);
+        expect(x3_2).equal(x3_1);
+        expect(y3_2).equal(y3_1);
+        expect(x4_2).equal(x4_1);
+        expect(y4_2).equal(y4_1);
 
         clearMock({ $svg });
       }
