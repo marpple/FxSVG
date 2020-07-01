@@ -1,35 +1,15 @@
-import { curry, defaultTo } from "fxjs2";
+import { defaultTo } from "fxjs2";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 
-export const $$initMatrixTransform = ($svg = $$getSVG()) => (
-  $el,
-  { matrix = $$createSVGMatrix()($svg), index = 0 } = {}
-) =>
-  $$getBaseTransformList($el).insertItemBefore(
-    $$createSVGTransformMatrix({ matrix })($svg),
-    index
-  );
-
-export const $$initMatrixTransform2 = ({ matrix, index = 0 } = {}) => (
+export const $$initMatrixTransform = ({ matrix, index = 0 } = {}) => (
   $el,
   $svg = $$getSVG()
-) =>
-  $$getBaseTransformList($el).insertItemBefore(
-    $$createSVGTransformMatrix({
-      matrix: defaultTo($$createSVGMatrix()($svg), matrix),
-    })($svg),
-    index
-  );
-
-export const $$initMatrixTransform3 = curry(
-  ({ matrix, index = 0 } = {}, $el, $svg = $$getSVG()) =>
-    $$getBaseTransformList($el).insertItemBefore(
-      $$createSVGTransformMatrix({
-        matrix: defaultTo($$createSVGMatrix()($svg), matrix),
-      })($svg),
-      index
-    )
-);
+) => {
+  matrix = defaultTo($$createSVGMatrix()($svg), matrix);
+  const transform = $$createSVGTransformMatrix({ matrix })($svg);
+  $$getBaseTransformList($el).insertItemBefore(transform, index);
+  return transform;
+};
