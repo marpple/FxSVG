@@ -11,15 +11,16 @@ svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransfo
 `SVGTrnsform`을 삽입할 `index`를 설정할 수 있으며 설정하지 않는 경우 `0` 으로 초기화됩니다.
 
 ```javascript
-const $el = $$el()(`
-  <rect
-    x="10"
-    y="20"
-    width="100"
-    height="200"
-  >
-  </rect>
-`);
+const str = `
+<rect
+  x="10"
+  y="20"
+  width="100"
+  height="200"
+>
+</rect>
+`;
+const $el = $$el(str)();
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {length: 0, numberOfItems: 0}
@@ -33,16 +34,17 @@ console.log($$getBaseTransformList($el));
 ```
 
 ```javascript
-const $el = $$el()(`
-  <rect
-    x="10"
-    y="20"
-    width="100"
-    height="200"
-    transform="scale(2, 4)"
-  >
-  </rect>
-`);
+const str = `
+<rect
+  x="10"
+  y="20"
+  width="100"
+  height="200"
+  transform="scale(2, 4)"
+>
+</rect>
+`;
+const $el = $$el(str)();
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, length: 1, numberOfItems: 1}
