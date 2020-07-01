@@ -28,6 +28,7 @@ export default ({ describe, it }) => [
           type: SVGTransform.SVG_TRANSFORM_MATRIX,
           SVG_TRANSFORM_MATRIX: SVGTransform.SVG_TRANSFORM_MATRIX,
         };
+
         const result = $$isMatrixSVGTransform(obj);
 
         expect(result).false;
@@ -39,6 +40,7 @@ export default ({ describe, it }) => [
           cx: makeRandomNumber(-100, 100),
           cy: makeRandomNumber(-100, 100),
         })();
+
         const result = $$isMatrixSVGTransform(rotate_t);
 
         expect(result).false;
@@ -49,6 +51,7 @@ export default ({ describe, it }) => [
           tx: makeRandomNumber(-100, 100),
           ty: makeRandomNumber(-100, 100),
         })();
+
         const result = $$isMatrixSVGTransform(translate_t);
 
         expect(result).false;
@@ -59,6 +62,7 @@ export default ({ describe, it }) => [
           sx: makeRandomNumber(-100, 100),
           sy: makeRandomNumber(-100, 100),
         })();
+
         const result = $$isMatrixSVGTransform(scale_t);
 
         expect(result).false;
@@ -70,6 +74,7 @@ export default ({ describe, it }) => [
         const matrix_t = $$createSVGTransformMatrix({
           matrix: makeRandomSVGMatrix(() => makeRandomNumber(-100, 100)),
         })();
+
         const result = $$isMatrixSVGTransform(matrix_t);
 
         expect(result).true;
