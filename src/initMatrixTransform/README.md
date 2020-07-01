@@ -25,7 +25,7 @@ console.log($$getBaseTransformList($el));
 // SVGTransformList {length: 0, numberOfItems: 0}
 
 const matrix = $$createSVGMatrix()({ a: 1, b: 2, c: 3, d: 4, e: 5, f: 6 });
-$$initMatrixTransform()($el, { matrix });
+$$initMatrixTransform({ matrix })($el);
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, length: 1, numberOfItems: 1}
@@ -51,7 +51,7 @@ console.log($$getBaseTransformList($el));
 //   matrix: SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 0, f: 0}
 
 const matrix = $$createSVGMatrix()({ a: 1, b: 2, c: 3, d: 4, e: 5, f: 6 });
-$$initMatrixTransform()($el, { matrix, index: 1 });
+$$initMatrixTransform({ matrix, index: 1 })($el);
 // index 를 1 로 설정했기 때문에
 // SVGTransformList 의 1 인덱스 위치에 SVGTransform 삽입
 
