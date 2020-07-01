@@ -27,11 +27,12 @@ import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGT
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$getBaseTransformList } from "./getBaseTransformList.index.js";
 
-const setupMock = ({ transform = makeRandomTransformAttributeValue() } = {}) =>
-  go(makeMockRect({ transform }), $$getBaseTransformList, (transform_list) => ({
-    transform,
-    transform_list,
-  }));
+const setupMock = ({
+  transform = makeRandomTransformAttributeValue(),
+} = {}) => {
+  const transform_list = $$getBaseTransformList(makeMockRect({ transform }));
+  return { transform, transform_list };
+};
 
 export default ({ describe, it }) => [
   describe(`$$getBaseTransformList`, function () {
