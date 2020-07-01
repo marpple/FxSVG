@@ -1,4 +1,3 @@
-import { tap } from "fxjs2";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 
 export const $$createSVGRect = ({
@@ -6,10 +5,11 @@ export const $$createSVGRect = ({
   y = 0,
   width = 0,
   height = 0,
-} = {}) => ($svg = $$getSVG()) =>
-  tap((rect) => {
-    rect.x = x;
-    rect.y = y;
-    rect.width = width;
-    rect.height = height;
-  })($svg.createSVGRect());
+} = {}) => ($svg = $$getSVG()) => {
+  const rect = $svg.createSVGRect();
+  rect.x = x;
+  rect.y = y;
+  rect.width = width;
+  rect.height = height;
+  return rect;
+};
