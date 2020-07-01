@@ -17,15 +17,16 @@ scale 중심 `cx`, `cy` 를 설정할 수 있습니다. 설정하지 않는 경�
 `SVGTransform` 을 추가할 `index` 를 설정할 수 있습니다. 설정하지 않는 경우 `0` 으로 초기화됩니다.
 
 ```javascript
-const $el = $$el()(`
-  <rect
-    x="10"
-    y="20"
-    width="100"
-    height="200"
-  >
-  </rect>
-`);
+const str = `
+<rect
+  x="10"
+  y="20"
+  width="100"
+  height="200"
+>
+</rect>
+`;
+const $el = $$el(str)();
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {length: 0, numberOfItems: 0}
@@ -43,16 +44,17 @@ console.log($$getBaseTransformList($el));
 ```
 
 ```javascript
-const $el = $$el()(`
-  <rect
-    x="10"
-    y="20"
-    width="100"
-    height="200"
-    transform="rotate(30 10 20)"
-  >
-  </rect>
-`);
+const str = `
+<rect
+  x="10"
+  y="20"
+  width="100"
+  height="200"
+  transform="rotate(30 10 20)"
+>
+</rect>
+`;
+const $el = $$el(str)();
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, length: 1, numberOfItems: 1}
