@@ -35,8 +35,8 @@ export default ({ describe, it }) => [
 
       $$appendTranslateTransform({ tx, ty })(transform);
 
-      expect(transform.matrix.e).to.equal(prev_tx + tx);
-      expect(transform.matrix.f).to.equal(prev_ty + ty);
+      expect(transform.matrix.e).equal(prev_tx + tx);
+      expect(transform.matrix.f).equal(prev_ty + ty);
     });
 
     it(`The transform's tx will not change if no input tx.`, function () {
@@ -70,7 +70,7 @@ export default ({ describe, it }) => [
 
         const after_t = $$appendTranslateTransform({ tx, ty })(before_t);
 
-        expect(after_t).to.equal(before_t);
+        expect(after_t).equal(before_t);
         expectSameValueSVGTransform(after_t, before_t);
       });
 
@@ -84,7 +84,7 @@ export default ({ describe, it }) => [
 
         const after_t = $$appendTranslateTransform({ tx, ty })(before_t);
 
-        expect(after_t).to.equal(before_t);
+        expect(after_t).equal(before_t);
         expectSameValueSVGTransform(after_t, before_t);
       });
 
@@ -97,7 +97,7 @@ export default ({ describe, it }) => [
 
         const after_t = $$appendTranslateTransform({ tx, ty })(before_t);
 
-        expect(after_t).to.equal(before_t);
+        expect(after_t).equal(before_t);
         expectSameValueSVGTransform(after_t, before_t);
       });
     });
