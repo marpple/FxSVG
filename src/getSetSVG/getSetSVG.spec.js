@@ -12,7 +12,7 @@ export default ({ describe, it, beforeEach }) => [
       );
       $$setSVG($svg);
 
-      expect($$getSVG()).to.equal($svg);
+      expect($$getSVG()).equal($svg);
     });
   }),
   describe(`$$setSVG`, function () {
@@ -22,7 +22,7 @@ export default ({ describe, it, beforeEach }) => [
         "svg"
       );
 
-      expect($$setSVG($svg)).to.equal($svg);
+      expect($$setSVG($svg)).equal($svg);
     });
   }),
   describe(`$$getSVG`, function () {
@@ -33,7 +33,7 @@ export default ({ describe, it, beforeEach }) => [
     it(`The return value is a SVG element.`, function () {
       const $svg = $$getSVG();
 
-      expect($svg.nodeName.toLowerCase()).to.equal("svg");
+      expect($svg.nodeName.toLowerCase()).equal("svg");
     });
 
     it(`The return value is always same.`, function () {
@@ -42,7 +42,7 @@ export default ({ describe, it, beforeEach }) => [
         rangeL,
         mapL(() => $$getSVG()),
         (iter) =>
-          go1(head(iter), ($a) => each(($b) => expect($b).to.equal($a), iter))
+          go1(head(iter), ($a) => each(($b) => expect($b).equal($a), iter))
       );
     });
   }),
