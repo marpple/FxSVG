@@ -18,16 +18,8 @@ import { $$updateRotateTransform } from "./updateRotateTransform.index.js";
 const setupMockTransform = () => {
   const angle = makeRandomInt(-700, 700);
   const [cx, cy] = mapL(() => makeRandomInt(-100, 100), rangeL(2));
-  return {
-    transform: $$createSVGTransformRotate({
-      angle,
-      cx,
-      cy,
-    })(),
-    angle,
-    cx,
-    cy,
-  };
+  const transform = $$createSVGTransformRotate({ angle, cx, cy })();
+  return { transform, angle, cx, cy };
 };
 
 const setupMockInputValues = () => ({
