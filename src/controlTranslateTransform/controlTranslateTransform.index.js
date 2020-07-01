@@ -13,7 +13,7 @@ export const $$controlTranslateTransform = ($svg = $$getSVG()) => (
 
   const controller = {};
   controller.update = ({ tx, ty } = {}) => {
-    $$updateTranslateTransform(transform, { tx, ty });
+    $$updateTranslateTransform({ tx, ty })(transform);
     return controller;
   };
   controller.append = ({ tx, ty } = {}) => {
@@ -41,7 +41,7 @@ export const $$controlTranslateTransform2 = ({
 
   const controller = {};
   controller.update = ({ tx, ty } = {}) => {
-    $$updateTranslateTransform(transform, { tx, ty });
+    $$updateTranslateTransform({ tx, ty })(transform);
     return controller;
   };
   controller.append = ({ tx, ty } = {}) => {
@@ -64,7 +64,7 @@ export const $$controlTranslateTransform3 = curry(
 
     const controller = {};
     controller.update = ({ tx, ty } = {}) => {
-      $$updateTranslateTransform(transform, { tx, ty });
+      $$updateTranslateTransform({ tx, ty })(transform);
       return controller;
     };
     controller.append = ({ tx, ty } = {}) => {
