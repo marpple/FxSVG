@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { each, go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs2";
+import { go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs2";
 import {
   expectSameValueSVGTransform,
   expectTransformWithRotateAngleCxCy,
@@ -109,16 +109,16 @@ export default ({ describe, it }) => [
         expect(after_transform_list.length).equal(
           before_transform_list.length + 3
         );
-        go(
+        const pairs = go(
           after_transform_list,
           zipWithIndexL,
           rejectL(([i]) => i >= index && i <= index + 2),
           mapL(([, transform]) => transform),
-          zipL(before_transform_list),
-          each(([before_transform, after_transform]) =>
-            expectSameValueSVGTransform(after_transform, before_transform)
-          )
+          zipL(before_transform_list)
         );
+        for (const [before_transform, after_transform] of pairs) {
+          expectSameValueSVGTransform(after_transform, before_transform);
+        }
       }
     });
 
