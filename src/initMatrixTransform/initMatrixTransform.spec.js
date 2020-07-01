@@ -16,7 +16,7 @@ import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$initMatrixTransform } from "./initMatrixTransform.index.js";
 
-const makeSVGList = () => [
+const setupSVGList = () => [
   undefined,
   document.createElementNS("http://www.w3.org/2000/svg", "svg"),
 ];
@@ -30,7 +30,7 @@ const setupMockEl = ({ transform } = {}) => {
 export default ({ describe, it }) => [
   describe(`$$initMatrixTransform`, function () {
     it(`The length of the SVG transform list is increased by 1.`, function () {
-      for (const $svg of makeSVGList()) {
+      for (const $svg of setupSVGList()) {
         const { $el, index } = setupMockEl({
           transform: makeRandomTransformAttributeValue(),
         });
@@ -45,7 +45,7 @@ export default ({ describe, it }) => [
     });
 
     it(`The transform at input index is a matrix transform with the input matrix.`, function () {
-      for (const $svg of makeSVGList()) {
+      for (const $svg of setupSVGList()) {
         const { $el, index } = setupMockEl({
           transform: makeRandomTransformAttributeValue(),
         });
@@ -59,7 +59,7 @@ export default ({ describe, it }) => [
     });
 
     it(`The function do nothing on other transforms.`, function () {
-      for (const $svg of makeSVGList()) {
+      for (const $svg of setupSVGList()) {
         const { $el, index } = setupMockEl({
           transform: makeRandomTransformAttributeValue(),
         });
@@ -90,7 +90,7 @@ export default ({ describe, it }) => [
     });
 
     it(`The transform at input index is an identity matrix when there is no input matrix.`, function () {
-      for (const $svg of makeSVGList()) {
+      for (const $svg of setupSVGList()) {
         const { $el, index } = setupMockEl({
           transform: makeRandomTransformAttributeValue(),
         });
@@ -104,7 +104,7 @@ export default ({ describe, it }) => [
     });
 
     it(`The transform is at index 0 when there is no input index.`, function () {
-      for (const $svg of makeSVGList()) {
+      for (const $svg of setupSVGList()) {
         const { $el } = setupMockEl({
           transform: makeRandomTransformAttributeValue(),
         });
@@ -118,7 +118,7 @@ export default ({ describe, it }) => [
     });
 
     it(`The transform at index 0 is an identity matrix when there is no input object.`, function () {
-      for (const $svg of makeSVGList()) {
+      for (const $svg of setupSVGList()) {
         const { $el } = setupMockEl({
           transform: makeRandomTransformAttributeValue(),
         });
