@@ -1,3 +1,4 @@
+import { defaultTo } from "fxjs2";
 import { $$isMatrixSVGTransform } from "../isMatrixSVGTransform/isMatrixSVGTransform.index.js";
 
 export const $$updateMatrixTransform = ({ matrix } = {}) => (transform) => {
@@ -5,6 +6,6 @@ export const $$updateMatrixTransform = ({ matrix } = {}) => (transform) => {
     return transform;
   }
 
-  matrix && transform.setMatrix(matrix);
+  transform.setMatrix(defaultTo(transform.matrix, matrix));
   return transform;
 };
