@@ -8,8 +8,9 @@ export const $$initMatrixTransform = ({ matrix, index = 0 } = {}) => (
   $el,
   $svg = $$getSVG()
 ) => {
-  matrix = defaultTo($$createSVGMatrix()($svg), matrix);
-  const transform = $$createSVGTransformMatrix({ matrix })($svg);
+  const transform = $$createSVGTransformMatrix({
+    matrix: defaultTo($$createSVGMatrix()($svg), matrix),
+  })($svg);
   $$getBaseTransformList($el).insertItemBefore(transform, index);
   return transform;
 };
