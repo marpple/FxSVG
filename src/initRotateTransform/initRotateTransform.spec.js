@@ -1,16 +1,5 @@
 import { expect } from "chai";
-import {
-  each,
-  extend,
-  flatL,
-  flatMapL,
-  go,
-  mapL,
-  rangeL,
-  rejectL,
-  zipL,
-  zipWithIndexL,
-} from "fxjs2";
+import { each, go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs2";
 import {
   expectSameValueSVGTransform,
   expectTransformWithRotateAngleCxCy,
@@ -24,11 +13,12 @@ import {
   makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
-import {
-  $$initRotateTransform,
-  $$initRotateTransform2,
-  $$initRotateTransform3,
-} from "./initRotateTransform.index.js";
+import { $$initRotateTransform } from "./initRotateTransform.index.js";
+
+const setupSVGList = () => [
+  undefined,
+  document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+];
 
 const setupMockEl = ({ transform } = {}) => {
   const $el = makeMockRect({ transform });
@@ -45,631 +35,205 @@ const setupMockInputValues = () => ({
 export default ({ describe, it }) => [
   describe(`$$initRotateTransform`, function () {
     it(`The length of the SVG transform list is increased by 3.`, function () {
-      const $list_svg = [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ];
-
-      for (const $svg of $list_svg) {
-        const [
-          { $el: $el1, index: index1 },
-          { $el: $el2, index: index2 },
-          { $el: $el3, index: index3 },
-        ] = mapL(
-          () =>
-            setupMockEl({
-              transform: makeRandomTransformAttributeValue(),
-            }),
-          rangeL(3)
-        );
-        const [
-          { angle: angle1, cx: cx1, cy: cy1 },
-          { angle: angle2, cx: cx2, cy: cy2 },
-          { angle: angle3, cx: cx3, cy: cy3 },
-        ] = mapL(setupMockInputValues, rangeL(3));
-        const [before_length1, before_length2, before_length3] = go(
-          [$el1, $el2, $el3],
-          mapL($$getBaseTransformList),
-          mapL(({ numberOfItems }) => numberOfItems)
-        );
-
-        $$initRotateTransform($svg)($el1, {
-          angle: angle1,
-          cx: cx1,
-          cy: cy1,
-          index: index1,
+      for (const $svg of setupSVGList()) {
+        const { $el, index } = setupMockEl({
+          transform: makeRandomTransformAttributeValue(),
         });
-        $$initRotateTransform2({
-          angle: angle2,
-          cx: cx2,
-          cy: cy2,
-          index: index2,
-        })($el2, $svg);
-        $$initRotateTransform3(
-          {
-            angle: angle3,
-            cx: cx3,
-            cy: cy3,
-            index: index3,
-          },
-          $el3,
-          $svg
-        );
-        // $$initRotateTransform3({
-        //   angle: angle3,
-        //   cx: cx3,
-        //   cy: cy3,
-        //   index: index3,
-        // })($el3, $svg);
+        const { angle, cx, cy } = setupMockInputValues();
+        const { numberOfItems: before_length } = $$getBaseTransformList($el);
 
-        const [after_length1, after_length2, after_length3] = go(
-          [$el1, $el2, $el3],
-          mapL($$getBaseTransformList),
-          mapL(({ numberOfItems }) => numberOfItems)
-        );
+        $$initRotateTransform({ angle, cx, cy, index })($el, $svg);
 
-        go(
-          [after_length1, after_length2, after_length3],
-          zipL([before_length1, before_length2, before_length3]),
-          each(([before_length, after_length]) =>
-            expect(after_length).equal(before_length + 3)
-          )
-        );
+        const { numberOfItems: after_length } = $$getBaseTransformList($el);
+        expect(after_length).equal(before_length + 3);
       }
     });
 
     it(`The transform at input index is a translate transform with tx = input cx, ty = input cy.`, function () {
-      const $list_svg = [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ];
-
-      for (const $svg of $list_svg) {
-        const [
-          { $el: $el1, index: index1 },
-          { $el: $el2, index: index2 },
-          { $el: $el3, index: index3 },
-        ] = mapL(
-          () =>
-            setupMockEl({
-              transform: makeRandomTransformAttributeValue(),
-            }),
-          rangeL(3)
-        );
-        const [
-          { angle: angle1, cx: cx1, cy: cy1 },
-          { angle: angle2, cx: cx2, cy: cy2 },
-          { angle: angle3, cx: cx3, cy: cy3 },
-        ] = mapL(setupMockInputValues, rangeL(3));
-
-        $$initRotateTransform($svg)($el1, {
-          angle: angle1,
-          cx: cx1,
-          cy: cy1,
-          index: index1,
+      for (const $svg of setupSVGList()) {
+        const { $el, index } = setupMockEl({
+          transform: makeRandomTransformAttributeValue(),
         });
-        $$initRotateTransform2({
-          angle: angle2,
-          cx: cx2,
-          cy: cy2,
-          index: index2,
-        })($el2, $svg);
-        $$initRotateTransform3(
-          {
-            angle: angle3,
-            cx: cx3,
-            cy: cy3,
-            index: index3,
-          },
-          $el3,
-          $svg
-        );
-        // $$initRotateTransform3({
-        //   angle: angle3,
-        //   cx: cx3,
-        //   cy: cy3,
-        //   index: index3,
-        // })($el3, $svg);
+        const { angle, cx, cy } = setupMockInputValues();
 
-        const [transform1, transform2, transform3] = go(
-          [$el1, $el2, $el3],
-          mapL($$getBaseTransformList),
-          zipL([index1, index2, index3]),
-          mapL(([index, transform_list]) => transform_list.getItem(index))
-        );
+        $$initRotateTransform({ angle, cx, cy, index })($el, $svg);
 
-        each(expectTransformWithTranslateTxTy, [
-          { transform: transform1, tx: cx1, ty: cy1 },
-          { transform: transform2, tx: cx2, ty: cy2 },
-          { transform: transform3, tx: cx3, ty: cy3 },
-        ]);
+        const transform = $$getBaseTransformList($el).getItem(index);
+        expectTransformWithTranslateTxTy({ transform, tx: cx, ty: cy });
       }
     });
 
     it(`The transform at input index + 1 is a rotate transform with the input angle, cx = 0, cy = 0.`, function () {
-      const $list_svg = [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ];
-
-      for (const $svg of $list_svg) {
-        const [
-          { $el: $el1, index: index1 },
-          { $el: $el2, index: index2 },
-          { $el: $el3, index: index3 },
-        ] = mapL(
-          () =>
-            setupMockEl({
-              transform: makeRandomTransformAttributeValue(),
-            }),
-          rangeL(3)
-        );
-        const [
-          { angle: angle1, cx: cx1, cy: cy1 },
-          { angle: angle2, cx: cx2, cy: cy2 },
-          { angle: angle3, cx: cx3, cy: cy3 },
-        ] = mapL(setupMockInputValues, rangeL(3));
-
-        $$initRotateTransform($svg)($el1, {
-          angle: angle1,
-          cx: cx1,
-          cy: cy1,
-          index: index1,
+      for (const $svg of setupSVGList()) {
+        const { $el, index } = setupMockEl({
+          transform: makeRandomTransformAttributeValue(),
         });
-        $$initRotateTransform2({
-          angle: angle2,
-          cx: cx2,
-          cy: cy2,
-          index: index2,
-        })($el2, $svg);
-        $$initRotateTransform3(
-          {
-            angle: angle3,
-            cx: cx3,
-            cy: cy3,
-            index: index3,
-          },
-          $el3,
-          $svg
-        );
-        // $$initRotateTransform3({
-        //   angle: angle3,
-        //   cx: cx3,
-        //   cy: cy3,
-        //   index: index3,
-        // })($el3, $svg);
+        const { angle, cx, cy } = setupMockInputValues();
 
-        const [transform1, transform2, transform3] = go(
-          [$el1, $el2, $el3],
-          mapL($$getBaseTransformList),
-          zipL([index1, index2, index3]),
-          mapL(([index, transform_list]) => transform_list.getItem(index + 1))
-        );
+        $$initRotateTransform({ angle, cx, cy, index })($el, $svg);
 
-        go(
-          [
-            { transform: transform1, angle: angle1 },
-            { transform: transform2, angle: angle2 },
-            { transform: transform3, angle: angle3 },
-          ],
-          mapL((o) => extend({ cx: 0, cy: 0 }, o)),
-          each(expectTransformWithRotateAngleCxCy)
-        );
+        const transform = $$getBaseTransformList($el).getItem(index + 1);
+        expectTransformWithRotateAngleCxCy({ transform, angle, cx: 0, cy: 0 });
       }
     });
 
     it(`The transform at input index + 2 is a translate transform with tx = -input cx, ty = -input cy.`, function () {
-      const $list_svg = [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ];
-
-      for (const $svg of $list_svg) {
-        const [
-          { $el: $el1, index: index1 },
-          { $el: $el2, index: index2 },
-          { $el: $el3, index: index3 },
-        ] = mapL(
-          () =>
-            setupMockEl({
-              transform: makeRandomTransformAttributeValue(),
-            }),
-          rangeL(3)
-        );
-        const [
-          { angle: angle1, cx: cx1, cy: cy1 },
-          { angle: angle2, cx: cx2, cy: cy2 },
-          { angle: angle3, cx: cx3, cy: cy3 },
-        ] = mapL(setupMockInputValues, rangeL(3));
-
-        $$initRotateTransform($svg)($el1, {
-          angle: angle1,
-          cx: cx1,
-          cy: cy1,
-          index: index1,
+      for (const $svg of setupSVGList()) {
+        const { $el, index } = setupMockEl({
+          transform: makeRandomTransformAttributeValue(),
         });
-        $$initRotateTransform2({
-          angle: angle2,
-          cx: cx2,
-          cy: cy2,
-          index: index2,
-        })($el2, $svg);
-        $$initRotateTransform3(
-          {
-            angle: angle3,
-            cx: cx3,
-            cy: cy3,
-            index: index3,
-          },
-          $el3,
-          $svg
-        );
-        // $$initRotateTransform3({
-        //   angle: angle3,
-        //   cx: cx3,
-        //   cy: cy3,
-        //   index: index3,
-        // })($el3, $svg);
+        const { angle, cx, cy } = setupMockInputValues();
 
-        const [transform1, transform2, transform3] = go(
-          [$el1, $el2, $el3],
-          mapL($$getBaseTransformList),
-          zipL([index1, index2, index3]),
-          mapL(([index, transform_list]) => transform_list.getItem(index + 2))
-        );
+        $$initRotateTransform({ angle, cx, cy, index })($el, $svg);
 
-        each(expectTransformWithTranslateTxTy, [
-          { transform: transform1, tx: -cx1, ty: -cy1 },
-          { transform: transform2, tx: -cx2, ty: -cy2 },
-          { transform: transform3, tx: -cx3, ty: -cy3 },
-        ]);
+        const transform = $$getBaseTransformList($el).getItem(index + 2);
+        expectTransformWithTranslateTxTy({ transform, tx: -cx, ty: -cy });
       }
     });
 
     it(`The function do nothing on other transforms.`, function () {
-      const $list_svg = [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ];
-
-      for (const $svg of $list_svg) {
-        const [
-          { $el: $el1, index: index1 },
-          { $el: $el2, index: index2 },
-          { $el: $el3, index: index3 },
-        ] = mapL(
-          () =>
-            setupMockEl({
-              transform: makeRandomTransformAttributeValue(),
-            }),
-          rangeL(3)
-        );
-        const [
-          { angle: angle1, cx: cx1, cy: cy1 },
-          { angle: angle2, cx: cx2, cy: cy2 },
-          { angle: angle3, cx: cx3, cy: cy3 },
-        ] = mapL(setupMockInputValues, rangeL(3));
-        const [
-          before_transform_list1,
-          before_transform_list2,
-          before_transform_list3,
-        ] = go(
-          [$el1, $el2, $el3],
-          mapL($$getBaseTransformList),
-          mapL(deepCopyTransformList)
-        );
-
-        $$initRotateTransform($svg)($el1, {
-          angle: angle1,
-          cx: cx1,
-          cy: cy1,
-          index: index1,
+      for (const $svg of setupSVGList()) {
+        const { $el, index } = setupMockEl({
+          transform: makeRandomTransformAttributeValue(),
         });
-        $$initRotateTransform2({
-          angle: angle2,
-          cx: cx2,
-          cy: cy2,
-          index: index2,
-        })($el2, $svg);
-        $$initRotateTransform3(
-          {
-            angle: angle3,
-            cx: cx3,
-            cy: cy3,
-            index: index3,
-          },
-          $el3,
-          $svg
-        );
-        // $$initRotateTransform3({
-        //   angle: angle3,
-        //   cx: cx3,
-        //   cy: cy3,
-        //   index: index3,
-        // })($el3, $svg);
-
-        const [
-          after_transform_list1,
-          after_transform_list2,
-          after_transform_list3,
-        ] = go(
-          [$el1, $el2, $el3],
-          mapL($$getBaseTransformList),
-          mapL(deepCopyTransformList)
+        const { angle, cx, cy } = setupMockInputValues();
+        const before_transform_list = deepCopyTransformList(
+          $$getBaseTransformList($el)
         );
 
+        $$initRotateTransform({ angle, cx, cy, index })($el, $svg);
+
+        const after_transform_list = deepCopyTransformList(
+          $$getBaseTransformList($el)
+        );
+        expect(after_transform_list.length).equal(
+          before_transform_list.length + 3
+        );
         go(
-          [after_transform_list1, after_transform_list2, after_transform_list3],
-          zipL([
-            before_transform_list1,
-            before_transform_list2,
-            before_transform_list3,
-          ]),
-          zipL([index1, index2, index3]),
-          mapL(flatL),
-          each(([index, before_transform_list, after_transform_list]) => {
-            expect(after_transform_list.length - 3).equal(
-              before_transform_list.length
-            );
-            go(
-              after_transform_list,
-              zipWithIndexL,
-              rejectL(([i]) => i >= index && i <= index + 2),
-              mapL(([, transform]) => transform),
-              zipL(before_transform_list),
-              each(([before_transform, after_transform]) =>
-                expectSameValueSVGTransform(after_transform, before_transform)
-              )
-            );
-          })
+          after_transform_list,
+          zipWithIndexL,
+          rejectL(([i]) => i >= index && i <= index + 2),
+          mapL(([, transform]) => transform),
+          zipL(before_transform_list),
+          each(([before_transform, after_transform]) =>
+            expectSameValueSVGTransform(after_transform, before_transform)
+          )
         );
       }
     });
 
     it(`The transforms at input index and input index + 2 are translate transforms with tx = 0, ty = 0
         when there are no input cx, cy.`, function () {
-      const $list_svg = [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ];
-
-      for (const $svg of $list_svg) {
-        const [
-          { $el: $el1, index: index1 },
-          { $el: $el2, index: index2 },
-          { $el: $el3, index: index3 },
-        ] = mapL(
-          () =>
-            setupMockEl({
-              transform: makeRandomTransformAttributeValue(),
-            }),
-          rangeL(3)
-        );
-        const [{ angle: angle1 }, { angle: angle2 }, { angle: angle3 }] = mapL(
-          setupMockInputValues,
-          rangeL(3)
-        );
-
-        $$initRotateTransform($svg)($el1, {
-          angle: angle1,
-          index: index1,
+      for (const $svg of setupSVGList()) {
+        const { $el, index } = setupMockEl({
+          transform: makeRandomTransformAttributeValue(),
         });
-        $$initRotateTransform2({
-          angle: angle2,
-          index: index2,
-        })($el2, $svg);
-        $$initRotateTransform3(
-          {
-            angle: angle3,
-            index: index3,
-          },
-          $el3,
-          $svg
-        );
-        // $$initRotateTransform3({
-        //   angle: angle3,
-        //   index: index3,
-        // })($el3, $svg);
+        const { angle } = setupMockInputValues();
 
-        go(
-          [$el1, $el2, $el3],
-          mapL($$getBaseTransformList),
-          zipL([index1, index2, index3]),
-          flatMapL(([index, transform_list]) =>
-            mapL((index) => transform_list.getItem(index), [index, index + 2])
-          ),
-          mapL((transform) => ({ transform, tx: 0, ty: 0 })),
-          each(expectTransformWithTranslateTxTy)
+        $$initRotateTransform({ angle, index })($el, $svg);
+
+        const transform_list = $$getBaseTransformList($el);
+        const [transform1, transform2] = mapL(
+          (i) => transform_list.getItem(i),
+          [index, index + 2]
         );
+        expectTransformWithTranslateTxTy({
+          transform: transform1,
+          tx: 0,
+          ty: 0,
+        });
+        expectTransformWithTranslateTxTy({
+          transform: transform2,
+          tx: 0,
+          ty: 0,
+        });
       }
     });
 
     it(`The transform at input index + 1 is a rotate transform with angle = 0, cx = 0, cy = 0
         when there is no input angle.`, function () {
-      const $list_svg = [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ];
-
-      for (const $svg of $list_svg) {
-        const [
-          { $el: $el1, index: index1 },
-          { $el: $el2, index: index2 },
-          { $el: $el3, index: index3 },
-        ] = mapL(
-          () =>
-            setupMockEl({
-              transform: makeRandomTransformAttributeValue(),
-            }),
-          rangeL(3)
-        );
-        const [
-          { cx: cx1, cy: cy1 },
-          { cx: cx2, cy: cy2 },
-          { cx: cx3, cy: cy3 },
-        ] = mapL(setupMockInputValues, rangeL(3));
-
-        $$initRotateTransform($svg)($el1, {
-          cx: cx1,
-          cy: cy1,
-          index: index1,
+      for (const $svg of setupSVGList()) {
+        const { $el, index } = setupMockEl({
+          transform: makeRandomTransformAttributeValue(),
         });
-        $$initRotateTransform2({
-          cx: cx2,
-          cy: cy2,
-          index: index2,
-        })($el2, $svg);
-        $$initRotateTransform3(
-          {
-            cx: cx3,
-            cy: cy3,
-            index: index3,
-          },
-          $el3,
-          $svg
-        );
-        // $$initRotateTransform3({
-        //   cx: cx3,
-        //   cy: cy3,
-        //   index: index3,
-        // })($el3, $svg);
+        const { cx, cy } = setupMockInputValues();
 
-        go(
-          [$el1, $el2, $el3],
-          mapL($$getBaseTransformList),
-          zipL([index1, index2, index3]),
-          mapL(([index, transform_list]) => transform_list.getItem(index + 1)),
-          mapL((transform) => ({ transform, angle: 0, cx: 0, cy: 0 })),
-          each(expectTransformWithRotateAngleCxCy)
-        );
+        $$initRotateTransform({ cx, cy, index })($el, $svg);
+
+        const transform = $$getBaseTransformList($el).getItem(index + 1);
+        expectTransformWithRotateAngleCxCy({
+          transform,
+          angle: 0,
+          cx: 0,
+          cy: 0,
+        });
       }
     });
 
     it(`The transform is from index 0 to index 2 when there is no input index.`, function () {
-      const $list_svg = [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ];
-
-      for (const $svg of $list_svg) {
-        const [{ $el: $el1 }, { $el: $el2 }, { $el: $el3 }] = mapL(
-          () =>
-            setupMockEl({
-              transform: makeRandomTransformAttributeValue(),
-            }),
-          rangeL(3)
-        );
-        const [
-          { angle: angle1, cx: cx1, cy: cy1 },
-          { angle: angle2, cx: cx2, cy: cy2 },
-          { angle: angle3, cx: cx3, cy: cy3 },
-        ] = mapL(setupMockInputValues, rangeL(3));
-
-        $$initRotateTransform($svg)($el1, {
-          angle: angle1,
-          cx: cx1,
-          cy: cy1,
+      for (const $svg of setupSVGList()) {
+        const { $el } = setupMockEl({
+          transform: makeRandomTransformAttributeValue(),
         });
-        $$initRotateTransform2({
-          angle: angle2,
-          cx: cx2,
-          cy: cy2,
-        })($el2, $svg);
-        $$initRotateTransform3(
-          {
-            angle: angle3,
-            cx: cx3,
-            cy: cy3,
-          },
-          $el3,
-          $svg
-        );
-        // $$initRotateTransform3({
-        //   angle: angle3,
-        //   cx: cx3,
-        //   cy: cy3,
-        // })($el3, $svg);
+        const { angle, cx, cy } = setupMockInputValues();
 
-        const [transform_list1, transform_list2, transform_list3] = mapL(
-          ($el) => $$getBaseTransformList($el),
-          [$el1, $el2, $el3]
-        );
+        $$initRotateTransform({ angle, cx, cy })($el, $svg);
 
-        go(
-          [transform_list1, transform_list2, transform_list3],
-          mapL((transform_list) => transform_list.getItem(0)),
-          zipL([
-            [cx1, cy1],
-            [cx2, cy2],
-            [cx3, cy3],
-          ]),
-          mapL(flatL),
-          mapL(([cx, cy, transform]) => ({ transform, tx: cx, ty: cy })),
-          each(expectTransformWithTranslateTxTy)
+        const transform_list = $$getBaseTransformList($el);
+        const [transform1, transform2, transform3] = mapL(
+          (i) => transform_list.getItem(i),
+          [0, 1, 2]
         );
-        go(
-          [transform_list1, transform_list2, transform_list3],
-          mapL((transform_list) => transform_list.getItem(1)),
-          zipL([angle1, angle2, angle3]),
-          mapL(([angle, transform]) => ({ transform, angle, cx: 0, cy: 0 })),
-          each(expectTransformWithRotateAngleCxCy)
-        );
-        go(
-          [transform_list1, transform_list2, transform_list3],
-          mapL((transform_list) => transform_list.getItem(2)),
-          zipL([
-            [cx1, cy1],
-            [cx2, cy2],
-            [cx3, cy3],
-          ]),
-          mapL(flatL),
-          mapL(([cx, cy, transform]) => ({ transform, tx: -cx, ty: -cy })),
-          each(expectTransformWithTranslateTxTy)
-        );
+        expectTransformWithTranslateTxTy({
+          transform: transform1,
+          tx: cx,
+          ty: cy,
+        });
+        expectTransformWithRotateAngleCxCy({
+          transform: transform2,
+          angle,
+          cx: 0,
+          cy: 0,
+        });
+        expectTransformWithTranslateTxTy({
+          transform: transform3,
+          tx: -cx,
+          ty: -cy,
+        });
       }
     });
 
     it(`The transforms at index 0 and index 2 are translate transforms with tx = 0, ty = 0
         and the transform at index 1 is a rotate transform with angle = 0, cx = 0, cy = 0
         when there is no input object.`, function () {
-      const $list_svg = [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ];
+      for (const $svg of setupSVGList()) {
+        const { $el } = setupMockEl({
+          transform: makeRandomTransformAttributeValue(),
+        });
 
-      for (const $svg of $list_svg) {
-        const [{ $el: $el1 }, { $el: $el2 }, { $el: $el3 }] = mapL(
-          () =>
-            setupMockEl({
-              transform: makeRandomTransformAttributeValue(),
-            }),
-          rangeL(3)
-        );
+        $$initRotateTransform()($el, $svg);
 
-        $$initRotateTransform($svg)($el1);
-        $$initRotateTransform2()($el2, $svg);
-        $$initRotateTransform3(undefined, $el3, $svg);
-        // $$initRotateTransform3()($el3, $svg);
-
-        const [transform_list1, transform_list2, transform_list3] = mapL(
-          ($el) => $$getBaseTransformList($el),
-          [$el1, $el2, $el3]
+        const transform_list = $$getBaseTransformList($el);
+        const [transform1, transform2, transform3] = mapL(
+          (i) => transform_list.getItem(i),
+          [0, 1, 2]
         );
-
-        go(
-          [transform_list1, transform_list2, transform_list3],
-          flatMapL((transform_list) =>
-            mapL((index) => transform_list.getItem(index), [0, 2])
-          ),
-          mapL((transform) => ({ transform, tx: 0, ty: 0 })),
-          each(expectTransformWithTranslateTxTy)
-        );
-        go(
-          [transform_list1, transform_list2, transform_list3],
-          mapL((transform_list) => transform_list.getItem(1)),
-          mapL((transform) => ({ transform, angle: 0, cx: 0, cy: 0 })),
-          each(expectTransformWithRotateAngleCxCy)
-        );
+        expectTransformWithTranslateTxTy({
+          transform: transform1,
+          tx: 0,
+          ty: 0,
+        });
+        expectTransformWithRotateAngleCxCy({
+          transform: transform2,
+          angle: 0,
+          cx: 0,
+          cy: 0,
+        });
+        expectTransformWithTranslateTxTy({
+          transform: transform3,
+          tx: 0,
+          ty: 0,
+        });
       }
     });
   }),

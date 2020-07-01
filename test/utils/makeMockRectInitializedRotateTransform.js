@@ -55,7 +55,7 @@ export const makeMockRectInitializedRotateTransform = ({
     appendL([_angle, makeRandomNumber(-700, 700)]),
     mapL(([a, b]) => defaultTo(b, a)),
     ([cx, cy, angle]) =>
-      $$initRotateTransform()($el, { angle, cx, cy, index: init_index })
+      $$initRotateTransform({ angle, cx, cy, index: init_index })($el)
   );
   const index = init_index + 1;
   const { e: cx, f: cy } = transform_list.getItem(index - 1).matrix;
