@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { each, go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs2";
+import { go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs2";
 import {
   makeRandomTransformAttributeValue,
   makeRandomNumber,
@@ -110,16 +110,16 @@ export default ({ describe, it }) => [
         expect(after_transform_list.length).equal(
           before_transform_list.length + 3
         );
-        go(
+        const pairs = go(
           after_transform_list,
           zipWithIndexL,
           rejectL(([i]) => i >= index && i <= index + 2),
           mapL(([, transform]) => transform),
-          zipL(before_transform_list),
-          each(([before_transform, after_transform]) =>
-            expectSameValueSVGTransform(after_transform, before_transform)
-          )
+          zipL(before_transform_list)
         );
+        for (const [before_transform, after_transform] of pairs) {
+          expectSameValueSVGTransform(after_transform, before_transform);
+        }
       }
     });
 
@@ -133,13 +133,14 @@ export default ({ describe, it }) => [
 
         $$initScaleTransform({ sx, sy, index })($el, $svg);
 
-        go(
-          [index, index + 2],
-          mapL((i) => $$getBaseTransformList($el).getItem(i)),
-          each((transform) =>
-            expectTransformWithTranslateTxTy({ transform, tx: 0, ty: 0 })
-          )
-        );
+        const transform_list = $$getBaseTransformList($el);
+        const transforms = mapL((i) => transform_list.getItem(i), [
+          index,
+          index + 2,
+        ]);
+        for (const transform of transforms) {
+          expectTransformWithTranslateTxTy({ transform, tx: 0, ty: 0 });
+        }
       }
     });
 
@@ -201,15 +202,25 @@ export default ({ describe, it }) => [
         $$initScaleTransform()($el, $svg);
 
         const transform_list = $$getBaseTransformList($el);
-        go(
-          [0, 2],
-          mapL((i) => transform_list.getItem(i)),
-          each((transform) =>
-            expectTransformWithTranslateTxTy({ transform, tx: 0, ty: 0 })
-          )
+        const [transform1, transform2, transform3] = mapL(
+          (i) => transform_list.getItem(i),
+          [0, 1, 2]
         );
-        const transform = transform_list.getItem(1);
-        expectTransformWithScaleSxSy({ transform, sx: 1, sy: 1 });
+        expectTransformWithTranslateTxTy({
+          transform: transform1,
+          tx: 0,
+          ty: 0,
+        });
+        expectTransformWithScaleSxSy({
+          transform: transform2,
+          sx: 1,
+          sy: 1,
+        });
+        expectTransformWithTranslateTxTy({
+          transform: transform3,
+          tx: 0,
+          ty: 0,
+        });
       }
     });
   }),
