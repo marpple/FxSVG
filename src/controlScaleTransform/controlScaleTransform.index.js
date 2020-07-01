@@ -32,7 +32,7 @@ export const $$controlScaleTransform = ($svg = $$getSVG()) => (
 
   const controller = {};
   controller.update = ({ sx, sy } = {}) => {
-    $$updateScaleTransform(transform, { sx, sy });
+    $$updateScaleTransform({ sx, sy })(transform);
     return controller;
   };
   controller.end = ({
@@ -85,7 +85,7 @@ export const $$controlScaleTransform2 = ({
 
   const controller = {};
   controller.update = ({ sx, sy } = {}) => {
-    $$updateScaleTransform(transform, { sx, sy });
+    $$updateScaleTransform({ sx, sy })(transform);
     return controller;
   };
   controller.end = ({
@@ -143,7 +143,7 @@ export const $$controlScaleTransform3 = curry(
 
     const controller = {};
     controller.update = ({ sx, sy } = {}) => {
-      $$updateScaleTransform(transform, { sx, sy });
+      $$updateScaleTransform({ sx, sy })(transform);
       return controller;
     };
     controller.end = ({
