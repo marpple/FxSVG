@@ -22,13 +22,13 @@ export const $$controlScaleTransform = ($svg = $$getSVG()) => (
     direction: _direction,
   } = {}
 ) => {
-  const transform = $$initScaleTransform($svg)($el, {
+  const transform = $$initScaleTransform({
     cx,
     cy,
     sx,
     sy,
     index,
-  });
+  })($el, $svg);
 
   const controller = {};
   controller.update = ({ sx, sy } = {}) => {
@@ -75,13 +75,13 @@ export const $$controlScaleTransform2 = ({
   height_name: _height_name,
   direction: _direction,
 } = {}) => ($el, $svg = $$getSVG()) => {
-  const transform = $$initScaleTransform($svg)($el, {
+  const transform = $$initScaleTransform({
     cx,
     cy,
     sx,
     sy,
     index,
-  });
+  })($el, $svg);
 
   const controller = {};
   controller.update = ({ sx, sy } = {}) => {
@@ -133,13 +133,13 @@ export const $$controlScaleTransform3 = curry(
     $el,
     $svg = $$getSVG()
   ) => {
-    const transform = $$initScaleTransform($svg)($el, {
+    const transform = $$initScaleTransform({
       cx,
       cy,
       sx,
       sy,
       index,
-    });
+    })($el, $svg);
 
     const controller = {};
     controller.update = ({ sx, sy } = {}) => {
