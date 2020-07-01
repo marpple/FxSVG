@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { each, go, go1, head, mapL, rangeL } from "fxjs2";
+import { head, mapL, rangeL } from "fxjs2";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { $$getSVG, $$setSVG } from "./getSetSVG.index.js";
 
@@ -37,13 +37,12 @@ export default ({ describe, it, beforeEach }) => [
     });
 
     it(`The return value is always same.`, function () {
-      go(
-        makeRandomInt(2),
-        rangeL,
-        mapL(() => $$getSVG()),
-        (iter) =>
-          go1(head(iter), ($a) => each(($b) => expect($b).equal($a), iter))
-      );
+      const iter = mapL(() => $$getSVG(), rangeL(makeRandomInt(2)));
+
+      const $a = head(iter);
+      for (const $b of iter) {
+        expect($b).equal($a);
+      }
     });
   }),
 ];
