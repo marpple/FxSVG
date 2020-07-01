@@ -16,11 +16,8 @@ import { $$updateScaleTransform } from "./updateScaleTransform.index.js";
 
 const setupMockTransform = () => {
   const [sx, sy] = mapL(() => makeRandomNumber(-100, 100), rangeL(2));
-  return {
-    transform: $$createSVGTransformScale({ sx, sy })(),
-    sx,
-    sy,
-  };
+  const transform = $$createSVGTransformScale({ sx, sy })();
+  return { transform, sx, sy };
 };
 
 const setupMockInputValues = () => ({
