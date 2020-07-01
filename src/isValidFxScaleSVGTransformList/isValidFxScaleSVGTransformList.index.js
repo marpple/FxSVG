@@ -1,79 +1,40 @@
-import { curry, go, mapL, rangeL } from "fxjs2";
+import { go, mapL, rangeL } from "fxjs2";
 import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
 import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 
-export const $$isValidFxScaleSVGTransformList = (
-  transform_list,
-  { index = 0 } = {}
-) =>
-  index > 0 &&
-  index + 1 < transform_list.numberOfItems &&
-  go(
-    rangeL(3),
-    mapL((i) => index - 1 + i),
-    mapL((i) => transform_list.getItem(i)),
-    ([t1, t2, t3]) =>
-      $$isTranslateSVGTransform(t1) &&
-      $$isScaleSVGTransform(t2) &&
-      $$isTranslateSVGTransform(t3) &&
-      t1.matrix.a === 1 &&
-      t1.matrix.b === 0 &&
-      t1.matrix.c === 0 &&
-      t1.matrix.d === 1 &&
-      t3.matrix.a === 1 &&
-      t3.matrix.b === 0 &&
-      t3.matrix.c === 0 &&
-      t3.matrix.d === 1 &&
-      t1.matrix.e + t3.matrix.e === 0 &&
-      t1.matrix.f + t3.matrix.f === 0
-  );
-
-export const $$isValidFxScaleSVGTransformList2 = ({ index = 0 } = {}) => (
+export const $$isValidFxScaleSVGTransformList = ({ index = 0 } = {}) => (
   transform_list
-) =>
-  index > 0 &&
-  index + 1 < transform_list.numberOfItems &&
-  go(
+) => {
+  if (index <= 0 || index >= transform_list.numberOfItems - 1) {
+    return false;
+  }
+
+  const [
+    positive_translate_transform,
+    scale_transform,
+    negative_translate_transform,
+  ] = go(
     rangeL(3),
     mapL((i) => index - 1 + i),
-    mapL((i) => transform_list.getItem(i)),
-    ([t1, t2, t3]) =>
-      $$isTranslateSVGTransform(t1) &&
-      $$isScaleSVGTransform(t2) &&
-      $$isTranslateSVGTransform(t3) &&
-      t1.matrix.a === 1 &&
-      t1.matrix.b === 0 &&
-      t1.matrix.c === 0 &&
-      t1.matrix.d === 1 &&
-      t3.matrix.a === 1 &&
-      t3.matrix.b === 0 &&
-      t3.matrix.c === 0 &&
-      t3.matrix.d === 1 &&
-      t1.matrix.e + t3.matrix.e === 0 &&
-      t1.matrix.f + t3.matrix.f === 0
+    mapL((i) => transform_list.getItem(i))
   );
-
-export const $$isValidFxScaleSVGTransformList3 = curry(
-  ({ index = 0 } = {}, transform_list) =>
-    index > 0 &&
-    index + 1 < transform_list.numberOfItems &&
-    go(
-      rangeL(3),
-      mapL((i) => index - 1 + i),
-      mapL((i) => transform_list.getItem(i)),
-      ([t1, t2, t3]) =>
-        $$isTranslateSVGTransform(t1) &&
-        $$isScaleSVGTransform(t2) &&
-        $$isTranslateSVGTransform(t3) &&
-        t1.matrix.a === 1 &&
-        t1.matrix.b === 0 &&
-        t1.matrix.c === 0 &&
-        t1.matrix.d === 1 &&
-        t3.matrix.a === 1 &&
-        t3.matrix.b === 0 &&
-        t3.matrix.c === 0 &&
-        t3.matrix.d === 1 &&
-        t1.matrix.e + t3.matrix.e === 0 &&
-        t1.matrix.f + t3.matrix.f === 0
-    )
-);
+  return (
+    $$isTranslateSVGTransform(positive_translate_transform) &&
+    $$isScaleSVGTransform(scale_transform) &&
+    $$isTranslateSVGTransform(negative_translate_transform) &&
+    positive_translate_transform.matrix.a === 1 &&
+    positive_translate_transform.matrix.b === 0 &&
+    positive_translate_transform.matrix.c === 0 &&
+    positive_translate_transform.matrix.d === 1 &&
+    negative_translate_transform.matrix.a === 1 &&
+    negative_translate_transform.matrix.b === 0 &&
+    negative_translate_transform.matrix.c === 0 &&
+    negative_translate_transform.matrix.d === 1 &&
+    positive_translate_transform.matrix.e +
+      negative_translate_transform.matrix.e ===
+      0 &&
+    positive_translate_transform.matrix.f +
+      negative_translate_transform.matrix.f ===
+      0
+  );
+};

@@ -9,7 +9,7 @@ export const $$mergeScaleTransform = ($svg = $$getSVG()) => (
   { index = 1 } = {}
 ) => {
   const transform_list = $$getBaseTransformList($el);
-  if (!$$isValidFxScaleSVGTransformList(transform_list, { index })) {
+  if (!$$isValidFxScaleSVGTransformList({ index })(transform_list)) {
     return $el;
   }
 
@@ -33,7 +33,7 @@ export const $$mergeScaleTransform2 = ({ index = 1 } = {}) => (
   $svg = $$getSVG()
 ) => {
   const transform_list = $$getBaseTransformList($el);
-  if (!$$isValidFxScaleSVGTransformList(transform_list, { index })) {
+  if (!$$isValidFxScaleSVGTransformList({ index })(transform_list)) {
     return $el;
   }
 
@@ -55,7 +55,7 @@ export const $$mergeScaleTransform2 = ({ index = 1 } = {}) => (
 export const $$mergeScaleTransform3 = curry(
   ({ index = 1 } = {}, $el, $svg = $$getSVG()) => {
     const transform_list = $$getBaseTransformList($el);
-    if (!$$isValidFxScaleSVGTransformList(transform_list, { index })) {
+    if (!$$isValidFxScaleSVGTransformList({ index })(transform_list)) {
       return $el;
     }
 

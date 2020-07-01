@@ -9,9 +9,9 @@
 const $el = $$el()(`
 <rect x="0" y="0" width="100" height="100"></rect>
 `);
-$$initScaleTransform()($el, { index: 0 });
+$$initScaleTransform({ index: 0 })($el);
 const transform_list = $$getBaseTransformList($el);
 
-console.log($$isValidFxScaleSVGTransformList(transform_list, { index: 1 }));
+console.log($$isValidFxScaleSVGTransformList({ index: 1 })(transform_list));
 // true
 ```
