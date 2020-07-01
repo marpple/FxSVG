@@ -191,7 +191,7 @@ export default ({ describe, it }) => [
               rangeL(Infinity)
             ),
           mapL(([angle, cx, cy]) =>
-            $$createSVGTransformRotate()({ angle, cx, cy })
+            $$createSVGTransformRotate({ angle, cx, cy })()
           ),
           takeL(3)
         );

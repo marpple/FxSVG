@@ -543,7 +543,7 @@ export default ({ describe, it }) => [
           rejectL(([i]) => equals2(i, index - 1) || equals2(i, index + 1)),
           mapL(([i, transform]) => {
             if (equals2(i, index)) {
-              return $$createSVGTransformRotate()({ angle, cx, cy });
+              return $$createSVGTransformRotate({ angle, cx, cy })();
             }
             return transform;
           }),

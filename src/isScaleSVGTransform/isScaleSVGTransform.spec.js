@@ -45,11 +45,11 @@ export default ({ describe, it }) => [
       });
 
       it(`When the input value is a SVGTransform whose type is the SVGTransform.SVG_TRANSFORM_ROTATE.`, function () {
-        const rotate_t = $$createSVGTransformRotate()({
+        const rotate_t = $$createSVGTransformRotate({
           angle: makeRandomNumber(-700, 700),
           cx: makeRandomNumber(-100, 100),
           cy: makeRandomNumber(-100, 100),
-        });
+        })();
         const result = $$isScaleSVGTransform(rotate_t);
 
         expect(result).to.be.false;

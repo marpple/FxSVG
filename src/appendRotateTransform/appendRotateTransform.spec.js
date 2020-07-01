@@ -21,7 +21,7 @@ const setupMock = ({
   cx = makeRandomNumber(-100, 100),
   cy = makeRandomNumber(-100, 100),
 } = {}) => {
-  const transform = $$createSVGTransformRotate()({ angle, cx, cy });
+  const transform = $$createSVGTransformRotate({ angle, cx, cy })();
   return { transform, angle, cx, cy };
 };
 

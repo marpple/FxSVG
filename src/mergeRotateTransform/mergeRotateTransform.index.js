@@ -47,7 +47,7 @@ export const $$mergeRotateTransform = ($svg = $$getSVG()) => (
 
   each(() => base_tl.removeItem(index - 1), rangeL(3));
   base_tl.insertItemBefore(
-    $$createSVGTransformRotate($svg)({ angle, cx, cy }),
+    $$createSVGTransformRotate({ angle, cx, cy })($svg),
     index - 1
   );
 
@@ -68,7 +68,7 @@ export const $$mergeRotateTransform2 = ({ index = 1 } = {}) => (
 
   each(() => base_tl.removeItem(index - 1), rangeL(3));
   base_tl.insertItemBefore(
-    $$createSVGTransformRotate($svg)({ angle, cx, cy }),
+    $$createSVGTransformRotate({ angle, cx, cy })($svg),
     index - 1
   );
 
@@ -87,7 +87,7 @@ export const $$mergeRotateTransform3 = curry(
 
     each(() => base_tl.removeItem(index - 1), rangeL(3));
     base_tl.insertItemBefore(
-      $$createSVGTransformRotate($svg)({ angle, cx, cy }),
+      $$createSVGTransformRotate({ angle, cx, cy })($svg),
       index - 1
     );
 

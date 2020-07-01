@@ -182,7 +182,7 @@ export default ({ describe, it }) => [
             cx: makeRandomNumber(-100, 100),
             cy: makeRandomNumber(-100, 100),
           })),
-          mapL((option) => $$createSVGTransformRotate()(option))
+          mapL((option) => $$createSVGTransformRotate(option)())
         );
 
         const [[tx1, ty1], [tx2, ty2], [tx3, ty3]] = mapL(

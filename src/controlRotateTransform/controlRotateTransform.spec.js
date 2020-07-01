@@ -90,11 +90,11 @@ export default ({ describe, it }) => [
         angle,
       } = setupMock();
 
-      const expect_transform = $$createSVGTransformRotate()({
+      const expect_transform = $$createSVGTransformRotate({
         angle,
         cx: 0,
         cy: 0,
-      });
+      })();
 
       expectSameValueSVGTransform(receive_transform, expect_transform);
     });
@@ -118,11 +118,11 @@ export default ({ describe, it }) => [
       const angle = makeRandomInt(-700, 700);
       controller.update({ angle });
 
-      const expect_transform = $$createSVGTransformRotate()({
+      const expect_transform = $$createSVGTransformRotate({
         angle,
         cx: 0,
         cy: 0,
-      });
+      })();
 
       expectSameValueSVGTransform(receive_transform, expect_transform);
     });
@@ -136,11 +136,11 @@ export default ({ describe, it }) => [
       const angle2 = makeRandomInt(-700, 700);
       controller.append({ angle: angle2 });
 
-      const expect_transform = $$createSVGTransformRotate()({
+      const expect_transform = $$createSVGTransformRotate({
         angle: angle1 + angle2,
         cx: 0,
         cy: 0,
-      });
+      })();
 
       expectSameValueSVGTransform(receive_transform, expect_transform);
     });
@@ -167,7 +167,7 @@ export default ({ describe, it }) => [
         before_transform_list.length - 2
       );
       go(
-        $$createSVGTransformRotate()({ angle, cx, cy }),
+        $$createSVGTransformRotate({ angle, cx, cy })(),
         (rotate_transform) =>
           go(
             before_transform_list,

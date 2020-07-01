@@ -15,7 +15,7 @@ export const $$initRotateTransform = ($svg = $$getSVG()) => (
     index
   );
   const transform = transform_list.insertItemBefore(
-    $$createSVGTransformRotate($svg)({ angle }),
+    $$createSVGTransformRotate({ angle })($svg),
     index
   );
   transform_list.insertItemBefore(
@@ -39,7 +39,7 @@ export const $$initRotateTransform2 = ({
     index
   );
   const transform = transform_list.insertItemBefore(
-    $$createSVGTransformRotate($svg)({ angle }),
+    $$createSVGTransformRotate({ angle })($svg),
     index
   );
   transform_list.insertItemBefore(
@@ -59,7 +59,7 @@ export const $$initRotateTransform3 = curry(
       index
     );
     const transform = transform_list.insertItemBefore(
-      $$createSVGTransformRotate($svg)({ angle }),
+      $$createSVGTransformRotate({ angle })($svg),
       index
     );
     transform_list.insertItemBefore(

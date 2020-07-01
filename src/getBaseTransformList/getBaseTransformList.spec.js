@@ -126,8 +126,8 @@ export default ({ describe, it }) => [
             const transform2 = go(
               transform_str.match(/(-?\d+(\.\d+)?)/gi),
               mapL(parseFloat),
-              ([angle, cx, cy]) => ({ angle, cx, cy }),
-              $$createSVGTransformRotate()
+              ([angle, cx, cy]) =>
+                $$createSVGTransformRotate({ angle, cx, cy })()
             );
             expect(transform_str).to.have.string("rotate");
             expectSameValueSVGMatrix(transform.matrix, transform2.matrix);

@@ -142,11 +142,11 @@ export default ({ describe, it }) => [
           });
           $$getBaseTransformList($input).removeItem(index);
           $$getBaseTransformList($input).insertItemBefore(
-            $$createSVGTransformRotate()({
+            $$createSVGTransformRotate({
               angle: makeRandomNumber(-700, 700),
               cx: makeRandomNumber(-100, 100),
               cy: makeRandomNumber(-100, 100),
-            }),
+            })(),
             index
           );
           const [before_x, before_y] = mapL(

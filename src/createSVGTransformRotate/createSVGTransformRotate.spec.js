@@ -9,6 +9,7 @@ import {
   mapL,
   object,
   pipe,
+  tap,
 } from "fxjs2";
 import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
@@ -16,36 +17,27 @@ import {
   makeRandomNumber,
 } from "../../test/utils/index.js";
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
-import {
-  $$createSVGTransformRotate,
-  $$createSVGTransformRotate2,
-  $$createSVGTransformRotate3,
-} from "./createSVGTransformRotate.index.js";
+import { $$isRotateSVGTransform } from "../isRotateSVGTransform/isRotateSVGTransform.index.js";
+import { $$createSVGTransformRotate } from "./createSVGTransformRotate.index.js";
 
 const makeCases = () =>
-  flatMapL(
-    ($svg) =>
-      go(
-        ["angle", "cx", "cy"],
-        makeAllCombinations,
-        mapL(
-          pipe(
-            mapL((k) => [k, makeRandomNumber(-100, 100)]),
-            object
-          )
-        ),
-        flatMapL((values) =>
-          mapL((transform) => ({ transform, values }), [
-            $$createSVGTransformRotate($svg)(values),
-            $$createSVGTransformRotate2(values)($svg),
-            $$createSVGTransformRotate3(values, $svg),
-          ])
-        ),
-        appendL({ transform: $$createSVGTransformRotate($svg)() }),
-        appendL({ transform: $$createSVGTransformRotate2()($svg) }),
-        appendL({ transform: $$createSVGTransformRotate3(undefined, $svg) })
-      ),
-    [undefined, document.createElementNS("http://www.w3.org/2000/svg", "svg")]
+  go(
+    ["angle", "cx", "cy"],
+    makeAllCombinations,
+    mapL(
+      pipe(
+        mapL((k) => [k, makeRandomNumber(-100, 100)]),
+        object
+      )
+    ),
+    mapL((values) => ({ values, f: $$createSVGTransformRotate(values) })),
+    appendL({ f: $$createSVGTransformRotate() }),
+    flatMapL(({ values, f }) =>
+      mapL(($svg) => ({ values, transform: f($svg) }), [
+        undefined,
+        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+      ])
+    )
   );
 
 export default ({ describe, it }) => [
@@ -54,7 +46,7 @@ export default ({ describe, it }) => [
       go(
         makeCases(),
         mapL(({ transform: t }) => t),
-        each((t) => expect(t).to.instanceof(SVGTransform))
+        each((t) => expect(t).instanceof(SVGTransform))
       );
     });
 
@@ -62,8 +54,7 @@ export default ({ describe, it }) => [
       go(
         makeCases(),
         mapL(({ transform: t }) => t),
-        mapL(({ type }) => type),
-        each((t) => expect(t).to.equal(SVGTransform.SVG_TRANSFORM_ROTATE))
+        each((transform) => expect($$isRotateSVGTransform(transform)).true)
       );
     });
 
@@ -80,11 +71,13 @@ export default ({ describe, it }) => [
             (values) => ({ values, transform })
           )
         ),
-        mapL(({ transform: receive_transform, values: { angle, cx, cy } }) => {
-          const expect_transform = $$createSVGTransform();
-          expect_transform.setRotate(angle, cx, cy);
-          return { receive_transform, expect_transform };
-        }),
+        mapL(({ transform: receive_transform, values: { angle, cx, cy } }) =>
+          go(
+            $$createSVGTransform(),
+            tap((transform) => transform.setRotate(angle, cx, cy)),
+            (expect_transform) => ({ receive_transform, expect_transform })
+          )
+        ),
         each(({ receive_transform, expect_transform }) =>
           expectSameValueSVGTransform(receive_transform, expect_transform)
         )

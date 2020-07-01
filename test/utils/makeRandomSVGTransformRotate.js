@@ -6,5 +6,5 @@ export const makeRandomSVGTransformRotate = (
   random = () => makeRandomNumber(-700, 700)
 ) =>
   go(rangeL(3), mapL(random), ([angle, cx, cy]) =>
-    $$createSVGTransformRotate()({ angle, cx, cy })
+    $$createSVGTransformRotate({ angle, cx, cy })()
   );
