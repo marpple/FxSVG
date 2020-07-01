@@ -63,8 +63,8 @@ export default ({ describe, it }) => [
 
       $$appendRotateTransform({ angle })(transform);
 
-      expect(transform.matrix.e).to.equal(0);
-      expect(transform.matrix.f).to.equal(0);
+      expect(transform.matrix.e).equal(0);
+      expect(transform.matrix.f).equal(0);
     });
 
     describe(`If the transform is another type transform, the function will do nothing but return the input.`, function () {
@@ -76,7 +76,7 @@ export default ({ describe, it }) => [
 
         const after_t = $$appendRotateTransform({ angle })(before_t);
 
-        expect(after_t).to.equal(before_t);
+        expect(after_t).equal(before_t);
         expectSameValueSVGTransform(after_t, before_t);
       });
 
@@ -91,7 +91,7 @@ export default ({ describe, it }) => [
 
         const after_t = $$appendRotateTransform({ angle })(before_t);
 
-        expect(after_t).to.equal(before_t);
+        expect(after_t).equal(before_t);
         expectSameValueSVGTransform(after_t, before_t);
       });
 
@@ -106,7 +106,7 @@ export default ({ describe, it }) => [
 
         const after_t = $$appendRotateTransform({ angle })(before_t);
 
-        expect(after_t).to.equal(before_t);
+        expect(after_t).equal(before_t);
         expectSameValueSVGTransform(after_t, before_t);
       });
     });
