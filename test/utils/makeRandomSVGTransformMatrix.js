@@ -7,5 +7,5 @@ export const makeRandomSVGTransformMatrix = (
   random = () => makeRandomNumber(-100, 100)
 ) =>
   go1(makeRandomSVGMatrix(random), (matrix) =>
-    $$createSVGTransformMatrix()({ matrix })
+    $$createSVGTransformMatrix({ matrix })()
   );

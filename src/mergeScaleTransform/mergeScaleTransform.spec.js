@@ -116,7 +116,7 @@ export default ({ describe, it }) => [
                 ],
                 mapL(({ matrix }) => matrix),
                 reduce((m1, m2) => m1.multiply(m2)),
-                (matrix) => $$createSVGTransformMatrix()({ matrix })
+                (matrix) => $$createSVGTransformMatrix({ matrix })()
               );
             }
             return transform;

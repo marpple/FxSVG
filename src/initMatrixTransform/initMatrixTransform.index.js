@@ -9,7 +9,7 @@ export const $$initMatrixTransform = ($svg = $$getSVG()) => (
   { matrix = $$createSVGMatrix()($svg), index = 0 } = {}
 ) =>
   $$getBaseTransformList($el).insertItemBefore(
-    $$createSVGTransformMatrix($svg)({ matrix }),
+    $$createSVGTransformMatrix({ matrix })($svg),
     index
   );
 
@@ -18,18 +18,18 @@ export const $$initMatrixTransform2 = ({ matrix, index = 0 } = {}) => (
   $svg = $$getSVG()
 ) =>
   $$getBaseTransformList($el).insertItemBefore(
-    $$createSVGTransformMatrix($svg)({
+    $$createSVGTransformMatrix({
       matrix: defaultTo($$createSVGMatrix()($svg), matrix),
-    }),
+    })($svg),
     index
   );
 
 export const $$initMatrixTransform3 = curry(
   ({ matrix, index = 0 } = {}, $el, $svg = $$getSVG()) =>
     $$getBaseTransformList($el).insertItemBefore(
-      $$createSVGTransformMatrix($svg)({
+      $$createSVGTransformMatrix({
         matrix: defaultTo($$createSVGMatrix()($svg), matrix),
-      }),
+      })($svg),
       index
     )
 );

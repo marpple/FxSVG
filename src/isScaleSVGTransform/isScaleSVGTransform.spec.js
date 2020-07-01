@@ -36,9 +36,9 @@ export default ({ describe, it }) => [
       });
 
       it(`When the input value is a SVGTransform whose type is the SVGTransform.SVG_TRANSFORM_MATRIX.`, function () {
-        const matrix_t = $$createSVGTransformMatrix()({
+        const matrix_t = $$createSVGTransformMatrix({
           matrix: makeRandomSVGMatrix(() => makeRandomNumber(-100, 100)),
-        });
+        })();
         const result = $$isScaleSVGTransform(matrix_t);
 
         expect(result).to.be.false;

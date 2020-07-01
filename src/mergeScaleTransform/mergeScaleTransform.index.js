@@ -19,8 +19,7 @@ export const $$mergeScaleTransform = ($svg = $$getSVG()) => (
     mapL((i) => transform_list.getItem(i)),
     mapL(({ matrix }) => matrix),
     reduce((m1, m2) => m1.multiply(m2)),
-    (matrix) => ({ matrix }),
-    $$createSVGTransformMatrix($svg)
+    (matrix) => $$createSVGTransformMatrix({ matrix })($svg)
   );
 
   each(() => transform_list.removeItem(index - 1), rangeL(3));
@@ -44,8 +43,7 @@ export const $$mergeScaleTransform2 = ({ index = 1 } = {}) => (
     mapL((i) => transform_list.getItem(i)),
     mapL(({ matrix }) => matrix),
     reduce((m1, m2) => m1.multiply(m2)),
-    (matrix) => ({ matrix }),
-    $$createSVGTransformMatrix($svg)
+    (matrix) => $$createSVGTransformMatrix({ matrix })($svg)
   );
 
   each(() => transform_list.removeItem(index - 1), rangeL(3));
@@ -67,8 +65,7 @@ export const $$mergeScaleTransform3 = curry(
       mapL((i) => transform_list.getItem(i)),
       mapL(({ matrix }) => matrix),
       reduce((m1, m2) => m1.multiply(m2)),
-      (matrix) => ({ matrix }),
-      $$createSVGTransformMatrix($svg)
+      (matrix) => $$createSVGTransformMatrix({ matrix })($svg)
     );
 
     each(() => transform_list.removeItem(index - 1), rangeL(3));

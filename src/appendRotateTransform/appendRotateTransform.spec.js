@@ -142,7 +142,7 @@ export default ({ describe, it }) => [
         const [before_t1, before_t2, before_t3] = go(
           rangeL(3),
           mapL(() => makeRandomSVGMatrix(() => makeRandomNumber(-100, 100))),
-          mapL((matrix) => $$createSVGTransformMatrix()({ matrix }))
+          mapL((matrix) => $$createSVGTransformMatrix({ matrix })())
         );
         const [angle1, angle2, angle3] = mapL(
           () => makeRandomNumber(-700, 700),

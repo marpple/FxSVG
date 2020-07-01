@@ -199,9 +199,9 @@ export default ({ describe, it }) => [
             rejectL(([i]) => equals2(i, index)),
             mapL(([, transform]) => transform),
             mapL(({ matrix }) =>
-              $$createSVGTransformMatrix()({
+              $$createSVGTransformMatrix({
                 matrix: plus_matrix.multiply(matrix).multiply(minus_matrix),
-              })
+              })()
             ),
             zipL(after_transform_list)
           ),

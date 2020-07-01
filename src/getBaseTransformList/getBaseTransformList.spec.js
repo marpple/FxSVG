@@ -91,8 +91,7 @@ export default ({ describe, it }) => [
               mapL(parseFloat),
               ([a, b, c, d, e, f]) => ({ a, b, c, d, e, f }),
               (values) => $$createSVGMatrix(values)(),
-              (matrix) => ({ matrix }),
-              $$createSVGTransformMatrix()
+              (matrix) => $$createSVGTransformMatrix({ matrix })()
             );
             expect(transform_str).to.have.string("matrix");
             expectSameValueSVGMatrix(transform.matrix, transform2.matrix);

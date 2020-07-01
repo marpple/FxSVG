@@ -18,7 +18,7 @@ import {
 
 const setupMockTransform = () => {
   const matrix = makeRandomSVGMatrix(() => makeRandomNumber(-100, 100));
-  const transform = $$createSVGTransformMatrix()({ matrix });
+  const transform = $$createSVGTransformMatrix({ matrix })();
   return { transform, matrix };
 };
 

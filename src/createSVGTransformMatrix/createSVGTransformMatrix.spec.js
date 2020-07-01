@@ -17,39 +17,30 @@ import {
   makeRandomSVGMatrix,
 } from "../../test/utils/index.js";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
-import {
-  $$createSVGTransformMatrix,
-  $$createSVGTransformMatrix2,
-  $$createSVGTransformMatrix3,
-} from "./createSVGTransformMatrix.index.js";
+import { $$isMatrixSVGTransform } from "../isMatrixSVGTransform/isMatrixSVGTransform.index.js";
+import { $$createSVGTransformMatrix } from "./createSVGTransformMatrix.index.js";
 
 const makeCases = () =>
-  flatMapL(
-    ($svg) =>
-      go(
-        ["matrix"],
-        makeAllCombinations,
-        mapL(
-          pipe(
-            mapL((k) => [
-              k,
-              makeRandomSVGMatrix(() => makeRandomNumber(-100, 100)),
-            ]),
-            object
-          )
-        ),
-        flatMapL((values) =>
-          mapL((transform) => ({ transform, values }), [
-            $$createSVGTransformMatrix($svg)(values),
-            $$createSVGTransformMatrix2(values)($svg),
-            $$createSVGTransformMatrix3(values, $svg),
-          ])
-        ),
-        appendL({ transform: $$createSVGTransformMatrix($svg)() }),
-        appendL({ transform: $$createSVGTransformMatrix2()($svg) }),
-        appendL({ transform: $$createSVGTransformMatrix3(undefined, $svg) })
-      ),
-    [undefined, document.createElementNS("http://www.w3.org/2000/svg", "svg")]
+  go(
+    ["matrix"],
+    makeAllCombinations,
+    mapL(
+      pipe(
+        mapL((k) => [
+          k,
+          makeRandomSVGMatrix(() => makeRandomNumber(-100, 100)),
+        ]),
+        object
+      )
+    ),
+    mapL((values) => ({ values, f: $$createSVGTransformMatrix(values) })),
+    appendL({ f: $$createSVGTransformMatrix() }),
+    flatMapL(({ values, f }) =>
+      mapL(($svg) => ({ values, transform: f($svg) }), [
+        undefined,
+        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+      ])
+    )
   );
 
 export default ({ describe, it }) => [
@@ -58,16 +49,15 @@ export default ({ describe, it }) => [
       go(
         makeCases(),
         mapL(({ transform: t }) => t),
-        each((transform) => expect(transform).to.instanceof(SVGTransform))
+        each((transform) => expect(transform).instanceof(SVGTransform))
       );
     });
 
-    it(`The transform's type is the SVGTransform.SVG_TRANSFORM_MATRIX.`, function () {
+    it(`The transform is a matrix transform.`, function () {
       go(
         makeCases(),
         mapL(({ transform: t }) => t),
-        mapL(({ type }) => type),
-        each((type) => expect(type).to.equal(SVGTransform.SVG_TRANSFORM_MATRIX))
+        each((transform) => expect($$isMatrixSVGTransform(transform)).true)
       );
     });
 
