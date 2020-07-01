@@ -13,13 +13,13 @@ export default ({ describe, it }) => [
       it(`When the input value is null.`, function () {
         const result = $$isMatrixSVGTransform(null);
 
-        expect(result).to.be.false;
+        expect(result).false;
       });
 
       it(`When the input value is a plain empty object.`, function () {
         const result = $$isMatrixSVGTransform({});
 
-        expect(result).to.be.false;
+        expect(result).false;
       });
 
       it(`When the input value is a plain object like
@@ -30,7 +30,7 @@ export default ({ describe, it }) => [
         };
         const result = $$isMatrixSVGTransform(obj);
 
-        expect(result).to.be.false;
+        expect(result).false;
       });
 
       it(`When the input value is a SVGTransform whose type is the SVGTransform.SVG_TRANSFORM_ROTATE.`, function () {
@@ -41,7 +41,7 @@ export default ({ describe, it }) => [
         })();
         const result = $$isMatrixSVGTransform(rotate_t);
 
-        expect(result).to.be.false;
+        expect(result).false;
       });
 
       it(`When the input value is a SVGTransform whose type is the SVGTransform.SVG_TRANSFORM_TRANSLATE.`, function () {
@@ -51,7 +51,7 @@ export default ({ describe, it }) => [
         })();
         const result = $$isMatrixSVGTransform(translate_t);
 
-        expect(result).to.be.false;
+        expect(result).false;
       });
 
       it(`When the input value is a SVGTransform whose type is the SVGTransform.SVG_TRANSFORM_SCALE.`, function () {
@@ -61,7 +61,7 @@ export default ({ describe, it }) => [
         })();
         const result = $$isMatrixSVGTransform(scale_t);
 
-        expect(result).to.be.false;
+        expect(result).false;
       });
     });
 
@@ -72,7 +72,7 @@ export default ({ describe, it }) => [
         })();
         const result = $$isMatrixSVGTransform(matrix_t);
 
-        expect(result).to.be.true;
+        expect(result).true;
       });
     });
   }),
