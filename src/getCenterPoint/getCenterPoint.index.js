@@ -22,12 +22,12 @@ const $$calcCenterPoint = ($svg = $$getSVG()) => (points) => {
     reduce((a, b) => a + b),
     (n) => n / 4
   );
-  return $$createSVGPoint({x, y})($svg);
+  return $$createSVGPoint({ x, y })($svg);
 };
 
 export const $$getCenterPoint = ($svg = $$getSVG()) => ($el) =>
   go(
-    $$getBoxPoints($svg)($el),
+    $$getBoxPoints($el, $svg),
     ({ original, transformed }) => [original, transformed],
     mapL($$calcCenterPoint($svg)),
     ([original, transformed]) => ({ original, transformed })
@@ -35,7 +35,7 @@ export const $$getCenterPoint = ($svg = $$getSVG()) => ($el) =>
 
 export const $$getCenterPoint2 = ($el, $svg = $$getSVG()) =>
   go(
-    $$getBoxPoints($svg)($el),
+    $$getBoxPoints($el, $svg),
     ({ original, transformed }) => [original, transformed],
     mapL($$calcCenterPoint($svg)),
     ([original, transformed]) => ({ original, transformed })

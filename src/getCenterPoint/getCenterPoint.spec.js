@@ -46,7 +46,7 @@ export default ({ describe, it }) => [
           { x: expect_original_x, y: expect_original_y },
           { x: expect_transformed_x, y: expect_transformed_y },
         ] = go(
-          $$getBoxPoints()($el),
+          $$getBoxPoints($el),
           ({ original, transformed }) =>
             mapL(
               ({ top_left, top_right, bottom_right, bottom_left }) => [
@@ -64,7 +64,7 @@ export default ({ describe, it }) => [
             }))
           ),
           mapL(({ x, y }) => ({ x: x / 4, y: y / 4 })),
-          mapL(xy => $$createSVGPoint(xy)())
+          mapL((xy) => $$createSVGPoint(xy)())
         );
         const {
           original: { x: receive_original_x, y: receive_original_y },

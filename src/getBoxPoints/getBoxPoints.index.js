@@ -3,40 +3,30 @@ import { $$createSVGPoint } from "../createSVGPoint/createSVGPoint.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 
-const $$getOriginalBoxPoints = ($svg = $$getSVG()) => ($el) => {
-  const bbox = $el.getBBox();
-  const [top_left, top_right, bottom_left, bottom_right] = mapL(
-    (xy) => $$createSVGPoint(xy)($svg),
-    [
-      { x: bbox.x, y: bbox.y },
-      { x: bbox.x + bbox.width, y: bbox.y },
-      { x: bbox.x, y: bbox.y + bbox.height },
-      {
-        x: bbox.x + bbox.width,
-        y: bbox.y + bbox.height,
-      },
-    ]
-  );
+const $$getOriginalBoxPoints = ($el, $svg = $$getSVG()) => {
+  const { x, y, width, height } = $el.getBBox();
 
-  return {
-    top_left,
-    top_right,
-    bottom_left,
-    bottom_right,
-  };
+  const top_left = $$createSVGPoint({ x, y })($svg);
+  const top_right = $$createSVGPoint({ x: x + width, y })($svg);
+  const bottom_left = $$createSVGPoint({ x, y: y + height })($svg);
+  const bottom_right = $$createSVGPoint({ x: x + width, y: y + height })($svg);
+
+  return { top_left, top_right, bottom_left, bottom_right };
 };
 
-const $$getTransformedBoxPoints = ($svg = $$getSVG()) => (
-  $el,
-  original_box_points
-) => {
+const $$getTransformedBoxPoints = ({
+  top_left: original_top_left,
+  top_right: original_top_right,
+  bottom_right: original_bottom_right,
+  bottom_left: original_bottom_left,
+}) => ($el, $svg = $$getSVG()) => {
   const transform_list = $$getBaseTransformList($el);
   const [top_left, top_right, bottom_left, bottom_right] = go(
     [
-      original_box_points.top_left,
-      original_box_points.top_right,
-      original_box_points.bottom_left,
-      original_box_points.bottom_right,
+      original_top_left,
+      original_top_right,
+      original_bottom_left,
+      original_bottom_right,
     ],
     mapL((p) => $$createSVGPoint(p)($svg)),
     mapL((p) =>
@@ -57,47 +47,36 @@ const $$getTransformedBoxPoints = ($svg = $$getSVG()) => (
   };
 };
 
-const $$getBoundingBoxPoints = ($svg = $$getSVG()) => (
-  $el,
-  transformed_box_points
-) => {
-  const l = [
-    transformed_box_points.top_left,
-    transformed_box_points.top_right,
-    transformed_box_points.bottom_left,
-    transformed_box_points.bottom_right,
+const $$getBoundingBoxPoints = ({
+  top_left: transformed_top_left,
+  top_right: transformed_top_right,
+  bottom_right: transformed_bottom_right,
+  bottom_left: transformed_bottom_left,
+}) => ($el, $svg = $$getSVG()) => {
+  const points = [
+    transformed_top_left,
+    transformed_top_right,
+    transformed_bottom_left,
+    transformed_bottom_right,
   ];
   const [min_x, max_x] = go1(
-    map(({ x }) => x, l),
+    map(({ x }) => x, points),
     (xs) => [Math.min(...xs), Math.max(...xs)]
   );
   const [min_y, max_y] = go1(
-    map(({ y }) => y, l),
+    map(({ y }) => y, points),
     (ys) => [Math.min(...ys), Math.max(...ys)]
   );
-  const [min, max] = mapL(xy => $$createSVGPoint(xy)($svg), [
-    { x: min_x, y: min_y },
-    { x: max_x, y: max_y },
-  ]);
+  const min = $$createSVGPoint({ x: min_x, y: min_y })($svg);
+  const max = $$createSVGPoint({ x: max_x, y: max_y })($svg);
 
-  return {
-    min,
-    max,
-  };
+  return { min, max };
 };
 
-export const $$getBoxPoints = ($svg = $$getSVG()) => ($el) => {
-  const original = $$getOriginalBoxPoints($svg)($el);
-  const transformed = $$getTransformedBoxPoints($svg)($el, original);
-  const bounding = $$getBoundingBoxPoints($svg)($el, transformed);
-
-  return { original, transformed, bounding };
-};
-
-export const $$getBoxPoints2 = ($el, $svg = $$getSVG()) => {
-  const original = $$getOriginalBoxPoints($svg)($el);
-  const transformed = $$getTransformedBoxPoints($svg)($el, original);
-  const bounding = $$getBoundingBoxPoints($svg)($el, transformed);
+export const $$getBoxPoints = ($el, $svg = $$getSVG()) => {
+  const original = $$getOriginalBoxPoints($el, $svg);
+  const transformed = $$getTransformedBoxPoints(original)($el, $svg);
+  const bounding = $$getBoundingBoxPoints(transformed)($el, $svg);
 
   return { original, transformed, bounding };
 };

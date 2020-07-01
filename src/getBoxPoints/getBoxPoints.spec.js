@@ -47,7 +47,7 @@ export default ({ describe, it }) => [
       for (const { $el, $svg, x, y, width, height } of cases) {
         const {
           original: { top_left, top_right, bottom_right, bottom_left },
-        } = $$getBoxPoints()($el);
+        } = $$getBoxPoints($el);
 
         expect(top_left.x).to.equal(x);
         expect(top_left.y).to.equal(y);
@@ -85,7 +85,7 @@ export default ({ describe, it }) => [
             bottom_right: { x: x3_1, y: y3_1 },
             bottom_left: { x: x4_1, y: y4_1 },
           },
-        } = $$getBoxPoints()($el);
+        } = $$getBoxPoints($el);
         const [
           { x: x1_2, y: y1_2 },
           { x: x2_2, y: y2_2 },
@@ -139,7 +139,7 @@ export default ({ describe, it }) => [
             min: { x: min_x_1, y: min_y_1 },
             max: { x: max_x_1, y: max_y_1 },
           },
-        } = $$getBoxPoints()($el);
+        } = $$getBoxPoints($el);
 
         const min_x_2 = Math.min(x1, x2, x3, x4);
         const min_y_2 = Math.min(y1, y2, y3, y4);
