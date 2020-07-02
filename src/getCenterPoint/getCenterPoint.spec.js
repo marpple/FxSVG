@@ -63,13 +63,12 @@ export default ({ describe, it }) => [
               y: y1 + y2,
             }))
           ),
-          mapL(({ x, y }) => ({ x: x / 4, y: y / 4 })),
-          mapL((xy) => $$createSVGPoint(xy)())
+          mapL(({ x, y }) => $$createSVGPoint({ x: x / 4, y: y / 4 })())
         );
         const {
           original: { x: receive_original_x, y: receive_original_y },
           transformed: { x: receive_transformed_x, y: receive_transformed_y },
-        } = $$getCenterPoint()($el);
+        } = $$getCenterPoint($el);
 
         expect(receive_original_x, "invalid_original_x").equal(
           expect_original_x
