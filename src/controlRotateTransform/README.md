@@ -9,13 +9,12 @@
 `update`, `append`, `end` 메소드를 체이닝하여 안전하게 조작할 수 있습니다.
 
 ```javascript
-const $el = $$el()(
-  `<rect x="10" y="20" width="100" height="200" transform="scale(2, 4)"></rect>`
-);
-const { controller } = $$controlTranslateTransform()($el, {
+const str = `<rect x="10" y="20" width="100" height="200" transform="scale(2, 4)"></rect>`;
+const $el = $$el(str)();
+const { controller } = $$controlTranslateTransform({
   cx: 10,
   cy: 20,
-});
+})($el);
 controller.update({ angle: 30 }).append({ angle: 45 }).end();
 
 console.log($el);
