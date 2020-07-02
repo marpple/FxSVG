@@ -30,7 +30,7 @@ const runTest = async (
   page
 ) => {
   await page.goto(url);
-  await page.waitForFunction(waitForTests);
+  await page.waitForFunction(waitForTests, { timeout: 0 });
   return page.evaluate(evaluateTestResults);
 };
 
