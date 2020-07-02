@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { flatMapL, go, mapL } from "fxjs2";
+import { flatMapL, mapL } from "fxjs2";
 import { $$el } from "./el.index.js";
 
 const MOCK_STR = `<circle cx="10" cy="20" r="30"></circle>`;
@@ -41,11 +41,9 @@ export default ({ describe, it }) => [
 
     it(`The return value is undefined
         when the input SVG string is empty string or there is no input SVG string.`, function () {
-      const cases = go(
-        setupSVGList(),
-        flatMapL(($svg) =>
-          mapL((svg_str) => ({ svg_str, $svg }), ["", undefined])
-        )
+      const cases = flatMapL(
+        ($svg) => mapL((svg_str) => ({ svg_str, $svg }), ["", undefined]),
+        setupSVGList()
       );
       for (const { $svg, svg_str } of cases) {
         const $el = $$el(svg_str)($svg);

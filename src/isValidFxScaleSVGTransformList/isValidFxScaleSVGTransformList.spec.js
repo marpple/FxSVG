@@ -29,32 +29,32 @@ import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.i
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isValidFxScaleSVGTransformList } from "./isValidFxScaleSVGTransformList.index.js";
 
-export const makeInvalidIndexCases = () =>
-  go(
+export const makeInvalidIndexCases = () => {
+  const [_mock1, _mock2] = go(
     rangeL(2),
     mapL(() => makeRandomTransformAttributeValue(10)),
-    mapL((transform) => makeMockRectInitiatedScaleTransform({ transform })),
-    ([mock1, mock2]) => [
-      go(
-        makeRandomInt(),
-        (n) => (n > 0 ? -n : n),
-        (index) => extend(mock1, { description: `index <= 0`, index })
-      ),
-      go(
-        mock2,
-        ({ $el }) => $el,
-        $$getBaseTransformList,
-        ({ numberOfItems: n }) => n,
-        (n) => [n - 1, n + 1000],
-        ([min, max]) => makeRandomInt(min, max),
-        (index) =>
-          extend(mock2, {
-            description: `index >= SVGTransformList.numberOfItems - 1`,
-            index,
-          })
-      ),
-    ]
+    mapL((transform) => makeMockRectInitiatedScaleTransform({ transform }))
   );
+  const mock1 = go(
+    makeRandomInt(),
+    (n) => (n > 0 ? -n : n),
+    (index) => extend(_mock1, { description: `index <= 0`, index })
+  );
+  const mock2 = go(
+    _mock2,
+    ({ $el }) => $el,
+    $$getBaseTransformList,
+    ({ numberOfItems: n }) => n,
+    (n) => [n - 1, n + 1000],
+    ([min, max]) => makeRandomInt(min, max),
+    (index) =>
+      extend(_mock2, {
+        description: `index >= SVGTransformList.numberOfItems - 1`,
+        index,
+      })
+  );
+  return [mock1, mock2];
+};
 
 export const makeInvalidSVGTransformTypeCases = () => {
   const matrix_transform = makeRandomSVGTransformMatrix();
@@ -81,74 +81,42 @@ export const makeInvalidSVGTransformTypeCases = () => {
   const invalid_scale_transform_cases = go(
     transform_list,
     rejectL(({ name }) => equals2(name, "scale")),
-    (invalid_transforms) => ({
-      name: `scale`,
+    mapL(({ name: name_receive, transform }) => ({
+      name_receive,
+      name_expect: "scale",
       index_delta: 0,
-      invalid_transforms,
-    })
+      transform,
+    }))
   );
-  const invalid_translate_transform_cases = go1(
-    [-1, 1],
-    flatMapL((index_delta) =>
-      go(
-        transform_list,
-        rejectL(({ name }) => equals2(name, "translate")),
-        (invalid_transforms) => ({
-          name: `translate`,
-          index_delta,
-          invalid_transforms,
-        })
-      )
-    )
-  );
-
-  return go(
-    [invalid_scale_transform_cases, ...invalid_translate_transform_cases],
-    flatMapL(({ name: name_expect, index_delta, invalid_transforms }) =>
-      mapL(
-        ({ name: name_receive, transform }) => ({
-          name_expect,
-          name_receive,
-          index_delta,
-          transform,
-        }),
-        invalid_transforms
-      )
+  const invalid_translate_transform_cases = go(
+    transform_list,
+    rejectL(({ name }) => equals2(name, "translate")),
+    flatMapL((obj) =>
+      mapL((index_delta) => extend({ index_delta }, obj), [-1, 1])
     ),
-    mapL(({ name_expect, name_receive, index_delta, transform }) =>
-      go(
-        makeMockRectInitiatedScaleTransform(),
-        tap(({ $el, index }) => {
-          const transform_list = $$getBaseTransformList($el);
-          transform_list.removeItem(index + index_delta);
-          transform_list.insertItemBefore(transform, index + index_delta);
-        }),
-        (mock) => ({
-          mock,
-          description: { name_expect, name_receive, index_delta },
-        })
-      )
-    ),
-    mapL(({ mock, description: { name_expect, name_receive, index_delta } }) =>
-      go(
-        index_delta,
-        (index_delta) => {
-          if (index_delta > 0) {
-            return `i + ${Math.abs(index_delta)}`;
-          }
-
-          if (index_delta < 0) {
-            return `i - ${Math.abs(index_delta)}`;
-          }
-
-          return "i";
-        },
-        (name_index) =>
-          `index : ${name_index}, expect : ${name_expect} receive : ${name_receive}`,
-        (description) => extend(mock, { description })
-      )
-    )
+    mapL(({ name: name_receive, transform, index_delta }) => ({
+      name_receive,
+      name_expect: "translate",
+      index_delta,
+      transform,
+    }))
   );
+
+  return mapL(({ name_expect, name_receive, index_delta, transform }) => {
+    const mock = makeMockRectInitiatedScaleTransform();
+
+    const { $el, index } = mock;
+    const transform_list = $$getBaseTransformList($el);
+    transform_list.removeItem(index + index_delta);
+    transform_list.insertItemBefore(transform, index + index_delta);
+
+    const name_index = index_delta
+      ? `i ${index_delta > 0 ? "+" : "-"} ${Math.abs(index_delta)}`
+      : "i";
+    const description = `index : ${name_index}, expect : ${name_expect} receive : ${name_receive}`;
+
+    return extend(mock, { description });
+  }, concatL(invalid_scale_transform_cases, invalid_translate_transform_cases));
 };
 
 export const makeInvalidSVGMatrixValueCases = () => {
@@ -193,47 +161,40 @@ export const makeInvalidSVGMatrixValueCases = () => {
         )
     )
   );
-  const iter2 = go(
-    ["e", "f"],
-    mapL((key) => ({ key, expect_value: 0 })),
-    mapL(({ key, expect_value }) => {
+  const iter2 = mapL(
+    (key) => {
       const mock = makeMockRectInitiatedScaleTransform();
-      const { $el, index } = mock;
       const receive_value = makeRandomNumberExcept(-100, 100, [0]);
-      go(
+
+      const { $el, index } = mock;
+      const matrix = go(
         makeRandomBool() ? -1 : 1,
         (index_delta) => index + index_delta,
         (i) => $$getBaseTransformList($el).getItem(i),
-        ({ matrix }) => (matrix[key] += receive_value)
+        ({ matrix }) => matrix
       );
-      return { mock, description: { key, expect_value, receive_value } };
-    }),
-    mapL(({ mock, description: { key, expect_value, receive_value } }) =>
-      go(
-        [
-          `eval : transforms[i - 1]["matrix"]["${key}"] + transforms[i + 1]["matrix"]["${key}"]`,
-          `expect : ${expect_value}`,
-          `receive : ${receive_value}`,
-        ],
-        join(", "),
-        (description) => extend(mock, { description })
-      )
-    )
+      matrix[key] += receive_value;
+
+      const description = join(", ", [
+        `eval : transforms[i - 1]["matrix"]["${key}"] + transforms[i + 1]["matrix"]["${key}"]`,
+        `expect : 0`,
+        `receive : ${receive_value}`,
+      ]);
+
+      return extend(mock, { description });
+    },
+    ["e", "f"]
   );
 
   return concatL(iter1, iter2);
 };
 
 export const makeInvalidCases = () =>
-  go(
-    [
-      makeInvalidIndexCases,
-      makeInvalidSVGTransformTypeCases,
-      makeInvalidSVGMatrixValueCases,
-    ],
-    mapL((f) => f()),
-    reduce(concatL)
-  );
+  reduce(concatL, [
+    makeInvalidIndexCases(),
+    makeInvalidSVGTransformTypeCases(),
+    makeInvalidSVGMatrixValueCases(),
+  ]);
 
 export default ({ describe, it }) => [
   describe(`$$isValidFxScaleSVGTransformList`, function () {

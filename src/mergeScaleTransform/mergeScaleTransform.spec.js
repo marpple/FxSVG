@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import {
   equals2,
+  extend,
   flatMapL,
   go,
   map,
@@ -54,12 +55,7 @@ export default ({ describe, it }) => [
       const cases = flatMapL(
         ($svg) =>
           mapL(
-            ({ description, $el, index }) => ({
-              description,
-              $el,
-              index,
-              $svg,
-            }),
+            (obj) => extend(obj, { $svg }),
             makeInvalidIsValidFxSVGTransformListCases()
           ),
         setupSVGList()

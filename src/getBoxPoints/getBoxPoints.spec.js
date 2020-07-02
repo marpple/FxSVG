@@ -36,14 +36,10 @@ const clearMock = ({ $svg }) => {
 export default ({ describe, it }) => [
   describe(`$$getBoxPoints`, function () {
     it(`The return "original" values are calculated from the initial input element position.`, function () {
-      const cases = [
-        setupMock(),
-        setupMock({
-          transform: makeRandomTransformAttributeValue(1, 10, () =>
-            makeRandomNumber(-700, 700)
-          ),
-        }),
-      ];
+      const transform = makeRandomTransformAttributeValue(1, 10, () =>
+        makeRandomNumber(-700, 700)
+      );
+      const cases = [setupMock(), setupMock({ transform })];
       for (const { $el, $svg, x, y, width, height } of cases) {
         const {
           original: { top_left, top_right, bottom_right, bottom_left },
@@ -66,14 +62,10 @@ export default ({ describe, it }) => [
     });
 
     it(`The return "transformed" values are calculated from the transformed input element's position.`, function () {
-      const cases = [
-        setupMock(),
-        setupMock({
-          transform: makeRandomTransformAttributeValue(1, 10, () =>
-            makeRandomNumber(-700, 700)
-          ),
-        }),
-      ];
+      const transform = makeRandomTransformAttributeValue(1, 10, () =>
+        makeRandomNumber(-700, 700)
+      );
+      const cases = [setupMock(), setupMock({ transform })];
       for (const { $el, $svg } of cases) {
         const transform_list = $$getBaseTransformList($el);
 
@@ -113,14 +105,10 @@ export default ({ describe, it }) => [
 
     it(`The return "bounding" values are calculated
         from the minimum and maximum values of the return "transformed" values.`, function () {
-      const cases = [
-        setupMock(),
-        setupMock({
-          transform: makeRandomTransformAttributeValue(1, 10, () =>
-            makeRandomNumber(-700, 700)
-          ),
-        }),
-      ];
+      const transform = makeRandomTransformAttributeValue(1, 10, () =>
+        makeRandomNumber(-700, 700)
+      );
+      const cases = [setupMock(), setupMock({ transform })];
       for (const { $el, $svg } of cases) {
         const {
           transformed: {

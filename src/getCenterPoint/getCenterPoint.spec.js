@@ -33,14 +33,10 @@ export default ({ describe, it }) => [
   describe(`$$getCenterPoint`, function () {
     it(`The return "original", "transformed" values are centers
         of the return "original", "transformed" values from "$$getBoxPoints()".`, function () {
-      const cases = [
-        setupMock(),
-        setupMock({
-          transform: makeRandomTransformAttributeValue(1, 10, () =>
-            makeRandomNumber(-700, 700)
-          ),
-        }),
-      ];
+      const transform = makeRandomTransformAttributeValue(1, 10, () =>
+        makeRandomNumber(-700, 700)
+      );
+      const cases = [setupMock(), setupMock({ transform })];
       for (const { $el, $svg } of cases) {
         const [
           { x: expect_original_x, y: expect_original_y },
