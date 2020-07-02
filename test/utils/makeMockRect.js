@@ -26,5 +26,5 @@ export const makeMockRect = (attrs = {}) =>
     mapL(([k, v]) => `${k}="${v}"`),
     join(" "),
     (attr_str) => `<rect ${attr_str}></rect>`,
-    (svg_str) => $$el()(svg_str)
+    (svg_str) => $$el(svg_str)()
   );
