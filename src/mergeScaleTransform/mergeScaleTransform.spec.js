@@ -1,9 +1,9 @@
 import { expect } from "chai";
 import {
-  each,
   equals2,
   flatMapL,
   go,
+  map,
   mapL,
   reduce,
   rejectL,
@@ -22,50 +22,63 @@ import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransform
 import { makeInvalidCases as makeInvalidIsValidFxSVGTransformListCases } from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.spec.js";
 import { $$mergeScaleTransform } from "./mergeScaleTransform.index.js";
 
+const setupSVGList = () => [
+  undefined,
+  document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+];
+
+const expectSameValueTransformList = (
+  receive_transform_list,
+  expect_transform_list,
+  description = "expectSameValueTransformList"
+) => {
+  expect(receive_transform_list.length, description).equal(
+    expect_transform_list.length
+  );
+  const pairs = zipL(receive_transform_list, expect_transform_list);
+  for (const [receive_transform, expect_transform] of pairs) {
+    expectSameValueSVGTransform(
+      receive_transform,
+      expect_transform,
+      description
+    );
+  }
+};
+
 export default ({ describe, it }) => [
   describe(`$$mergeScaleTransform`, function () {
     it(`The function do nothing but return the input element
         when the input values failed to pass "$$isValidFxScaleSVGTransformList".`, function () {
       this.slow(1000);
 
-      const cases = go(
-        [
-          undefined,
-          document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-        ],
-        mapL($$mergeScaleTransform),
-        flatMapL((f) =>
+      const cases = flatMapL(
+        ($svg) =>
           mapL(
-            ({ description, $el, index }) => ({ description, $el, index, f }),
+            ({ description, $el, index }) => ({
+              description,
+              $el,
+              index,
+              $svg,
+            }),
             makeInvalidIsValidFxSVGTransformListCases()
-          )
-        )
+          ),
+        setupSVGList()
       );
-      for (const { $el: $input, description, index, f } of cases) {
+      for (const { $el: $input, description, index, $svg } of cases) {
         const before_transform_list = deepCopyTransformList(
           $$getBaseTransformList($input)
         );
 
-        const $output = f($input, { index });
+        const $output = $$mergeScaleTransform({ index })($input, $svg);
 
         const after_transform_list = deepCopyTransformList(
           $$getBaseTransformList($input)
         );
-
         expect($output, description).equal($input);
-        expect(after_transform_list.length, description).equal(
-          before_transform_list.length
-        );
-        go(
+        expectSameValueTransformList(
           after_transform_list,
-          zipL(before_transform_list),
-          each(([before_transform, after_transform]) =>
-            expectSameValueSVGTransform(
-              after_transform,
-              before_transform,
-              description
-            )
-          )
+          before_transform_list,
+          description
         );
       }
     });
@@ -75,11 +88,7 @@ export default ({ describe, it }) => [
         the transform "translate(-cx, -cy)" at the input index + 1
         are merge to the matrix transform of the multiplication of transforms.
         So the length of the transform list is decreased by 2.`, function () {
-      const fs = mapL($$mergeScaleTransform, [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ]);
-      for (const f of fs) {
+      for (const $svg of setupSVGList()) {
         const {
           $el: $input,
           index,
@@ -92,21 +101,17 @@ export default ({ describe, it }) => [
           $$getBaseTransformList($input)
         );
 
-        const $output = f($input, { index });
+        const $output = $$mergeScaleTransform({ index })($input, $svg);
 
         const after_transform_list = deepCopyTransformList(
           $$getBaseTransformList($input)
         );
-
         expect($output).equal($input);
-        expect(after_transform_list.length).equal(
-          before_transform_list.length - 2
-        );
-        go(
+        const expect_transform_list = go(
           before_transform_list,
           zipWithIndexL,
           rejectL(([i]) => equals2(i, index - 1) || equals2(i, index + 1)),
-          mapL(([i, transform]) => {
+          map(([i, transform]) => {
             if (equals2(i, index)) {
               return go(
                 [
@@ -119,12 +124,13 @@ export default ({ describe, it }) => [
                 (matrix) => $$createSVGTransformMatrix({ matrix })()
               );
             }
+
             return transform;
-          }),
-          zipL(after_transform_list),
-          each(([receive_transform, expect_transform]) =>
-            expectSameValueSVGTransform(receive_transform, expect_transform)
-          )
+          })
+        );
+        expectSameValueTransformList(
+          after_transform_list,
+          expect_transform_list
         );
       }
     });

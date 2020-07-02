@@ -54,7 +54,7 @@ export const $$controlScaleTransform = ($svg = $$getSVG()) => (
           height_name,
           direction,
         })
-      : $$mergeScaleTransform($svg)($el, { index: index + 1 });
+      : $$mergeScaleTransform({ index: index + 1 })($el, $svg);
     return $el;
   };
 
@@ -107,7 +107,7 @@ export const $$controlScaleTransform2 = ({
           height_name,
           direction,
         })
-      : $$mergeScaleTransform($svg)($el, { index: index + 1 });
+      : $$mergeScaleTransform({ index: index + 1 })($el, $svg);
     return $el;
   };
 
@@ -165,7 +165,7 @@ export const $$controlScaleTransform3 = curry(
             height_name,
             direction,
           })
-        : $$mergeScaleTransform($svg)($el, { index: index + 1 });
+        : $$mergeScaleTransform({ index: index + 1 })($el, $svg);
       return $el;
     };
 
