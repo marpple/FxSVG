@@ -1,6 +1,6 @@
 {
   "name": "fxsvg",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Functional SVG Handling Library",
   "type": "module",
   "main": "./src/index.js",
