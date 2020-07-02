@@ -45,13 +45,13 @@ const setupMock = ({
     makeRandomInt(0, $$getBaseTransformList($el).numberOfItems + 1),
     _index
   );
-  const result = $$controlTranslateTransform()($el, {
+  const result = $$controlTranslateTransform({
     tx,
     ty,
     x_name: "x",
     y_name: "y",
     index,
-  });
+  })($el);
   return { x, y, tx, ty, index, $el, result };
 };
 
