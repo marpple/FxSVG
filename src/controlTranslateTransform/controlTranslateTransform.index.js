@@ -22,7 +22,7 @@ export const $$controlTranslateTransform = ($svg = $$getSVG()) => (
   };
   controller.end = () => {
     if (x_name && y_name) {
-      $$mergeTranslateTransform($svg)($el, { index, x_name, y_name });
+      $$mergeTranslateTransform({ index, x_name, y_name })($el, $svg);
     }
     return $el;
   };
@@ -50,7 +50,7 @@ export const $$controlTranslateTransform2 = ({
   };
   controller.end = () => {
     if (x_name && y_name) {
-      $$mergeTranslateTransform($svg)($el, { index, x_name, y_name });
+      $$mergeTranslateTransform({ index, x_name, y_name })($el, $svg);
     }
     return $el;
   };
@@ -73,7 +73,7 @@ export const $$controlTranslateTransform3 = curry(
     };
     controller.end = () => {
       if (x_name && y_name) {
-        $$mergeTranslateTransform($svg)($el, { index, x_name, y_name });
+        $$mergeTranslateTransform({ index, x_name, y_name })($el, $svg);
       }
       return $el;
     };

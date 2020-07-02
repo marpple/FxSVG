@@ -1,67 +1,20 @@
-import { curry, each, go, mapL, rangeL } from "fxjs2";
+import { each, go, mapL, rangeL } from "fxjs2";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 
-export const $$mergeTranslateTransform = ($svg = $$getSVG()) => (
-  $el,
-  { index = 0, x_name = "x", y_name = "y" } = {}
-) => {
-  const base_tl = $$getBaseTransformList($el);
-  if (index > base_tl.numberOfItems - 1 || index < 0) {
-    return $el;
-  }
-
-  const transform = base_tl.getItem(index);
-  if (!$$isTranslateSVGTransform(transform)) {
-    return $el;
-  }
-
-  const { e: tx, f: ty } = transform.matrix;
-
-  go(
-    [
-      { name: x_name, value: tx },
-      { name: y_name, value: ty },
-    ],
-    mapL(({ name, value }) => ({
-      name,
-      value: `${parseFloat($el.getAttributeNS(null, name)) + value}`,
-    })),
-    each(({ name, value }) => $el.setAttributeNS(null, name, value))
-  );
-
-  base_tl.removeItem(index);
-
-  go(
-    rangeL(base_tl.numberOfItems),
-    mapL((i) => base_tl.getItem(i)),
-    mapL((t) => [
-      $$createSVGTransformTranslate({ tx, ty })($svg),
-      t,
-      $$createSVGTransformTranslate({ tx: -tx, ty: -ty })($svg),
-    ]),
-    each(([t1, t2, t3]) => {
-      const matrix = t1.matrix.multiply(t2.matrix).multiply(t3.matrix);
-      t2.setMatrix(matrix);
-    })
-  );
-
-  return $el;
-};
-
-export const $$mergeTranslateTransform2 = ({
+export const $$mergeTranslateTransform = ({
   index = 0,
   x_name = "x",
   y_name = "y",
 } = {}) => ($el, $svg = $$getSVG()) => {
-  const base_tl = $$getBaseTransformList($el);
-  if (index > base_tl.numberOfItems - 1 || index < 0) {
+  const base_transform_list = $$getBaseTransformList($el);
+  if (index > base_transform_list.numberOfItems - 1 || index < 0) {
     return $el;
   }
 
-  const transform = base_tl.getItem(index);
+  const transform = base_transform_list.getItem(index);
   if (!$$isTranslateSVGTransform(transform)) {
     return $el;
   }
@@ -80,11 +33,11 @@ export const $$mergeTranslateTransform2 = ({
     each(({ name, value }) => $el.setAttributeNS(null, name, value))
   );
 
-  base_tl.removeItem(index);
+  base_transform_list.removeItem(index);
 
   go(
-    rangeL(base_tl.numberOfItems),
-    mapL((i) => base_tl.getItem(i)),
+    rangeL(base_transform_list.numberOfItems),
+    mapL((i) => base_transform_list.getItem(i)),
     mapL((t) => [
       $$createSVGTransformTranslate({ tx, ty })($svg),
       t,
@@ -98,49 +51,3 @@ export const $$mergeTranslateTransform2 = ({
 
   return $el;
 };
-
-export const $$mergeTranslateTransform3 = curry(
-  ({ index = 0, x_name = "x", y_name = "y" } = {}, $el, $svg = $$getSVG()) => {
-    const base_tl = $$getBaseTransformList($el);
-    if (index > base_tl.numberOfItems - 1 || index < 0) {
-      return $el;
-    }
-
-    const transform = base_tl.getItem(index);
-    if (!$$isTranslateSVGTransform(transform)) {
-      return $el;
-    }
-
-    const { e: tx, f: ty } = transform.matrix;
-
-    go(
-      [
-        { name: x_name, value: tx },
-        { name: y_name, value: ty },
-      ],
-      mapL(({ name, value }) => ({
-        name,
-        value: `${parseFloat($el.getAttributeNS(null, name)) + value}`,
-      })),
-      each(({ name, value }) => $el.setAttributeNS(null, name, value))
-    );
-
-    base_tl.removeItem(index);
-
-    go(
-      rangeL(base_tl.numberOfItems),
-      mapL((i) => base_tl.getItem(i)),
-      mapL((t) => [
-        $$createSVGTransformTranslate({ tx, ty })($svg),
-        t,
-        $$createSVGTransformTranslate({ tx: -tx, ty: -ty })($svg),
-      ]),
-      each(([t1, t2, t3]) => {
-        const matrix = t1.matrix.multiply(t2.matrix).multiply(t3.matrix);
-        t2.setMatrix(matrix);
-      })
-    );
-
-    return $el;
-  }
-);
