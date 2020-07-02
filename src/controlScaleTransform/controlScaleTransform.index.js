@@ -45,7 +45,7 @@ export const $$controlScaleTransform = ($svg = $$getSVG()) => (
     direction = _direction,
   } = {}) => {
     merge_type === 2
-      ? $$mergeScaleTransform2($el, {
+      ? $$mergeScaleTransform2({
           index: index + 1,
           is_need_correction,
           x_name,
@@ -53,7 +53,7 @@ export const $$controlScaleTransform = ($svg = $$getSVG()) => (
           width_name,
           height_name,
           direction,
-        })
+        })($el)
       : $$mergeScaleTransform({ index: index + 1 })($el, $svg);
     return $el;
   };
@@ -98,7 +98,7 @@ export const $$controlScaleTransform2 = ({
     direction = _direction,
   } = {}) => {
     merge_type === 2
-      ? $$mergeScaleTransform2($el, {
+      ? $$mergeScaleTransform2({
           index: index + 1,
           is_need_correction,
           x_name,
@@ -106,7 +106,7 @@ export const $$controlScaleTransform2 = ({
           width_name,
           height_name,
           direction,
-        })
+        })($el)
       : $$mergeScaleTransform({ index: index + 1 })($el, $svg);
     return $el;
   };

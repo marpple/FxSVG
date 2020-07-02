@@ -16,23 +16,24 @@
 지정하지 않을 경우 `true` 로 초기화됩니다.
 
 ```javascript
-const $el = $$el()(`
-  <rect
-    x="10"
-    y="20"
-    width="100"
-    height="200"
-    transform="translate(200 400)"
-  >
-  </rect>
-`);
+const str = `
+<rect
+  x="10"
+  y="20"
+  width="100"
+  height="200"
+  transform="translate(200 400)"
+>
+</rect>
+`;
+const $el = $$el(str)();
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, length: 1, numberOfItems: 1}
 // 0: SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 //   matrix: SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 200, f: 400}
 
-$$initScaleTransform()($el, { sx: 2, sy: 3, cx: 60, cy: 120, index: 1 });
+$$initScaleTransform({ sx: 2, sy: 3, cx: 60, cy: 120, index: 1 })($el);
 // SVGTransformList 의 가장 뒤쪽에 추가
 // transform 이 적용되는 순서로는 가장 먼저 적용됨
 
@@ -47,7 +48,7 @@ console.log($$getBaseTransformList($el));
 // 3: SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 //   matrix: SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: -60, f: -120}
 
-$$mergeScaleTransform2($el, { index: 2, direction: "se" });
+$$mergeScaleTransform2({ index: 2, direction: "se" })($el);
 // 인덱스 2 에 SVGTransform.SVG_TRANSFORM_SCALE 타입의 SVGTransform 위치
 
 console.log($$getBaseTransformList($el));
