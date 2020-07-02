@@ -21,7 +21,7 @@ export const $$controlRotateTransform = ($svg = $$getSVG()) => (
     return controller;
   };
   controller.end = () => {
-    $$mergeRotateTransform($svg)($el, { index: index + 1 });
+    $$mergeRotateTransform({ index: index + 1 })($el, $svg);
     return $el;
   };
 
@@ -46,7 +46,7 @@ export const $$controlRotateTransform2 = ({
     return controller;
   };
   controller.end = () => {
-    $$mergeRotateTransform($svg)($el, { index: index + 1 });
+    $$mergeRotateTransform({ index: index + 1 })($el, $svg);
     return $el;
   };
 
@@ -72,7 +72,7 @@ export const $$controlRotateTransform3 = curry(
       return controller;
     };
     controller.end = () => {
-      $$mergeRotateTransform($svg)($el, { index: index + 1 });
+      $$mergeRotateTransform({ index: index + 1 })($el, $svg);
       return $el;
     };
 
