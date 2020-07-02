@@ -1,5 +1,6 @@
 import { expect } from "chai";
-import { defaultTo, equals2, go, join, mapL, rangeL } from "fxjs2";
+import { defaultTo, equals2, go, join, mapL, rangeL, zipL } from "fxjs2";
+import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   makeMockRect,
   makeRandomInt,
@@ -11,7 +12,7 @@ import { $$getAnimTransformList } from "./getAnimTransformList.index.js";
 export default ({ describe, it }) => [
   describe(`$$getAnimTransformList`, function () {
     it(`The return transform list is same with the base transform list if there is no animation.`, function () {
-      const { base_transform_list, anim_transform_list } = go(
+      const $el = go(
         makeRandomInt(),
         rangeL,
         mapL(() => makeRandomInt(0, 3)),
@@ -28,14 +29,16 @@ export default ({ describe, it }) => [
         }),
         join(" "),
         defaultTo(null),
-        (transform) => makeMockRect({ transform }),
-        ($el) => ({
-          base_transform_list: $$getBaseTransformList($el),
-          anim_transform_list: $$getAnimTransformList($el),
-        })
+        (transform) => makeMockRect({ transform })
       );
+      const base_transform_list = [...$$getBaseTransformList($el)];
+      const anim_transform_list = [...$$getAnimTransformList($el)];
 
-      expect(anim_transform_list).to.deep.equal(base_transform_list);
+      expect(anim_transform_list.length).equal(base_transform_list.length);
+      const pairs = zipL(base_transform_list, anim_transform_list);
+      for (const [base_transform, anim_transform] of pairs) {
+        expectSameValueSVGTransform(anim_transform, base_transform);
+      }
     });
   }),
 ];

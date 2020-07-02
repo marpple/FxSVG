@@ -1,6 +1,9 @@
 import { expect } from "chai";
 import { mapL, rangeL } from "fxjs2";
-import { expectTransformWithTranslateTxTy } from "../../test/assertions/index.js";
+import {
+  expectSameValueSVGTransform,
+  expectTransformWithTranslateTxTy,
+} from "../../test/assertions/index.js";
 import {
   makeRandomInt,
   makeRandomNumber,
@@ -14,7 +17,7 @@ import { $$updateTranslateTransform } from "./updateTranslateTransform.index.js"
 
 const setupMockTransform = () => {
   const [tx, ty] = mapL(() => makeRandomInt(-100, 100), rangeL(2));
-  const transform = $$createSVGTransformTranslate()({ tx, ty });
+  const transform = $$createSVGTransformTranslate({ tx, ty })();
   return { transform, tx, ty };
 };
 
@@ -28,7 +31,8 @@ export default ({ describe, it }) => [
     it(`The tx, ty of the input transform is changed to input tx, ty.`, function () {
       const { transform } = setupMockTransform();
       const { tx, ty } = setupMockInputValues();
-      $$updateTranslateTransform(transform, { tx, ty });
+
+      $$updateTranslateTransform({ tx, ty })(transform);
 
       expectTransformWithTranslateTxTy({ transform, tx, ty });
     });
@@ -36,7 +40,8 @@ export default ({ describe, it }) => [
     it(`The tx of the transform is same with before when there is no input tx.`, function () {
       const { transform, tx } = setupMockTransform();
       const { ty } = setupMockInputValues();
-      $$updateTranslateTransform(transform, { ty });
+
+      $$updateTranslateTransform({ ty })(transform);
 
       expectTransformWithTranslateTxTy({ transform, tx, ty });
     });
@@ -44,62 +49,58 @@ export default ({ describe, it }) => [
     it(`The ty of the transform is same with before when there is no input ty.`, function () {
       const { transform, ty } = setupMockTransform();
       const { tx } = setupMockInputValues();
-      $$updateTranslateTransform(transform, { tx });
+
+      $$updateTranslateTransform({ tx })(transform);
 
       expectTransformWithTranslateTxTy({ transform, tx, ty });
     });
 
     it(`The tx, ty of the transform is same with before when there is no input object.`, function () {
       const { transform, tx, ty } = setupMockTransform();
-      $$updateTranslateTransform(transform);
+
+      $$updateTranslateTransform()(transform);
 
       expectTransformWithTranslateTxTy({ transform, tx, ty });
     });
 
     describe(`If the transform is another type transform, the function will do nothing but return the input.`, function () {
       it(`When the transform is a matrix transform...`, function () {
-        const before_t = $$createSVGTransformMatrix()({
+        const before_t = $$createSVGTransformMatrix({
           matrix: makeRandomSVGMatrix(() => makeRandomNumber(-100, 100)),
-        });
+        })();
+        const { tx, ty } = setupMockInputValues();
 
-        const after_t = $$updateTranslateTransform(before_t, {
-          tx: makeRandomNumber(-100, 100),
-          ty: makeRandomNumber(-100, 100),
-        });
+        const after_t = $$updateTranslateTransform({ tx, ty })(before_t);
 
-        expect(after_t).to.equal(before_t);
-        expect(after_t).to.deep.equal(before_t);
+        expect(after_t).equal(before_t);
+        expectSameValueSVGTransform(after_t, before_t);
       });
 
       it(`When the transform is a rotate transform...`, function () {
-        const before_t = $$createSVGTransformRotate()({
+        const before_t = $$createSVGTransformRotate({
           angle: makeRandomNumber(-700, 700),
           cx: makeRandomNumber(-100, 100),
           cy: makeRandomNumber(-100, 100),
-        });
+        })();
+        const { tx, ty } = setupMockInputValues();
 
-        const after_t = $$updateTranslateTransform(before_t, {
-          tx: makeRandomNumber(-100, 100),
-          ty: makeRandomNumber(-100, 100),
-        });
+        const after_t = $$updateTranslateTransform({ tx, ty })(before_t);
 
-        expect(after_t).to.equal(before_t);
-        expect(after_t).to.deep.equal(before_t);
+        expect(after_t).equal(before_t);
+        expectSameValueSVGTransform(after_t, before_t);
       });
 
       it(`When the transform is a scale transform...`, function () {
-        const before_t = $$createSVGTransformScale()({
+        const before_t = $$createSVGTransformScale({
           sx: makeRandomNumber(-100, 100),
           sy: makeRandomNumber(-100, 100),
-        });
+        })();
+        const { tx, ty } = setupMockInputValues();
 
-        const after_t = $$updateTranslateTransform(before_t, {
-          tx: makeRandomNumber(-100, 100),
-          ty: makeRandomNumber(-100, 100),
-        });
+        const after_t = $$updateTranslateTransform({ tx, ty })(before_t);
 
-        expect(after_t).to.equal(before_t);
-        expect(after_t).to.deep.equal(before_t);
+        expect(after_t).equal(before_t);
+        expectSameValueSVGTransform(after_t, before_t);
       });
     });
   }),

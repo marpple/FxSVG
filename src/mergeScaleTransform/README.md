@@ -7,26 +7,25 @@
 병합된 `SVGTransform` 은 `SVGTransform.SVG_TRANSFORM_MATRIX` 타입입니다.
 따라서 한 번 병합한 `SVGTransform`을 `$$updateScaleTransform` 이나 `$$appendScaleTransform` 으로 변경할 수 없습니다.
 
-[SVG 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
-
 ```javascript
-const $el = $$el()(`
-  <rect
-    x="10"
-    y="20"
-    width="100"
-    height="200"
-    transform="translate(200 400)"
-  >
-  </rect>
-`);
+const str = `
+<rect
+  x="10"
+  y="20"
+  width="100"
+  height="200"
+  transform="translate(200 400)"
+>
+</rect>
+`;
+const $el = $$el(str)();
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, length: 1, numberOfItems: 1}
 // 0: SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 //   matrix: SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 200, f: 400}
 
-$$initScaleTransform()($el, { sx: 2, sy: 3, cx: 60, cy: 70 });
+$$initScaleTransform({ sx: 2, sy: 3, cx: 60, cy: 70 })($el);
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, 1: SVGTransform, 2: SVGTransform, 3: SVGTransform, length: 4, numberOfItems: 4}
@@ -39,7 +38,7 @@ console.log($$getBaseTransformList($el));
 // 3: SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 //   matrix: SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 200, f: 400}
 
-$$mergeScaleTransform()($el, { index: 1 });
+$$mergeScaleTransform({ index: 1 })($el);
 // 인덱스 1 에 SVGTransform.SVG_TRANSFORM_SCALE 타입의 SVGTransform 위치
 
 console.log($$getBaseTransformList($el));

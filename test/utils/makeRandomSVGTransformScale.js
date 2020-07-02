@@ -6,5 +6,5 @@ export const makeRandomSVGTransformScale = (
   random = () => makeRandomNumber(-100, 100)
 ) =>
   go(rangeL(2), mapL(random), ([sx, sy]) =>
-    $$createSVGTransformScale()({ sx, sy })
+    $$createSVGTransformScale({ sx, sy })()
   );

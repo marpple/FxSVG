@@ -1,5 +1,6 @@
 import { expect } from "chai";
-import { each, equals2, go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs2";
+import { equals2, go, map, rejectL, zipL, zipWithIndexL } from "fxjs2";
+import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   deepCopyTransformList,
   makeMockRectInitializedRotateTransform,
@@ -15,14 +16,30 @@ import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSV
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$mergeRotateTransform } from "./mergeRotateTransform.index.js";
 
+const setupSVGList = () => [
+  undefined,
+  document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+];
+
+const expectSameValueTransformList = (
+  receive_transform_list,
+  expect_transform_list
+) => {
+  expect(receive_transform_list.length).equal(expect_transform_list.length);
+  const pairs = zipL(receive_transform_list, expect_transform_list);
+  for (const [receive_transform, expect_transform] of pairs) {
+    expectSameValueSVGTransform(
+      receive_transform,
+      expect_transform,
+      "expectSameTransformList"
+    );
+  }
+};
+
 export default ({ describe, it }) => [
   describe(`$$mergeRotateTransform`, function () {
     it(`The function do nothing but return the input element when the input index is out of bounds.`, function () {
-      const fs = mapL(($svg) => $$mergeRotateTransform($svg), [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ]);
-      for (const f of fs) {
+      for (const $svg of setupSVGList()) {
         const { $el: $input } = makeMockRectInitializedRotateTransform();
         const { numberOfItems: transform_list_length } = $$getBaseTransformList(
           $input
@@ -30,27 +47,27 @@ export default ({ describe, it }) => [
         const before_transform_list = deepCopyTransformList(
           $$getBaseTransformList($input)
         );
-
         const index = makeRandomBool()
           ? transform_list_length + makeRandomInt(1)
           : -makeRandomInt(1);
-        const $output = f($input, { index });
+
+        const $output = $$mergeRotateTransform({ index })($input, $svg);
+
         const after_transform_list = deepCopyTransformList(
           $$getBaseTransformList($input)
         );
         expect($output).equal($input);
-        expect(after_transform_list).deep.equal(before_transform_list);
+        expectSameValueTransformList(
+          after_transform_list,
+          before_transform_list
+        );
       }
     });
 
     describe(`The function do nothing but return the input element
               when the transform at input index - 1 is not a translate transform.`, function () {
       it(`When the transform is a matrix transform...`, function () {
-        const fs = mapL(($svg) => $$mergeRotateTransform($svg), [
-          undefined,
-          document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-        ]);
-        for (const f of fs) {
+        for (const $svg of setupSVGList()) {
           const {
             $el: $input,
             index,
@@ -64,22 +81,21 @@ export default ({ describe, it }) => [
             $$getBaseTransformList($input)
           );
 
-          const $output = f($input, { index });
+          const $output = $$mergeRotateTransform({ index })($input, $svg);
+
           const after_transform_list = deepCopyTransformList(
             $$getBaseTransformList($input)
           );
-
           expect($output).equal($input);
-          expect(after_transform_list).deep.equal(before_transform_list);
+          expectSameValueTransformList(
+            after_transform_list,
+            before_transform_list
+          );
         }
       });
 
       it(`When the transform is a rotate transform...`, function () {
-        const fs = mapL(($svg) => $$mergeRotateTransform($svg), [
-          undefined,
-          document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-        ]);
-        for (const f of fs) {
+        for (const $svg of setupSVGList()) {
           const {
             $el: $input,
             index,
@@ -93,22 +109,21 @@ export default ({ describe, it }) => [
             $$getBaseTransformList($input)
           );
 
-          const $output = f($input, { index });
+          const $output = $$mergeRotateTransform({ index })($input, $svg);
+
           const after_transform_list = deepCopyTransformList(
             $$getBaseTransformList($input)
           );
-
           expect($output).equal($input);
-          expect(after_transform_list).deep.equal(before_transform_list);
+          expectSameValueTransformList(
+            after_transform_list,
+            before_transform_list
+          );
         }
       });
 
       it(`When the transform is a scale transform...`, function () {
-        const fs = mapL(($svg) => $$mergeRotateTransform($svg), [
-          undefined,
-          document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-        ]);
-        for (const f of fs) {
+        for (const $svg of setupSVGList()) {
           const {
             $el: $input,
             index,
@@ -122,13 +137,16 @@ export default ({ describe, it }) => [
             $$getBaseTransformList($input)
           );
 
-          const $output = f($input, { index });
+          const $output = $$mergeRotateTransform({ index })($input, $svg);
+
           const after_transform_list = deepCopyTransformList(
             $$getBaseTransformList($input)
           );
-
           expect($output).equal($input);
-          expect(after_transform_list).deep.equal(before_transform_list);
+          expectSameValueTransformList(
+            after_transform_list,
+            before_transform_list
+          );
         }
       });
     });
@@ -136,11 +154,7 @@ export default ({ describe, it }) => [
     describe(`The function do nothing but return the input element
               when the transform at input index is not a rotate transform.`, function () {
       it(`When the transform is a matrix transform...`, function () {
-        const fs = mapL(($svg) => $$mergeRotateTransform($svg), [
-          undefined,
-          document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-        ]);
-        for (const f of fs) {
+        for (const $svg of setupSVGList()) {
           const {
             $el: $input,
             index,
@@ -154,22 +168,21 @@ export default ({ describe, it }) => [
             $$getBaseTransformList($input)
           );
 
-          const $output = f($input, { index });
+          const $output = $$mergeRotateTransform({ index })($input, $svg);
+
           const after_transform_list = deepCopyTransformList(
             $$getBaseTransformList($input)
           );
-
           expect($output).equal($input);
-          expect(after_transform_list).deep.equal(before_transform_list);
+          expectSameValueTransformList(
+            after_transform_list,
+            before_transform_list
+          );
         }
       });
 
       it(`When the transform is a scale transform...`, function () {
-        const fs = mapL(($svg) => $$mergeRotateTransform($svg), [
-          undefined,
-          document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-        ]);
-        for (const f of fs) {
+        for (const $svg of setupSVGList()) {
           const {
             $el: $input,
             index,
@@ -183,22 +196,21 @@ export default ({ describe, it }) => [
             $$getBaseTransformList($input)
           );
 
-          const $output = f($input, { index });
+          const $output = $$mergeRotateTransform({ index })($input, $svg);
+
           const after_transform_list = deepCopyTransformList(
             $$getBaseTransformList($input)
           );
-
           expect($output).equal($input);
-          expect(after_transform_list).deep.equal(before_transform_list);
+          expectSameValueTransformList(
+            after_transform_list,
+            before_transform_list
+          );
         }
       });
 
       it(`When the transform is a translate transform...`, function () {
-        const fs = mapL(($svg) => $$mergeRotateTransform($svg), [
-          undefined,
-          document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-        ]);
-        for (const f of fs) {
+        for (const $svg of setupSVGList()) {
           const {
             $el: $input,
             index,
@@ -212,13 +224,16 @@ export default ({ describe, it }) => [
             $$getBaseTransformList($input)
           );
 
-          const $output = f($input, { index });
+          const $output = $$mergeRotateTransform({ index })($input, $svg);
+
           const after_transform_list = deepCopyTransformList(
             $$getBaseTransformList($input)
           );
-
           expect($output).equal($input);
-          expect(after_transform_list).deep.equal(before_transform_list);
+          expectSameValueTransformList(
+            after_transform_list,
+            before_transform_list
+          );
         }
       });
     });
@@ -226,11 +241,7 @@ export default ({ describe, it }) => [
     describe(`The function do nothing but return the input element
               when the transform at input index + 1 is not a translate transform.`, function () {
       it(`When the transform is a matrix transform...`, function () {
-        const fs = mapL(($svg) => $$mergeRotateTransform($svg), [
-          undefined,
-          document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-        ]);
-        for (const f of fs) {
+        for (const $svg of setupSVGList()) {
           const {
             $el: $input,
             index,
@@ -244,22 +255,21 @@ export default ({ describe, it }) => [
             $$getBaseTransformList($input)
           );
 
-          const $output = f($input, { index });
+          const $output = $$mergeRotateTransform({ index })($input, $svg);
+
           const after_transform_list = deepCopyTransformList(
             $$getBaseTransformList($input)
           );
-
           expect($output).equal($input);
-          expect(after_transform_list).deep.equal(before_transform_list);
+          expectSameValueTransformList(
+            after_transform_list,
+            before_transform_list
+          );
         }
       });
 
       it(`When the transform is a rotate transform...`, function () {
-        const fs = mapL(($svg) => $$mergeRotateTransform($svg), [
-          undefined,
-          document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-        ]);
-        for (const f of fs) {
+        for (const $svg of setupSVGList()) {
           const {
             $el: $input,
             index,
@@ -273,22 +283,21 @@ export default ({ describe, it }) => [
             $$getBaseTransformList($input)
           );
 
-          const $output = f($input, { index });
+          const $output = $$mergeRotateTransform({ index })($input, $svg);
+
           const after_transform_list = deepCopyTransformList(
             $$getBaseTransformList($input)
           );
-
           expect($output).equal($input);
-          expect(after_transform_list).deep.equal(before_transform_list);
+          expectSameValueTransformList(
+            after_transform_list,
+            before_transform_list
+          );
         }
       });
 
       it(`When the transform is a scale transform...`, function () {
-        const fs = mapL(($svg) => $$mergeRotateTransform($svg), [
-          undefined,
-          document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-        ]);
-        for (const f of fs) {
+        for (const $svg of setupSVGList()) {
           const {
             $el: $input,
             index,
@@ -302,24 +311,23 @@ export default ({ describe, it }) => [
             $$getBaseTransformList($input)
           );
 
-          const $output = f($input, { index });
+          const $output = $$mergeRotateTransform({ index })($input, $svg);
+
           const after_transform_list = deepCopyTransformList(
             $$getBaseTransformList($input)
           );
-
           expect($output).equal($input);
-          expect(after_transform_list).deep.equal(before_transform_list);
+          expectSameValueTransformList(
+            after_transform_list,
+            before_transform_list
+          );
         }
       });
     });
 
     it(`The function do nothing but return the input element
         when the cx, cy values of the transform at input index are not 0.`, function () {
-      const fs = mapL(($svg) => $$mergeRotateTransform($svg), [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ]);
-      for (const f of fs) {
+      for (const $svg of setupSVGList()) {
         const { $el: $input, index } = makeMockRectInitializedRotateTransform();
         const transform = $$getBaseTransformList($input).getItem(index);
         transform.setRotate(
@@ -331,23 +339,22 @@ export default ({ describe, it }) => [
           $$getBaseTransformList($input)
         );
 
-        const $output = f($input, { index });
+        const $output = $$mergeRotateTransform({ index })($input, $svg);
+
         const after_transform_list = deepCopyTransformList(
           $$getBaseTransformList($input)
         );
-
         expect($output).equal($input);
-        expect(after_transform_list).deep.equal(before_transform_list);
+        expectSameValueTransformList(
+          after_transform_list,
+          before_transform_list
+        );
       }
     });
 
     it(`The function do nothing but return the input element
         when the sum of tx values of the transforms at the input index - 1 and the input index + 1 is not 0.`, function () {
-      const fs = mapL(($svg) => $$mergeRotateTransform($svg), [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ]);
-      for (const f of fs) {
+      for (const $svg of setupSVGList()) {
         const { $el: $input, index } = makeMockRectInitializedRotateTransform();
         const target_index = index + (makeRandomBool() ? 1 : -1);
         const transform = $$getBaseTransformList($input).getItem(target_index);
@@ -359,23 +366,22 @@ export default ({ describe, it }) => [
           $$getBaseTransformList($input)
         );
 
-        const $output = f($input, { index });
+        const $output = $$mergeRotateTransform({ index })($input, $svg);
+
         const after_transform_list = deepCopyTransformList(
           $$getBaseTransformList($input)
         );
-
         expect($output).equal($input);
-        expect(after_transform_list).deep.equal(before_transform_list);
+        expectSameValueTransformList(
+          after_transform_list,
+          before_transform_list
+        );
       }
     });
 
     it(`The function do nothing but return the input element
         when the sum of ty values of the transforms at the input index - 1 and the input index + 1 is not 0.`, function () {
-      const fs = mapL(($svg) => $$mergeRotateTransform($svg), [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ]);
-      for (const f of fs) {
+      for (const $svg of setupSVGList()) {
         const { $el: $input, index } = makeMockRectInitializedRotateTransform();
         const target_index = index + (makeRandomBool() ? 1 : -1);
         const transform = $$getBaseTransformList($input).getItem(target_index);
@@ -387,13 +393,16 @@ export default ({ describe, it }) => [
           $$getBaseTransformList($input)
         );
 
-        const $output = f($input, { index });
+        const $output = $$mergeRotateTransform({ index })($input, $svg);
+
         const after_transform_list = deepCopyTransformList(
           $$getBaseTransformList($input)
         );
-
         expect($output).equal($input);
-        expect(after_transform_list).deep.equal(before_transform_list);
+        expectSameValueTransformList(
+          after_transform_list,
+          before_transform_list
+        );
       }
     });
 
@@ -402,11 +411,7 @@ export default ({ describe, it }) => [
         the transform "translate(-cx, -cy)" at the input index + 1
         are merge to the transform "rotate(angle, cx, cy)"
         So the length of the transform list is decreased by 2.`, function () {
-      const fs = mapL(($svg) => $$mergeRotateTransform($svg), [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ]);
-      for (const f of fs) {
+      for (const $svg of setupSVGList()) {
         const {
           $el: $input,
           index,
@@ -418,35 +423,29 @@ export default ({ describe, it }) => [
           $$getBaseTransformList($input)
         );
 
-        const $output = f($input, { index });
+        const $output = $$mergeRotateTransform({ index })($input, $svg);
+
         const after_transform_list = deepCopyTransformList(
           $$getBaseTransformList($input)
         );
-
         expect($output).equal($input);
         expect(after_transform_list.length).equal(
           before_transform_list.length - 2
         );
-        go(
+        const expect_transform_list = go(
           before_transform_list,
           zipWithIndexL,
           rejectL(([i]) => equals2(i, index - 1) || equals2(i, index + 1)),
-          mapL(([i, transform]) => {
+          map(([i, transform]) => {
             if (equals2(i, index)) {
-              return $$createSVGTransformRotate()({ angle, cx, cy });
+              return $$createSVGTransformRotate({ angle, cx, cy })();
             }
             return transform;
-          }),
-          zipL(after_transform_list),
-          each(
-            ([
-              { type: receive_type, matrix: receive_matrix },
-              { type: expect_type, matrix: expect_matrix },
-            ]) => {
-              expect(receive_type).equal(expect_type);
-              expect(receive_matrix).deep.equal(expect_matrix);
-            }
-          )
+          })
+        );
+        expectSameValueTransformList(
+          after_transform_list,
+          expect_transform_list
         );
       }
     });

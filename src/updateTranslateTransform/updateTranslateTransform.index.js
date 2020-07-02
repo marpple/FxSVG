@@ -1,13 +1,14 @@
+import { defaultTo } from "fxjs2";
 import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 
-export const $$updateTranslateTransform = (
-  transform,
-  { tx = transform.matrix.e, ty = transform.matrix.f } = {}
-) => {
+export const $$updateTranslateTransform = ({ tx, ty } = {}) => (transform) => {
   if (!$$isTranslateSVGTransform(transform)) {
     return transform;
   }
 
-  transform.setTranslate(tx, ty);
+  transform.setTranslate(
+    defaultTo(transform.matrix.e, tx),
+    defaultTo(transform.matrix.f, ty)
+  );
   return transform;
 };

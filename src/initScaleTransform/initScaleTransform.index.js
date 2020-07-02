@@ -3,24 +3,27 @@ import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/cr
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 
-export const $$initScaleTransform = ($svg = $$getSVG()) => (
-  $el,
-  { sx = 1, sy = 1, cx = 0, cy = 0, index = 0 } = {}
-) => {
+export const $$initScaleTransform = ({
+  sx = 1,
+  sy = 1,
+  cx = 0,
+  cy = 0,
+  index = 0,
+} = {}) => ($el, $svg = $$getSVG()) => {
   const transform_list = $$getBaseTransformList($el);
+  const positive_translate_transform = $$createSVGTransformTranslate({
+    tx: cx,
+    ty: cy,
+  })($svg);
+  const negative_translate_transform = $$createSVGTransformTranslate({
+    tx: -cx,
+    ty: -cy,
+  })($svg);
+  const scale_transform = $$createSVGTransformScale({ sx, sy })($svg);
 
-  transform_list.insertItemBefore(
-    $$createSVGTransformTranslate($svg)({ tx: -cx, ty: -cy }),
-    index
-  );
-  const transform = transform_list.insertItemBefore(
-    $$createSVGTransformScale($svg)({ sx, sy }),
-    index
-  );
-  transform_list.insertItemBefore(
-    $$createSVGTransformTranslate($svg)({ tx: cx, ty: cy }),
-    index
-  );
+  transform_list.insertItemBefore(negative_translate_transform, index);
+  transform_list.insertItemBefore(scale_transform, index);
+  transform_list.insertItemBefore(positive_translate_transform, index);
 
-  return transform;
+  return scale_transform;
 };

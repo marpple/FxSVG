@@ -9,26 +9,25 @@ svg 엘리먼트에 다른 `SVGTransform` 이 있는 경우 각 `SVGTransform` �
 
 `cx`, `cy` 처럼 `x`, `y` 위치를 나타내는 속성명이 다른 경우 `x_name`, `y_name` 으로 해당 속성명을 설정할 수 있습니다.
 
-[SVG 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
-
 ```javascript
-const $el = $$el()(`
-  <rect
-    x="10"
-    y="20"
-    width="100"
-    height="200"
-    transform="scale(2, 4)"
-  >
-  </rect>
-`);
+const str = `
+<rect
+  x="10"
+  y="20"
+  width="100"
+  height="200"
+  transform="scale(2, 4)"
+>
+</rect>
+`;
+const $el = $$el(str)();
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, length: 1, numberOfItems: 1}
 // 0: SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
 //   matrix: SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 0, f: 0}
 
-$$initTranslateTransform()($el, { tx: 500, ty: 600 });
+$$initTranslateTransform({ tx: 500, ty: 600 })($el);
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, 1: SVGTransform, length: 2, numberOfItems: 2}
@@ -49,22 +48,23 @@ console.log($el);
 ```
 
 ```javascript
-const $el = $$el()(`
-  <circle
-    cx="10"
-    cy="20"
-    r="100"
-    transform="scale(2, 4)"
-  >
-  </circle>
-`);
+const str = `
+<circle
+  cx="10"
+  cy="20"
+  r="100"
+  transform="scale(2, 4)"
+>
+</circle>
+`;
+const $el = $$el(str)();
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, length: 1, numberOfItems: 1}
 // 0: SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
 //   matrix: SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 0, f: 0}
 
-$$initTranslateTransform()($el, { tx: 500, ty: 600 });
+$$initTranslateTransform({ tx: 500, ty: 600 })($el);
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, 1: SVGTransform, length: 2, numberOfItems: 2}
@@ -73,7 +73,7 @@ console.log($$getBaseTransformList($el));
 // 1: SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
 //   matrix: SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 0, f: 0}
 
-$$mergeTranslateTransform()($el, { x_name: "cx", y_name: "cy" });
+$$mergeTranslateTransform({ x_name: "cx", y_name: "cy" })($el);
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, length: 1, numberOfItems: 1}

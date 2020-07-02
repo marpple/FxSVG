@@ -52,6 +52,7 @@ controller.append({ tx: 10 }).append({ ty: 10 }).end();
 
 ## Documentation
 
+- [Function Interface](./doc/FUNCTION_INTERFACE.md)
 - [API Reference](./doc/API.md)
 - [Test](./doc/TEST.md)
 

@@ -7,19 +7,23 @@
 `cx`, `cy`로 회전할 중심의 좌포를 설정하고 `angle`로 회전할 각도(`deg` 단위)를 설정합니다.
 `cx`, `cy`를 설정하지 않으면 `(0, 0)`으로 설정합니다.
 
-[SVG 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
-
 ```javascript
 console.log($$createSVGTransformRotate()());
 // SVGTransform {type: 4, matrix: SVGMatrix, angle: 0}
 ```
 
 ```javascript
-console.log($$createSVGTransformRotate()({ angle: 45 }));
+console.log($$createSVGTransformRotate({ angle: 45 })());
 // SVGTransform {type: 4, matrix: SVGMatrix, angle: 45}
 ```
 
 ```javascript
-console.log($$createSVGTransformRotate()({ cx: 10, cy: 10, angle: 30 }));
+console.log($$createSVGTransformRotate({ cx: 10, cy: 10, angle: 30 })());
 // SVGTransform {type: 4, matrix: SVGMatrix, angle: 30}
+```
+
+```javascript
+const $svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+console.log($$createSVGTransformRotate({ cx: 20, cy: 20, angle: 60 })($svg));
+// SVGTransform {type: 4, matrix: SVGMatrix, angle: 60}
 ```

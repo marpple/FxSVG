@@ -1,74 +1,45 @@
 import { expect } from "chai";
-import {
-  appendL,
-  defaultTo,
-  each,
-  extend,
-  flatMapL,
-  go,
-  mapL,
-  object,
-  pipe,
-  reduce,
-} from "fxjs2";
+import { appendL, defaultTo, extend, flatMapL, go, mapL, object } from "fxjs2";
 import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
 import { $$createSVGRect } from "./createSVGRect.index.js";
 
 const makeCases = () =>
-  flatMapL(
-    (f) =>
-      go(
-        ["x", "y", "width", "height"],
-        makeAllCombinations,
-        mapL(
-          pipe(
-            mapL((k) => [k, makeRandomInt()]),
-            mapL((ks) => object([ks])),
-            reduce(extend),
-            defaultTo({})
-          )
-        ),
-        mapL((values) => ({ values, rect: f(values) })),
-        appendL({ rect: f() })
-      ),
-    [
-      $$createSVGRect(),
-      $$createSVGRect(
-        document.createElementNS("http://www.w3.org/2000/svg", "svg")
-      ),
-    ]
+  go(
+    ["x", "y", "width", "height"],
+    makeAllCombinations,
+    mapL(mapL((k) => [k, makeRandomInt()])),
+    mapL(object),
+    mapL((values) => ({ values, f: $$createSVGRect(values) })),
+    appendL({ f: $$createSVGRect() }),
+    flatMapL(({ values, f }) =>
+      mapL(($svg) => ({ values, rect: f($svg) }), [
+        undefined,
+        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+      ])
+    )
   );
 
 export default ({ describe, it }) => [
   describe(`$$createSVGRect`, function () {
     it(`The return value is a SVGRect.`, function () {
-      go(
-        makeCases(),
-        mapL(({ rect: r }) => r),
-        each((r) => expect(r).to.instanceof(SVGRect))
-      );
+      for (const { rect } of makeCases()) {
+        expect(rect).instanceof(SVGRect);
+      }
     });
 
     it(`Each value of the rect will be same with the given value.
         If there is omitted values or no argument,
         the values will be {x: 0, y: 0, width: 0, height: 0} individually by default.`, function () {
-      go(
-        makeCases(),
-        mapL(({ rect, values }) =>
-          go(
-            values,
-            defaultTo({}),
-            (values) => extend({ x: 0, y: 0, width: 0, height: 0 }, values),
-            (values) => ({ rect, values })
-          )
-        ),
-        each(({ rect, values }) => {
-          expect(rect.x).to.equal(values.x);
-          expect(rect.y).to.equal(values.y);
-          expect(rect.width).to.equal(values.width);
-          expect(rect.height).to.equal(values.height);
-        })
-      );
+      for (const { rect, values } of makeCases()) {
+        const expect_values = extend(
+          { x: 0, y: 0, width: 0, height: 0 },
+          defaultTo({}, values)
+        );
+        expect(rect.x).equal(expect_values.x);
+        expect(rect.y).equal(expect_values.y);
+        expect(rect.width).equal(expect_values.width);
+        expect(rect.height).equal(expect_values.height);
+      }
     });
   }),
 ];

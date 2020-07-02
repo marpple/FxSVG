@@ -4,23 +4,23 @@ import { $$initRotateTransform } from "../initRotateTransform/initRotateTransfor
 import { $$mergeRotateTransform } from "../mergeRotateTransform/mergeRotateTransform.index.js";
 import { $$updateRotateTransform } from "../updateRotateTransform/updateRotateTransform.index.js";
 
-export const $$controlRotateTransform = ($svg = $$getSVG()) => (
+export const $$controlRotateTransform = ({ angle, cx, cy, index = 0 } = {}) => (
   $el,
-  { angle, cx, cy, index = 0 } = {}
+  $svg = $$getSVG()
 ) => {
-  const transform = $$initRotateTransform($svg)($el, { angle, cx, cy, index });
+  const transform = $$initRotateTransform({ angle, cx, cy, index })($el, $svg);
 
   const controller = {};
   controller.update = ({ angle } = {}) => {
-    $$updateRotateTransform(transform, { angle, cx: 0, cy: 0 });
+    $$updateRotateTransform({ angle, cx: 0, cy: 0 })(transform);
     return controller;
   };
   controller.append = ({ angle } = {}) => {
-    $$appendRotateTransform(transform, { angle });
+    $$appendRotateTransform({ angle })(transform);
     return controller;
   };
   controller.end = () => {
-    $$mergeRotateTransform($svg)($el, { index: index + 1 });
+    $$mergeRotateTransform({ index: index + 1 })($el, $svg);
     return $el;
   };
 

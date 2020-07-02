@@ -16,23 +16,22 @@ svg 엘리먼트에 총 3개의 `SVGTransform`을 순서대로 추가합니다.
 초기 회전 각도 `angle` 을 설정할 수 있습니다. 단위는 `deg` 입니다. 설정하지 않는 경우 `0` 으로 초기화됩니다.
 `SVGTransform` 을 추가할 `index` 를 설정할 수 있습니다. 설정하지 않는 경우 `0` 으로 초기화됩니다.
 
-[SVG 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
-
 ```javascript
-const $el = $$el()(`
-  <rect
-    x="10"
-    y="20"
-    width="100"
-    height="200"
-  >
-  </rect>
-`);
+const str = `
+<rect
+  x="10"
+  y="20"
+  width="100"
+  height="200"
+>
+</rect>
+`;
+const $el = $$el(str)();
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {length: 0, numberOfItems: 0}
 
-$$initRotateTransform()($el, { angle: 30, cx: 10, cy: 20 });
+$$initRotateTransform({ angle: 30, cx: 10, cy: 20 })($el);
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, 1: SVGTransform, 2: SVGTransform, length: 3, numberOfItems: 3}
@@ -44,23 +43,24 @@ console.log($$getBaseTransformList($el));
 ```
 
 ```javascript
-const $el = $$el()(`
-  <rect
-    x="10"
-    y="20"
-    width="100"
-    height="200"
-    transform="scale(2, 4)"
-  >
-  </rect>
-`);
+const str = `
+<rect
+  x="10"
+  y="20"
+  width="100"
+  height="200"
+  transform="scale(2, 4)"
+>
+</rect>
+`;
+const $el = $$el(str)();
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, length: 1, numberOfItems: 1}
 // 0: SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
 //   matrix: SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 0, f: 0}
 
-$$initRotateTransform()($el, { cx: 10, cy: 20, angle: 30, index: 1 });
+$$initRotateTransform({ cx: 10, cy: 20, angle: 30, index: 1 })($el);
 // index 를 1 로 설정할 경우
 // 기존 SVGTransformList 의 1 번 인덱스부터 3개의 SVGTransform 이 추가됨
 // 즉 1, 2, 3 번 인덱스 사용

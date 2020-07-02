@@ -2,11 +2,12 @@ import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/cr
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 
-export const $$initTranslateTransform = ($svg = $$getSVG()) => (
-  $el,
-  { tx = 0, ty = 0, index = 0 } = {}
-) =>
-  $$getBaseTransformList($el).insertItemBefore(
-    $$createSVGTransformTranslate($svg)({ tx, ty }),
-    index
-  );
+export const $$initTranslateTransform = ({
+  tx = 0,
+  ty = 0,
+  index = 0,
+} = {}) => ($el, $svg = $$getSVG()) => {
+  const transform = $$createSVGTransformTranslate({ tx, ty })($svg);
+  $$getBaseTransformList($el).insertItemBefore(transform, index);
+  return transform;
+};

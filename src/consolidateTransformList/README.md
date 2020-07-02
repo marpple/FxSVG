@@ -7,16 +7,17 @@
 이 함수는 입력받은 `SVGTransformList`를 수정합니다.
 
 ```javascript
-const $el = $$el()(`
-  <rect
-    x="10"
-    y="20"
-    width="100"
-    height="200"
-    transform="translate(400, 500) scale(2, 4)"
-  >
-  </rect>
-`);
+const str = `
+<rect
+  x="10"
+  y="20"
+  width="100"
+  height="200"
+  transform="translate(400, 500) scale(2, 4)"
+>
+</rect>
+`;
+const $el = $$el(str)();
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, 1: SVGTransform, length: 2, numberOfItems: 2}

@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { go, map, mapL, rejectL, zipWithIndexL } from "fxjs2";
+import { go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs2";
 import {
   makeRandomTransformAttributeValue,
   makeRandomNumber,
@@ -8,11 +8,17 @@ import {
   makeMockRect,
 } from "../../test/utils/index.js";
 import {
+  expectSameValueSVGTransform,
   expectTransformWithScaleSxSy,
   expectTransformWithTranslateTxTy,
 } from "../../test/assertions/index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$initScaleTransform } from "./initScaleTransform.index.js";
+
+const setupSVGList = () => [
+  undefined,
+  document.createElementNS("http://www.w3.org/2000/svg", "svg"),
+];
 
 const setupMockEl = ({ transform } = {}) => {
   const $el = makeMockRect({ transform });
@@ -30,19 +36,14 @@ const setupMockInputValues = () => ({
 export default ({ describe, it }) => [
   describe(`$$initScaleTransform`, function () {
     it(`The length of the SVG transform list is increased by 3.`, function () {
-      const fs = mapL(($svg) => $$initScaleTransform($svg), [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ]);
-
-      for (const f of fs) {
+      for (const $svg of setupSVGList()) {
         const { $el, index } = setupMockEl({
           transform: makeRandomTransformAttributeValue(),
         });
         const { cx, cy, sx, sy } = setupMockInputValues();
         const { numberOfItems: before_length } = $$getBaseTransformList($el);
 
-        f($el, { sx, sy, cx, cy, index });
+        $$initScaleTransform({ sx, sy, cx, cy, index })($el, $svg);
 
         const { numberOfItems: after_length } = $$getBaseTransformList($el);
         expect(after_length).equal(before_length + 3);
@@ -50,18 +51,13 @@ export default ({ describe, it }) => [
     });
 
     it(`The transform at input index is a translate transform with tx = input cx, ty = input cy.`, function () {
-      const fs = mapL(($svg) => $$initScaleTransform($svg), [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ]);
-
-      for (const f of fs) {
+      for (const $svg of setupSVGList()) {
         const { $el, index } = setupMockEl({
           transform: makeRandomTransformAttributeValue(),
         });
         const { cx, cy, sx, sy } = setupMockInputValues();
 
-        f($el, { sx, sy, cx, cy, index });
+        $$initScaleTransform({ sx, sy, cx, cy, index })($el, $svg);
 
         const transform = $$getBaseTransformList($el).getItem(index);
         expectTransformWithTranslateTxTy({ transform, tx: cx, ty: cy });
@@ -69,18 +65,13 @@ export default ({ describe, it }) => [
     });
 
     it(`The transform at input index + 1 is a scale transform with input sx, sy.`, function () {
-      const fs = mapL(($svg) => $$initScaleTransform($svg), [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ]);
-
-      for (const f of fs) {
+      for (const $svg of setupSVGList()) {
         const { $el, index } = setupMockEl({
           transform: makeRandomTransformAttributeValue(),
         });
         const { cx, cy, sx, sy } = setupMockInputValues();
 
-        f($el, { sx, sy, cx, cy, index });
+        $$initScaleTransform({ sx, sy, cx, cy, index })($el, $svg);
 
         const transform = $$getBaseTransformList($el).getItem(index + 1);
         expectTransformWithScaleSxSy({ transform, sx, sy });
@@ -88,18 +79,13 @@ export default ({ describe, it }) => [
     });
 
     it(`The transform at input index + 2 is a translate transform with tx = -input cx, ty = -input cy.`, function () {
-      const fs = mapL(($svg) => $$initScaleTransform($svg), [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ]);
-
-      for (const f of fs) {
+      for (const $svg of setupSVGList()) {
         const { $el, index } = setupMockEl({
           transform: makeRandomTransformAttributeValue(),
         });
         const { cx, cy, sx, sy } = setupMockInputValues();
 
-        f($el, { sx, sy, cx, cy, index });
+        $$initScaleTransform({ sx, sy, cx, cy, index })($el, $svg);
 
         const transform = $$getBaseTransformList($el).getItem(index + 2);
         expectTransformWithTranslateTxTy({ transform, tx: -cx, ty: -cy });
@@ -107,12 +93,7 @@ export default ({ describe, it }) => [
     });
 
     it(`The function do nothing on other transforms.`, function () {
-      const fs = mapL(($svg) => $$initScaleTransform($svg), [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ]);
-
-      for (const f of fs) {
+      for (const $svg of setupSVGList()) {
         const { $el, index } = setupMockEl({
           transform: makeRandomTransformAttributeValue(),
         });
@@ -121,99 +102,89 @@ export default ({ describe, it }) => [
           $$getBaseTransformList($el)
         );
 
-        f($el, { sx, sy, cx, cy, index });
+        $$initScaleTransform({ sx, sy, cx, cy, index })($el, $svg);
 
         const after_transform_list = deepCopyTransformList(
           $$getBaseTransformList($el)
         );
-        expect(
-          go(
-            after_transform_list,
-            zipWithIndexL,
-            rejectL(([i]) => i >= index && i <= index + 2),
-            map(([, transform]) => transform)
-          )
-        ).deep.equal(before_transform_list);
+        expect(after_transform_list.length).equal(
+          before_transform_list.length + 3
+        );
+        const pairs = go(
+          after_transform_list,
+          zipWithIndexL,
+          rejectL(([i]) => i >= index && i <= index + 2),
+          mapL(([, transform]) => transform),
+          zipL(before_transform_list)
+        );
+        for (const [before_transform, after_transform] of pairs) {
+          expectSameValueSVGTransform(after_transform, before_transform);
+        }
       }
     });
 
     it(`The transforms at input index and input index + 2 are translate transforms with tx = 0, ty = 0
         when there are no input cx, cy.`, function () {
-      const fs = mapL(($svg) => $$initScaleTransform($svg), [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ]);
-
-      for (const f of fs) {
+      for (const $svg of setupSVGList()) {
         const { $el, index } = setupMockEl({
           transform: makeRandomTransformAttributeValue(),
         });
         const { sx, sy } = setupMockInputValues();
 
-        f($el, { sx, sy, index });
+        $$initScaleTransform({ sx, sy, index })($el, $svg);
 
-        expectTransformWithTranslateTxTy({
-          transform: $$getBaseTransformList($el).getItem(index),
-          tx: 0,
-          ty: 0,
-        });
-        expectTransformWithTranslateTxTy({
-          transform: $$getBaseTransformList($el).getItem(index + 2),
-          tx: 0,
-          ty: 0,
-        });
+        const transform_list = $$getBaseTransformList($el);
+        const transforms = mapL((i) => transform_list.getItem(i), [
+          index,
+          index + 2,
+        ]);
+        for (const transform of transforms) {
+          expectTransformWithTranslateTxTy({ transform, tx: 0, ty: 0 });
+        }
       }
     });
 
     it(`The transform at input index + 1 is a scale transform with sx = 1, sy = 1
         when there is no input sx, sy.`, function () {
-      const fs = mapL(($svg) => $$initScaleTransform($svg), [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ]);
-
-      for (const f of fs) {
+      for (const $svg of setupSVGList()) {
         const { $el, index } = setupMockEl({
           transform: makeRandomTransformAttributeValue(),
         });
         const { cx, cy } = setupMockInputValues();
 
-        f($el, { cx, cy, index });
+        $$initScaleTransform({ cx, cy, index })($el, $svg);
 
-        expectTransformWithScaleSxSy({
-          transform: $$getBaseTransformList($el).getItem(index + 1),
-          sx: 1,
-          sy: 1,
-        });
+        const transform = $$getBaseTransformList($el).getItem(index + 1);
+        expectTransformWithScaleSxSy({ transform, sx: 1, sy: 1 });
       }
     });
 
     it(`The transform is from index 0 to index 2 when there is no input index.`, function () {
-      const fs = mapL(($svg) => $$initScaleTransform($svg), [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ]);
-
-      for (const f of fs) {
+      for (const $svg of setupSVGList()) {
         const { $el } = setupMockEl({
           transform: makeRandomTransformAttributeValue(),
         });
         const { sx, sy, cx, cy } = setupMockInputValues();
 
-        f($el, { sx, sy, cx, cy });
+        $$initScaleTransform({ cx, cy, sx, sy })($el, $svg);
 
+        const transform_list = $$getBaseTransformList($el);
+        const [transform1, transform2, transform3] = mapL(
+          (i) => transform_list.getItem(i),
+          [0, 1, 2]
+        );
         expectTransformWithTranslateTxTy({
-          transform: $$getBaseTransformList($el).getItem(0),
+          transform: transform1,
           tx: cx,
           ty: cy,
         });
         expectTransformWithScaleSxSy({
-          transform: $$getBaseTransformList($el).getItem(1),
+          transform: transform2,
           sx,
           sy,
         });
         expectTransformWithTranslateTxTy({
-          transform: $$getBaseTransformList($el).getItem(2),
+          transform: transform3,
           tx: -cx,
           ty: -cy,
         });
@@ -223,30 +194,30 @@ export default ({ describe, it }) => [
     it(`The transforms at index 0 and index 2 are translate transforms with tx = 0, ty = 0
         and the transform at index 1 is a scale transform with sx = 1, sy = 1
         when there is no input object.`, function () {
-      const fs = mapL(($svg) => $$initScaleTransform($svg), [
-        undefined,
-        document.createElementNS("http://www.w3.org/2000/svg", "svg"),
-      ]);
-
-      for (const f of fs) {
+      for (const $svg of setupSVGList()) {
         const { $el } = setupMockEl({
           transform: makeRandomTransformAttributeValue(),
         });
 
-        f($el);
+        $$initScaleTransform()($el, $svg);
 
+        const transform_list = $$getBaseTransformList($el);
+        const [transform1, transform2, transform3] = mapL(
+          (i) => transform_list.getItem(i),
+          [0, 1, 2]
+        );
         expectTransformWithTranslateTxTy({
-          transform: $$getBaseTransformList($el).getItem(0),
+          transform: transform1,
           tx: 0,
           ty: 0,
         });
         expectTransformWithScaleSxSy({
-          transform: $$getBaseTransformList($el).getItem(1),
+          transform: transform2,
           sx: 1,
           sy: 1,
         });
         expectTransformWithTranslateTxTy({
-          transform: $$getBaseTransformList($el).getItem(2),
+          transform: transform3,
           tx: 0,
           ty: 0,
         });

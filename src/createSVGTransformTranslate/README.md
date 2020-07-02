@@ -8,21 +8,26 @@
 
 입력한 `tx`, `ty` 값과 실제 Transform 에 적용된 값은 정확도 차이가 발생할 수 있습니다.
 
-[SVG 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
-
 ```javascript
 console.log($$createSVGTransformTranslate()());
 // SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 ```
 
 ```javascript
-console.log($$createSVGTransformTranslate()({ tx: 10 }));
+console.log($$createSVGTransformTranslate({ tx: 10 })());
 // SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 0}
 ```
 
 ```javascript
-console.log($$createSVGTransformTranslate()({ tx: 10, ty: 20 }));
+console.log($$createSVGTransformTranslate({ tx: 10, ty: 20 })());
 // SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 //   SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 20}
+```
+
+```javascript
+const $svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+console.log($$createSVGTransformTranslate({ tx: 100, ty: 200 })($svg));
+// SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
+//   SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 100, f: 200}
 ```

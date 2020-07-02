@@ -15,13 +15,13 @@ export default ({ describe, it }) => [
       it(`When the input value is null.`, function () {
         const result = $$isTranslateSVGTransform(null);
 
-        expect(result).to.be.false;
+        expect(result).false;
       });
 
       it(`When the input value is a plain empty object.`, function () {
         const result = $$isTranslateSVGTransform({});
 
-        expect(result).to.be.false;
+        expect(result).false;
       });
 
       it(`When the input value is a plain object like
@@ -30,51 +30,56 @@ export default ({ describe, it }) => [
           type: SVGTransform.SVG_TRANSFORM_TRANSLATE,
           SVG_TRANSFORM_TRANSLATE: SVGTransform.SVG_TRANSFORM_TRANSLATE,
         };
+
         const result = $$isTranslateSVGTransform(obj);
 
-        expect(result).to.be.false;
+        expect(result).false;
       });
 
       it(`When the input value is a SVGTransform whose type is the SVGTransform.SVG_TRANSFORM_MATRIX.`, function () {
-        const matrix_t = $$createSVGTransformMatrix()({
+        const matrix_t = $$createSVGTransformMatrix({
           matrix: makeRandomSVGMatrix(() => makeRandomNumber(-100, 100)),
-        });
+        })();
+
         const result = $$isTranslateSVGTransform(matrix_t);
 
-        expect(result).to.be.false;
+        expect(result).false;
       });
 
       it(`When the input value is a SVGTransform whose type is the SVGTransform.SVG_TRANSFORM_ROTATE.`, function () {
-        const rotate_t = $$createSVGTransformRotate()({
+        const rotate_t = $$createSVGTransformRotate({
           angle: makeRandomNumber(-700, 700),
           cx: makeRandomNumber(-100, 100),
           cy: makeRandomNumber(-100, 100),
-        });
+        })();
+
         const result = $$isTranslateSVGTransform(rotate_t);
 
-        expect(result).to.be.false;
+        expect(result).false;
       });
 
       it(`When the input value is a SVGTransform whose type is the SVGTransform.SVG_TRANSFORM_SCALE.`, function () {
-        const scale_t = $$createSVGTransformScale()({
+        const scale_t = $$createSVGTransformScale({
           sx: makeRandomNumber(-100, 100),
           sy: makeRandomNumber(-100, 100),
-        });
+        })();
+
         const result = $$isTranslateSVGTransform(scale_t);
 
-        expect(result).to.be.false;
+        expect(result).false;
       });
     });
 
     describe(`The function will return true...`, function () {
       it(`When the input value is a SVGTransform and the type is SVGTransform.SVG_TRANSFORM_TRANSLATE.`, function () {
-        const translate_t = $$createSVGTransformTranslate()({
+        const translate_t = $$createSVGTransformTranslate({
           tx: makeRandomNumber(-100, 100),
           ty: makeRandomNumber(-100, 100),
-        });
+        })();
+
         const result = $$isTranslateSVGTransform(translate_t);
 
-        expect(result).to.be.true;
+        expect(result).true;
       });
     });
   }),

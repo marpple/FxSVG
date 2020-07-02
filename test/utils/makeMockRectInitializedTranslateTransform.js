@@ -51,7 +51,7 @@ export const makeMockRectInitializedTranslateTransform = ({
       [_ty, ty],
     ],
     mapL(([a, b]) => defaultTo(b, a)),
-    ([tx, ty]) => $$initTranslateTransform()($el, { tx, ty, index })
+    ([tx, ty]) => $$initTranslateTransform({ tx, ty, index })($el)
   );
   const { e: tx, f: ty } = transform_list.getItem(index).matrix;
   const [x, y, width, height] = go(

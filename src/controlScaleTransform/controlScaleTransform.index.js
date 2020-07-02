@@ -4,34 +4,31 @@ import { $$mergeScaleTransform } from "../mergeScaleTransform/mergeScaleTransfor
 import { $$mergeScaleTransform2 } from "../mergeScaleTransform2/mergeScaleTransform2.index.js";
 import { $$updateScaleTransform } from "../updateScaleTransform/updateScaleTransform.index.js";
 
-export const $$controlScaleTransform = ($svg = $$getSVG()) => (
-  $el,
-  {
-    cx,
-    cy,
-    sx,
-    sy,
-    index = 0,
-    is_need_correction: _is_need_correction = true,
-    merge_type: _merge_type = 1,
-    x_name: _x_name,
-    y_name: _y_name,
-    width_name: _width_name,
-    height_name: _height_name,
-    direction: _direction,
-  } = {}
-) => {
-  const transform = $$initScaleTransform($svg)($el, {
+export const $$controlScaleTransform = ({
+  cx,
+  cy,
+  sx,
+  sy,
+  index = 0,
+  is_need_correction: _is_need_correction = true,
+  merge_type: _merge_type = 1,
+  x_name: _x_name,
+  y_name: _y_name,
+  width_name: _width_name,
+  height_name: _height_name,
+  direction: _direction,
+} = {}) => ($el, $svg = $$getSVG()) => {
+  const transform = $$initScaleTransform({
     cx,
     cy,
     sx,
     sy,
     index,
-  });
+  })($el, $svg);
 
   const controller = {};
   controller.update = ({ sx, sy } = {}) => {
-    $$updateScaleTransform(transform, { sx, sy });
+    $$updateScaleTransform({ sx, sy })(transform);
     return controller;
   };
   controller.end = ({
@@ -44,7 +41,7 @@ export const $$controlScaleTransform = ($svg = $$getSVG()) => (
     direction = _direction,
   } = {}) => {
     merge_type === 2
-      ? $$mergeScaleTransform2($el, {
+      ? $$mergeScaleTransform2({
           index: index + 1,
           is_need_correction,
           x_name,
@@ -52,8 +49,8 @@ export const $$controlScaleTransform = ($svg = $$getSVG()) => (
           width_name,
           height_name,
           direction,
-        })
-      : $$mergeScaleTransform($svg)($el, { index: index + 1 });
+        })($el)
+      : $$mergeScaleTransform({ index: index + 1 })($el, $svg);
     return $el;
   };
 

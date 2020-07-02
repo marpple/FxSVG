@@ -11,6 +11,7 @@ import {
   zipL,
   zipWithIndexL,
 } from "fxjs2";
+import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   deepCopyTransformList,
   makeMockRect,
@@ -44,13 +45,13 @@ const setupMock = ({
     makeRandomInt(0, $$getBaseTransformList($el).numberOfItems + 1),
     _index
   );
-  const result = $$controlTranslateTransform()($el, {
+  const result = $$controlTranslateTransform({
     tx,
     ty,
     x_name: "x",
     y_name: "y",
     index,
-  });
+  })($el);
   return { x, y, tx, ty, index, $el, result };
 };
 
@@ -102,9 +103,9 @@ export default ({ describe, it }) => [
         ty,
       } = setupMock();
 
-      const expect_transform = $$createSVGTransformTranslate()({ tx, ty });
+      const expect_transform = $$createSVGTransformTranslate({ tx, ty })();
 
-      expect(receive_transform).deep.equal(expect_transform);
+      expectSameValueSVGTransform(receive_transform, expect_transform);
     });
 
     it(`The return transform object is the transform at the input index.`, function () {
@@ -115,7 +116,7 @@ export default ({ describe, it }) => [
       } = setupMock();
       const expect_transform = $$getBaseTransformList($el).getItem(index);
 
-      expect(receive_transform).deep.equal(expect_transform);
+      expectSameValueSVGTransform(receive_transform, expect_transform);
     });
 
     it(`The controller.update method update the return transform with the input tx, ty.`, function () {
@@ -126,9 +127,9 @@ export default ({ describe, it }) => [
       const [tx, ty] = mapL(() => makeRandomInt(-100, 100), rangeL(2));
       controller.update({ tx, ty });
 
-      const expect_transform = $$createSVGTransformTranslate()({ tx, ty });
+      const expect_transform = $$createSVGTransformTranslate({ tx, ty })();
 
-      expect(receive_transform).deep.equal(expect_transform);
+      expectSameValueSVGTransform(receive_transform, expect_transform);
     });
 
     it(`The controller.append method add the input tx, ty to the return transform.`, function () {
@@ -141,12 +142,12 @@ export default ({ describe, it }) => [
       const [tx2, ty2] = mapL(() => makeRandomInt(-100, 100), rangeL(2));
       controller.append({ tx: tx2, ty: ty2 });
 
-      const expect_transform = $$createSVGTransformTranslate()({
+      const expect_transform = $$createSVGTransformTranslate({
         tx: tx1 + tx2,
         ty: ty1 + ty2,
-      });
+      })();
 
-      expect(receive_transform).deep.equal(expect_transform);
+      expectSameValueSVGTransform(receive_transform, expect_transform);
     });
 
     it(`The controller.end method update x, y of the element.`, function () {
@@ -181,12 +182,15 @@ export default ({ describe, it }) => [
         $$getBaseTransformList($el)
       );
 
+      expect(after_transform_list.length).equal(
+        before_transform_list.length - 1
+      );
       go(
         [
           { tx, ty },
           { tx: -tx, ty: -ty },
         ],
-        mapL($$createSVGTransformTranslate()),
+        mapL((values) => $$createSVGTransformTranslate(values)()),
         mapL(({ matrix: m }) => m),
         ([plus_matrix, minus_matrix]) =>
           go(
@@ -195,20 +199,14 @@ export default ({ describe, it }) => [
             rejectL(([i]) => equals2(i, index)),
             mapL(([, transform]) => transform),
             mapL(({ matrix }) =>
-              $$createSVGTransformMatrix()({
+              $$createSVGTransformMatrix({
                 matrix: plus_matrix.multiply(matrix).multiply(minus_matrix),
-              })
+              })()
             ),
             zipL(after_transform_list)
           ),
-        each(
-          ([
-            { type: after_type, matrix: after_matrix },
-            { type: before_type, matrix: before_matrix },
-          ]) => {
-            expect(after_type).equal(before_type);
-            expect(after_matrix).deep.equal(before_matrix);
-          }
+        each(([after_transform, before_transform]) =>
+          expectSameValueSVGTransform(after_transform, before_transform)
         )
       );
     });

@@ -5,12 +5,13 @@ import {
   equals2,
   go,
   isUndefined,
+  map,
   mapL,
-  rangeL,
   rejectL,
   zipL,
   zipWithIndexL,
 } from "fxjs2";
+import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   deepCopyTransformList,
   makeMockRect,
@@ -29,7 +30,7 @@ const setupMock = ({
   transform: _transform,
 } = {}) => {
   const angle = defaultTo(makeRandomInt(-700, 700), _angle);
-  const [cx, cy] = mapL(defaultTo(makeRandomInt(-100, 100)), rangeL(2));
+  const [cx, cy] = mapL(defaultTo(makeRandomInt(-100, 100)), [_cx, _cy]);
   const transform = isUndefined(_transform)
     ? makeRandomTransformAttributeValue()
     : _transform;
@@ -38,147 +39,166 @@ const setupMock = ({
     makeRandomInt(0, $$getBaseTransformList($el).numberOfItems + 1),
     _index
   );
-  const result = $$controlRotateTransform()($el, { angle, cx, cy, index });
-  return { angle, cx, cy, index, $el, result };
+  return { angle, cx, cy, index, $el };
 };
 
 export default ({ describe, it }) => [
   describe(`$$controlRotateTransform`, function () {
     it(`The return object has "$el", "controller", "transform" properties.`, function () {
-      const { result } = setupMock();
+      const { angle, cx, cy, index, $el } = setupMock();
+
+      const result = $$controlRotateTransform({ angle, cx, cy, index })($el);
 
       const keys = new Set(Object.keys(result));
-
-      expect(keys.size).to.equal(3);
-      each((k) => expect(keys.has(k)).to.be.true, [
-        "$el",
-        "controller",
-        "transform",
-      ]);
+      expect(keys.size).equal(3);
+      each((k) => expect(keys.has(k)).true, ["$el", "controller", "transform"]);
     });
 
     it(`The return element is same with the input element.`, function () {
-      const {
-        result: { $el: $receive },
-        $el: $expect,
-      } = setupMock();
+      const { angle, cx, cy, index, $el: $input } = setupMock();
 
-      expect($receive).to.equal($expect);
+      const { $el: $output } = $$controlRotateTransform({
+        angle,
+        cx,
+        cy,
+        index,
+      })($input);
+
+      expect($output).equal($input);
     });
 
     it(`The return controller object has "update", "append", "end" methods.`, function () {
-      const {
-        result: { controller },
-      } = setupMock();
+      const { angle, cx, cy, index, $el } = setupMock();
+
+      const { controller } = $$controlRotateTransform({ angle, cx, cy, index })(
+        $el
+      );
 
       const entries = new Map(Object.entries(controller));
-
-      expect(entries.size).to.equal(3);
+      expect(entries.size).equal(3);
       each(
         (k) => {
-          expect(entries.has(k)).to.be.true;
-          expect(entries.get(k)).is.a("function");
+          expect(entries.has(k)).true;
+          expect(entries.get(k)).a("function");
         },
         ["update", "append", "end"]
       );
     });
 
     it(`The return transform object is a rotate transform whose angle is the input angle and cx, cy are 0.`, function () {
-      const {
-        result: { transform: receive_transform },
-        angle,
-      } = setupMock();
+      const { angle, cx, cy, index, $el } = setupMock();
 
-      const expect_transform = $$createSVGTransformRotate()({
+      const { transform: receive_transform } = $$controlRotateTransform({
+        angle,
+        cx,
+        cy,
+        index,
+      })($el);
+
+      const expect_transform = $$createSVGTransformRotate({
         angle,
         cx: 0,
         cy: 0,
-      });
-
-      expect(receive_transform).deep.equal(expect_transform);
+      })();
+      expectSameValueSVGTransform(receive_transform, expect_transform);
     });
 
     it(`The return transform object is the transform at the input index + 1.`, function () {
-      const {
-        result: { transform: receive_transform },
-        $el,
-        index,
-      } = setupMock();
-      const expect_transform = $$getBaseTransformList($el).getItem(index + 1);
+      const { angle, cx, cy, index, $el } = setupMock();
 
-      expect(receive_transform).to.deep.equal(expect_transform);
+      const { transform: receive_transform } = $$controlRotateTransform({
+        angle,
+        cx,
+        cy,
+        index,
+      })($el);
+
+      const expect_transform = $$getBaseTransformList($el).getItem(index + 1);
+      expectSameValueSVGTransform(receive_transform, expect_transform);
     });
 
     it(`The controller.update method update the return transform with the input angle.`, function () {
+      const { angle, cx, cy, index, $el } = setupMock();
+
       const {
-        result: { transform: receive_transform, controller },
-      } = setupMock();
-
-      const angle = makeRandomInt(-700, 700);
-      controller.update({ angle });
-
-      const expect_transform = $$createSVGTransformRotate()({
+        transform: receive_transform,
+        controller,
+      } = $$controlRotateTransform({
         angle,
+        cx,
+        cy,
+        index,
+      })($el);
+
+      const update_angle = makeRandomInt(-700, 700);
+      controller.update({ angle: update_angle });
+
+      const expect_transform = $$createSVGTransformRotate({
+        angle: update_angle,
         cx: 0,
         cy: 0,
-      });
-
-      expect(receive_transform).deep.equal(expect_transform);
+      })();
+      expectSameValueSVGTransform(receive_transform, expect_transform);
     });
 
     it(`The controller.append method add the input angle to the return transform.`, function () {
+      const { angle: angle1, cx, cy, index, $el } = setupMock();
+
       const {
-        result: { transform: receive_transform, controller },
+        transform: receive_transform,
+        controller,
+      } = $$controlRotateTransform({
         angle: angle1,
-      } = setupMock();
+        cx,
+        cy,
+        index,
+      })($el);
 
       const angle2 = makeRandomInt(-700, 700);
       controller.append({ angle: angle2 });
 
-      const expect_transform = $$createSVGTransformRotate()({
+      const expect_transform = $$createSVGTransformRotate({
         angle: angle1 + angle2,
         cx: 0,
         cy: 0,
-      });
+      })();
 
-      expect(receive_transform).deep.equal(expect_transform);
+      expectSameValueSVGTransform(receive_transform, expect_transform);
     });
 
     it(`The controller.end method merge the transforms from index to index + 2 to a rotate transform.`, function () {
-      const {
-        result: { $el, controller },
-        index,
+      const { angle, cx, cy, index, $el: $input } = setupMock();
+
+      const { controller, $el: $output } = $$controlRotateTransform({
         angle,
         cx,
         cy,
-      } = setupMock();
+        index,
+      })($input);
+
       const before_transform_list = deepCopyTransformList(
-        $$getBaseTransformList($el)
+        $$getBaseTransformList($output)
       );
 
       controller.end();
 
       const after_transform_list = deepCopyTransformList(
-        $$getBaseTransformList($el)
+        $$getBaseTransformList($output)
       );
-
-      go(
-        $$createSVGTransformRotate()({ angle, cx, cy }),
-        (rotate_transform) =>
-          go(
-            before_transform_list,
-            zipWithIndexL,
-            rejectL(([i]) => i >= index + 1 && i <= index + 2),
-            mapL(([i, transform]) =>
-              equals2(i, index) ? rotate_transform : transform
-            ),
-            mapL(({ type, matrix }) => ({ type, matrix }))
-          ),
-        zipL(after_transform_list),
-        each(([after_transform, before_transform]) =>
-          expect(after_transform).deep.equal(before_transform)
+      const rotate_transform = $$createSVGTransformRotate({ angle, cx, cy })();
+      const expect_transform_list = go(
+        before_transform_list,
+        zipWithIndexL,
+        rejectL(([i]) => i >= index + 1 && i <= index + 2),
+        map(([i, transform]) =>
+          equals2(i, index) ? rotate_transform : transform
         )
       );
+      expect(after_transform_list.length).equal(expect_transform_list.length);
+      const pairs = zipL(after_transform_list, expect_transform_list);
+      for (const [receive_transform, expect_transform] of pairs) {
+        expectSameValueSVGTransform(receive_transform, expect_transform);
+      }
     });
   }),
 ];

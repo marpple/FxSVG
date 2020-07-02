@@ -4,22 +4,18 @@ import { $$isValidFxScaleSVGTransformList } from "../isValidFxScaleSVGTransformL
 
 const VALID_DIRECTION = new Set(["n", "ne", "e", "se", "s", "sw", "w", "nw"]);
 
-export const $$mergeScaleTransform2 = (
-  $el,
-  {
-    index = 1,
-    is_need_correction = true,
-    x_name = "x",
-    y_name = "y",
-    width_name = "width",
-    height_name = "height",
-    direction,
-  } = {}
-) => {
+export const $$mergeScaleTransform2 = ({
+  index = 1,
+  is_need_correction = true,
+  x_name = "x",
+  y_name = "y",
+  width_name = "width",
+  height_name = "height",
+  direction,
+} = {}) => ($el) => {
   const transform_list = $$getBaseTransformList($el);
-
   if (
-    !$$isValidFxScaleSVGTransformList(transform_list, { index }) ||
+    !$$isValidFxScaleSVGTransformList({ index })(transform_list) ||
     !VALID_DIRECTION.has(direction)
   ) {
     return $el;

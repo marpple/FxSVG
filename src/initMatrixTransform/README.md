@@ -10,24 +10,23 @@ svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_MATRIX` 타입의 `SVGTransform`
 `matrix` 값을 설정할 수 있으며 설정하지 않는 경우 Identity Matrix 로 초기화됩니다.
 `SVGTransform`을 삽입할 `index` 를 설정할 수 있으며 설정하지 않는 경우 `0` 으로 초기화됩니다.
 
-[SVG 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
-
 ```javascript
-const $el = $$el()(`
-  <rect
-    x="10"
-    y="20"
-    width="100"
-    height="200"
-  >
-  </rect>
-`);
+const str = `
+<rect
+  x="10"
+  y="20"
+  width="100"
+  height="200"
+>
+</rect>
+`;
+const $el = $$el(str)();
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {length: 0, numberOfItems: 0}
 
-const matrix = $$createSVGMatrix()({ a: 1, b: 2, c: 3, d: 4, e: 5, f: 6 });
-$$initMatrixTransform()($el, { matrix });
+const matrix = $$createSVGMatrix({ a: 1, b: 2, c: 3, d: 4, e: 5, f: 6 })();
+$$initMatrixTransform({ matrix })($el);
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, length: 1, numberOfItems: 1}
@@ -36,24 +35,25 @@ console.log($$getBaseTransformList($el));
 ```
 
 ```javascript
-const $el = $$el()(`
-  <rect
-    x="10"
-    y="20"
-    width="100"
-    height="200"
-    transform="scale(2, 4)"
-  >
-  </rect>
-`);
+const str = `
+<rect
+  x="10"
+  y="20"
+  width="100"
+  height="200"
+  transform="scale(2, 4)"
+>
+</rect>
+`;
+const $el = $$el(str)();
 
 console.log($$getBaseTransformList($el));
 // SVGTransformList {0: SVGTransform, length: 1, numberOfItems: 1}
 // 0: SVGTransform {type: 3, matrix: SVGMatrix, angle: 0}
 //   matrix: SVGMatrix {a: 2, b: 0, c: 0, d: 4, e: 0, f: 0}
 
-const matrix = $$createSVGMatrix()({ a: 1, b: 2, c: 3, d: 4, e: 5, f: 6 });
-$$initMatrixTransform()($el, { matrix, index: 1 });
+const matrix = $$createSVGMatrix({ a: 1, b: 2, c: 3, d: 4, e: 5, f: 6 })();
+$$initMatrixTransform({ matrix, index: 1 })($el);
 // index 를 1 로 설정했기 때문에
 // SVGTransformList 의 1 인덱스 위치에 SVGTransform 삽입
 

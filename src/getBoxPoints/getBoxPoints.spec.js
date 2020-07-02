@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { each, map, reduce } from "fxjs2";
+import { map, reduce } from "fxjs2";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
@@ -36,18 +36,14 @@ const clearMock = ({ $svg }) => {
 export default ({ describe, it }) => [
   describe(`$$getBoxPoints`, function () {
     it(`The return "original" values are calculated from the initial input element position.`, function () {
-      const cases = [
-        setupMock(),
-        setupMock({
-          transform: makeRandomTransformAttributeValue(1, 100, () =>
-            makeRandomNumber(-700, 700)
-          ),
-        }),
-      ];
+      const transform = makeRandomTransformAttributeValue(1, 10, () =>
+        makeRandomNumber(-700, 700)
+      );
+      const cases = [setupMock(), setupMock({ transform })];
       for (const { $el, $svg, x, y, width, height } of cases) {
         const {
           original: { top_left, top_right, bottom_right, bottom_left },
-        } = $$getBoxPoints()($el);
+        } = $$getBoxPoints($el);
 
         expect(top_left.x).to.equal(x);
         expect(top_left.y).to.equal(y);
@@ -66,14 +62,10 @@ export default ({ describe, it }) => [
     });
 
     it(`The return "transformed" values are calculated from the transformed input element's position.`, function () {
-      const cases = [
-        setupMock(),
-        setupMock({
-          transform: makeRandomTransformAttributeValue(1, 100, () =>
-            makeRandomNumber(-700, 700)
-          ),
-        }),
-      ];
+      const transform = makeRandomTransformAttributeValue(1, 10, () =>
+        makeRandomNumber(-700, 700)
+      );
+      const cases = [setupMock(), setupMock({ transform })];
       for (const { $el, $svg } of cases) {
         const transform_list = $$getBaseTransformList($el);
 
@@ -85,7 +77,7 @@ export default ({ describe, it }) => [
             bottom_right: { x: x3_1, y: y3_1 },
             bottom_left: { x: x4_1, y: y4_1 },
           },
-        } = $$getBoxPoints()($el);
+        } = $$getBoxPoints($el);
         const [
           { x: x1_2, y: y1_2 },
           { x: x2_2, y: y2_2 },
@@ -98,20 +90,14 @@ export default ({ describe, it }) => [
           transform_list
         );
 
-        each(
-          ([expect_value, receive_value]) =>
-            expect(receive_value).equal(expect_value),
-          [
-            [x1_2, x1_1],
-            [y1_2, y1_1],
-            [x2_2, x2_1],
-            [y2_2, y2_1],
-            [x3_2, x3_1],
-            [y3_2, y3_1],
-            [x4_2, x4_1],
-            [y4_2, y4_1],
-          ]
-        );
+        expect(x1_2).equal(x1_1);
+        expect(y1_2).equal(y1_1);
+        expect(x2_2).equal(x2_1);
+        expect(y2_2).equal(y2_1);
+        expect(x3_2).equal(x3_1);
+        expect(y3_2).equal(y3_1);
+        expect(x4_2).equal(x4_1);
+        expect(y4_2).equal(y4_1);
 
         clearMock({ $svg });
       }
@@ -119,14 +105,10 @@ export default ({ describe, it }) => [
 
     it(`The return "bounding" values are calculated
         from the minimum and maximum values of the return "transformed" values.`, function () {
-      const cases = [
-        setupMock(),
-        setupMock({
-          transform: makeRandomTransformAttributeValue(1, 100, () =>
-            makeRandomNumber(-700, 700)
-          ),
-        }),
-      ];
+      const transform = makeRandomTransformAttributeValue(1, 10, () =>
+        makeRandomNumber(-700, 700)
+      );
+      const cases = [setupMock(), setupMock({ transform })];
       for (const { $el, $svg } of cases) {
         const {
           transformed: {
@@ -139,7 +121,7 @@ export default ({ describe, it }) => [
             min: { x: min_x_1, y: min_y_1 },
             max: { x: max_x_1, y: max_y_1 },
           },
-        } = $$getBoxPoints()($el);
+        } = $$getBoxPoints($el);
 
         const min_x_2 = Math.min(x1, x2, x3, x4);
         const min_y_2 = Math.min(y1, y2, y3, y4);

@@ -11,10 +11,10 @@
 이 함수는 인자로 받은 `SVGTransform` 객체를 직접 수정합니다.
 
 ```javascript
-const t = $$createSVGTransformRotate()({ angle: 45 });
-console.log(t);
+const transform = $$createSVGTransformRotate({ angle: 45 })();
+console.log(transform);
 // SVGTransform {type: 4, matrix: SVGMatrix, angle: 45}
-$$appendRotateTransform(t, { angle: 30 });
-console.log(t);
+$$appendRotateTransform({ angle: 30 })(transform);
+console.log(transform);
 // SVGTransform {type: 4, matrix: SVGMatrix, angle: 75}
 ```

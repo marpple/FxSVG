@@ -11,12 +11,12 @@
 입력한 `tx`, `ty` 값과 실제 Transform 에 적용된 값은 정확도 차이가 발생할 수 있습니다.
 
 ```javascript
-const t = $$createSVGTransformTranslate()({ tx: 10, ty: 20 });
-console.log(t);
+const transform = $$createSVGTransformTranslate({ tx: 10, ty: 20 })();
+console.log(transform);
 // SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 // matrix: SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 10, f: 20}
-$$updateTranslateTransform(t, { tx: 100, ty: 200 });
-console.log(t);
+$$updateTranslateTransform({ tx: 100, ty: 200 })(transform);
+console.log(transform);
 // SVGTransform {type: 2, matrix: SVGMatrix, angle: 0}
 // matrix: SVGMatrix {a: 1, b: 0, c: 0, d: 1, e: 100, f: 200}
 ```

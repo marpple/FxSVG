@@ -1,13 +1,14 @@
+import { defaultTo } from "fxjs2";
 import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
 
-export const $$updateScaleTransform = (
-  transform,
-  { sx = transform.matrix.a, sy = transform.matrix.d } = {}
-) => {
+export const $$updateScaleTransform = ({ sx, sy } = {}) => (transform) => {
   if (!$$isScaleSVGTransform(transform)) {
     return transform;
   }
 
-  transform.setScale(sx, sy);
+  transform.setScale(
+    defaultTo(transform.matrix.a, sx),
+    defaultTo(transform.matrix.d, sy)
+  );
   return transform;
 };

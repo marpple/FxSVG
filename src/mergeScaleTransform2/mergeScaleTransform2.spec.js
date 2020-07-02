@@ -1,20 +1,19 @@
 import { expect } from "chai";
 import {
   appendL,
-  each,
   extend,
   flatMapL,
   go,
   go1,
   head,
-  isNil,
-  join,
+  map,
   mapL,
   rangeL,
   rejectL,
   zipL,
   zipWithIndexL,
 } from "fxjs2";
+import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   deepCopyTransformList,
   makeRandomBool,
@@ -28,6 +27,22 @@ import { makeInvalidCases as makeInvalidIsValidFxSVGTransformListCases } from ".
 import { $$mergeScaleTransform2 } from "./mergeScaleTransform2.index.js";
 
 const DIRECTIONS = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
+
+const expectSameValueTransformList = (
+  receive_transform_list,
+  expect_transform_list,
+  description = "expectSameValueTransformList"
+) => {
+  expect(receive_transform_list.length).equal(expect_transform_list.length);
+  const pairs = zipL(receive_transform_list, expect_transform_list);
+  for (const [receive_transform, expect_transform] of pairs) {
+    expectSameValueSVGTransform(
+      receive_transform,
+      expect_transform,
+      `expectNotChange(${description})`
+    );
+  }
+};
 
 const expectNotChange = (
   {
@@ -49,18 +64,23 @@ const expectNotChange = (
   description
 ) => {
   expect($after, description).equal($before);
-  expect(after_transform_list, description).deep.equal(before_transform_list);
   expect(after_x, description).equal(before_x);
   expect(after_y, description).equal(before_y);
   expect(after_width, description).equal(before_width);
   expect(after_height, description).equal(before_height);
+
+  expectSameValueTransformList(
+    [...after_transform_list],
+    [...before_transform_list]
+  );
 };
 
 export default ({ describe, it }) => [
   describe(`$$mergeScaleTransform2`, function () {
     it(`The function do nothing but return the input element
         when the input values failed to pass "$$isValidFxScaleSVGTransformList".`, function () {
-      this.slow(1500);
+      this.slow(3000);
+      this.timeout(6000);
 
       const cases = go(
         makeInvalidIsValidFxSVGTransformListCases(),
@@ -89,7 +109,7 @@ export default ({ describe, it }) => [
           $$getBaseTransformList($input)
         );
 
-        const $output = $$mergeScaleTransform2($input, {
+        const $output = $$mergeScaleTransform2({
           index,
           is_need_correction,
           direction,
@@ -97,7 +117,7 @@ export default ({ describe, it }) => [
           y_name: "y",
           width_name: "width",
           height_name: "height",
-        });
+        })($input);
 
         const [after_x, after_y, after_width, after_height] = go(
           ["x", "y", "width", "height"],
@@ -107,7 +127,6 @@ export default ({ describe, it }) => [
         const after_transform_list = deepCopyTransformList(
           $$getBaseTransformList($input)
         );
-
         expectNotChange(
           {
             $el: $input,
@@ -149,9 +168,7 @@ export default ({ describe, it }) => [
                   head
                 )
               ),
-              ([a, b]) => [a, makeRandomBool() ? b : null],
-              rejectL(isNil),
-              join("")
+              ([a, b]) => (makeRandomBool() ? `${a}${b}` : a)
             ),
           },
           {
@@ -178,7 +195,6 @@ export default ({ describe, it }) => [
           )
         )
       );
-
       for (const { direction, description, is_need_correction } of cases) {
         const {
           $el: $input,
@@ -192,7 +208,7 @@ export default ({ describe, it }) => [
           $$getBaseTransformList($input)
         );
 
-        const $output = $$mergeScaleTransform2($input, {
+        const $output = $$mergeScaleTransform2({
           index,
           direction,
           x_name: "x",
@@ -200,7 +216,7 @@ export default ({ describe, it }) => [
           width_name: "width",
           height_name: "height",
           is_need_correction,
-        });
+        })($input);
 
         const after_transform_list = deepCopyTransformList(
           $$getBaseTransformList($input)
@@ -210,7 +226,6 @@ export default ({ describe, it }) => [
           mapL((k) => $output.getAttributeNS(null, k)),
           mapL(parseFloat)
         );
-
         expectNotChange(
           {
             $el: $input,
@@ -255,12 +270,11 @@ export default ({ describe, it }) => [
         const { $el, index } = makeMockRectInitiatedScaleTransform({
           transform,
         });
-
         const before_transform_list = deepCopyTransformList(
           $$getBaseTransformList($el)
         );
 
-        $$mergeScaleTransform2($el, {
+        $$mergeScaleTransform2({
           index,
           direction,
           is_need_correction,
@@ -268,21 +282,20 @@ export default ({ describe, it }) => [
           y_name: "y",
           width_name: "width",
           height_name: "height",
-        });
+        })($el);
 
         const after_transform_list = deepCopyTransformList(
           $$getBaseTransformList($el)
         );
-
-        go(
+        const expect_transform_list = go(
           before_transform_list,
           zipWithIndexL,
           rejectL(([i]) => i >= index - 1 && i <= index + 1),
-          mapL(([, transform]) => transform),
-          zipL(after_transform_list),
-          each(([after_transform, before_transform]) =>
-            expect(after_transform).deep.equal(before_transform)
-          )
+          map(([, transform]) => transform)
+        );
+        expectSameValueTransformList(
+          after_transform_list,
+          expect_transform_list
         );
       }
     });
@@ -303,7 +316,6 @@ export default ({ describe, it }) => [
           ])
         )
       );
-
       for (const { direction, is_need_correction, transform } of cases) {
         const {
           $el,
@@ -316,7 +328,7 @@ export default ({ describe, it }) => [
           transform,
         });
 
-        $$mergeScaleTransform2($el, {
+        $$mergeScaleTransform2({
           index,
           direction,
           is_need_correction,
@@ -324,14 +336,13 @@ export default ({ describe, it }) => [
           y_name: "y",
           width_name: "width",
           height_name: "height",
-        });
+        })($el);
 
         const [after_width, after_height] = go(
           ["width", "height"],
           mapL((k) => $el.getAttributeNS(null, k)),
           mapL(parseFloat)
         );
-
         expect(after_width).equal(before_width * Math.abs(sx));
         expect(after_height).equal(before_height * Math.abs(sy));
       }
@@ -353,15 +364,14 @@ export default ({ describe, it }) => [
           ])
         )
       );
-
       for (const { direction, is_need_correction, transform } of cases) {
-        const { $el, index, x: before_x } = makeMockRectInitiatedScaleTransform(
-          {
-            transform,
-          }
-        );
+        const {
+          $el,
+          index,
+          x: before_x,
+        } = makeMockRectInitiatedScaleTransform({ transform });
 
-        $$mergeScaleTransform2($el, {
+        $$mergeScaleTransform2({
           index,
           direction,
           is_need_correction,
@@ -369,10 +379,9 @@ export default ({ describe, it }) => [
           y_name: "y",
           width_name: "width",
           height_name: "height",
-        });
+        })($el);
 
         const after_x = parseFloat($el.getAttributeNS(null, "x"));
-
         expect(after_x).equal(before_x);
       }
     });
@@ -393,15 +402,14 @@ export default ({ describe, it }) => [
           ])
         )
       );
-
       for (const { direction, is_need_correction, transform } of cases) {
-        const { $el, index, y: before_y } = makeMockRectInitiatedScaleTransform(
-          {
-            transform,
-          }
-        );
+        const {
+          $el,
+          index,
+          y: before_y,
+        } = makeMockRectInitiatedScaleTransform({ transform });
 
-        $$mergeScaleTransform2($el, {
+        $$mergeScaleTransform2({
           index,
           direction,
           is_need_correction,
@@ -409,10 +417,9 @@ export default ({ describe, it }) => [
           y_name: "y",
           width_name: "width",
           height_name: "height",
-        });
+        })($el);
 
         const after_y = parseFloat($el.getAttributeNS(null, "y"));
-
         expect(after_y).equal(before_y);
       }
     });
@@ -461,7 +468,7 @@ export default ({ describe, it }) => [
           sx: _sx,
         });
 
-        $$mergeScaleTransform2($el, {
+        $$mergeScaleTransform2({
           index,
           direction,
           is_need_correction,
@@ -469,10 +476,9 @@ export default ({ describe, it }) => [
           y_name: "y",
           width_name: "width",
           height_name: "height",
-        });
+        })($el);
 
         const after_x = parseFloat($el.getAttributeNS(null, "x"));
-
         expect(after_x).equal((before_x - cx) * sx + cx);
       }
     });
@@ -521,7 +527,7 @@ export default ({ describe, it }) => [
           sy: _sy,
         });
 
-        $$mergeScaleTransform2($el, {
+        $$mergeScaleTransform2({
           index,
           direction,
           is_need_correction,
@@ -529,10 +535,9 @@ export default ({ describe, it }) => [
           y_name: "y",
           width_name: "width",
           height_name: "height",
-        });
+        })($el);
 
         const after_y = parseFloat($el.getAttributeNS(null, "y"));
-
         expect(after_y).equal((before_y - cy) * sy + cy);
       }
     });
@@ -563,7 +568,7 @@ export default ({ describe, it }) => [
           sx: _sx,
         });
 
-        $$mergeScaleTransform2($el, {
+        $$mergeScaleTransform2({
           index,
           direction,
           is_need_correction: true,
@@ -571,10 +576,9 @@ export default ({ describe, it }) => [
           y_name: "y",
           width_name: "width",
           height_name: "height",
-        });
+        })($el);
 
         const after_x = parseFloat($el.getAttributeNS(null, "x"));
-
         expect(after_x).equal((before_x - cx) * sx + cx + width * sx);
       }
     });
@@ -605,7 +609,7 @@ export default ({ describe, it }) => [
           sy: _sy,
         });
 
-        $$mergeScaleTransform2($el, {
+        $$mergeScaleTransform2({
           index,
           direction,
           is_need_correction: true,
@@ -613,10 +617,9 @@ export default ({ describe, it }) => [
           y_name: "y",
           width_name: "width",
           height_name: "height",
-        });
+        })($el);
 
         const after_y = parseFloat($el.getAttributeNS(null, "y"));
-
         expect(after_y).equal((before_y - cy) * sy + cy + height * sy);
       }
     });

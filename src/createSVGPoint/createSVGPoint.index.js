@@ -1,11 +1,10 @@
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 
-export const $$createSVGPoint = ($svg = $$getSVG()) => ({
-  x = 0,
-  y = 0,
-} = {}) => {
-  const p = $svg.createSVGPoint();
-  p.x = x;
-  p.y = y;
-  return p;
+export const $$createSVGPoint = ({ x = 0, y = 0 } = {}) => (
+  $svg = $$getSVG()
+) => {
+  const point = $svg.createSVGPoint();
+  point.x = x;
+  point.y = y;
+  return point;
 };

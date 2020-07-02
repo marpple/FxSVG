@@ -10,16 +10,13 @@
 
 `x_name`, `y_name` 설정을 인자로 전달하지 않는 경우 `end` 메소드에서 `$$mergeTranslateTransform` 를 실행하지 않습니다.
 
-[SVG 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
-
 ```javascript
-const $el = $$el()(
-  `<circle cx="10" cy="20" r="100" transform="scale(2, 4)"></circle>`
-);
-const { controller } = $$controlTranslateTransform()($el, {
+const str = `<circle cx="10" cy="20" r="100" transform="scale(2, 4)"></circle>`;
+const $el = $$el(str)();
+const { controller } = $$controlTranslateTransform({
   x_name: "cx",
   y_name: "cy",
-});
+})($el);
 controller.update({ tx: 30, ty: 60 }).append({ tx: 70, ty: 40 }).end();
 
 console.log($el);

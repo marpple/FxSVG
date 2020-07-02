@@ -4,24 +4,27 @@ import { $$initTranslateTransform } from "../initTranslateTransform/initTranslat
 import { $$mergeTranslateTransform } from "../mergeTranslateTransform/mergeTranslateTransform.index.js";
 import { $$updateTranslateTransform } from "../updateTranslateTransform/updateTranslateTransform.index.js";
 
-export const $$controlTranslateTransform = ($svg = $$getSVG()) => (
-  $el,
-  { index = 0, tx, ty, x_name, y_name } = {}
-) => {
-  const transform = $$initTranslateTransform($svg)($el, { tx, ty, index });
+export const $$controlTranslateTransform = ({
+  index = 0,
+  tx,
+  ty,
+  x_name,
+  y_name,
+} = {}) => ($el, $svg = $$getSVG()) => {
+  const transform = $$initTranslateTransform({ tx, ty, index })($el, $svg);
 
   const controller = {};
   controller.update = ({ tx, ty } = {}) => {
-    $$updateTranslateTransform(transform, { tx, ty });
+    $$updateTranslateTransform({ tx, ty })(transform);
     return controller;
   };
   controller.append = ({ tx, ty } = {}) => {
-    $$appendTranslateTransform(transform, { tx, ty });
+    $$appendTranslateTransform({ tx, ty })(transform);
     return controller;
   };
   controller.end = () => {
     if (x_name && y_name) {
-      $$mergeTranslateTransform($svg)($el, { index, x_name, y_name });
+      $$mergeTranslateTransform({ index, x_name, y_name })($el, $svg);
     }
     return $el;
   };

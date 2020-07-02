@@ -9,21 +9,20 @@ svg 객체의 영역에 해당하는 `SVGPoint`들을 반환합니다. 해당 sv
 `transformed` 속성은 svg 객체가 `transform` 한 후 영역입니다.
 `bounding` 속성은 svg 객체가 `transform` 한 후 영역을 덮는 최소 직사각형 영역입니다.
 
-[SVG 주입](../../doc/SVG_INJECTION.md)이 적용된 함수입니다.
-
 ```javascript
-const $el = $$el()(`
-  <rect
-    x="10"
-    y="20"
-    width="100"
-    height="200"
-    transform="translate(400, 500)" 
-  >
-  </rect>
-`);
+const str = `
+<rect
+  x="10"
+  y="20"
+  width="100"
+  height="200"
+  transform="translate(400, 500)" 
+>
+</rect>
+`;
+const $el = $$el(str)();
 $svg.appendChild($el);
-console.log($$getBoxPoints()($el));
+console.log($$getBoxPoints($el));
 // {original: {...}, transformed: {...}, bounding: {...}}
 // original:
 //   top_left: SVGPoint {x: 10, y: 20}

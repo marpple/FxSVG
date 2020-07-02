@@ -1,15 +1,16 @@
-import { expect } from "chai";
-import { go, tap } from "fxjs2";
 import { $$createSVGTransform } from "../../src/createSVGTransform/createSVGTransform.index.js";
-import { $$isScaleSVGTransform } from "../../src/isScaleSVGTransform/isScaleSVGTransform.index.js";
+import { expectSameValueSVGTransform } from "./expectSameValueSVGTransform.js";
 
-export const expectTransformWithScaleSxSy = ({ transform, sx, sy }) => {
-  const matrix = go(
-    $$createSVGTransform(),
-    tap((transform) => transform.setScale(sx, sy)),
-    ({ matrix }) => matrix
+export const expectTransformWithScaleSxSy = ({
+  transform: receive_transform,
+  sx,
+  sy,
+}) => {
+  const expect_transform = $$createSVGTransform();
+  expect_transform.setScale(sx, sy);
+  expectSameValueSVGTransform(
+    receive_transform,
+    expect_transform,
+    "expectTransformWithScaleSxSy"
   );
-
-  expect($$isScaleSVGTransform(transform)).to.be.true;
-  expect(transform.matrix).to.deep.equal(matrix);
 };

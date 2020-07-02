@@ -3,24 +3,26 @@ import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/cr
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 
-export const $$initRotateTransform = ($svg = $$getSVG()) => (
-  $el,
-  { angle = 0, cx = 0, cy = 0, index = 0 } = {}
-) => {
+export const $$initRotateTransform = ({
+  angle = 0,
+  cx = 0,
+  cy = 0,
+  index = 0,
+} = {}) => ($el, $svg = $$getSVG()) => {
   const transform_list = $$getBaseTransformList($el);
+  const positive_translate_transform = $$createSVGTransformTranslate({
+    tx: cx,
+    ty: cy,
+  })($svg);
+  const negative_translate_transform = $$createSVGTransformTranslate({
+    tx: -cx,
+    ty: -cy,
+  })($svg);
+  const rotate_transform = $$createSVGTransformRotate({ angle })($svg);
 
-  transform_list.insertItemBefore(
-    $$createSVGTransformTranslate($svg)({ tx: -cx, ty: -cy }),
-    index
-  );
-  const transform = transform_list.insertItemBefore(
-    $$createSVGTransformRotate($svg)({ angle }),
-    index
-  );
-  transform_list.insertItemBefore(
-    $$createSVGTransformTranslate($svg)({ tx: cx, ty: cy }),
-    index
-  );
+  transform_list.insertItemBefore(negative_translate_transform, index);
+  transform_list.insertItemBefore(rotate_transform, index);
+  transform_list.insertItemBefore(positive_translate_transform, index);
 
-  return transform;
+  return rotate_transform;
 };

@@ -1,5 +1,6 @@
 import { expect } from "chai";
-import { go, go1, mapL, reduce } from "fxjs2";
+import { go, mapL, reduce } from "fxjs2";
+import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import {
   makeMockRect,
   makeRandomTransformAttributeValue,
@@ -8,7 +9,7 @@ import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransform
 import { $$consolidateTransformList } from "./consolidateTransformList.index.js";
 
 const setupMock = ({ transform = makeRandomTransformAttributeValue() } = {}) =>
-  go1(makeMockRect({ transform }), $$getBaseTransformList);
+  $$getBaseTransformList(makeMockRect({ transform }));
 
 export default ({ describe, it }) => [
   describe(`$$consolidateTransformList`, function () {
@@ -17,7 +18,7 @@ export default ({ describe, it }) => [
 
       const output_list = $$consolidateTransformList(input_list);
 
-      expect(output_list).to.equal(input_list);
+      expect(output_list).equal(input_list);
     });
 
     it(`The return transform list has 0 or 1 transform.`, function () {
@@ -30,13 +31,13 @@ export default ({ describe, it }) => [
 
         const output_list = $$consolidateTransformList(input_list);
 
-        expect(output_list.numberOfItems).to.equal(n);
+        expect(output_list.numberOfItems).equal(n);
       }
     });
 
     it(`The consolidated transform's matrix is same with the matrix from multiplying all transform's matrix.`, function () {
       const input_list = setupMock({
-        transform: makeRandomTransformAttributeValue(1),
+        transform: makeRandomTransformAttributeValue(1, 10),
       });
       const matrix = go(
         input_list,
@@ -46,7 +47,7 @@ export default ({ describe, it }) => [
 
       const output_list = $$consolidateTransformList(input_list);
 
-      expect(output_list.getItem(0).matrix).to.deep.equal(matrix);
+      expectSameValueSVGMatrix(output_list.getItem(0).matrix, matrix);
     });
   }),
 ];

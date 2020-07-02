@@ -2,8 +2,6 @@
 
 [EN](./API.md) | [KR](./API_KR.md)
 
-[SVG Injection](SVG_INJECTION.md)
-
 ---
 
 ## \$\$appendRotateTransform

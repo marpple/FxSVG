@@ -56,7 +56,7 @@ export const makeMockRectInitiatedScaleTransform = ({
     ],
     mapL(([a, b]) => defaultTo(b, a)),
     ([sx, sy, cx, cy]) =>
-      $$initScaleTransform()($el, { sx, sy, cx, cy, index: init_index })
+      $$initScaleTransform({ sx, sy, cx, cy, index: init_index })($el)
   );
   const index = init_index + 1;
   const [{ e: cx, f: cy }, { a: sx, d: sy }] = go(

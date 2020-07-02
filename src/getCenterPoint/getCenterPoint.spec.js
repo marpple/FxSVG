@@ -33,20 +33,16 @@ export default ({ describe, it }) => [
   describe(`$$getCenterPoint`, function () {
     it(`The return "original", "transformed" values are centers
         of the return "original", "transformed" values from "$$getBoxPoints()".`, function () {
-      const cases = [
-        setupMock(),
-        setupMock({
-          transform: makeRandomTransformAttributeValue(1, 100, () =>
-            makeRandomNumber(-700, 700)
-          ),
-        }),
-      ];
+      const transform = makeRandomTransformAttributeValue(1, 10, () =>
+        makeRandomNumber(-700, 700)
+      );
+      const cases = [setupMock(), setupMock({ transform })];
       for (const { $el, $svg } of cases) {
         const [
           { x: expect_original_x, y: expect_original_y },
           { x: expect_transformed_x, y: expect_transformed_y },
         ] = go(
-          $$getBoxPoints()($el),
+          $$getBoxPoints($el),
           ({ original, transformed }) =>
             mapL(
               ({ top_left, top_right, bottom_right, bottom_left }) => [
@@ -63,13 +59,12 @@ export default ({ describe, it }) => [
               y: y1 + y2,
             }))
           ),
-          mapL(({ x, y }) => ({ x: x / 4, y: y / 4 })),
-          mapL($$createSVGPoint())
+          mapL(({ x, y }) => $$createSVGPoint({ x: x / 4, y: y / 4 })())
         );
         const {
           original: { x: receive_original_x, y: receive_original_y },
           transformed: { x: receive_transformed_x, y: receive_transformed_y },
-        } = $$getCenterPoint()($el);
+        } = $$getCenterPoint($el);
 
         expect(receive_original_x, "invalid_original_x").equal(
           expect_original_x
