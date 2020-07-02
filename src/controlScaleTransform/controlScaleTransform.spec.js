@@ -82,7 +82,7 @@ const setupMock = ({
     ],
     mapL(([a, b]) => defaultTo(b, a)),
     ([sx, sy, cx, cy]) =>
-      $$controlScaleTransform()($el, {
+      $$controlScaleTransform({
         cx,
         cy,
         sx,
@@ -95,7 +95,7 @@ const setupMock = ({
         width_name: "width",
         height_name: "height",
         direction,
-      })
+      })($el)
   );
   const [x, y, width, height] = go(
     ["x", "y", "width", "height"],
