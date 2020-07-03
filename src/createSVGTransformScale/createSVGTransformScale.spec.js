@@ -4,6 +4,7 @@ import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
 import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
+import { $$isSVGTransform } from "../isSVGTransform/isSVGTransform.index.js";
 import { $$createSVGTransformScale } from "./createSVGTransformScale.index.js";
 
 const makeCases = () =>
@@ -26,7 +27,7 @@ export default ({ describe, it }) => [
   describe(`$$createSVGTransformScale`, function () {
     it(`The return value is a SVGTransform.`, function () {
       for (const { transform } of makeCases()) {
-        expect(transform).instanceof(SVGTransform);
+        expect($$isSVGTransform(transform)).true;
       }
     });
 

@@ -7,6 +7,7 @@ import {
 } from "../../test/utils/index.js";
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
 import { $$isRotateSVGTransform } from "../isRotateSVGTransform/isRotateSVGTransform.index.js";
+import { $$isSVGTransform } from "../isSVGTransform/isSVGTransform.index.js";
 import { $$createSVGTransformRotate } from "./createSVGTransformRotate.index.js";
 
 const makeCases = () =>
@@ -29,7 +30,7 @@ export default ({ describe, it }) => [
   describe(`$$createSVGTransformRotate`, function () {
     it(`The return value is a SVGTransform.`, function () {
       for (const { transform } of makeCases()) {
-        expect(transform).instanceof(SVGTransform);
+        expect($$isSVGTransform(transform)).true;
       }
     });
 

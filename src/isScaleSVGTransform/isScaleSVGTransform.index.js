@@ -1,5 +1,7 @@
+import { $$isSVGTransform } from "../isSVGTransform/isSVGTransform.index.js";
+
 export const $$isScaleSVGTransform = (transform) => {
-  if (!(transform instanceof SVGTransform)) {
+  if (!$$isSVGTransform(transform)) {
     return false;
   }
 
