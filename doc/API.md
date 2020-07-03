@@ -144,6 +144,11 @@
 - [source](../src/isScaleSVGTransform/isScaleSVGTransform.index.js)
 - [detail](../src/isScaleSVGTransform/README.md)
 
+## \$\$isSVGTransform
+
+- [source](../src/isSVGTransform/isSVGTransform.index.js)
+- [detail](../src/isSVGTransform/README.md)
+
 ## \$\$isTranslateSVGTransform
 
 - [source](../src/isTranslateSVGTransform/isTranslateSVGTransform.index.js)

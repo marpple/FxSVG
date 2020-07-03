@@ -218,6 +218,13 @@ svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransfo
 
 해당 `SVGTransform`의 `type`이 `SVGTransform.SVG_TRANSFORM_SCALE`인지 여부를 판단합니다.
 
+## \$\$isSVGTransform
+
+- [source](../src/isSVGTransform/isSVGTransform.index.js)
+- [detail](../src/isSVGTransform/README.md)
+
+해당 객체가 `SVGTransform` 인지 여부를 판단합니다.
+
 ## \$\$isTranslateSVGTransform
 
 - [source](../src/isTranslateSVGTransform/isTranslateSVGTransform.index.js)
