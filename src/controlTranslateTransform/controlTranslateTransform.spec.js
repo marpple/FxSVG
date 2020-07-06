@@ -16,6 +16,7 @@ import {
   deepCopyTransformList,
   makeMockRect,
   makeRandomInt,
+  makeRandomNumber,
   makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
@@ -31,12 +32,10 @@ const setupMock = ({
   transform: _transform,
   index: _index,
 } = {}) => {
-  const [x, y, tx, ty] = mapL((a) => defaultTo(makeRandomInt(-100, 100), a), [
-    _x,
-    _y,
-    _tx,
-    _ty,
-  ]);
+  const [x, y, tx, ty] = mapL(
+    (a) => defaultTo(makeRandomNumber(-100, 100), a),
+    [_x, _y, _tx, _ty]
+  );
   const transform = isUndefined(_transform)
     ? makeRandomTransformAttributeValue()
     : _transform;
@@ -45,7 +44,17 @@ const setupMock = ({
     makeRandomInt(0, $$getBaseTransformList($el).numberOfItems + 1),
     _index
   );
-  return { x, y, tx, ty, index, $el, x_name: "x", y_name: "y" };
+  return { tx, ty, index, $el, x_name: "x", y_name: "y" };
+};
+
+const getAttributesFromElement = ({ index, x_name, y_name }) => ($el) => {
+  const [x, y] = go(
+    [x_name, y_name],
+    mapL((k) => $el.getAttributeNS(null, k)),
+    mapL(parseFloat)
+  );
+  const { e: tx, f: ty } = $$getBaseTransformList($el).getItem(index).matrix;
+  return { x, y, tx, ty };
 };
 
 export default ({ describe, it }) => [
@@ -130,11 +139,16 @@ export default ({ describe, it }) => [
     });
 
     it(`The controller.end method update x, y of the element if there are x_name and y_name.`, function () {
-      const { index, $el, x, y, tx, ty, x_name, y_name } = setupMock();
+      const { index, $el, tx: _tx, ty: _ty, x_name, y_name } = setupMock();
       const controller = $$controlTranslateTransform({
         index,
-        tx,
-        ty,
+        tx: _tx,
+        ty: _ty,
+        x_name,
+        y_name,
+      })($el);
+      const { x, y, tx, ty } = getAttributesFromElement({
+        index,
         x_name,
         y_name,
       })($el);
