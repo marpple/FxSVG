@@ -17,6 +17,7 @@ import {
   deepCopyTransformList,
   makeMockRect,
   makeRandomInt,
+  makeRandomNumber,
   makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
@@ -31,8 +32,8 @@ const setupMock = ({
   index: _index,
   transform: _transform,
 } = {}) => {
-  const angle = defaultTo(makeRandomInt(-700, 700), _angle);
-  const [cx, cy] = mapL((a) => defaultTo(makeRandomInt(-100, 100), a), [
+  const angle = defaultTo(makeRandomNumber(-700, 700), _angle);
+  const [cx, cy] = mapL((a) => defaultTo(makeRandomNumber(-100, 100), a), [
     _cx,
     _cy,
   ]);
@@ -106,7 +107,7 @@ export default ({ describe, it }) => [
         index,
       })($el);
       const receive_transform = $$getBaseTransformList($el).getItem(index + 1);
-      const update_angle = makeRandomInt(-700, 700);
+      const update_angle = makeRandomNumber(-700, 700);
 
       controller.update({ angle: update_angle });
 
@@ -128,7 +129,7 @@ export default ({ describe, it }) => [
         index,
       })($el);
       const receive_transform = $$getBaseTransformList($el).getItem(index + 1);
-      const angle2 = makeRandomInt(-700, 700);
+      const angle2 = makeRandomNumber(-700, 700);
 
       controller.append({ angle: angle2 });
 

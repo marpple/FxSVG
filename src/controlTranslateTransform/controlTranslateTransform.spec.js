@@ -104,7 +104,7 @@ export default ({ describe, it }) => [
       })($el);
       const receive_transform = $$getBaseTransformList($el).getItem(index);
       const [update_tx, update_ty] = mapL(
-        () => makeRandomInt(-100, 100),
+        () => makeRandomNumber(-100, 100),
         rangeL(2)
       );
 
@@ -127,7 +127,7 @@ export default ({ describe, it }) => [
         y_name,
       })($el);
       const receive_transform = $$getBaseTransformList($el).getItem(index);
-      const [tx2, ty2] = mapL(() => makeRandomInt(-100, 100), rangeL(2));
+      const [tx2, ty2] = mapL(() => makeRandomNumber(-100, 100), rangeL(2));
 
       controller.append({ tx: tx2, ty: ty2 });
 
