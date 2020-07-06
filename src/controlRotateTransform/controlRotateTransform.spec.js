@@ -32,7 +32,10 @@ const setupMock = ({
   transform: _transform,
 } = {}) => {
   const angle = defaultTo(makeRandomInt(-700, 700), _angle);
-  const [cx, cy] = mapL(defaultTo(makeRandomInt(-100, 100)), [_cx, _cy]);
+  const [cx, cy] = mapL((a) => defaultTo(makeRandomInt(-100, 100), a), [
+    _cx,
+    _cy,
+  ]);
   const transform = isUndefined(_transform)
     ? makeRandomTransformAttributeValue()
     : _transform;
