@@ -29,5 +29,5 @@ export const $$controlTranslateTransform = ({
     return $el;
   };
 
-  return { $el, controller, transform };
+  return controller;
 };
