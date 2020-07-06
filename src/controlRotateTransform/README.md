@@ -11,7 +11,7 @@
 ```javascript
 const str = `<rect x="10" y="20" width="100" height="200" transform="scale(2, 4)"></rect>`;
 const $el = $$el(str)();
-const { controller } = $$controlTranslateTransform({
+const controller = $$controlTranslateTransform({
   cx: 10,
   cy: 20,
 })($el);

@@ -26,6 +26,7 @@ import __spec_initTranslateTransform__ from "../src/initTranslateTransform/initT
 import __spec_isMatrixSVGTransform__ from "../src/isMatrixSVGTransform/isMatrixSVGTransform.spec.js";
 import __spec_isRotateSVGTransform__ from "../src/isRotateSVGTransform/isRotateSVGTransform.spec.js";
 import __spec_isScaleSVGTransform__ from "../src/isScaleSVGTransform/isScaleSVGTransform.spec.js";
+import __spec_isSVGTransform__ from "../src/isSVGTransform/isSVGTransform.spec.js";
 import __spec_isTranslateSVGTransform__ from "../src/isTranslateSVGTransform/isTranslateSVGTransform.spec.js";
 import __spec_isValidFxScaleSVGTransformList__ from "../src/isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.spec.js";
 import __spec_mergeRotateTransform__ from "../src/mergeRotateTransform/mergeRotateTransform.spec.js";
@@ -63,6 +64,7 @@ export default () =>
     __spec_initMatrixTransform__,
     __spec_initRotateTransform__,
     __spec_initScaleTransform__,
+    __spec_isSVGTransform__,
     __spec_initTranslateTransform__,
     __spec_isMatrixSVGTransform__,
     __spec_isRotateSVGTransform__,

@@ -24,6 +24,11 @@
 - [source](../src/controlRotateTransform/controlRotateTransform.index.js)
 - [detail](../src/controlRotateTransform/README.md)
 
+## \$\$controlScaleTransform
+
+- [source](../src/controlScaleTransform/controlScaleTransform.index.js)
+- [detail](../src/controlScaleTransform/README.md)
+
 ## \$\$controlTranslateTransform
 
 - [source](../src/controlTranslateTransform/controlTranslateTransform.index.js)
@@ -143,6 +148,11 @@
 
 - [source](../src/isScaleSVGTransform/isScaleSVGTransform.index.js)
 - [detail](../src/isScaleSVGTransform/README.md)
+
+## \$\$isSVGTransform
+
+- [source](../src/isSVGTransform/isSVGTransform.index.js)
+- [detail](../src/isSVGTransform/README.md)
 
 ## \$\$isTranslateSVGTransform
 

@@ -7,6 +7,7 @@ import {
   isUndefined,
   map,
   mapL,
+  rangeL,
   rejectL,
   zipL,
   zipWithIndexL,
@@ -16,9 +17,11 @@ import {
   deepCopyTransformList,
   makeMockRect,
   makeRandomInt,
+  makeRandomNumber,
   makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
+import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$controlRotateTransform } from "./controlRotateTransform.index.js";
 
@@ -29,8 +32,11 @@ const setupMock = ({
   index: _index,
   transform: _transform,
 } = {}) => {
-  const angle = defaultTo(makeRandomInt(-700, 700), _angle);
-  const [cx, cy] = mapL(defaultTo(makeRandomInt(-100, 100)), [_cx, _cy]);
+  const angle = defaultTo(makeRandomNumber(-700, 700), _angle);
+  const [cx, cy] = mapL((a) => defaultTo(makeRandomNumber(-100, 100), a), [
+    _cx,
+    _cy,
+  ]);
   const transform = isUndefined(_transform)
     ? makeRandomTransformAttributeValue()
     : _transform;
@@ -44,33 +50,10 @@ const setupMock = ({
 
 export default ({ describe, it }) => [
   describe(`$$controlRotateTransform`, function () {
-    it(`The return object has "$el", "controller", "transform" properties.`, function () {
+    it(`The return object has "update", "append", "end" methods.`, function () {
       const { angle, cx, cy, index, $el } = setupMock();
 
-      const result = $$controlRotateTransform({ angle, cx, cy, index })($el);
-
-      const keys = new Set(Object.keys(result));
-      expect(keys.size).equal(3);
-      each((k) => expect(keys.has(k)).true, ["$el", "controller", "transform"]);
-    });
-
-    it(`The return element is same with the input element.`, function () {
-      const { angle, cx, cy, index, $el: $input } = setupMock();
-
-      const { $el: $output } = $$controlRotateTransform({
-        angle,
-        cx,
-        cy,
-        index,
-      })($input);
-
-      expect($output).equal($input);
-    });
-
-    it(`The return controller object has "update", "append", "end" methods.`, function () {
-      const { angle, cx, cy, index, $el } = setupMock();
-
-      const { controller } = $$controlRotateTransform({ angle, cx, cy, index })(
+      const controller = $$controlRotateTransform({ angle, cx, cy, index })(
         $el
       );
 
@@ -85,52 +68,47 @@ export default ({ describe, it }) => [
       );
     });
 
-    it(`The return transform object is a rotate transform whose angle is the input angle and cx, cy are 0.`, function () {
+    it(`The function initiates rotate transform to the input element with the input angle, cx, cy, index.`, function () {
       const { angle, cx, cy, index, $el } = setupMock();
 
-      const { transform: receive_transform } = $$controlRotateTransform({
-        angle,
-        cx,
-        cy,
-        index,
-      })($el);
+      $$controlRotateTransform({ angle, cx, cy, index })($el);
 
-      const expect_transform = $$createSVGTransformRotate({
-        angle,
-        cx: 0,
-        cy: 0,
-      })();
-      expectSameValueSVGTransform(receive_transform, expect_transform);
+      const transform_list = $$getBaseTransformList($el);
+      const [
+        positive_translate_transform,
+        rotate_transform,
+        negative_translate_transform,
+      ] = go(
+        rangeL(3),
+        mapL((i) => index + i),
+        mapL((i) => transform_list.getItem(i))
+      );
+      expectSameValueSVGTransform(
+        positive_translate_transform,
+        $$createSVGTransformTranslate({ tx: cx, ty: cy })()
+      );
+      expectSameValueSVGTransform(
+        rotate_transform,
+        $$createSVGTransformRotate({ angle, cx: 0, cy: 0 })()
+      );
+      expectSameValueSVGTransform(
+        negative_translate_transform,
+        $$createSVGTransformTranslate({ tx: -cx, ty: -cy })()
+      );
     });
 
-    it(`The return transform object is the transform at the input index + 1.`, function () {
+    it(`The controller.update method update the transform with the input angle.`, function () {
       const { angle, cx, cy, index, $el } = setupMock();
 
-      const { transform: receive_transform } = $$controlRotateTransform({
+      const controller = $$controlRotateTransform({
         angle,
         cx,
         cy,
         index,
       })($el);
+      const receive_transform = $$getBaseTransformList($el).getItem(index + 1);
+      const update_angle = makeRandomNumber(-700, 700);
 
-      const expect_transform = $$getBaseTransformList($el).getItem(index + 1);
-      expectSameValueSVGTransform(receive_transform, expect_transform);
-    });
-
-    it(`The controller.update method update the return transform with the input angle.`, function () {
-      const { angle, cx, cy, index, $el } = setupMock();
-
-      const {
-        transform: receive_transform,
-        controller,
-      } = $$controlRotateTransform({
-        angle,
-        cx,
-        cy,
-        index,
-      })($el);
-
-      const update_angle = makeRandomInt(-700, 700);
       controller.update({ angle: update_angle });
 
       const expect_transform = $$createSVGTransformRotate({
@@ -141,20 +119,18 @@ export default ({ describe, it }) => [
       expectSameValueSVGTransform(receive_transform, expect_transform);
     });
 
-    it(`The controller.append method add the input angle to the return transform.`, function () {
+    it(`The controller.append method add the input angle to the transform.`, function () {
       const { angle: angle1, cx, cy, index, $el } = setupMock();
 
-      const {
-        transform: receive_transform,
-        controller,
-      } = $$controlRotateTransform({
+      const controller = $$controlRotateTransform({
         angle: angle1,
         cx,
         cy,
         index,
       })($el);
+      const receive_transform = $$getBaseTransformList($el).getItem(index + 1);
+      const angle2 = makeRandomNumber(-700, 700);
 
-      const angle2 = makeRandomInt(-700, 700);
       controller.append({ angle: angle2 });
 
       const expect_transform = $$createSVGTransformRotate({
@@ -162,28 +138,27 @@ export default ({ describe, it }) => [
         cx: 0,
         cy: 0,
       })();
-
       expectSameValueSVGTransform(receive_transform, expect_transform);
     });
 
     it(`The controller.end method merge the transforms from index to index + 2 to a rotate transform.`, function () {
-      const { angle, cx, cy, index, $el: $input } = setupMock();
+      const { angle, cx, cy, index, $el } = setupMock();
 
-      const { controller, $el: $output } = $$controlRotateTransform({
+      const controller = $$controlRotateTransform({
         angle,
         cx,
         cy,
         index,
-      })($input);
+      })($el);
 
       const before_transform_list = deepCopyTransformList(
-        $$getBaseTransformList($output)
+        $$getBaseTransformList($el)
       );
 
       controller.end();
 
       const after_transform_list = deepCopyTransformList(
-        $$getBaseTransformList($output)
+        $$getBaseTransformList($el)
       );
       const rotate_transform = $$createSVGTransformRotate({ angle, cx, cy })();
       const expect_transform_list = go(

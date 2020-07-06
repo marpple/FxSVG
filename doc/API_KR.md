@@ -35,6 +35,14 @@
 `$$initRotateTransform`, `$$updateRotateTransform`, `$$appendRotateTransform`, `$$mergeRotateTransform` 함수들을
 쉽게 사용할 수 있는 `controller` 를 생성합니다.
 
+## \$\$controlScaleTransform
+
+- [source](../src/controlScaleTransform/controlScaleTransform.index.js)
+- [detail](../src/controlScaleTransform/README.md)
+
+`$$initScaleTransform`, `$$updateScaleTransform`, `$$mergeScaleTransform`, `$$mergeScaleTransform2` 함수들을
+쉽게 사용할 수 있는 `controller` 를 생성합니다.
+
 ## \$\$controlTranslateTransform
 
 - [source](../src/controlTranslateTransform/controlTranslateTransform.index.js)
@@ -217,6 +225,13 @@ svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransfo
 - [detail](../src/isScaleSVGTransform/README.md)
 
 해당 `SVGTransform`의 `type`이 `SVGTransform.SVG_TRANSFORM_SCALE`인지 여부를 판단합니다.
+
+## \$\$isSVGTransform
+
+- [source](../src/isSVGTransform/isSVGTransform.index.js)
+- [detail](../src/isSVGTransform/README.md)
+
+해당 객체가 `SVGTransform` 인지 여부를 판단합니다.
 
 ## \$\$isTranslateSVGTransform
 

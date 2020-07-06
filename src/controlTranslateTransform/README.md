@@ -13,7 +13,7 @@
 ```javascript
 const str = `<circle cx="10" cy="20" r="100" transform="scale(2, 4)"></circle>`;
 const $el = $$el(str)();
-const { controller } = $$controlTranslateTransform({
+const controller = $$controlTranslateTransform({
   x_name: "cx",
   y_name: "cy",
 })($el);
