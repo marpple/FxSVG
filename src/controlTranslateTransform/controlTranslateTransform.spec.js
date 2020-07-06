@@ -31,7 +31,7 @@ const setupMock = ({
   transform: _transform,
   index: _index,
 } = {}) => {
-  const [x, y, tx, ty] = mapL(defaultTo(makeRandomInt(-100, 100)), [
+  const [x, y, tx, ty] = mapL((a) => defaultTo(makeRandomInt(-100, 100), a), [
     _x,
     _y,
     _tx,
