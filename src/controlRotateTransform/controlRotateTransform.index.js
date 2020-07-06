@@ -24,5 +24,5 @@ export const $$controlRotateTransform = ({ angle, cx, cy, index = 0 } = {}) => (
     return $el;
   };
 
-  return { $el, transform, controller };
+  return controller;
 };
