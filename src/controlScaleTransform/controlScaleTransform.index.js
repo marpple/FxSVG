@@ -54,5 +54,5 @@ export const $$controlScaleTransform = ({
     return $el;
   };
 
-  return { $el, transform, controller };
+  return controller;
 };
