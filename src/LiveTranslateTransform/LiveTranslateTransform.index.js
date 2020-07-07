@@ -4,6 +4,10 @@ import { $$LiveTransform } from "../LiveTransform/LiveTransform.index.js";
 import { $$updateTranslateTransform } from "../updateTranslateTransform/updateTranslateTransform.index.js";
 
 export class $$LiveTranslateTransform {
+  static get name() {
+    return "$$LiveTranslateTransform";
+  }
+
   constructor(
     { index = 0, tx = 0, ty = 0, x_name, y_name } = {},
     $el,
