@@ -19,24 +19,22 @@ const $$getTransformedBoxPoints = ({
   top_right: original_top_right,
   bottom_right: original_bottom_right,
   bottom_left: original_bottom_left,
-}) => ($el, $svg = $$getSVG()) => {
+}) => ($el) => {
   const transform_list = $$getBaseTransformList($el);
-  const [top_left, top_right, bottom_left, bottom_right] = go(
+  const merged_matrix = go(
+    rangeL(transform_list.numberOfItems),
+    mapL((i) => transform_list.getItem(i)),
+    mapL(({ matrix: m }) => m),
+    reduce((m1, m2) => m1.multiply(m2))
+  );
+  const [top_left, top_right, bottom_left, bottom_right] = mapL(
+    (p) => (merged_matrix ? p.matrixTransform(merged_matrix) : p),
     [
       original_top_left,
       original_top_right,
       original_bottom_left,
       original_bottom_right,
-    ],
-    mapL((p) => $$createSVGPoint(p)($svg)),
-    mapL((p) =>
-      go(
-        rangeL(transform_list.numberOfItems),
-        mapL((i) => transform_list.getItem(i)),
-        mapL(({ matrix: m }) => m),
-        (iter) => reduce((p, m) => p.matrixTransform(m), p, iter)
-      )
-    )
+    ]
   );
 
   return {
@@ -75,7 +73,7 @@ const $$getBoundingBoxPoints = ({
 
 export const $$getBoxPoints = ($el, $svg = $$getSVG()) => {
   const original = $$getOriginalBoxPoints($el, $svg);
-  const transformed = $$getTransformedBoxPoints(original)($el, $svg);
+  const transformed = $$getTransformedBoxPoints(original)($el);
   const bounding = $$getBoundingBoxPoints(transformed)($el, $svg);
 
   return { original, transformed, bounding };

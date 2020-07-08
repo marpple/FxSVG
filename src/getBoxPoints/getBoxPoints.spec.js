@@ -1,9 +1,10 @@
 import { expect } from "chai";
-import { map, reduce } from "fxjs2";
+import { defaultTo, go, mapL, rangeL, reduce } from "fxjs2";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
 import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTransformAttributeValue.js";
+import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getBoxPoints } from "./getBoxPoints.index.js";
 
@@ -78,17 +79,24 @@ export default ({ describe, it }) => [
             bottom_left: { x: x4_1, y: y4_1 },
           },
         } = $$getBoxPoints($el);
+        const merged_matrix = go(
+          rangeL(transform_list.numberOfItems),
+          mapL((i) => transform_list.getItem(i)),
+          mapL(({ matrix: m }) => m),
+          reduce((m1, m2) => m1.multiply(m2)),
+          defaultTo($$createSVGMatrix()())
+        );
         const [
           { x: x1_2, y: y1_2 },
           { x: x2_2, y: y2_2 },
           { x: x3_2, y: y3_2 },
           { x: x4_2, y: y4_2 },
-        ] = reduce(
-          (points, { matrix }) =>
-            map((point) => point.matrixTransform(matrix), points),
-          [top_left, top_right, bottom_right, bottom_left],
-          transform_list
-        );
+        ] = mapL((point) => point.matrixTransform(merged_matrix), [
+          top_left,
+          top_right,
+          bottom_right,
+          bottom_left,
+        ]);
 
         expect(x1_2).equal(x1_1);
         expect(y1_2).equal(y1_1);
