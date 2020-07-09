@@ -1,18 +1,24 @@
 import { go } from "fxjs2";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
-import { $$update } from "../LiveTransform/LiveTransform.index.js";
+import {
+  $$LiveTransform,
+
+} from "../LiveTransform/LiveTransform.index.js";
+import {$$LiveTransformHandler} from "../LiveTransformHandler/LiveTransformHandler.index.js";
 import { $$LiveTranslateTransform } from "./LiveTranslateTransform.index.js";
 
 export default ({ describe, it }) => [
-  describe.only(`$$LiveTranslateTransform`, function () {
-    it(`TEST`, function () {
-      console.group("1");
+  describe(`$$LiveTranslateTransform`, function () {
+    it(`TEST 1`, function () {
+      console.group("TEST 1");
+
+      console.group("init $rect");
       const $rect = makeMockRect({ transform: null });
       console.log($rect.cloneNode());
       console.groupEnd();
 
-      console.group("2");
-      const live_transform = $$LiveTranslateTransform.from({
+      console.group("make $$LiveTransform object");
+      const live_transform = $$LiveTranslateTransform.create({
         index: 0,
         tx: 10,
         ty: 10,
@@ -20,38 +26,96 @@ export default ({ describe, it }) => [
         y_name: "y",
       })($rect);
       console.log(live_transform);
+      console.groupEnd();
+
+      console.group("transformed $rect");
       console.log($rect.cloneNode());
       console.groupEnd();
 
-      console.group("3");
-      const temp3 = $$update({ tx: 200, ty: 120 })(live_transform);
-      console.log(temp3);
+      console.groupEnd();
+    });
+
+    it(`TEST 2`, function () {
+      console.group("TEST 2");
+
+      console.group("init $rect");
+      const $rect = makeMockRect({ transform: null });
+      console.log($rect.cloneNode());
+      console.groupEnd();
+
+      console.group("make $$LiveTransform object");
+      const live_transform = $$LiveTranslateTransform.create({
+        index: 0,
+        tx: 10,
+        ty: 10,
+        x_name: "x",
+        y_name: "y",
+      })($rect);
       console.log(live_transform);
-      console.log(temp3 === live_transform);
-      console.log($rect.cloneNode());
       console.groupEnd();
 
-      console.group("4");
-      const temp4 = $$update({ tx: -100, ty: -200 })(
-        $$update({ tx: 50, ty: 60 })(live_transform)
+      console.group("execute $$update");
+      const temp = $$LiveTransform.$$update({ tx: 200, ty: 120 })(
+        live_transform
       );
-      console.log(temp4);
-      console.log(live_transform);
-      console.log(temp4 === live_transform);
+      console.log(temp);
+      console.groupEnd();
+
+      console.group("$$LiveTransform == $$update()");
+      console.log(temp === live_transform);
+      console.groupEnd();
+
+      console.group("transformed $rect");
       console.log($rect.cloneNode());
       console.groupEnd();
 
-      console.group("5");
-      const temp5 = go(
+      console.groupEnd();
+    });
+
+    it(`TEST 3`, function () {
+      console.group("TEST 3");
+      const $rect = makeMockRect({ transform: null });
+      console.log($rect.cloneNode());
+      const live_transform = $$LiveTranslateTransform.create({
+        index: 0,
+        tx: 10,
+        ty: 10,
+        x_name: "x",
+        y_name: "y",
+      })($rect);
+      const temp = $$LiveTransform.$$update({ tx: -100, ty: -200 })(
+        $$LiveTransform.$$update({ tx: 50, ty: 60 })(live_transform)
+      );
+      console.log(temp);
+      console.log(live_transform);
+      console.log(temp === live_transform);
+      console.log($rect.cloneNode());
+      console.groupEnd();
+    });
+
+    it(`TEST 4`, function () {
+      console.group("TEST 4");
+      const $rect = makeMockRect({ transform: null });
+      console.log($rect.cloneNode());
+      const live_transform = $$LiveTranslateTransform.create({
+        index: 0,
+        tx: 10,
+        ty: 10,
+        x_name: "x",
+        y_name: "y",
+      })($rect);
+      const temp = go(
         live_transform,
-        $$update({ tx: 2, ty: 3 }),
-        $$update({ tx: 12, ty: 13 }),
-        $$update({ tx: 22, ty: 23 }),
-        $$update({ tx: 32, ty: 33 })
+        $$LiveTransformHandler.$$wrap,
+        $$LiveTransformHandler.$$update({ tx: 2, ty: 3 }),
+        $$LiveTransformHandler.$$update({ tx: 12, ty: 13 }),
+        $$LiveTransformHandler.$$update({ tx: 22, ty: 23 }),
+        $$LiveTransformHandler.$$update({ tx: 32, ty: 33 }),
+        $$LiveTransformHandler.$$unwrap
       );
-      console.log(temp5);
+      console.log(temp);
       console.log(live_transform);
-      console.log(temp5 === live_transform);
+      console.log(temp === live_transform);
       console.log($rect.cloneNode());
       console.groupEnd();
     });

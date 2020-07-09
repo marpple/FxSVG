@@ -1,32 +1,11 @@
-import { type } from "./typeclasses.js";
+export class $$LiveTransform {
+  $$getIsDone() {}
 
-export const $$LiveTransform = type(
-  class $$LiveTransform {
-    static get name() {
-      return "$$LiveTransform";
-    }
+  $$done() {}
 
-    $$update(option) {
-      return (live_transform) => {
-        const { $$update } = this(live_transform);
-        return $$update(option)(live_transform);
-      };
-    }
+  $$update(option) {}
 
-    $$append(option) {
-      return (live_transform) => {
-        const { $$append } = this(live_transform);
-        return $$append(option)(live_transform);
-      };
-    }
+  $$append(option) {}
 
-    $$merge(option) {
-      return (live_transform) => {
-        const { $$merge } = this(live_transform);
-        return $$merge(option)(live_transform);
-      };
-    }
-  }
-);
-
-export const { $$update, $$append, $$merge } = $$LiveTransform.prototype;
+  $$merge(option) {}
+}

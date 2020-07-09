@@ -29,6 +29,8 @@ import __spec_isScaleSVGTransform__ from "../src/isScaleSVGTransform/isScaleSVGT
 import __spec_isSVGTransform__ from "../src/isSVGTransform/isSVGTransform.spec.js";
 import __spec_isTranslateSVGTransform__ from "../src/isTranslateSVGTransform/isTranslateSVGTransform.spec.js";
 import __spec_isValidFxScaleSVGTransformList__ from "../src/isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.spec.js";
+import __spec_LiveTransform__ from "../src/LiveTransform/LiveTransform.spec.js";
+import __spec_LiveTransformHandler__ from "../src/LiveTransformHandler/LiveTransformHandler.spec.js";
 import __spec_LiveTranslateTransform__ from "../src/LiveTranslateTransform/LiveTranslateTransform.spec.js";
 import __spec_mergeRotateTransform__ from "../src/mergeRotateTransform/mergeRotateTransform.spec.js";
 import __spec_mergeScaleTransform__ from "../src/mergeScaleTransform/mergeScaleTransform.spec.js";
@@ -72,6 +74,8 @@ export default () =>
     __spec_isScaleSVGTransform__,
     __spec_isTranslateSVGTransform__,
     __spec_isValidFxScaleSVGTransformList__,
+    __spec_LiveTransform__,
+    __spec_LiveTransformHandler__,
     __spec_LiveTranslateTransform__,
     __spec_mergeRotateTransform__,
     __spec_mergeScaleTransform__,
