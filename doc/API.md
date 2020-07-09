@@ -169,6 +169,11 @@
 - [source](../src/LiveTransform/LiveTransform.index.js)
 - [detail](../src/LiveTransform/README.md)
 
+## \$\$LiveTransformHandler
+
+- [source](../src/LiveTransformHandler/LiveTransformHandler.index.js)
+- [detail](../src/LiveTransformHandler/README.md)
+
 ## \$\$mergeRotateTransform
 
 - [source](../src/mergeRotateTransform/mergeRotateTransform.index.js)
