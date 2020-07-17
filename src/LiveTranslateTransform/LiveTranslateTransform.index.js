@@ -19,11 +19,12 @@ export class $$LiveTranslateTransform extends $$LiveTransform {
     this.transform = $$initTranslateTransform({ tx, ty, index })($el, $svg);
     this.x_name = x_name;
     this.y_name = y_name;
+    this.index = index;
     this.$el = $el;
     this.$svg = $svg;
   }
 
-  static create({ index = 0, tx = 0, ty = 0, x_name, y_name } = {}) {
+  static $$create({ index = 0, tx = 0, ty = 0, x_name, y_name } = {}) {
     return ($el, $svg = $$getSVG()) =>
       new $$LiveTranslateTransform(
         { index, tx, ty, x_name, y_name },

@@ -11,10 +11,6 @@ export class $$LiveTransformHandler {
     return (live_transform_handler) => live_transform_handler.$$merge(option);
   }
 
-  constructor(live_transform) {
-    this.live_transform = live_transform;
-  }
-
   static $$wrap(live_transform) {
     return new $$LiveTransformHandler(live_transform);
   }
@@ -26,6 +22,10 @@ export class $$LiveTransformHandler {
 
     live_transform_handler.live_transform.$$done();
     return live_transform_handler.live_transform;
+  }
+
+  constructor(live_transform) {
+    this.live_transform = live_transform;
   }
 
   $$update(option) {

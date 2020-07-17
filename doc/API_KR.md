@@ -261,6 +261,13 @@ svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransfo
 
 `$$LiveTransform` 타입의 객체를 함수형 스타일로 쉽게 다루기 위한 보조 클래스입니다.
 
+## \$\$LiveTranslateTransform
+
+- [source](../src/LiveTranslateTransform/LiveTranslateTransform.index.js)
+- [detail](../src/LiveTranslateTransform/README.md)
+
+SVG Translate Transform 을 다루기 위한 `$$LiveTransform` 인터페이스의 구현체입니다.
+
 ## \$\$mergeRotateTransform
 
 - [source](../src/mergeRotateTransform/mergeRotateTransform.index.js)
