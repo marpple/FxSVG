@@ -29,6 +29,7 @@ import { $$isScaleSVGTransform } from "./isScaleSVGTransform/isScaleSVGTransform
 import { $$isSVGTransform } from "./isSVGTransform/isSVGTransform.index.js";
 import { $$isTranslateSVGTransform } from "./isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 import { $$isValidFxScaleSVGTransformList } from "./isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js";
+import { $$LiveScaleTransform } from "./LiveScaleTransform/LiveScaleTransform.index.js";
 import { $$LiveTransform } from "./LiveTransform/LiveTransform.index.js";
 import { $$LiveTransformHandler } from "./LiveTransformHandler/LiveTransformHandler.index.js";
 import { $$LiveTranslateTransform } from "./LiveTranslateTransform/LiveTranslateTransform.index.js";
@@ -74,6 +75,7 @@ export const FxSVG = {
   isSVGTransform: $$isSVGTransform,
   isTranslateSVGTransform: $$isTranslateSVGTransform,
   isValidFxScaleSVGTransformList: $$isValidFxScaleSVGTransformList,
+  LiveScaleTransform: $$LiveScaleTransform,
   LiveTransform: $$LiveTransform,
   LiveTransformHandler: $$LiveTransformHandler,
   LiveTranslateTransform: $$LiveTranslateTransform,

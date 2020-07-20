@@ -29,6 +29,7 @@ export { $$isScaleSVGTransform } from "./isScaleSVGTransform/isScaleSVGTransform
 export { $$isSVGTransform } from "./isSVGTransform/isSVGTransform.index.js";
 export { $$isTranslateSVGTransform } from "./isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 export { $$isValidFxScaleSVGTransformList } from "./isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js";
+export { $$LiveScaleTransform } from "./LiveScaleTransform/LiveScaleTransform.index.js";
 export { $$LiveTransform } from "./LiveTransform/LiveTransform.index.js";
 export { $$LiveTransformHandler } from "./LiveTransformHandler/LiveTransformHandler.index.js";
 export { $$LiveTranslateTransform } from "./LiveTranslateTransform/LiveTranslateTransform.index.js";
