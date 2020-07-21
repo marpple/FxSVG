@@ -247,6 +247,13 @@ svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransfo
 
 `$$initScaleTransform` 함수를 적용한 `SVGTransformList`인지 여부를 판단합니다.
 
+## \$\$LiveRotateTransform
+
+- [source](../src/LiveRotateTransform/LiveRotateTransform.index.js)
+- [detail](../src/LiveRotateTransform/README.md)
+
+SVG Rotate Transform 을 다루기 위한 `$$LiveTransform` 인터페이스의 구현체입니다.
+
 ## \$\$LiveScaleTransform
 
 - [source](../src/LiveScaleTransform/LiveScaleTransform.index.js)

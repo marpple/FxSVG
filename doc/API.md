@@ -164,6 +164,11 @@
 - [source](../src/isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js)
 - [detail](../src/isValidFxScaleSVGTransformList/README.md)
 
+## \$\$LiveRotateTransform
+
+- [source](../src/LiveRotateTransform/LiveRotateTransform.index.js)
+- [detail](../src/LiveRotateTransform/README.md)
+
 ## \$\$LiveScaleTransform
 
 - [source](../src/LiveScaleTransform/LiveScaleTransform.index.js)
