@@ -1,16 +1,16 @@
 import { expect } from "chai";
-import { defaultTo, isUndefined, mapL, rangeL } from "fxjs2";
+import { defaultTo, equals2, isUndefined, mapL, rangeL } from "fxjs2";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
 import { makeRandomNumberExcept } from "../../test/utils/makeRandomNumberExcept.js";
 import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTransformAttributeValue.js";
-import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
-import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
-import { $$LiveScaleTransform } from "./LiveScaleTransform.index.js";
+import { $$LiveScaleTransform2 } from "./LiveScaleTransform2.index.js";
+
+const DIRECTIONS = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
 
 const setupMock = ({
   x: _x,
@@ -46,6 +46,7 @@ const setupMock = ({
     y_name: "y",
     width_name: "width",
     height_name: "height",
+    is_need_correction: true,
     cx,
     cy,
     sx,
@@ -53,23 +54,43 @@ const setupMock = ({
     index,
     transform,
     $el,
+    direction: DIRECTIONS[makeRandomInt(0, 8)],
   };
 };
 
 export default ({ describe, it }) => [
-  describe(`$$LiveScaleTransform`, function () {
+  describe(`$$LiveScaleTransform2`, function () {
     it(`The $$create static method makes a new instance with the input values.`, function () {
-      const { sx, sy, cx, cy, index, $el } = setupMock();
+      const {
+        sx,
+        sy,
+        cx,
+        cy,
+        index,
+        $el,
+        x_name,
+        y_name,
+        width_name,
+        height_name,
+        is_need_correction,
+        direction,
+      } = setupMock();
 
-      const live_scale_transform = $$LiveScaleTransform.$$create({
+      const live_scale_transform = $$LiveScaleTransform2.$$create({
         index,
         cx,
         cy,
         sx,
         sy,
+        x_name,
+        y_name,
+        width_name,
+        height_name,
+        is_need_correction,
+        direction,
       })($el);
 
-      expect(live_scale_transform).instanceof($$LiveScaleTransform);
+      expect(live_scale_transform).instanceof($$LiveScaleTransform2);
       expect($$isScaleSVGTransform(live_scale_transform.transform)).true;
       expect(
         $$isScaleSVGTransform($$getBaseTransformList($el).getItem(index + 1))
@@ -83,13 +104,32 @@ export default ({ describe, it }) => [
     });
 
     it(`The "$$update" method updates the transforms sx, sy values.`, function () {
-      const { cx, cy, sx, sy, index, $el } = setupMock();
-      const live_scale_transform = $$LiveScaleTransform.$$create({
+      const {
+        sx,
+        sy,
+        cx,
+        cy,
+        index,
+        $el,
+        x_name,
+        y_name,
+        width_name,
+        height_name,
+        is_need_correction,
+        direction,
+      } = setupMock();
+      const live_scale_transform = $$LiveScaleTransform2.$$create({
         index,
         cx,
         cy,
         sx,
         sy,
+        x_name,
+        y_name,
+        width_name,
+        height_name,
+        is_need_correction,
+        direction,
       })($el);
       const [new_sx, new_sy] = mapL(
         () => makeRandomNumber(-100, 100),
@@ -103,37 +143,75 @@ export default ({ describe, it }) => [
       );
     });
 
-    it(`The "$$merge" methods merge the three transforms to the one merged transform.`, function () {
-      const [cx, cy, sx, sy] = mapL(
-        () => makeRandomNumber(-100, 100),
-        rangeL(4)
+    it(`The "$$merge" methods merge the three transforms to the element.`, function () {
+      const [x1, y1, cx, cy, sx, sy] = mapL(
+        () => makeRandomInt(-100, 100),
+        rangeL(6)
       );
-      const { index, $el } = setupMock({ cx, cy, sx, sy });
-      const live_scale_transform = $$LiveScaleTransform.$$create({
+      const [width1, height1] = mapL(() => makeRandomInt(1, 100), rangeL(2));
+      const {
+        x_name,
+        y_name,
+        width_name,
+        height_name,
+        is_need_correction,
+        direction,
         index,
-        sx,
-        sy,
+        $el,
+      } = setupMock({
+        x: x1,
+        y: y1,
         cx,
         cy,
+        sx,
+        sy,
+        width: width1,
+        height: height1,
+      });
+      const live_scale_transform = $$LiveScaleTransform2.$$create({
+        index,
+        cx,
+        cy,
+        sx,
+        sy,
+        x_name,
+        y_name,
+        width_name,
+        height_name,
+        is_need_correction,
+        direction,
       })($el);
       const { numberOfItems: l1 } = $$getBaseTransformList($el);
-      const transform1 = $$createSVGTransformMatrix({
-        matrix: $$createSVGTransformTranslate({
-          tx: cx,
-          ty: cy,
-        })()
-          .matrix.multiply($$createSVGTransformScale({ sx, sy })().matrix)
-          .multiply(
-            $$createSVGTransformTranslate({ tx: -cx, ty: -cy })().matrix
-          ),
-      })();
 
       live_scale_transform.$$merge();
 
+      const [x2, y2, width2, height2] = mapL(
+        (k) => parseFloat($el.getAttributeNS(null, k)),
+        [x_name, y_name, width_name, height_name]
+      );
+      let expect_x;
+      if (equals2(direction, "n") || equals2(direction, "s")) {
+        expect_x = x1;
+      } else if (sx >= 0 || !is_need_correction) {
+        expect_x = (x1 - cx) * sx + cx;
+      } else {
+        expect_x = (x1 - cx) * sx + cx + width1 * sx;
+      }
+      let expect_y;
+      if (equals2(direction, "e") || equals2(direction, "w")) {
+        expect_y = y1;
+      } else if (sy >= 0 || !is_need_correction) {
+        expect_y = (y1 - cy) * sy + cy;
+      } else {
+        expect_y = (y1 - cy) * sy + cy + height1 * sy;
+      }
+
       const { numberOfItems: l2 } = $$getBaseTransformList($el);
-      const transform2 = $$getBaseTransformList($el).getItem(index);
-      expect(l2).equal(l1 - 2);
-      expect(transform2).deep.equal(transform1);
+      expect(l2).equal(l1 - 3);
+      expect(width2).equal(width1 * Math.abs(sx));
+      expect(height2).equal(height1 * Math.abs(sy));
+      expect(x2).equal(expect_x);
+      expect(y2).equal(expect_y);
     });
   }),
 ];

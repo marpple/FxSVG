@@ -254,6 +254,14 @@ svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransfo
 
 SVG Scale Transform 을 다루기 위한 `$$LiveTransform` 인터페이스의 구현체입니다.
 
+## \$\$LiveScaleTransform2
+
+- [source](../src/LiveScaleTransform2/LiveScaleTransform2.index.js)
+- [detail](../src/LiveScaleTransform2/README.md)
+
+SVG Scale Transform 을 다루기 위한 `$$LiveTransform` 인터페이스의 구현체입니다.
+`$$mergeScaleTransform2` 를 사용하는 버전입니다.
+
 ## \$\$LiveTransform
 
 - [source](../src/LiveTransform/LiveTransform.index.js)

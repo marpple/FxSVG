@@ -57,9 +57,6 @@ export default ({ describe, it }) => [
       expect(live_translate_transform.transform).deep.equal(
         $$createSVGTransformTranslate({ tx, ty })()
       );
-      expect(live_translate_transform.x_name).equal(x_name);
-      expect(live_translate_transform.y_name).equal(y_name);
-      expect(live_translate_transform.$el).equal($el);
     });
 
     it(`The "$$update" method updates the transform's tx, ty values.`, function () {
@@ -125,8 +122,8 @@ export default ({ describe, it }) => [
 
       const { numberOfItems: l2 } = $$getBaseTransformList($el);
       const [x2, y2] = mapL((k) => parseFloat($el.getAttributeNS(null, k)), [
-        "x",
-        "y",
+        x_name,
+        y_name,
       ]);
       expect(l2).equal(l1 - 1);
       expect(x2).equal(x1 + tx);

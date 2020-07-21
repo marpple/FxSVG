@@ -169,6 +169,11 @@
 - [source](../src/LiveScaleTransform/LiveScaleTransform.index.js)
 - [detail](../src/LiveScaleTransform/README.md)
 
+## \$\$LiveScaleTransform2
+
+- [source](../src/LiveScaleTransform2/LiveScaleTransform2.index.js)
+- [detail](../src/LiveScaleTransform2/README.md)
+
 ## \$\$LiveTransform
 
 - [source](../src/LiveTransform/LiveTransform.index.js)
