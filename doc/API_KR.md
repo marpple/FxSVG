@@ -27,30 +27,6 @@
 
 `SVGTransformList` 객체의 모든 `SVGTransform` 객체를 하나로 통합합니다.
 
-## \$\$controlRotateTransform
-
-- [source](../src/controlRotateTransform/controlRotateTransform.index.js)
-- [detail](../src/controlRotateTransform/README.md)
-
-`$$initRotateTransform`, `$$updateRotateTransform`, `$$appendRotateTransform`, `$$mergeRotateTransform` 함수들을
-쉽게 사용할 수 있는 `controller` 를 생성합니다.
-
-## \$\$controlScaleTransform
-
-- [source](../src/controlScaleTransform/controlScaleTransform.index.js)
-- [detail](../src/controlScaleTransform/README.md)
-
-`$$initScaleTransform`, `$$updateScaleTransform`, `$$mergeScaleTransform`, `$$mergeScaleTransform2` 함수들을
-쉽게 사용할 수 있는 `controller` 를 생성합니다.
-
-## \$\$controlTranslateTransform
-
-- [source](../src/controlTranslateTransform/controlTranslateTransform.index.js)
-- [detail](../src/controlTranslateTransform/README.md)
-
-`$$initTranslateTransform`, `$$updateTranslateTransform`, `$$appendTranslateTransform`, `$$mergeTranslateTransform` 함수들을
-쉽게 사용할 수 있는 `controller` 를 생성합니다.
-
 ## \$\$createSVGMatrix
 
 - [source](../src/createSVGMatrix/createSVGMatrix.index.js)
@@ -246,6 +222,49 @@ svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransfo
 - [detail](../src/isValidFxScaleSVGTransformList/README.md)
 
 `$$initScaleTransform` 함수를 적용한 `SVGTransformList`인지 여부를 판단합니다.
+
+## \$\$LiveRotateTransform
+
+- [source](../src/LiveRotateTransform/LiveRotateTransform.index.js)
+- [detail](../src/LiveRotateTransform/README.md)
+
+SVG Rotate Transform 을 다루기 위한 `$$LiveTransform` 인터페이스의 구현체입니다.
+
+## \$\$LiveScaleTransform
+
+- [source](../src/LiveScaleTransform/LiveScaleTransform.index.js)
+- [detail](../src/LiveScaleTransform/README.md)
+
+SVG Scale Transform 을 다루기 위한 `$$LiveTransform` 인터페이스의 구현체입니다.
+
+## \$\$LiveScaleTransform2
+
+- [source](../src/LiveScaleTransform2/LiveScaleTransform2.index.js)
+- [detail](../src/LiveScaleTransform2/README.md)
+
+SVG Scale Transform 을 다루기 위한 `$$LiveTransform` 인터페이스의 구현체입니다.
+`$$mergeScaleTransform2` 를 사용하는 버전입니다.
+
+## \$\$LiveTransform
+
+- [source](../src/LiveTransform/LiveTransform.index.js)
+- [detail](../src/LiveTransform/README.md)
+
+`FxSVG` 에서 SVG Transform 을 쉽게 다루기 위한 인터페이스입니다.
+
+## \$\$LiveTransformHandler
+
+- [source](../src/LiveTransformHandler/LiveTransformHandler.index.js)
+- [detail](../src/LiveTransformHandler/README.md)
+
+`$$LiveTransform` 타입의 객체를 함수형 스타일로 쉽게 다루기 위한 보조 클래스입니다.
+
+## \$\$LiveTranslateTransform
+
+- [source](../src/LiveTranslateTransform/LiveTranslateTransform.index.js)
+- [detail](../src/LiveTranslateTransform/README.md)
+
+SVG Translate Transform 을 다루기 위한 `$$LiveTransform` 인터페이스의 구현체입니다.
 
 ## \$\$mergeRotateTransform
 

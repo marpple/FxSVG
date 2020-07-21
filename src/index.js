@@ -1,9 +1,6 @@
 export { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
 export { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 export { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";
-export { $$controlRotateTransform } from "./controlRotateTransform/controlRotateTransform.index.js";
-export { $$controlScaleTransform } from "./controlScaleTransform/controlScaleTransform.index.js";
-export { $$controlTranslateTransform } from "./controlTranslateTransform/controlTranslateTransform.index.js";
 export { $$createSVGMatrix } from "./createSVGMatrix/createSVGMatrix.index.js";
 export { $$createSVGPoint } from "./createSVGPoint/createSVGPoint.index.js";
 export { $$createSVGRect } from "./createSVGRect/createSVGRect.index.js";
@@ -29,6 +26,12 @@ export { $$isScaleSVGTransform } from "./isScaleSVGTransform/isScaleSVGTransform
 export { $$isSVGTransform } from "./isSVGTransform/isSVGTransform.index.js";
 export { $$isTranslateSVGTransform } from "./isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 export { $$isValidFxScaleSVGTransformList } from "./isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js";
+export { $$LiveRotateTransform } from "./LiveRotateTransform/LiveRotateTransform.index.js";
+export { $$LiveScaleTransform } from "./LiveScaleTransform/LiveScaleTransform.index.js";
+export { $$LiveScaleTransform2 } from "./LiveScaleTransform2/LiveScaleTransform2.index.js";
+export { $$LiveTransform } from "./LiveTransform/LiveTransform.index.js";
+export { $$LiveTransformHandler } from "./LiveTransformHandler/LiveTransformHandler.index.js";
+export { $$LiveTranslateTransform } from "./LiveTranslateTransform/LiveTranslateTransform.index.js";
 export { $$mergeRotateTransform } from "./mergeRotateTransform/mergeRotateTransform.index.js";
 export { $$mergeScaleTransform } from "./mergeScaleTransform/mergeScaleTransform.index.js";
 export { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransform2.index.js";

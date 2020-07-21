@@ -19,21 +19,6 @@
 - [source](../src/consolidateTransformList/consolidateTransformList.index.js)
 - [detail](../src/consolidateTransformList/README.md)
 
-## \$\$controlRotateTransform
-
-- [source](../src/controlRotateTransform/controlRotateTransform.index.js)
-- [detail](../src/controlRotateTransform/README.md)
-
-## \$\$controlScaleTransform
-
-- [source](../src/controlScaleTransform/controlScaleTransform.index.js)
-- [detail](../src/controlScaleTransform/README.md)
-
-## \$\$controlTranslateTransform
-
-- [source](../src/controlTranslateTransform/controlTranslateTransform.index.js)
-- [detail](../src/controlTranslateTransform/README.md)
-
 ## \$\$createSVGMatrix
 
 - [source](../src/createSVGMatrix/createSVGMatrix.index.js)
@@ -163,6 +148,36 @@
 
 - [source](../src/isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js)
 - [detail](../src/isValidFxScaleSVGTransformList/README.md)
+
+## \$\$LiveRotateTransform
+
+- [source](../src/LiveRotateTransform/LiveRotateTransform.index.js)
+- [detail](../src/LiveRotateTransform/README.md)
+
+## \$\$LiveScaleTransform
+
+- [source](../src/LiveScaleTransform/LiveScaleTransform.index.js)
+- [detail](../src/LiveScaleTransform/README.md)
+
+## \$\$LiveScaleTransform2
+
+- [source](../src/LiveScaleTransform2/LiveScaleTransform2.index.js)
+- [detail](../src/LiveScaleTransform2/README.md)
+
+## \$\$LiveTransform
+
+- [source](../src/LiveTransform/LiveTransform.index.js)
+- [detail](../src/LiveTransform/README.md)
+
+## \$\$LiveTransformHandler
+
+- [source](../src/LiveTransformHandler/LiveTransformHandler.index.js)
+- [detail](../src/LiveTransformHandler/README.md)
+
+## \$\$LiveTranslateTransform
+
+- [source](../src/LiveTranslateTransform/LiveTranslateTransform.index.js)
+- [detail](../src/LiveTranslateTransform/README.md)
 
 ## \$\$mergeRotateTransform
 

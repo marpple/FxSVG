@@ -1,9 +1,6 @@
 import __spec_appendRotateTransform__ from "../src/appendRotateTransform/appendRotateTransform.spec.js";
 import __spec_appendTranslateTransform__ from "../src/appendTranslateTransform/appendTranslateTransform.spec.js";
 import __spec_consolidateTransformList__ from "../src/consolidateTransformList/consolidateTransformList.spec.js";
-import __spec_controlRotateTransform__ from "../src/controlRotateTransform/controlRotateTransform.spec.js";
-import __spec_controlScaleTransform__ from "../src/controlScaleTransform/controlScaleTransform.spec.js";
-import __spec_controlTranslateTransform__ from "../src/controlTranslateTransform/controlTranslateTransform.spec.js";
 import __spec_createSVGMatrix__ from "../src/createSVGMatrix/createSVGMatrix.spec.js";
 import __spec_createSVGPoint__ from "../src/createSVGPoint/createSVGPoint.spec.js";
 import __spec_createSVGRect__ from "../src/createSVGRect/createSVGRect.spec.js";
@@ -29,6 +26,12 @@ import __spec_isScaleSVGTransform__ from "../src/isScaleSVGTransform/isScaleSVGT
 import __spec_isSVGTransform__ from "../src/isSVGTransform/isSVGTransform.spec.js";
 import __spec_isTranslateSVGTransform__ from "../src/isTranslateSVGTransform/isTranslateSVGTransform.spec.js";
 import __spec_isValidFxScaleSVGTransformList__ from "../src/isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.spec.js";
+import __spec_LiveRotateTransform__ from "../src/LiveRotateTransform/LiveRotateTransform.spec.js";
+import __spec_LiveScaleTransform__ from "../src/LiveScaleTransform/LiveScaleTransform.spec.js";
+import __spec_LiveScaleTransform2__ from "../src/LiveScaleTransform2/LiveScaleTransform2.spec.js";
+import __spec_LiveTransform__ from "../src/LiveTransform/LiveTransform.spec.js";
+import __spec_LiveTransformHandler__ from "../src/LiveTransformHandler/LiveTransformHandler.spec.js";
+import __spec_LiveTranslateTransform__ from "../src/LiveTranslateTransform/LiveTranslateTransform.spec.js";
 import __spec_mergeRotateTransform__ from "../src/mergeRotateTransform/mergeRotateTransform.spec.js";
 import __spec_mergeScaleTransform__ from "../src/mergeScaleTransform/mergeScaleTransform.spec.js";
 import __spec_mergeScaleTransform2__ from "../src/mergeScaleTransform2/mergeScaleTransform2.spec.js";
@@ -43,9 +46,6 @@ export default () =>
     __spec_appendRotateTransform__,
     __spec_appendTranslateTransform__,
     __spec_consolidateTransformList__,
-    __spec_controlRotateTransform__,
-    __spec_controlScaleTransform__,
-    __spec_controlTranslateTransform__,
     __spec_createSVGMatrix__,
     __spec_createSVGPoint__,
     __spec_createSVGRect__,
@@ -71,6 +71,12 @@ export default () =>
     __spec_isScaleSVGTransform__,
     __spec_isTranslateSVGTransform__,
     __spec_isValidFxScaleSVGTransformList__,
+    __spec_LiveRotateTransform__,
+    __spec_LiveScaleTransform__,
+    __spec_LiveScaleTransform2__,
+    __spec_LiveTransform__,
+    __spec_LiveTransformHandler__,
+    __spec_LiveTranslateTransform__,
     __spec_mergeRotateTransform__,
     __spec_mergeScaleTransform__,
     __spec_mergeScaleTransform2__,
