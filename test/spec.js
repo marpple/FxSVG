@@ -1,9 +1,6 @@
 import __spec_appendRotateTransform__ from "../src/appendRotateTransform/appendRotateTransform.spec.js";
 import __spec_appendTranslateTransform__ from "../src/appendTranslateTransform/appendTranslateTransform.spec.js";
 import __spec_consolidateTransformList__ from "../src/consolidateTransformList/consolidateTransformList.spec.js";
-import __spec_controlRotateTransform__ from "../src/controlRotateTransform/controlRotateTransform.spec.js";
-import __spec_controlScaleTransform__ from "../src/controlScaleTransform/controlScaleTransform.spec.js";
-import __spec_controlTranslateTransform__ from "../src/controlTranslateTransform/controlTranslateTransform.spec.js";
 import __spec_createSVGMatrix__ from "../src/createSVGMatrix/createSVGMatrix.spec.js";
 import __spec_createSVGPoint__ from "../src/createSVGPoint/createSVGPoint.spec.js";
 import __spec_createSVGRect__ from "../src/createSVGRect/createSVGRect.spec.js";
@@ -49,9 +46,6 @@ export default () =>
     __spec_appendRotateTransform__,
     __spec_appendTranslateTransform__,
     __spec_consolidateTransformList__,
-    __spec_controlRotateTransform__,
-    __spec_controlScaleTransform__,
-    __spec_controlTranslateTransform__,
     __spec_createSVGMatrix__,
     __spec_createSVGPoint__,
     __spec_createSVGRect__,

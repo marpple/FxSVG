@@ -27,30 +27,6 @@
 
 `SVGTransformList` 객체의 모든 `SVGTransform` 객체를 하나로 통합합니다.
 
-## \$\$controlRotateTransform
-
-- [source](../src/controlRotateTransform/controlRotateTransform.index.js)
-- [detail](../src/controlRotateTransform/README.md)
-
-`$$initRotateTransform`, `$$updateRotateTransform`, `$$appendRotateTransform`, `$$mergeRotateTransform` 함수들을
-쉽게 사용할 수 있는 `controller` 를 생성합니다.
-
-## \$\$controlScaleTransform
-
-- [source](../src/controlScaleTransform/controlScaleTransform.index.js)
-- [detail](../src/controlScaleTransform/README.md)
-
-`$$initScaleTransform`, `$$updateScaleTransform`, `$$mergeScaleTransform`, `$$mergeScaleTransform2` 함수들을
-쉽게 사용할 수 있는 `controller` 를 생성합니다.
-
-## \$\$controlTranslateTransform
-
-- [source](../src/controlTranslateTransform/controlTranslateTransform.index.js)
-- [detail](../src/controlTranslateTransform/README.md)
-
-`$$initTranslateTransform`, `$$updateTranslateTransform`, `$$appendTranslateTransform`, `$$mergeTranslateTransform` 함수들을
-쉽게 사용할 수 있는 `controller` 를 생성합니다.
-
 ## \$\$createSVGMatrix
 
 - [source](../src/createSVGMatrix/createSVGMatrix.index.js)

@@ -1,9 +1,6 @@
 export { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
 export { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 export { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";
-export { $$controlRotateTransform } from "./controlRotateTransform/controlRotateTransform.index.js";
-export { $$controlScaleTransform } from "./controlScaleTransform/controlScaleTransform.index.js";
-export { $$controlTranslateTransform } from "./controlTranslateTransform/controlTranslateTransform.index.js";
 export { $$createSVGMatrix } from "./createSVGMatrix/createSVGMatrix.index.js";
 export { $$createSVGPoint } from "./createSVGPoint/createSVGPoint.index.js";
 export { $$createSVGRect } from "./createSVGRect/createSVGRect.index.js";

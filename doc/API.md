@@ -19,21 +19,6 @@
 - [source](../src/consolidateTransformList/consolidateTransformList.index.js)
 - [detail](../src/consolidateTransformList/README.md)
 
-## \$\$controlRotateTransform
-
-- [source](../src/controlRotateTransform/controlRotateTransform.index.js)
-- [detail](../src/controlRotateTransform/README.md)
-
-## \$\$controlScaleTransform
-
-- [source](../src/controlScaleTransform/controlScaleTransform.index.js)
-- [detail](../src/controlScaleTransform/README.md)
-
-## \$\$controlTranslateTransform
-
-- [source](../src/controlTranslateTransform/controlTranslateTransform.index.js)
-- [detail](../src/controlTranslateTransform/README.md)
-
 ## \$\$createSVGMatrix
 
 - [source](../src/createSVGMatrix/createSVGMatrix.index.js)
