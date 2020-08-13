@@ -1,3 +1,4 @@
+import __spec_append__ from "../src/append/append.spec.js";
 import __spec_appendRotateTransform__ from "../src/appendRotateTransform/appendRotateTransform.spec.js";
 import __spec_appendTranslateTransform__ from "../src/appendTranslateTransform/appendTranslateTransform.spec.js";
 import __spec_consolidateTransformList__ from "../src/consolidateTransformList/consolidateTransformList.spec.js";
@@ -49,6 +50,7 @@ import __spec_updateTranslateTransform__ from "../src/updateTranslateTransform/u
 
 export default () =>
   [
+    __spec_append__,
     __spec_appendRotateTransform__,
     __spec_appendTranslateTransform__,
     __spec_consolidateTransformList__,

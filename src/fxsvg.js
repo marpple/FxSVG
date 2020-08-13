@@ -1,3 +1,4 @@
+import { $$append } from "./append/append.index.js";
 import { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
 import { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 import { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";
@@ -48,6 +49,7 @@ import { $$updateScaleTransform } from "./updateScaleTransform/updateScaleTransf
 import { $$updateTranslateTransform } from "./updateTranslateTransform/updateTranslateTransform.index.js";
 
 export const FxSVG = {
+  append: $$append,
   appendRotateTransform: $$appendRotateTransform,
   appendTranslateTransform: $$appendTranslateTransform,
   consolidateTransformList: $$consolidateTransformList,

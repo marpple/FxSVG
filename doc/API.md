@@ -4,6 +4,11 @@
 
 ---
 
+## \$\$append
+
+- [source](../src/append/append.index.js)
+- [detail](../src/append/README.md)
+
 ## \$\$appendRotateTransform
 
 - [source](../src/appendRotateTransform/appendRotateTransform.index.js)
