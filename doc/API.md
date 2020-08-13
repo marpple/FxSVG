@@ -209,6 +209,11 @@
 - [source](../src/mergeTranslateTransform/mergeTranslateTransform.index.js)
 - [detail](../src/mergeTranslateTransform/README.md)
 
+## \$\$qsa
+
+- [source](../src/qsa/qsa.index.js)
+- [detail](../src/qsa/README.md)
+
 ## \$\$removeAttrNS
 
 - [source](../src/removeAttrNS/removeAttrNS.index.js)
