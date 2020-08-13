@@ -209,6 +209,11 @@
 - [source](../src/mergeTranslateTransform/mergeTranslateTransform.index.js)
 - [detail](../src/mergeTranslateTransform/README.md)
 
+## \$\$removeAttrNS
+
+- [source](../src/removeAttrNS/removeAttrNS.index.js)
+- [detail](../src/removeAttrNS/README.md)
+
 ## \$\$updateMatrixTransform
 
 - [source](../src/updateMatrixTransform/updateMatrixTransform.index.js)

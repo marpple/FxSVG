@@ -38,6 +38,7 @@ import { $$mergeRotateTransform } from "./mergeRotateTransform/mergeRotateTransf
 import { $$mergeScaleTransform } from "./mergeScaleTransform/mergeScaleTransform.index.js";
 import { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransform2.index.js";
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
+import { $$removeAttrNS } from "./removeAttrNS/removeAttrNS.index.js";
 import { $$updateMatrixTransform } from "./updateMatrixTransform/updateMatrixTransform.index.js";
 import { $$updateRotateTransform } from "./updateRotateTransform/updateRotateTransform.index.js";
 import { $$updateScaleTransform } from "./updateScaleTransform/updateScaleTransform.index.js";
@@ -85,6 +86,7 @@ export const FxSVG = {
   mergeScaleTransform: $$mergeScaleTransform,
   mergeScaleTransform2: $$mergeScaleTransform2,
   mergeTranslateTransform: $$mergeTranslateTransform,
+  removeAttrNS: $$removeAttrNS,
   updateMatrixTransform: $$updateMatrixTransform,
   updateRotateTransform: $$updateRotateTransform,
   updateScaleTransform: $$updateScaleTransform,
