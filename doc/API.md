@@ -14,6 +14,11 @@
 - [source](../src/appendRotateTransform/appendRotateTransform.index.js)
 - [detail](../src/appendRotateTransform/README.md)
 
+## \$\$appendTo
+
+- [source](../src/appendTo/appendTo.index.js)
+- [detail](../src/appendTo/README.md)
+
 ## \$\$appendTranslateTransform
 
 - [source](../src/appendTranslateTransform/appendTranslateTransform.index.js)

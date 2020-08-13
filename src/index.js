@@ -1,5 +1,6 @@
 export { $$append } from "./append/append.index.js";
 export { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
+export { $$appendTo } from "./appendTo/appendTo.index.js";
 export { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 export { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";
 export { $$createSVGMatrix } from "./createSVGMatrix/createSVGMatrix.index.js";

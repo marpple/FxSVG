@@ -21,6 +21,14 @@
 
 `SVGTransform.SVG_TRANSFORM_ROTATE` 타입의 `SVGTransform` 의 `angle` 값에 입력받은 `angle`을 더합니다.
 
+## \$\$appendTo
+
+- [source](../src/appendTo/appendTo.index.js)
+- [detail](../src/appendTo/README.md)
+
+첫 번째로 받은 엘리먼트에 두 번째로 받은 엘리먼트를 자식 엘리먼트로 추가합니다.
+`appendChild` 와 동일한 함수입니다.
+
 ## \$\$appendTranslateTransform
 
 - [source](../src/appendTranslateTransform/appendTranslateTransform.index.js)
