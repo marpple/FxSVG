@@ -74,6 +74,11 @@
 - [source](../src/getAnimTransformList/getAnimTransformList.index.js)
 - [detail](../src/getAnimTransformList/README.md)
 
+# \$\$getAttrNS
+
+- [source](../src/getAttrNS/getAttrNS.index.js)
+- [detail](../src/getAttrNS/README.md)
+
 ## \$\$getBaseTransformList
 
 - [source](../src/getBaseTransformList/getBaseTransformList.index.js)

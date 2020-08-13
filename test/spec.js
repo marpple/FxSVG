@@ -12,6 +12,7 @@ import __spec_createSVGTransformTranslate__ from "../src/createSVGTransformTrans
 import __spec_el__ from "../src/el/el.spec.js";
 import __spec_els__ from "../src/els/els.spec.js";
 import __spec_getAnimTransformList__ from "../src/getAnimTransformList/getAnimTransformList.spec.js";
+import __spec_getAttrNS__ from "../src/getAttrNS/getAttrNS.spec.js";
 import __spec_getBaseTransformList__ from "../src/getBaseTransformList/getBaseTransformList.spec.js";
 import __spec_getBoxPoints__ from "../src/getBoxPoints/getBoxPoints.spec.js";
 import __spec_getCenterPoint__ from "../src/getCenterPoint/getCenterPoint.spec.js";
@@ -58,6 +59,7 @@ export default () =>
     __spec_el__,
     __spec_els__,
     __spec_getAnimTransformList__,
+    __spec_getAttrNS__,
     __spec_getBaseTransformList__,
     __spec_getBoxPoints__,
     __spec_getCenterPoint__,

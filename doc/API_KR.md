@@ -104,6 +104,13 @@
 
 입력받은 svg 객체의 `transform.animVal` 값을 반환합니다.
 
+# \$\$getAttrNS
+
+- [source](../src/getAttrNS/getAttrNS.index.js)
+- [detail](../src/getAttrNS/README.md)
+
+SVG 엘리먼트의 속성에 해당하는 값을 반환합니다. 해당하는 속성이 없으면 `null`을 반환합니다.
+
 ## \$\$getBaseTransformList
 
 - [source](../src/getBaseTransformList/getBaseTransformList.index.js)

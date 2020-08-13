@@ -12,6 +12,7 @@ export { $$createSVGTransformTranslate } from "./createSVGTransformTranslate/cre
 export { $$el } from "./el/el.index.js";
 export { $$els } from "./els/els.index.js";
 export { $$getAnimTransformList } from "./getAnimTransformList/getAnimTransformList.index.js";
+export { $$getAttrNS } from "./getAttrNS/getAttrNS.index.js";
 export { $$getBaseTransformList } from "./getBaseTransformList/getBaseTransformList.index.js";
 export { $$getBoxPoints } from "./getBoxPoints/getBoxPoints.index.js";
 export { $$getCenterPoint } from "./getCenterPoint/getCenterPoint.index.js";

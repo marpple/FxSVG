@@ -12,6 +12,7 @@ import { $$createSVGTransformTranslate } from "./createSVGTransformTranslate/cre
 import { $$el } from "./el/el.index.js";
 import { $$els } from "./els/els.index.js";
 import { $$getAnimTransformList } from "./getAnimTransformList/getAnimTransformList.index.js";
+import { $$getAttrNS } from "./getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "./getBaseTransformList/getBaseTransformList.index.js";
 import { $$getBoxPoints } from "./getBoxPoints/getBoxPoints.index.js";
 import { $$getCenterPoint } from "./getCenterPoint/getCenterPoint.index.js";
@@ -57,6 +58,7 @@ export const FxSVG = {
   el: $$el,
   els: $$els,
   getAnimTransformList: $$getAnimTransformList,
+  getAttrNS: $$getAttrNS,
   getBaseTransformList: $$getBaseTransformList,
   getBoxPoints: $$getBoxPoints,
   getCenterPoint: $$getCenterPoint,
