@@ -8,6 +8,7 @@ import {
   rangeL,
   rejectL,
 } from "fxjs2";
+import { $$getAttrNS } from "../../src/getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../../src/getBaseTransformList/getBaseTransformList.index.js";
 import { $$initScaleTransform } from "../../src/initScaleTransform/initScaleTransform.index.js";
 import { makeMockRect } from "./makeMockRect.js";
@@ -67,7 +68,7 @@ export const makeMockRectInitiatedScaleTransform = ({
   );
   const [x, y, width, height] = go(
     ["x", "y", "width", "height"],
-    mapL((name) => $el.getAttributeNS(null, name)),
+    mapL((name) => $$getAttrNS(name)($el)),
     mapL(parseFloat)
   );
 

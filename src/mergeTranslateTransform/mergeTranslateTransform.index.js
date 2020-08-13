@@ -1,5 +1,6 @@
 import { each, go, mapL, rangeL } from "fxjs2";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
+import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslateSVGTransform.index.js";
@@ -28,7 +29,7 @@ export const $$mergeTranslateTransform = ({
     ],
     mapL(({ name, value }) => ({
       name,
-      value: `${parseFloat($el.getAttributeNS(null, name)) + value}`,
+      value: `${parseFloat($$getAttrNS(name)($el)) + value}`,
     })),
     each(({ name, value }) => $el.setAttributeNS(null, name, value))
   );

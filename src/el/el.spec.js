@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import { flatMapL, mapL } from "fxjs2";
+import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$el } from "./el.index.js";
 
 const MOCK_STR = `<circle cx="10" cy="20" r="30"></circle>`;
@@ -12,9 +13,9 @@ const setupSVGList = () => [
 const expectElFromMockStr = ($el) => {
   expect($el).instanceof(SVGElement);
   expect($el.nodeName.toLowerCase()).equal("circle");
-  expect($el.getAttributeNS(null, "cx")).equal("10");
-  expect($el.getAttributeNS(null, "cy")).equal("20");
-  expect($el.getAttributeNS(null, "r")).equal("30");
+  expect($$getAttrNS("cx")($el)).equal("10");
+  expect($$getAttrNS("cy")($el)).equal("20");
+  expect($$getAttrNS("r")($el)).equal("30");
 };
 
 export default ({ describe, it }) => [

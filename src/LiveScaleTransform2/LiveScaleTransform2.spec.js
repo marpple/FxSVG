@@ -6,6 +6,7 @@ import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
 import { makeRandomNumberExcept } from "../../test/utils/makeRandomNumberExcept.js";
 import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTransformAttributeValue.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
+import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
 import { $$LiveScaleTransform2 } from "./LiveScaleTransform2.index.js";
@@ -186,7 +187,7 @@ export default ({ describe, it }) => [
       live_scale_transform.$$merge();
 
       const [x2, y2, width2, height2] = mapL(
-        (k) => parseFloat($el.getAttributeNS(null, k)),
+        (k) => parseFloat($$getAttrNS(k)($el)),
         [x_name, y_name, width_name, height_name]
       );
       let expect_x;

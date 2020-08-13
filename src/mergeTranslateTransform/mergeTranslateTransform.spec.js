@@ -14,6 +14,7 @@ import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSV
 import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
+import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform.index.js";
 
@@ -46,10 +47,10 @@ export default ({ describe, it }) => [
         const { numberOfItems: transform_list_length } = $$getBaseTransformList(
           $input
         );
-        const [before_x, before_y] = mapL(
-          (k) => $input.getAttributeNS(null, k),
-          ["x", "y"]
-        );
+        const [before_x, before_y] = mapL((k) => $$getAttrNS(k)($input), [
+          "x",
+          "y",
+        ]);
         const before_transform_list = deepCopyTransformList(
           $$getBaseTransformList($input)
         );
@@ -63,10 +64,10 @@ export default ({ describe, it }) => [
           y_name: "y",
         })($input, $svg);
 
-        const [after_x, after_y] = mapL(
-          (k) => $output.getAttributeNS(null, k),
-          ["x", "y"]
-        );
+        const [after_x, after_y] = mapL((k) => $$getAttrNS(k)($output), [
+          "x",
+          "y",
+        ]);
         const after_transform_list = deepCopyTransformList(
           $$getBaseTransformList($output)
         );
@@ -99,10 +100,10 @@ export default ({ describe, it }) => [
             })(),
             index
           );
-          const [before_x, before_y] = mapL(
-            (k) => $input.getAttributeNS(null, k),
-            ["x", "y"]
-          );
+          const [before_x, before_y] = mapL((k) => $$getAttrNS(k)($input), [
+            "x",
+            "y",
+          ]);
           const before_transform_list = deepCopyTransformList(
             $$getBaseTransformList($input)
           );
@@ -113,10 +114,10 @@ export default ({ describe, it }) => [
             y_name: "y",
           })($input, $svg);
 
-          const [after_x, after_y] = mapL(
-            (k) => $output.getAttributeNS(null, k),
-            ["x", "y"]
-          );
+          const [after_x, after_y] = mapL((k) => $$getAttrNS(k)($output), [
+            "x",
+            "y",
+          ]);
           const after_transform_list = deepCopyTransformList(
             $$getBaseTransformList($output)
           );
@@ -149,10 +150,10 @@ export default ({ describe, it }) => [
             })(),
             index
           );
-          const [before_x, before_y] = mapL(
-            (k) => $input.getAttributeNS(null, k),
-            ["x", "y"]
-          );
+          const [before_x, before_y] = mapL((k) => $$getAttrNS(k)($input), [
+            "x",
+            "y",
+          ]);
           const before_transform_list = deepCopyTransformList(
             $$getBaseTransformList($input)
           );
@@ -163,10 +164,10 @@ export default ({ describe, it }) => [
             y_name: "y",
           })($input, $svg);
 
-          const [after_x, after_y] = mapL(
-            (k) => $output.getAttributeNS(null, k),
-            ["x", "y"]
-          );
+          const [after_x, after_y] = mapL((k) => $$getAttrNS(k)($output), [
+            "x",
+            "y",
+          ]);
           const after_transform_list = deepCopyTransformList(
             $$getBaseTransformList($output)
           );
@@ -198,10 +199,10 @@ export default ({ describe, it }) => [
             })(),
             index
           );
-          const [before_x, before_y] = mapL(
-            (k) => $input.getAttributeNS(null, k),
-            ["x", "y"]
-          );
+          const [before_x, before_y] = mapL((k) => $$getAttrNS(k)($input), [
+            "x",
+            "y",
+          ]);
           const before_transform_list = deepCopyTransformList(
             $$getBaseTransformList($input)
           );
@@ -212,10 +213,10 @@ export default ({ describe, it }) => [
             y_name: "y",
           })($input, $svg);
 
-          const [after_x, after_y] = mapL(
-            (k) => $output.getAttributeNS(null, k),
-            ["x", "y"]
-          );
+          const [after_x, after_y] = mapL((k) => $$getAttrNS(k)($output), [
+            "x",
+            "y",
+          ]);
           const after_transform_list = deepCopyTransformList(
             $$getBaseTransformList($output)
           );
@@ -292,8 +293,8 @@ export default ({ describe, it }) => [
           y_name: "y",
         })($input, $svg);
 
-        expect($output.getAttributeNS(null, "x")).equal(`${x + tx}`);
-        expect($output.getAttributeNS(null, "y")).equal(`${y + ty}`);
+        expect($$getAttrNS("x")($output)).equal(`${x + tx}`);
+        expect($$getAttrNS("y")($output)).equal(`${y + ty}`);
       }
     });
   }),

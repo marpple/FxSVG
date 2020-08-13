@@ -1,4 +1,5 @@
 import { each, go, go1, mapL, rangeL, some } from "fxjs2";
+import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isValidFxScaleSVGTransformList } from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js";
 
@@ -29,7 +30,7 @@ export const $$mergeScaleTransform2 = ({
   );
   const [x, y, width, height] = go(
     [x_name, y_name, width_name, height_name],
-    mapL((name) => $el.getAttributeNS(null, name)),
+    mapL((name) => $$getAttrNS(name)($el)),
     mapL(parseFloat)
   );
 
