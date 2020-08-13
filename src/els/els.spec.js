@@ -11,6 +11,7 @@ import {
   zip,
 } from "fxjs2";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
+import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$els } from "./els.index.js";
 
 const setupSVGList = () => [
@@ -79,7 +80,7 @@ export default ({ describe, it }) => [
           expect($el).instanceof(SVGElement);
           expect($el.nodeName.toLowerCase()).equal(name);
           for (const [key, expect_value] of entriesL(attrs)) {
-            const receive_value = $el.getAttributeNS(null, key);
+            const receive_value = $$getAttrNS(key)($el);
             expect(receive_value).equal(expect_value);
           }
         }

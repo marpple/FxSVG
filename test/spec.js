@@ -1,4 +1,6 @@
+import __spec_append__ from "../src/append/append.spec.js";
 import __spec_appendRotateTransform__ from "../src/appendRotateTransform/appendRotateTransform.spec.js";
+import __spec_appendTo__ from "../src/appendTo/appendTo.spec.js";
 import __spec_appendTranslateTransform__ from "../src/appendTranslateTransform/appendTranslateTransform.spec.js";
 import __spec_consolidateTransformList__ from "../src/consolidateTransformList/consolidateTransformList.spec.js";
 import __spec_createSVGMatrix__ from "../src/createSVGMatrix/createSVGMatrix.spec.js";
@@ -38,6 +40,8 @@ import __spec_mergeRotateTransform__ from "../src/mergeRotateTransform/mergeRota
 import __spec_mergeScaleTransform__ from "../src/mergeScaleTransform/mergeScaleTransform.spec.js";
 import __spec_mergeScaleTransform2__ from "../src/mergeScaleTransform2/mergeScaleTransform2.spec.js";
 import __spec_mergeTranslateTransform__ from "../src/mergeTranslateTransform/mergeTranslateTransform.spec.js";
+import __spec_qs__ from "../src/qs/qs.spec.js";
+import __spec_qsa__ from "../src/qsa/qsa.spec.js";
 import __spec_removeAttrNS__ from "../src/removeAttrNS/removeAttrNS.spec.js";
 import __spec_setAttrNS__ from "../src/setAttrNS/setAttrNS.spec.js";
 import __spec_updateMatrixTransform__ from "../src/updateMatrixTransform/updateMatrixTransform.spec.js";
@@ -47,7 +51,9 @@ import __spec_updateTranslateTransform__ from "../src/updateTranslateTransform/u
 
 export default () =>
   [
+    __spec_append__,
     __spec_appendRotateTransform__,
+    __spec_appendTo__,
     __spec_appendTranslateTransform__,
     __spec_consolidateTransformList__,
     __spec_createSVGMatrix__,
@@ -87,6 +93,8 @@ export default () =>
     __spec_mergeScaleTransform__,
     __spec_mergeScaleTransform2__,
     __spec_mergeTranslateTransform__,
+    __spec_qs__,
+    __spec_qsa__,
     __spec_removeAttrNS__,
     __spec_setAttrNS__,
     __spec_updateMatrixTransform__,

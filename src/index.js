@@ -1,4 +1,6 @@
+export { $$append } from "./append/append.index.js";
 export { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
+export { $$appendTo } from "./appendTo/appendTo.index.js";
 export { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 export { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";
 export { $$createSVGMatrix } from "./createSVGMatrix/createSVGMatrix.index.js";
@@ -38,6 +40,8 @@ export { $$mergeRotateTransform } from "./mergeRotateTransform/mergeRotateTransf
 export { $$mergeScaleTransform } from "./mergeScaleTransform/mergeScaleTransform.index.js";
 export { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransform2.index.js";
 export { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
+export { $$qs } from "./qs/qs.index.js";
+export { $$qsa } from "./qsa/qsa.index.js";
 export { $$removeAttrNS } from "./removeAttrNS/removeAttrNS.index.js";
 export { $$setAttrNS } from "./setAttrNS/setAttrNS.index.js";
 export { $$updateMatrixTransform } from "./updateMatrixTransform/updateMatrixTransform.index.js";

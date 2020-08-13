@@ -9,6 +9,7 @@ import {
   rangeL,
   rejectL,
 } from "fxjs2";
+import { $$getAttrNS } from "../../src/getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../../src/getBaseTransformList/getBaseTransformList.index.js";
 import { $$initRotateTransform } from "../../src/initRotateTransform/initRotateTransform.index.js";
 import { makeMockRect } from "./makeMockRect.js";
@@ -62,7 +63,7 @@ export const makeMockRectInitializedRotateTransform = ({
   const { angle } = transform_list.getItem(index);
   const [x, y, width, height] = go(
     ["x", "y", "width", "height"],
-    mapL((name) => $el.getAttributeNS(null, name)),
+    mapL((name) => $$getAttrNS(name)($el)),
     mapL(parseFloat)
   );
 

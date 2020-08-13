@@ -22,6 +22,7 @@ import {
   makeRandomTransformAttributeValue,
   makeMockRectInitiatedScaleTransform,
 } from "../../test/utils/index.js";
+import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { makeInvalidCases as makeInvalidIsValidFxSVGTransformListCases } from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.spec.js";
 import { $$mergeScaleTransform2 } from "./mergeScaleTransform2.index.js";
@@ -121,7 +122,7 @@ export default ({ describe, it }) => [
 
         const [after_x, after_y, after_width, after_height] = go(
           ["x", "y", "width", "height"],
-          mapL((k) => $output.getAttributeNS(null, k)),
+          mapL((k) => $$getAttrNS(k)($output)),
           mapL(parseFloat)
         );
         const after_transform_list = deepCopyTransformList(
@@ -223,7 +224,7 @@ export default ({ describe, it }) => [
         );
         const [after_x, after_y, after_width, after_height] = go(
           ["x", "y", "width", "height"],
-          mapL((k) => $output.getAttributeNS(null, k)),
+          mapL((k) => $$getAttrNS(k)($output)),
           mapL(parseFloat)
         );
         expectNotChange(
@@ -340,7 +341,7 @@ export default ({ describe, it }) => [
 
         const [after_width, after_height] = go(
           ["width", "height"],
-          mapL((k) => $el.getAttributeNS(null, k)),
+          mapL((k) => $$getAttrNS(k)($el)),
           mapL(parseFloat)
         );
         expect(after_width).equal(before_width * Math.abs(sx));
@@ -381,7 +382,7 @@ export default ({ describe, it }) => [
           height_name: "height",
         })($el);
 
-        const after_x = parseFloat($el.getAttributeNS(null, "x"));
+        const after_x = parseFloat($$getAttrNS("x")($el));
         expect(after_x).equal(before_x);
       }
     });
@@ -419,7 +420,7 @@ export default ({ describe, it }) => [
           height_name: "height",
         })($el);
 
-        const after_y = parseFloat($el.getAttributeNS(null, "y"));
+        const after_y = parseFloat($$getAttrNS("y")($el));
         expect(after_y).equal(before_y);
       }
     });
@@ -478,7 +479,7 @@ export default ({ describe, it }) => [
           height_name: "height",
         })($el);
 
-        const after_x = parseFloat($el.getAttributeNS(null, "x"));
+        const after_x = parseFloat($$getAttrNS("x")($el));
         expect(after_x).equal((before_x - cx) * sx + cx);
       }
     });
@@ -537,7 +538,7 @@ export default ({ describe, it }) => [
           height_name: "height",
         })($el);
 
-        const after_y = parseFloat($el.getAttributeNS(null, "y"));
+        const after_y = parseFloat($$getAttrNS("y")($el));
         expect(after_y).equal((before_y - cy) * sy + cy);
       }
     });
@@ -578,7 +579,7 @@ export default ({ describe, it }) => [
           height_name: "height",
         })($el);
 
-        const after_x = parseFloat($el.getAttributeNS(null, "x"));
+        const after_x = parseFloat($$getAttrNS("x")($el));
         expect(after_x).equal((before_x - cx) * sx + cx + width * sx);
       }
     });
@@ -619,7 +620,7 @@ export default ({ describe, it }) => [
           height_name: "height",
         })($el);
 
-        const after_y = parseFloat($el.getAttributeNS(null, "y"));
+        const after_y = parseFloat($$getAttrNS("y")($el));
         expect(after_y).equal((before_y - cy) * sy + cy + height * sy);
       }
     });

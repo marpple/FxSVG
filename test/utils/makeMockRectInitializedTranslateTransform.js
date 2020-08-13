@@ -8,6 +8,7 @@ import {
   rangeL,
   rejectL,
 } from "fxjs2";
+import { $$getAttrNS } from "../../src/getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../../src/getBaseTransformList/getBaseTransformList.index.js";
 import { $$initTranslateTransform } from "../../src/initTranslateTransform/initTranslateTransform.index.js";
 import { makeMockRect } from "./makeMockRect.js";
@@ -56,7 +57,7 @@ export const makeMockRectInitializedTranslateTransform = ({
   const { e: tx, f: ty } = transform_list.getItem(index).matrix;
   const [x, y, width, height] = go(
     ["x", "y", "width", "height"],
-    mapL((name) => $el.getAttributeNS(null, name)),
+    mapL((name) => $$getAttrNS(name)($el)),
     mapL(parseFloat)
   );
 

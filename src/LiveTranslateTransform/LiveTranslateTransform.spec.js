@@ -5,6 +5,7 @@ import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
 import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTransformAttributeValue.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
+import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 import { $$LiveTranslateTransform } from "./LiveTranslateTransform.index.js";
@@ -121,7 +122,7 @@ export default ({ describe, it }) => [
       live_translate_transform.$$merge();
 
       const { numberOfItems: l2 } = $$getBaseTransformList($el);
-      const [x2, y2] = mapL((k) => parseFloat($el.getAttributeNS(null, k)), [
+      const [x2, y2] = mapL((k) => parseFloat($$getAttrNS(k)($el)), [
         x_name,
         y_name,
       ]);

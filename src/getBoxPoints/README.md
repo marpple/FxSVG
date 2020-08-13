@@ -21,7 +21,7 @@ const str = `
 </rect>
 `;
 const $el = $$el(str)();
-$svg.appendChild($el);
+$$append($el)($svg);
 console.log($$getBoxPoints($el));
 // {original: {...}, transformed: {...}, bounding: {...}}
 // original:
