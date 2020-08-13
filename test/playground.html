@@ -26,9 +26,9 @@
 
     (() => {
       const { width, height } = document.body.getBoundingClientRect();
-      $svg.setAttributeNS(null, "width", `${width}`);
-      $svg.setAttributeNS(null, "height", `${height}`);
-      $svg.setAttributeNS(null, "viewBox", "-1000 -1000 2000 2000");
+      FxSVG.setAttrNS(["width", `${width}`])($svg);
+      FxSVG.setAttrNS(["height", `${height}`])($svg);
+      FxSVG.setAttrNS(["viewBox", "-1000 -1000 2000 2000"])($svg);
     })();
   </script>
 </html>

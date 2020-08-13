@@ -2,6 +2,7 @@ import { each, go, go1, mapL, rangeL, some } from "fxjs2";
 import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isValidFxScaleSVGTransformList } from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js";
+import { $$setAttrNS } from "../setAttrNS/setAttrNS.index.js";
 
 const VALID_DIRECTION = new Set(["n", "ne", "e", "se", "s", "sw", "w", "nw"]);
 
@@ -58,7 +59,7 @@ export const $$mergeScaleTransform2 = ({
       [height_name, height * Math.abs(sy)],
     ],
     mapL(([k, v]) => [k, `${v}`]),
-    each(([k, v]) => $el.setAttributeNS(null, k, v))
+    each((kv) => $$setAttrNS(kv)($el))
   );
 
   each(() => transform_list.removeItem(index - 1), rangeL(3));

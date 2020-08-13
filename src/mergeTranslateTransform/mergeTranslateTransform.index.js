@@ -4,6 +4,7 @@ import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslateSVGTransform.index.js";
+import { $$setAttrNS } from "../setAttrNS/setAttrNS.index.js";
 
 export const $$mergeTranslateTransform = ({
   index = 0,
@@ -27,11 +28,11 @@ export const $$mergeTranslateTransform = ({
       { name: x_name, value: tx },
       { name: y_name, value: ty },
     ],
-    mapL(({ name, value }) => ({
+    mapL(({ name, value }) => [
       name,
-      value: `${parseFloat($$getAttrNS(name)($el)) + value}`,
-    })),
-    each(({ name, value }) => $el.setAttributeNS(null, name, value))
+      `${parseFloat($$getAttrNS(name)($el)) + value}`,
+    ]),
+    each((kv) => $$setAttrNS(kv)($el))
   );
 
   base_transform_list.removeItem(index);
