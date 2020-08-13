@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { $$append } from "../append/append.index.js";
 import { $$el } from "../el/el.index.js";
 import { $$qsa } from "./qsa.index.js";
 
@@ -11,11 +12,11 @@ export default ({ describe, it }) => [
       const a_el = $$el(
         `<circle class="${class_name}" cx="10" cy="10" r="20"></circle>`
       )();
-      g_el.appendChild(a_el);
+      $$append(a_el)(g_el);
       const b_el = $$el(
         `<rect class="${class_name}" x="20" y="20" width="100" height="40"></rect>`
       )();
-      g_el.appendChild(b_el);
+      $$append(b_el)(g_el);
 
       // when
       const received = $$qsa(`.${class_name}`, g_el);
@@ -30,9 +31,9 @@ export default ({ describe, it }) => [
     it(`The function returns an empty NodeList when there is no matched elements with the selector.`, function () {
       // given
       const g_el = $$el(`<g></g>`)();
-      g_el.appendChild($$el(`<circle cx="10" cy="10" r="20"></circle>`)());
-      g_el.appendChild(
-        $$el(`<rect x="20" y="20" width="100" height="40"></rect>`)()
+      $$append($$el(`<circle cx="10" cy="10" r="20"></circle>`)())(g_el);
+      $$append($$el(`<rect x="20" y="20" width="100" height="40"></rect>`)())(
+        g_el
       );
 
       // when

@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { $$append } from "../append/append.index.js";
 import { $$el } from "../el/el.index.js";
 import { $$qs } from "./qs.index.js";
 
@@ -8,7 +9,7 @@ export default ({ describe, it }) => [
       // given
       const g_el = $$el(`<g></g>`)();
       const a_el = $$el(`<circle cx="10" cy="10" r="20"></circle>`)();
-      g_el.appendChild(a_el);
+      $$append(a_el)(g_el);
 
       // when
       const received = $$qs("circle", g_el);
@@ -21,7 +22,7 @@ export default ({ describe, it }) => [
       // given
       const g_el = $$el(`<g></g>`)();
       const a_el = $$el(`<circle cx="10" cy="10" r="20"></circle>`)();
-      g_el.appendChild(a_el);
+      $$append(a_el)(g_el);
 
       // when
       const received = $$qs("rect", g_el);

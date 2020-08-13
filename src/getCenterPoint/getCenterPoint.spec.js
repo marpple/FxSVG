@@ -4,6 +4,7 @@ import { makeMockRect } from "../../test/utils/makeMockRect.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
 import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTransformAttributeValue.js";
+import { $$append } from "../append/append.index.js";
 import { $$createSVGPoint } from "../createSVGPoint/createSVGPoint.index.js";
 import { $$getBoxPoints } from "../getBoxPoints/getBoxPoints.index.js";
 import { $$getCenterPoint } from "./getCenterPoint.index.js";
@@ -20,7 +21,7 @@ const setupMock = ({ transform } = {}) => {
   });
 
   document.body.appendChild($svg);
-  $svg.appendChild($el);
+  $$append($el)($svg);
 
   return { $el, $svg };
 };

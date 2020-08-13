@@ -23,7 +23,7 @@ const str = `
 </rect>
 `;
 const $el = $$el(str)();
-$svg.appendChild($el);
+$$append($el)($svg);
 
 console.log($$getCenterPoint($el));
 // {original: SVGPoint, transformed: SVGPoint}
