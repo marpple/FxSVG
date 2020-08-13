@@ -139,6 +139,13 @@ svg 객체의 중심에 해당하는 `SVGPoint`를 반환합니다.
 
 내부적으로 사용하는 `<svg></svg>` 엘리먼트를 설정합니다.
 
+## \$\$hasAttrNS
+
+- [source](../src/hasAttrNS/hasAttrNS.index.js)
+- [detail](../src/hasAttrNS/README.md)
+
+SVG 엘리먼트가 속성을 가지고 있는지 여부를 판단합니다.
+
 ## \$\$initMatrixTransform
 
 - [source](../src/initMatrixTransform/initMatrixTransform.index.js)

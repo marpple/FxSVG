@@ -16,6 +16,7 @@ export { $$getBaseTransformList } from "./getBaseTransformList/getBaseTransformL
 export { $$getBoxPoints } from "./getBoxPoints/getBoxPoints.index.js";
 export { $$getCenterPoint } from "./getCenterPoint/getCenterPoint.index.js";
 export { $$getSVG, $$setSVG } from "./getSetSVG/getSetSVG.index.js";
+export { $$hasAttrNS } from "./hasAttrNS/hasAttrNS.index.js";
 export { $$initMatrixTransform } from "./initMatrixTransform/initMatrixTransform.index.js";
 export { $$initRotateTransform } from "./initRotateTransform/initRotateTransform.index.js";
 export { $$initScaleTransform } from "./initScaleTransform/initScaleTransform.index.js";

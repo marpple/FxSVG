@@ -16,6 +16,7 @@ import __spec_getBaseTransformList__ from "../src/getBaseTransformList/getBaseTr
 import __spec_getBoxPoints__ from "../src/getBoxPoints/getBoxPoints.spec.js";
 import __spec_getCenterPoint__ from "../src/getCenterPoint/getCenterPoint.spec.js";
 import __spec_getSetSVG__ from "../src/getSetSVG/getSetSVG.spec.js";
+import __spec_hasAttrNS__ from "../src/hasAttrNS/hasAttrNS.spec.js";
 import __spec_initMatrixTransform__ from "../src/initMatrixTransform/initMatrixTransform.spec.js";
 import __spec_initRotateTransform__ from "../src/initRotateTransform/initRotateTransform.spec.js";
 import __spec_initScaleTransform__ from "../src/initScaleTransform/initScaleTransform.spec.js";
@@ -61,6 +62,7 @@ export default () =>
     __spec_getBoxPoints__,
     __spec_getCenterPoint__,
     __spec_getSetSVG__,
+    __spec_hasAttrNS__,
     __spec_initMatrixTransform__,
     __spec_initRotateTransform__,
     __spec_initScaleTransform__,

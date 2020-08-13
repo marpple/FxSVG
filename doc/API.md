@@ -99,6 +99,11 @@
 - [source](../src/getSetSVG/getSetSVG.index.js)
 - [detail](../src/getSetSVG/README.md)
 
+## \$\$hasAttrNS
+
+- [source](../src/hasAttrNS/hasAttrNS.index.js)
+- [detail](../src/hasAttrNS/README.md)
+
 ## \$\$initMatrixTransform
 
 - [source](../src/initMatrixTransform/initMatrixTransform.index.js)
