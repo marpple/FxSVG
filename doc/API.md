@@ -214,6 +214,11 @@
 - [source](../src/removeAttrNS/removeAttrNS.index.js)
 - [detail](../src/removeAttrNS/README.md)
 
+## \$\$setAttrNS
+
+- [source](../src/setAttrNS/setAttrNS.index.js)
+- [detail](../src/setAttrNS/README.md)
+
 ## \$\$updateMatrixTransform
 
 - [source](../src/updateMatrixTransform/updateMatrixTransform.index.js)

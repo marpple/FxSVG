@@ -318,6 +318,13 @@ svg 엘리먼트에 다른 `SVGTransform` 이 있는 경우 각 `SVGTransform` �
 
 SVG 엘리먼트의 속성을 제거합니다. 필요한 경우 namespace 를 지정하여 사용할 수 있습니다.
 
+## \$\$setAttrNS
+
+- [source](../src/setAttrNS/setAttrNS.index.js)
+- [detail](../src/setAttrNS/README.md)
+
+SVG 엘리먼트에 속성과 값을 추가합니다. 필요한 경우 namespace 를 지정하여 사용할 수 있습니다.
+
 ## \$\$updateMatrixTransform
 
 - [source](../src/updateMatrixTransform/updateMatrixTransform.index.js)

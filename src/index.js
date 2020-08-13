@@ -39,6 +39,7 @@ export { $$mergeScaleTransform } from "./mergeScaleTransform/mergeScaleTransform
 export { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransform2.index.js";
 export { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
 export { $$removeAttrNS } from "./removeAttrNS/removeAttrNS.index.js";
+export { $$setAttrNS } from "./setAttrNS/setAttrNS.index.js";
 export { $$updateMatrixTransform } from "./updateMatrixTransform/updateMatrixTransform.index.js";
 export { $$updateRotateTransform } from "./updateRotateTransform/updateRotateTransform.index.js";
 export { $$updateScaleTransform } from "./updateScaleTransform/updateScaleTransform.index.js";
