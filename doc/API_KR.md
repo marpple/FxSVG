@@ -311,6 +311,13 @@ svg 엘리먼트에 가장 마지막으로 적용된 `SVGTransform` 이 `SVGTran
 해당 `SVGTransform` 을 svg 엘리먼트의 `x`, `y` 속성 (혹은 그에 준하는 속성) 에 반영합니다.
 svg 엘리먼트에 다른 `SVGTransform` 이 있는 경우 각 `SVGTransform` 을 업데이트합니다.
 
+## \$\$qs
+
+- [source](../src/qs/qs.index.js)
+- [detail](../src/qs/README.md)
+
+부모 엘리먼트에서 가장 먼저 셀렉터에 해당하는 자손 엘리먼트를 찾아 반환합니다. `querySelector` 와 동일한 함수입니다.
+
 ## \$\$qsa
 
 - [source](../src/qsa/qsa.index.js)
