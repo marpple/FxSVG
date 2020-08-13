@@ -12,10 +12,12 @@ import __spec_createSVGTransformTranslate__ from "../src/createSVGTransformTrans
 import __spec_el__ from "../src/el/el.spec.js";
 import __spec_els__ from "../src/els/els.spec.js";
 import __spec_getAnimTransformList__ from "../src/getAnimTransformList/getAnimTransformList.spec.js";
+import __spec_getAttrNS__ from "../src/getAttrNS/getAttrNS.spec.js";
 import __spec_getBaseTransformList__ from "../src/getBaseTransformList/getBaseTransformList.spec.js";
 import __spec_getBoxPoints__ from "../src/getBoxPoints/getBoxPoints.spec.js";
 import __spec_getCenterPoint__ from "../src/getCenterPoint/getCenterPoint.spec.js";
 import __spec_getSetSVG__ from "../src/getSetSVG/getSetSVG.spec.js";
+import __spec_hasAttrNS__ from "../src/hasAttrNS/hasAttrNS.spec.js";
 import __spec_initMatrixTransform__ from "../src/initMatrixTransform/initMatrixTransform.spec.js";
 import __spec_initRotateTransform__ from "../src/initRotateTransform/initRotateTransform.spec.js";
 import __spec_initScaleTransform__ from "../src/initScaleTransform/initScaleTransform.spec.js";
@@ -36,6 +38,8 @@ import __spec_mergeRotateTransform__ from "../src/mergeRotateTransform/mergeRota
 import __spec_mergeScaleTransform__ from "../src/mergeScaleTransform/mergeScaleTransform.spec.js";
 import __spec_mergeScaleTransform2__ from "../src/mergeScaleTransform2/mergeScaleTransform2.spec.js";
 import __spec_mergeTranslateTransform__ from "../src/mergeTranslateTransform/mergeTranslateTransform.spec.js";
+import __spec_removeAttrNS__ from "../src/removeAttrNS/removeAttrNS.spec.js";
+import __spec_setAttrNS__ from "../src/setAttrNS/setAttrNS.spec.js";
 import __spec_updateMatrixTransform__ from "../src/updateMatrixTransform/updateMatrixTransform.spec.js";
 import __spec_updateRotateTransform__ from "../src/updateRotateTransform/updateRotateTransform.spec.js";
 import __spec_updateScaleTransform__ from "../src/updateScaleTransform/updateScaleTransform.sepc.js";
@@ -57,10 +61,12 @@ export default () =>
     __spec_el__,
     __spec_els__,
     __spec_getAnimTransformList__,
+    __spec_getAttrNS__,
     __spec_getBaseTransformList__,
     __spec_getBoxPoints__,
     __spec_getCenterPoint__,
     __spec_getSetSVG__,
+    __spec_hasAttrNS__,
     __spec_initMatrixTransform__,
     __spec_initRotateTransform__,
     __spec_initScaleTransform__,
@@ -81,6 +87,8 @@ export default () =>
     __spec_mergeScaleTransform__,
     __spec_mergeScaleTransform2__,
     __spec_mergeTranslateTransform__,
+    __spec_removeAttrNS__,
+    __spec_setAttrNS__,
     __spec_updateMatrixTransform__,
     __spec_updateRotateTransform__,
     __spec_updateScaleTransform__,

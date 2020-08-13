@@ -74,6 +74,11 @@
 - [source](../src/getAnimTransformList/getAnimTransformList.index.js)
 - [detail](../src/getAnimTransformList/README.md)
 
+# \$\$getAttrNS
+
+- [source](../src/getAttrNS/getAttrNS.index.js)
+- [detail](../src/getAttrNS/README.md)
+
 ## \$\$getBaseTransformList
 
 - [source](../src/getBaseTransformList/getBaseTransformList.index.js)
@@ -98,6 +103,11 @@
 
 - [source](../src/getSetSVG/getSetSVG.index.js)
 - [detail](../src/getSetSVG/README.md)
+
+## \$\$hasAttrNS
+
+- [source](../src/hasAttrNS/hasAttrNS.index.js)
+- [detail](../src/hasAttrNS/README.md)
 
 ## \$\$initMatrixTransform
 
@@ -198,6 +208,16 @@
 
 - [source](../src/mergeTranslateTransform/mergeTranslateTransform.index.js)
 - [detail](../src/mergeTranslateTransform/README.md)
+
+## \$\$removeAttrNS
+
+- [source](../src/removeAttrNS/removeAttrNS.index.js)
+- [detail](../src/removeAttrNS/README.md)
+
+## \$\$setAttrNS
+
+- [source](../src/setAttrNS/setAttrNS.index.js)
+- [detail](../src/setAttrNS/README.md)
 
 ## \$\$updateMatrixTransform
 

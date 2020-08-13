@@ -104,6 +104,13 @@
 
 입력받은 svg 객체의 `transform.animVal` 값을 반환합니다.
 
+# \$\$getAttrNS
+
+- [source](../src/getAttrNS/getAttrNS.index.js)
+- [detail](../src/getAttrNS/README.md)
+
+SVG 엘리먼트의 속성에 해당하는 값을 반환합니다. 해당하는 속성이 없으면 `null`을 반환합니다.
+
 ## \$\$getBaseTransformList
 
 - [source](../src/getBaseTransformList/getBaseTransformList.index.js)
@@ -138,6 +145,13 @@ svg 객체의 중심에 해당하는 `SVGPoint`를 반환합니다.
 - [detail](../src/getSetSVG/README.md)
 
 내부적으로 사용하는 `<svg></svg>` 엘리먼트를 설정합니다.
+
+## \$\$hasAttrNS
+
+- [source](../src/hasAttrNS/hasAttrNS.index.js)
+- [detail](../src/hasAttrNS/README.md)
+
+SVG 엘리먼트가 속성을 가지고 있는지 여부를 판단합니다.
 
 ## \$\$initMatrixTransform
 
@@ -296,6 +310,20 @@ SVG Translate Transform 을 다루기 위한 `$$LiveTransform` 인터페이스�
 svg 엘리먼트에 가장 마지막으로 적용된 `SVGTransform` 이 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입인 경우
 해당 `SVGTransform` 을 svg 엘리먼트의 `x`, `y` 속성 (혹은 그에 준하는 속성) 에 반영합니다.
 svg 엘리먼트에 다른 `SVGTransform` 이 있는 경우 각 `SVGTransform` 을 업데이트합니다.
+
+## \$\$removeAttrNS
+
+- [source](../src/removeAttrNS/removeAttrNS.index.js)
+- [detail](../src/removeAttrNS/README.md)
+
+SVG 엘리먼트의 속성을 제거합니다. 필요한 경우 namespace 를 지정하여 사용할 수 있습니다.
+
+## \$\$setAttrNS
+
+- [source](../src/setAttrNS/setAttrNS.index.js)
+- [detail](../src/setAttrNS/README.md)
+
+SVG 엘리먼트에 속성과 값을 추가합니다. 필요한 경우 namespace 를 지정하여 사용할 수 있습니다.
 
 ## \$\$updateMatrixTransform
 

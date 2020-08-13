@@ -12,10 +12,12 @@ export { $$createSVGTransformTranslate } from "./createSVGTransformTranslate/cre
 export { $$el } from "./el/el.index.js";
 export { $$els } from "./els/els.index.js";
 export { $$getAnimTransformList } from "./getAnimTransformList/getAnimTransformList.index.js";
+export { $$getAttrNS } from "./getAttrNS/getAttrNS.index.js";
 export { $$getBaseTransformList } from "./getBaseTransformList/getBaseTransformList.index.js";
 export { $$getBoxPoints } from "./getBoxPoints/getBoxPoints.index.js";
 export { $$getCenterPoint } from "./getCenterPoint/getCenterPoint.index.js";
 export { $$getSVG, $$setSVG } from "./getSetSVG/getSetSVG.index.js";
+export { $$hasAttrNS } from "./hasAttrNS/hasAttrNS.index.js";
 export { $$initMatrixTransform } from "./initMatrixTransform/initMatrixTransform.index.js";
 export { $$initRotateTransform } from "./initRotateTransform/initRotateTransform.index.js";
 export { $$initScaleTransform } from "./initScaleTransform/initScaleTransform.index.js";
@@ -36,6 +38,8 @@ export { $$mergeRotateTransform } from "./mergeRotateTransform/mergeRotateTransf
 export { $$mergeScaleTransform } from "./mergeScaleTransform/mergeScaleTransform.index.js";
 export { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransform2.index.js";
 export { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
+export { $$removeAttrNS } from "./removeAttrNS/removeAttrNS.index.js";
+export { $$setAttrNS } from "./setAttrNS/setAttrNS.index.js";
 export { $$updateMatrixTransform } from "./updateMatrixTransform/updateMatrixTransform.index.js";
 export { $$updateRotateTransform } from "./updateRotateTransform/updateRotateTransform.index.js";
 export { $$updateScaleTransform } from "./updateScaleTransform/updateScaleTransform.index.js";

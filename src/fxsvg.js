@@ -12,10 +12,12 @@ import { $$createSVGTransformTranslate } from "./createSVGTransformTranslate/cre
 import { $$el } from "./el/el.index.js";
 import { $$els } from "./els/els.index.js";
 import { $$getAnimTransformList } from "./getAnimTransformList/getAnimTransformList.index.js";
+import { $$getAttrNS } from "./getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "./getBaseTransformList/getBaseTransformList.index.js";
 import { $$getBoxPoints } from "./getBoxPoints/getBoxPoints.index.js";
 import { $$getCenterPoint } from "./getCenterPoint/getCenterPoint.index.js";
 import { $$getSVG, $$setSVG } from "./getSetSVG/getSetSVG.index.js";
+import { $$hasAttrNS } from "./hasAttrNS/hasAttrNS.index.js";
 import { $$initMatrixTransform } from "./initMatrixTransform/initMatrixTransform.index.js";
 import { $$initRotateTransform } from "./initRotateTransform/initRotateTransform.index.js";
 import { $$initScaleTransform } from "./initScaleTransform/initScaleTransform.index.js";
@@ -36,6 +38,8 @@ import { $$mergeRotateTransform } from "./mergeRotateTransform/mergeRotateTransf
 import { $$mergeScaleTransform } from "./mergeScaleTransform/mergeScaleTransform.index.js";
 import { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransform2.index.js";
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
+import { $$removeAttrNS } from "./removeAttrNS/removeAttrNS.index.js";
+import { $$setAttrNS } from "./setAttrNS/setAttrNS.index.js";
 import { $$updateMatrixTransform } from "./updateMatrixTransform/updateMatrixTransform.index.js";
 import { $$updateRotateTransform } from "./updateRotateTransform/updateRotateTransform.index.js";
 import { $$updateScaleTransform } from "./updateScaleTransform/updateScaleTransform.index.js";
@@ -56,11 +60,13 @@ export const FxSVG = {
   el: $$el,
   els: $$els,
   getAnimTransformList: $$getAnimTransformList,
+  getAttrNS: $$getAttrNS,
   getBaseTransformList: $$getBaseTransformList,
   getBoxPoints: $$getBoxPoints,
   getCenterPoint: $$getCenterPoint,
   getSVG: $$getSVG,
   setSVG: $$setSVG,
+  hasAttrNS: $$hasAttrNS,
   initMatrixTransform: $$initMatrixTransform,
   initRotateTransform: $$initRotateTransform,
   initScaleTransform: $$initScaleTransform,
@@ -81,6 +87,8 @@ export const FxSVG = {
   mergeScaleTransform: $$mergeScaleTransform,
   mergeScaleTransform2: $$mergeScaleTransform2,
   mergeTranslateTransform: $$mergeTranslateTransform,
+  removeAttrNS: $$removeAttrNS,
+  setAttrNS: $$setAttrNS,
   updateMatrixTransform: $$updateMatrixTransform,
   updateRotateTransform: $$updateRotateTransform,
   updateScaleTransform: $$updateScaleTransform,
