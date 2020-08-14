@@ -1,10 +1,12 @@
 export {
   $append as $$append,
   $appendTo as $$appendTo,
+  $hide as $$hide,
   $off as $$off,
   $on as $$on,
   $qs as $$qs,
   $qsa as $$qsa,
+  $show as $$show,
 } from "fxdom";
 
 export { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
