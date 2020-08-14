@@ -1,7 +1,6 @@
-import { $append, $qs, $qsa } from "fxdom";
+import { $append, $appendTo, $qs, $qsa } from "fxdom";
 
 import { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
-import { $$appendTo } from "./appendTo/appendTo.index.js";
 import { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 import { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";
 import { $$convertClientToUserCoords } from "./convertClientToUserCoords/convertClientToUserCoords.index.js";
@@ -55,11 +54,11 @@ import { $$updateTranslateTransform } from "./updateTranslateTransform/updateTra
 
 export const FxSVG = {
   append: $append,
+  appendTo: $appendTo,
   qs: $qs,
   qsa: $qsa,
 
   appendRotateTransform: $$appendRotateTransform,
-  appendTo: $$appendTo,
   appendTranslateTransform: $$appendTranslateTransform,
   consolidateTransformList: $$consolidateTransformList,
   convertClientToUserCoords: $$convertClientToUserCoords,

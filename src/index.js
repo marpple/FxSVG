@@ -1,7 +1,11 @@
-export { $qs as $$qs, $qsa as $$qsa, $append as $$append } from "fxdom";
+export {
+  $append as $$append,
+  $appendTo as $$appendTo,
+  $qs as $$qs,
+  $qsa as $$qsa,
+} from "fxdom";
 
 export { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
-export { $$appendTo } from "./appendTo/appendTo.index.js";
 export { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 export { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";
 export { $$convertClientToUserCoords } from "./convertClientToUserCoords/convertClientToUserCoords.index.js";

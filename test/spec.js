@@ -1,5 +1,4 @@
 import __spec_appendRotateTransform__ from "../src/appendRotateTransform/appendRotateTransform.spec.js";
-import __spec_appendTo__ from "../src/appendTo/appendTo.spec.js";
 import __spec_appendTranslateTransform__ from "../src/appendTranslateTransform/appendTranslateTransform.spec.js";
 import __spec_consolidateTransformList__ from "../src/consolidateTransformList/consolidateTransformList.spec.js";
 import __spec_convertClientToUserCoords__ from "../src/convertClientToUserCoords/convertClientToUserCoords.spec.js";
@@ -54,7 +53,6 @@ import __spec_updateTranslateTransform__ from "../src/updateTranslateTransform/u
 export default () =>
   [
     __spec_appendRotateTransform__,
-    __spec_appendTo__,
     __spec_appendTranslateTransform__,
     __spec_consolidateTransformList__,
     __spec_convertClientToUserCoords__,
