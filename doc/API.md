@@ -234,6 +234,11 @@
 - [source](../src/mergeTranslateTransform/mergeTranslateTransform.index.js)
 - [detail](../src/mergeTranslateTransform/README.md)
 
+## \$\$on
+
+- [source](../src/on/on.index.js)
+- [detail](../src/on/README.md)
+
 ## \$\$qs
 
 - [source](../src/qs/qs.index.js)

@@ -350,6 +350,14 @@ svg 엘리먼트에 가장 마지막으로 적용된 `SVGTransform` 이 `SVGTran
 해당 `SVGTransform` 을 svg 엘리먼트의 `x`, `y` 속성 (혹은 그에 준하는 속성) 에 반영합니다.
 svg 엘리먼트에 다른 `SVGTransform` 이 있는 경우 각 `SVGTransform` 을 업데이트합니다.
 
+## \$\$on
+
+- [source](../src/on/on.index.js)
+- [detail](../src/on/README.md)
+
+해당 엘리먼트의 이벤트에 이벤트 핸들러를 추가합니다.
+`addEventListener` 와 동일한 함수입니다. `addEventListner` 가 제공하는 모든 인터페이스를 동일하게 지원합니다.
+
 ## \$\$qs
 
 - [source](../src/qs/qs.index.js)

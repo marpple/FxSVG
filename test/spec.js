@@ -43,6 +43,7 @@ import __spec_mergeRotateTransform__ from "../src/mergeRotateTransform/mergeRota
 import __spec_mergeScaleTransform__ from "../src/mergeScaleTransform/mergeScaleTransform.spec.js";
 import __spec_mergeScaleTransform2__ from "../src/mergeScaleTransform2/mergeScaleTransform2.spec.js";
 import __spec_mergeTranslateTransform__ from "../src/mergeTranslateTransform/mergeTranslateTransform.spec.js";
+import __spec_on__ from "../src/on/on.spec.js";
 import __spec_qs__ from "../src/qs/qs.spec.js";
 import __spec_qsa__ from "../src/qsa/qsa.spec.js";
 import __spec_removeAttrNS__ from "../src/removeAttrNS/removeAttrNS.spec.js";
@@ -99,6 +100,7 @@ export default () =>
     __spec_mergeScaleTransform__,
     __spec_mergeScaleTransform2__,
     __spec_mergeTranslateTransform__,
+    __spec_on__,
     __spec_qs__,
     __spec_qsa__,
     __spec_removeAttrNS__,
