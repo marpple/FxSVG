@@ -104,6 +104,11 @@
 - [source](../src/getCenterPoint/getCenterPoint.index.js)
 - [detail](../src/getCenterPoint/README.md)
 
+## \$\$getConsolidatedTransformMatrix
+
+- [source](../src/getConsolidatedTransformMatrix/getConsolidatedTransformMatrix.index.js)
+- [detail](../src/getConsolidatedTransformMatrix/README.md)
+
 ## \$\$getSVG
 
 - [source](../src/getSetSVG/getSetSVG.index.js)

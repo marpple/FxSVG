@@ -148,6 +148,14 @@ svg 객체의 영역에 해당하는 `SVGPoint`들을 반환합니다.
 
 svg 객체의 중심에 해당하는 `SVGPoint`를 반환합니다.
 
+## \$\$getConsolidatedTransformMatrix
+
+- [source](../src/getConsolidatedTransformMatrix/getConsolidatedTransformMatrix.index.js)
+- [detail](../src/getConsolidatedTransformMatrix/README.md)
+
+입력받은 `SVGTransformList` 의 모든 `SVGTransform` 의 변환 행렬을 곱한 행렬을 반환합니다.
+`SVGTransformList.consolidate` 와 비슷한 동작을 수행하지만 `SVGTransformList` 를 변형하지 않습니다.
+
 ## \$\$getSVG
 
 - [source](../src/getSetSVG/getSetSVG.index.js)
