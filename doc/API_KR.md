@@ -6,14 +6,6 @@
 
 ---
 
-## \$\$append
-
-- [source](../src/append/append.index.js)
-- [detail](../src/append/README.md)
-
-첫 번째로 받은 엘리먼트를 두 번째로 받은 엘리먼트의 자식 엘리먼트로 추가합니다.
-`appendChild` 와 동일한 함수입니다.
-
 ## \$\$appendRotateTransform
 
 - [source](../src/appendRotateTransform/appendRotateTransform.index.js)

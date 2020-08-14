@@ -1,6 +1,5 @@
-export { $qs as $$qs, $qsa as $$qsa } from "fxdom";
+export { $qs as $$qs, $qsa as $$qsa, $append as $$append } from "fxdom";
 
-export { $$append } from "./append/append.index.js";
 export { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
 export { $$appendTo } from "./appendTo/appendTo.index.js";
 export { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
