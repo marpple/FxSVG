@@ -366,13 +366,6 @@ svg 엘리먼트에 다른 `SVGTransform` 이 있는 경우 각 `SVGTransform` �
 해당 엘리먼트의 이벤트에 이벤트 핸들러를 추가합니다.
 `addEventListener` 와 동일한 함수입니다. `addEventListner` 가 제공하는 모든 인터페이스를 동일하게 지원합니다.
 
-## \$\$qsa
-
-- [source](../src/qsa/qsa.index.js)
-- [detail](../src/qsa/README.md)
-
-부모 엘리먼트에서 셀렉터에 해당하는 자손 엘리먼트 목록을 찾아 반환합니다. `querySelectorAll` 과 동일한 함수입니다.
-
 ## \$\$removeAttrNS
 
 - [source](../src/removeAttrNS/removeAttrNS.index.js)

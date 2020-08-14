@@ -244,11 +244,6 @@
 - [source](../src/on/on.index.js)
 - [detail](../src/on/README.md)
 
-## \$\$qsa
-
-- [source](../src/qsa/qsa.index.js)
-- [detail](../src/qsa/README.md)
-
 ## \$\$removeAttrNS
 
 - [source](../src/removeAttrNS/removeAttrNS.index.js)
