@@ -3,6 +3,7 @@ import { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTra
 import { $$appendTo } from "./appendTo/appendTo.index.js";
 import { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 import { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";
+import { $$convertClientToUserCoords } from "./convertClientToUserCoords/convertClientToUserCoords.index.js";
 import { $$createSVGMatrix } from "./createSVGMatrix/createSVGMatrix.index.js";
 import { $$createSVGPoint } from "./createSVGPoint/createSVGPoint.index.js";
 import { $$createSVGRect } from "./createSVGRect/createSVGRect.index.js";
@@ -56,6 +57,7 @@ export const FxSVG = {
   appendTo: $$appendTo,
   appendTranslateTransform: $$appendTranslateTransform,
   consolidateTransformList: $$consolidateTransformList,
+  convertClientToUserCoords: $$convertClientToUserCoords,
   createSVGMatrix: $$createSVGMatrix,
   createSVGPoint: $$createSVGPoint,
   createSVGRect: $$createSVGRect,

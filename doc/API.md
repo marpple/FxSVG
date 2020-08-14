@@ -29,6 +29,11 @@
 - [source](../src/consolidateTransformList/consolidateTransformList.index.js)
 - [detail](../src/consolidateTransformList/README.md)
 
+## \$\$convertClientToUserCoords
+
+- [source](../src/convertClientToUserCoords/convertClientToUserCoords.index.js)
+- [detail](../src/convertClientToUserCoords/README.md)
+
 ## \$\$createSVGMatrix
 
 - [source](../src/createSVGMatrix/createSVGMatrix.index.js)

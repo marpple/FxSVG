@@ -3,6 +3,7 @@ export { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTra
 export { $$appendTo } from "./appendTo/appendTo.index.js";
 export { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 export { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";
+export { $$convertClientToUserCoords } from "./convertClientToUserCoords/convertClientToUserCoords.index.js";
 export { $$createSVGMatrix } from "./createSVGMatrix/createSVGMatrix.index.js";
 export { $$createSVGPoint } from "./createSVGPoint/createSVGPoint.index.js";
 export { $$createSVGRect } from "./createSVGRect/createSVGRect.index.js";

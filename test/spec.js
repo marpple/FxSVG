@@ -3,6 +3,7 @@ import __spec_appendRotateTransform__ from "../src/appendRotateTransform/appendR
 import __spec_appendTo__ from "../src/appendTo/appendTo.spec.js";
 import __spec_appendTranslateTransform__ from "../src/appendTranslateTransform/appendTranslateTransform.spec.js";
 import __spec_consolidateTransformList__ from "../src/consolidateTransformList/consolidateTransformList.spec.js";
+import __spec_convertClientToUserCoords__ from "../src/convertClientToUserCoords/convertClientToUserCoords.spec.js";
 import __spec_createSVGMatrix__ from "../src/createSVGMatrix/createSVGMatrix.spec.js";
 import __spec_createSVGPoint__ from "../src/createSVGPoint/createSVGPoint.spec.js";
 import __spec_createSVGRect__ from "../src/createSVGRect/createSVGRect.spec.js";
@@ -57,6 +58,7 @@ export default () =>
     __spec_appendTo__,
     __spec_appendTranslateTransform__,
     __spec_consolidateTransformList__,
+    __spec_convertClientToUserCoords__,
     __spec_createSVGMatrix__,
     __spec_createSVGPoint__,
     __spec_createSVGRect__,
