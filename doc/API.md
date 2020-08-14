@@ -234,6 +234,11 @@
 - [source](../src/mergeTranslateTransform/mergeTranslateTransform.index.js)
 - [detail](../src/mergeTranslateTransform/README.md)
 
+## \$\$off
+
+- [source](../src/off/off.index.js)
+- [test](../src/off/README.md)
+
 ## \$\$on
 
 - [source](../src/on/on.index.js)
