@@ -1,6 +1,6 @@
-import { $$append } from "./append/append.index.js";
+import { $append, $appendTo, $off, $on, $qs, $qsa } from "fxdom";
+
 import { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
-import { $$appendTo } from "./appendTo/appendTo.index.js";
 import { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 import { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";
 import { $$convertClientToUserCoords } from "./convertClientToUserCoords/convertClientToUserCoords.index.js";
@@ -43,10 +43,6 @@ import { $$mergeRotateTransform } from "./mergeRotateTransform/mergeRotateTransf
 import { $$mergeScaleTransform } from "./mergeScaleTransform/mergeScaleTransform.index.js";
 import { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransform2.index.js";
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
-import { $$off } from "./off/off.index.js";
-import { $$on } from "./on/on.index.js";
-import { $$qs } from "./qs/qs.index.js";
-import { $$qsa } from "./qsa/qsa.index.js";
 import { $$removeAttrNS } from "./removeAttrNS/removeAttrNS.index.js";
 import { $$setAttrNS } from "./setAttrNS/setAttrNS.index.js";
 import { $$updateMatrixTransform } from "./updateMatrixTransform/updateMatrixTransform.index.js";
@@ -55,9 +51,14 @@ import { $$updateScaleTransform } from "./updateScaleTransform/updateScaleTransf
 import { $$updateTranslateTransform } from "./updateTranslateTransform/updateTranslateTransform.index.js";
 
 export const FxSVG = {
-  append: $$append,
+  append: $append,
+  appendTo: $appendTo,
+  off: $off,
+  on: $on,
+  qs: $qs,
+  qsa: $qsa,
+
   appendRotateTransform: $$appendRotateTransform,
-  appendTo: $$appendTo,
   appendTranslateTransform: $$appendTranslateTransform,
   consolidateTransformList: $$consolidateTransformList,
   convertClientToUserCoords: $$convertClientToUserCoords,
@@ -101,10 +102,6 @@ export const FxSVG = {
   mergeScaleTransform: $$mergeScaleTransform,
   mergeScaleTransform2: $$mergeScaleTransform2,
   mergeTranslateTransform: $$mergeTranslateTransform,
-  off: $$off,
-  on: $$on,
-  qs: $$qs,
-  qsa: $$qsa,
   removeAttrNS: $$removeAttrNS,
   setAttrNS: $$setAttrNS,
   updateMatrixTransform: $$updateMatrixTransform,

@@ -1,10 +1,10 @@
 import { expect } from "chai";
+import { $append } from "fxdom";
 import { defaultTo, go, mapL, rangeL, reduce } from "fxjs2";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
 import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTransformAttributeValue.js";
-import { $$append } from "../append/append.index.js";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getBoxPoints } from "./getBoxPoints.index.js";
@@ -26,7 +26,7 @@ const setupMock = ({ transform } = {}) => {
   });
 
   document.body.appendChild($svg);
-  $$append($el)($svg);
+  $append($el, $svg);
 
   return { x, y, width, height, $el, $svg };
 };

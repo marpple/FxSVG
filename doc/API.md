@@ -4,20 +4,10 @@
 
 ---
 
-## \$\$append
-
-- [source](../src/append/append.index.js)
-- [detail](../src/append/README.md)
-
 ## \$\$appendRotateTransform
 
 - [source](../src/appendRotateTransform/appendRotateTransform.index.js)
 - [detail](../src/appendRotateTransform/README.md)
-
-## \$\$appendTo
-
-- [source](../src/appendTo/appendTo.index.js)
-- [detail](../src/appendTo/README.md)
 
 ## \$\$appendTranslateTransform
 
@@ -233,26 +223,6 @@
 
 - [source](../src/mergeTranslateTransform/mergeTranslateTransform.index.js)
 - [detail](../src/mergeTranslateTransform/README.md)
-
-## \$\$off
-
-- [source](../src/off/off.index.js)
-- [test](../src/off/README.md)
-
-## \$\$on
-
-- [source](../src/on/on.index.js)
-- [detail](../src/on/README.md)
-
-## \$\$qs
-
-- [source](../src/qs/qs.index.js)
-- [detail](../src/qs/README.md)
-
-## \$\$qsa
-
-- [source](../src/qsa/qsa.index.js)
-- [detail](../src/qsa/README.md)
 
 ## \$\$removeAttrNS
 

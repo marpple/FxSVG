@@ -6,28 +6,12 @@
 
 ---
 
-## \$\$append
-
-- [source](../src/append/append.index.js)
-- [detail](../src/append/README.md)
-
-첫 번째로 받은 엘리먼트를 두 번째로 받은 엘리먼트의 자식 엘리먼트로 추가합니다.
-`appendChild` 와 동일한 함수입니다.
-
 ## \$\$appendRotateTransform
 
 - [source](../src/appendRotateTransform/appendRotateTransform.index.js)
 - [detail](../src/appendRotateTransform/README.md)
 
 `SVGTransform.SVG_TRANSFORM_ROTATE` 타입의 `SVGTransform` 의 `angle` 값에 입력받은 `angle`을 더합니다.
-
-## \$\$appendTo
-
-- [source](../src/appendTo/appendTo.index.js)
-- [detail](../src/appendTo/README.md)
-
-첫 번째로 받은 엘리먼트에 두 번째로 받은 엘리먼트를 자식 엘리먼트로 추가합니다.
-`appendChild` 와 동일한 함수입니다.
 
 ## \$\$appendTranslateTransform
 
@@ -349,36 +333,6 @@ SVG Translate Transform 을 다루기 위한 `$$LiveTransform` 인터페이스�
 svg 엘리먼트에 가장 마지막으로 적용된 `SVGTransform` 이 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입인 경우
 해당 `SVGTransform` 을 svg 엘리먼트의 `x`, `y` 속성 (혹은 그에 준하는 속성) 에 반영합니다.
 svg 엘리먼트에 다른 `SVGTransform` 이 있는 경우 각 `SVGTransform` 을 업데이트합니다.
-
-## \$\$off
-
-- [source](../src/off/off.index.js)
-- [test](../src/off/README.md)
-
-해당 엘리먼트에서 이벤트 핸들러를 제거합니다.
-`removeEventListener` 와 동일한 함수입니다. `removeEventListner` 가 제공하는 모든 인터페이스를 동일하게 지원합니다.
-
-## \$\$on
-
-- [source](../src/on/on.index.js)
-- [detail](../src/on/README.md)
-
-해당 엘리먼트의 이벤트에 이벤트 핸들러를 추가합니다.
-`addEventListener` 와 동일한 함수입니다. `addEventListner` 가 제공하는 모든 인터페이스를 동일하게 지원합니다.
-
-## \$\$qs
-
-- [source](../src/qs/qs.index.js)
-- [detail](../src/qs/README.md)
-
-부모 엘리먼트에서 가장 먼저 셀렉터에 해당하는 자손 엘리먼트를 찾아 반환합니다. `querySelector` 와 동일한 함수입니다.
-
-## \$\$qsa
-
-- [source](../src/qsa/qsa.index.js)
-- [detail](../src/qsa/README.md)
-
-부모 엘리먼트에서 셀렉터에 해당하는 자손 엘리먼트 목록을 찾아 반환합니다. `querySelectorAll` 과 동일한 함수입니다.
 
 ## \$\$removeAttrNS
 
