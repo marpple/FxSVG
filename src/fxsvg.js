@@ -17,6 +17,7 @@ import { $$els } from "./els/els.index.js";
 import { $$getAnimTransformList } from "./getAnimTransformList/getAnimTransformList.index.js";
 import { $$getAttrNS } from "./getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "./getBaseTransformList/getBaseTransformList.index.js";
+import { $$getBoundingPoints } from "./getBoundingPoints/getBoundingPoints.index.js";
 import { $$getBoxPoints } from "./getBoxPoints/getBoxPoints.index.js";
 import { $$getCenterPoint } from "./getCenterPoint/getCenterPoint.index.js";
 import { $$getConsolidatedTransformMatrix } from "./getConsolidatedTransformMatrix/getConsolidatedTransformMatrix.index.js";
@@ -71,6 +72,7 @@ export const FxSVG = {
   getAnimTransformList: $$getAnimTransformList,
   getAttrNS: $$getAttrNS,
   getBaseTransformList: $$getBaseTransformList,
+  getBoundingPoints: $$getBoundingPoints,
   getBoxPoints: $$getBoxPoints,
   getCenterPoint: $$getCenterPoint,
   getConsolidatedTransformMatrix: $$getConsolidatedTransformMatrix,

@@ -17,6 +17,7 @@ import __spec_els__ from "../src/els/els.spec.js";
 import __spec_getAnimTransformList__ from "../src/getAnimTransformList/getAnimTransformList.spec.js";
 import __spec_getAttrNS__ from "../src/getAttrNS/getAttrNS.spec.js";
 import __spec_getBaseTransformList__ from "../src/getBaseTransformList/getBaseTransformList.spec.js";
+import __spec_getBoundingPoints__ from "../src/getBoundingPoints/getBoundingPoints.spec.js";
 import __spec_getBoxPoints__ from "../src/getBoxPoints/getBoxPoints.spec.js";
 import __spec_getCenterPoint__ from "../src/getCenterPoint/getCenterPoint.spec.js";
 import __spec_getConsolidatedTransformMatrix__ from "../src/getConsolidatedTransformMatrix/getConsolidatedTransformMatrix.spec.js";
@@ -72,6 +73,7 @@ export default () =>
     __spec_getAnimTransformList__,
     __spec_getAttrNS__,
     __spec_getBaseTransformList__,
+    __spec_getBoundingPoints__,
     __spec_getBoxPoints__,
     __spec_getCenterPoint__,
     __spec_getConsolidatedTransformMatrix__,

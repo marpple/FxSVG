@@ -99,6 +99,11 @@
 - [source](../src/getBaseTransformList/getBaseTransformList.index.js)
 - [detail](../src/getBaseTransformList/README.md)
 
+## \$\$getBoundingPoints
+
+- [source](../src/getBoundingPoints/getBoundingPoints.index.js)
+- [detail](../src/getBoundingPoints/README.md)
+
 ## \$\$getBoxPoints
 
 - [source](../src/getBoxPoints/getBoxPoints.index.js)

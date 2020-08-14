@@ -141,6 +141,14 @@ SVG 엘리먼트의 속성에 해당하는 값을 반환합니다. 해당하는 
 
 입력받은 svg 객체의 `transform.baseVal` 값을 반환합니다.
 
+## \$\$getBoundingPoints
+
+- [source](../src/getBoundingPoints/getBoundingPoints.index.js)
+- [detail](../src/getBoundingPoints/README.md)
+
+입력한 point 목록에서 x, y 의 개별 최솟값, 최댓값으로 이루어진 min, max point 를 반환합니다.
+x, y 는 독립적으로 비교됩니다. 따라서 반환된 point 는 입력한 point 목록에 없을 수 있습니다.
+
 ## \$\$getBoxPoints
 
 - [source](../src/getBoxPoints/getBoxPoints.index.js)
