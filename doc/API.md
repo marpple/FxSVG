@@ -244,11 +244,6 @@
 - [source](../src/on/on.index.js)
 - [detail](../src/on/README.md)
 
-## \$\$qs
-
-- [source](../src/qs/qs.index.js)
-- [detail](../src/qs/README.md)
-
 ## \$\$qsa
 
 - [source](../src/qsa/qsa.index.js)

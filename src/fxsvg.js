@@ -1,3 +1,5 @@
+import { $qs } from "fxdom";
+
 import { $$append } from "./append/append.index.js";
 import { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
 import { $$appendTo } from "./appendTo/appendTo.index.js";
@@ -45,7 +47,6 @@ import { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransfo
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
 import { $$off } from "./off/off.index.js";
 import { $$on } from "./on/on.index.js";
-import { $$qs } from "./qs/qs.index.js";
 import { $$qsa } from "./qsa/qsa.index.js";
 import { $$removeAttrNS } from "./removeAttrNS/removeAttrNS.index.js";
 import { $$setAttrNS } from "./setAttrNS/setAttrNS.index.js";
@@ -55,6 +56,8 @@ import { $$updateScaleTransform } from "./updateScaleTransform/updateScaleTransf
 import { $$updateTranslateTransform } from "./updateTranslateTransform/updateTranslateTransform.index.js";
 
 export const FxSVG = {
+  qs: $qs,
+
   append: $$append,
   appendRotateTransform: $$appendRotateTransform,
   appendTo: $$appendTo,
@@ -103,7 +106,6 @@ export const FxSVG = {
   mergeTranslateTransform: $$mergeTranslateTransform,
   off: $$off,
   on: $$on,
-  qs: $$qs,
   qsa: $$qsa,
   removeAttrNS: $$removeAttrNS,
   setAttrNS: $$setAttrNS,
