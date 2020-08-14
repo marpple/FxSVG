@@ -29,6 +29,11 @@
 - [source](../src/consolidateTransformList/consolidateTransformList.index.js)
 - [detail](../src/consolidateTransformList/README.md)
 
+## \$\$convertClientToUserCoords
+
+- [source](../src/convertClientToUserCoords/convertClientToUserCoords.index.js)
+- [detail](../src/convertClientToUserCoords/README.md)
+
 ## \$\$createSVGMatrix
 
 - [source](../src/createSVGMatrix/createSVGMatrix.index.js)
@@ -94,6 +99,11 @@
 - [source](../src/getBaseTransformList/getBaseTransformList.index.js)
 - [detail](../src/getBaseTransformList/README.md)
 
+## \$\$getBoundingPoints
+
+- [source](../src/getBoundingPoints/getBoundingPoints.index.js)
+- [detail](../src/getBoundingPoints/README.md)
+
 ## \$\$getBoxPoints
 
 - [source](../src/getBoxPoints/getBoxPoints.index.js)
@@ -103,6 +113,11 @@
 
 - [source](../src/getCenterPoint/getCenterPoint.index.js)
 - [detail](../src/getCenterPoint/README.md)
+
+## \$\$getConsolidatedTransformMatrix
+
+- [source](../src/getConsolidatedTransformMatrix/getConsolidatedTransformMatrix.index.js)
+- [detail](../src/getConsolidatedTransformMatrix/README.md)
 
 ## \$\$getSVG
 
@@ -218,6 +233,16 @@
 
 - [source](../src/mergeTranslateTransform/mergeTranslateTransform.index.js)
 - [detail](../src/mergeTranslateTransform/README.md)
+
+## \$\$off
+
+- [source](../src/off/off.index.js)
+- [test](../src/off/README.md)
+
+## \$\$on
+
+- [source](../src/on/on.index.js)
+- [detail](../src/on/README.md)
 
 ## \$\$qs
 

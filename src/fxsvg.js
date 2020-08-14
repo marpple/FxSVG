@@ -3,6 +3,7 @@ import { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTra
 import { $$appendTo } from "./appendTo/appendTo.index.js";
 import { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 import { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";
+import { $$convertClientToUserCoords } from "./convertClientToUserCoords/convertClientToUserCoords.index.js";
 import { $$createSVGMatrix } from "./createSVGMatrix/createSVGMatrix.index.js";
 import { $$createSVGPoint } from "./createSVGPoint/createSVGPoint.index.js";
 import { $$createSVGRect } from "./createSVGRect/createSVGRect.index.js";
@@ -16,8 +17,10 @@ import { $$els } from "./els/els.index.js";
 import { $$getAnimTransformList } from "./getAnimTransformList/getAnimTransformList.index.js";
 import { $$getAttrNS } from "./getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "./getBaseTransformList/getBaseTransformList.index.js";
+import { $$getBoundingPoints } from "./getBoundingPoints/getBoundingPoints.index.js";
 import { $$getBoxPoints } from "./getBoxPoints/getBoxPoints.index.js";
 import { $$getCenterPoint } from "./getCenterPoint/getCenterPoint.index.js";
+import { $$getConsolidatedTransformMatrix } from "./getConsolidatedTransformMatrix/getConsolidatedTransformMatrix.index.js";
 import { $$getSVG, $$setSVG } from "./getSetSVG/getSetSVG.index.js";
 import { $$hasAttrNS } from "./hasAttrNS/hasAttrNS.index.js";
 import { $$initMatrixTransform } from "./initMatrixTransform/initMatrixTransform.index.js";
@@ -40,6 +43,8 @@ import { $$mergeRotateTransform } from "./mergeRotateTransform/mergeRotateTransf
 import { $$mergeScaleTransform } from "./mergeScaleTransform/mergeScaleTransform.index.js";
 import { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransform2.index.js";
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
+import { $$off } from "./off/off.index.js";
+import { $$on } from "./on/on.index.js";
 import { $$qs } from "./qs/qs.index.js";
 import { $$qsa } from "./qsa/qsa.index.js";
 import { $$removeAttrNS } from "./removeAttrNS/removeAttrNS.index.js";
@@ -55,6 +60,7 @@ export const FxSVG = {
   appendTo: $$appendTo,
   appendTranslateTransform: $$appendTranslateTransform,
   consolidateTransformList: $$consolidateTransformList,
+  convertClientToUserCoords: $$convertClientToUserCoords,
   createSVGMatrix: $$createSVGMatrix,
   createSVGPoint: $$createSVGPoint,
   createSVGRect: $$createSVGRect,
@@ -68,8 +74,10 @@ export const FxSVG = {
   getAnimTransformList: $$getAnimTransformList,
   getAttrNS: $$getAttrNS,
   getBaseTransformList: $$getBaseTransformList,
+  getBoundingPoints: $$getBoundingPoints,
   getBoxPoints: $$getBoxPoints,
   getCenterPoint: $$getCenterPoint,
+  getConsolidatedTransformMatrix: $$getConsolidatedTransformMatrix,
   getSVG: $$getSVG,
   setSVG: $$setSVG,
   hasAttrNS: $$hasAttrNS,
@@ -93,6 +101,8 @@ export const FxSVG = {
   mergeScaleTransform: $$mergeScaleTransform,
   mergeScaleTransform2: $$mergeScaleTransform2,
   mergeTranslateTransform: $$mergeTranslateTransform,
+  off: $$off,
+  on: $$on,
   qs: $$qs,
   qsa: $$qsa,
   removeAttrNS: $$removeAttrNS,

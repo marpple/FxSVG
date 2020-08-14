@@ -3,6 +3,7 @@ import __spec_appendRotateTransform__ from "../src/appendRotateTransform/appendR
 import __spec_appendTo__ from "../src/appendTo/appendTo.spec.js";
 import __spec_appendTranslateTransform__ from "../src/appendTranslateTransform/appendTranslateTransform.spec.js";
 import __spec_consolidateTransformList__ from "../src/consolidateTransformList/consolidateTransformList.spec.js";
+import __spec_convertClientToUserCoords__ from "../src/convertClientToUserCoords/convertClientToUserCoords.spec.js";
 import __spec_createSVGMatrix__ from "../src/createSVGMatrix/createSVGMatrix.spec.js";
 import __spec_createSVGPoint__ from "../src/createSVGPoint/createSVGPoint.spec.js";
 import __spec_createSVGRect__ from "../src/createSVGRect/createSVGRect.spec.js";
@@ -16,8 +17,10 @@ import __spec_els__ from "../src/els/els.spec.js";
 import __spec_getAnimTransformList__ from "../src/getAnimTransformList/getAnimTransformList.spec.js";
 import __spec_getAttrNS__ from "../src/getAttrNS/getAttrNS.spec.js";
 import __spec_getBaseTransformList__ from "../src/getBaseTransformList/getBaseTransformList.spec.js";
+import __spec_getBoundingPoints__ from "../src/getBoundingPoints/getBoundingPoints.spec.js";
 import __spec_getBoxPoints__ from "../src/getBoxPoints/getBoxPoints.spec.js";
 import __spec_getCenterPoint__ from "../src/getCenterPoint/getCenterPoint.spec.js";
+import __spec_getConsolidatedTransformMatrix__ from "../src/getConsolidatedTransformMatrix/getConsolidatedTransformMatrix.spec.js";
 import __spec_getSetSVG__ from "../src/getSetSVG/getSetSVG.spec.js";
 import __spec_hasAttrNS__ from "../src/hasAttrNS/hasAttrNS.spec.js";
 import __spec_initMatrixTransform__ from "../src/initMatrixTransform/initMatrixTransform.spec.js";
@@ -40,6 +43,8 @@ import __spec_mergeRotateTransform__ from "../src/mergeRotateTransform/mergeRota
 import __spec_mergeScaleTransform__ from "../src/mergeScaleTransform/mergeScaleTransform.spec.js";
 import __spec_mergeScaleTransform2__ from "../src/mergeScaleTransform2/mergeScaleTransform2.spec.js";
 import __spec_mergeTranslateTransform__ from "../src/mergeTranslateTransform/mergeTranslateTransform.spec.js";
+import __spec_off__ from "../src/off/off.spec.js";
+import __spec_on__ from "../src/on/on.spec.js";
 import __spec_qs__ from "../src/qs/qs.spec.js";
 import __spec_qsa__ from "../src/qsa/qsa.spec.js";
 import __spec_removeAttrNS__ from "../src/removeAttrNS/removeAttrNS.spec.js";
@@ -56,6 +61,7 @@ export default () =>
     __spec_appendTo__,
     __spec_appendTranslateTransform__,
     __spec_consolidateTransformList__,
+    __spec_convertClientToUserCoords__,
     __spec_createSVGMatrix__,
     __spec_createSVGPoint__,
     __spec_createSVGRect__,
@@ -69,8 +75,10 @@ export default () =>
     __spec_getAnimTransformList__,
     __spec_getAttrNS__,
     __spec_getBaseTransformList__,
+    __spec_getBoundingPoints__,
     __spec_getBoxPoints__,
     __spec_getCenterPoint__,
+    __spec_getConsolidatedTransformMatrix__,
     __spec_getSetSVG__,
     __spec_hasAttrNS__,
     __spec_initMatrixTransform__,
@@ -93,6 +101,8 @@ export default () =>
     __spec_mergeScaleTransform__,
     __spec_mergeScaleTransform2__,
     __spec_mergeTranslateTransform__,
+    __spec_off__,
+    __spec_on__,
     __spec_qs__,
     __spec_qsa__,
     __spec_removeAttrNS__,

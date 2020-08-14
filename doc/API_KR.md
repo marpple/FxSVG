@@ -43,6 +43,13 @@
 
 `SVGTransformList` 객체의 모든 `SVGTransform` 객체를 하나로 통합합니다.
 
+## \$\$convertClientToUserCoords
+
+- [source](../src/convertClientToUserCoords/convertClientToUserCoords.index.js)
+- [detail](../src/convertClientToUserCoords/README.md)
+
+CSSOM 의 client coordinate system 좌표를 SVG 의 user coordinate system 좌표로 변환합니다.
+
 ## \$\$createSVGMatrix
 
 - [source](../src/createSVGMatrix/createSVGMatrix.index.js)
@@ -134,6 +141,14 @@ SVG 엘리먼트의 속성에 해당하는 값을 반환합니다. 해당하는 
 
 입력받은 svg 객체의 `transform.baseVal` 값을 반환합니다.
 
+## \$\$getBoundingPoints
+
+- [source](../src/getBoundingPoints/getBoundingPoints.index.js)
+- [detail](../src/getBoundingPoints/README.md)
+
+입력한 point 목록에서 x, y 의 개별 최솟값, 최댓값으로 이루어진 min, max point 를 반환합니다.
+x, y 는 독립적으로 비교됩니다. 따라서 반환된 point 는 입력한 point 목록에 없을 수 있습니다.
+
 ## \$\$getBoxPoints
 
 - [source](../src/getBoxPoints/getBoxPoints.index.js)
@@ -147,6 +162,14 @@ svg 객체의 영역에 해당하는 `SVGPoint`들을 반환합니다.
 - [detail](../src/getCenterPoint/README.md)
 
 svg 객체의 중심에 해당하는 `SVGPoint`를 반환합니다.
+
+## \$\$getConsolidatedTransformMatrix
+
+- [source](../src/getConsolidatedTransformMatrix/getConsolidatedTransformMatrix.index.js)
+- [detail](../src/getConsolidatedTransformMatrix/README.md)
+
+입력받은 `SVGTransformList` 의 모든 `SVGTransform` 의 변환 행렬을 곱한 행렬을 반환합니다.
+`SVGTransformList.consolidate` 와 비슷한 동작을 수행하지만 `SVGTransformList` 를 변형하지 않습니다.
 
 ## \$\$getSVG
 
@@ -326,6 +349,22 @@ SVG Translate Transform 을 다루기 위한 `$$LiveTransform` 인터페이스�
 svg 엘리먼트에 가장 마지막으로 적용된 `SVGTransform` 이 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입인 경우
 해당 `SVGTransform` 을 svg 엘리먼트의 `x`, `y` 속성 (혹은 그에 준하는 속성) 에 반영합니다.
 svg 엘리먼트에 다른 `SVGTransform` 이 있는 경우 각 `SVGTransform` 을 업데이트합니다.
+
+## \$\$off
+
+- [source](../src/off/off.index.js)
+- [test](../src/off/README.md)
+
+해당 엘리먼트에서 이벤트 핸들러를 제거합니다.
+`removeEventListener` 와 동일한 함수입니다. `removeEventListner` 가 제공하는 모든 인터페이스를 동일하게 지원합니다.
+
+## \$\$on
+
+- [source](../src/on/on.index.js)
+- [detail](../src/on/README.md)
+
+해당 엘리먼트의 이벤트에 이벤트 핸들러를 추가합니다.
+`addEventListener` 와 동일한 함수입니다. `addEventListner` 가 제공하는 모든 인터페이스를 동일하게 지원합니다.
 
 ## \$\$qs
 

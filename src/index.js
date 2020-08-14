@@ -3,6 +3,7 @@ export { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTra
 export { $$appendTo } from "./appendTo/appendTo.index.js";
 export { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 export { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";
+export { $$convertClientToUserCoords } from "./convertClientToUserCoords/convertClientToUserCoords.index.js";
 export { $$createSVGMatrix } from "./createSVGMatrix/createSVGMatrix.index.js";
 export { $$createSVGPoint } from "./createSVGPoint/createSVGPoint.index.js";
 export { $$createSVGRect } from "./createSVGRect/createSVGRect.index.js";
@@ -16,8 +17,10 @@ export { $$els } from "./els/els.index.js";
 export { $$getAnimTransformList } from "./getAnimTransformList/getAnimTransformList.index.js";
 export { $$getAttrNS } from "./getAttrNS/getAttrNS.index.js";
 export { $$getBaseTransformList } from "./getBaseTransformList/getBaseTransformList.index.js";
+export { $$getBoundingPoints } from "./getBoundingPoints/getBoundingPoints.index.js";
 export { $$getBoxPoints } from "./getBoxPoints/getBoxPoints.index.js";
 export { $$getCenterPoint } from "./getCenterPoint/getCenterPoint.index.js";
+export { $$getConsolidatedTransformMatrix } from "./getConsolidatedTransformMatrix/getConsolidatedTransformMatrix.index.js";
 export { $$getSVG, $$setSVG } from "./getSetSVG/getSetSVG.index.js";
 export { $$hasAttrNS } from "./hasAttrNS/hasAttrNS.index.js";
 export { $$initMatrixTransform } from "./initMatrixTransform/initMatrixTransform.index.js";
@@ -40,6 +43,8 @@ export { $$mergeRotateTransform } from "./mergeRotateTransform/mergeRotateTransf
 export { $$mergeScaleTransform } from "./mergeScaleTransform/mergeScaleTransform.index.js";
 export { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransform2.index.js";
 export { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
+export { $$off } from "./off/off.index.js";
+export { $$on } from "./on/on.index.js";
 export { $$qs } from "./qs/qs.index.js";
 export { $$qsa } from "./qsa/qsa.index.js";
 export { $$removeAttrNS } from "./removeAttrNS/removeAttrNS.index.js";
