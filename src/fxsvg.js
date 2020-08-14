@@ -1,4 +1,4 @@
-import { $append, $appendTo, $off, $on, $qs, $qsa } from "fxdom";
+import { $append, $appendTo, $hide, $off, $on, $qs, $qsa, $show } from "fxdom";
 
 import { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
 import { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
@@ -53,10 +53,12 @@ import { $$updateTranslateTransform } from "./updateTranslateTransform/updateTra
 export const FxSVG = {
   append: $append,
   appendTo: $appendTo,
+  hide: $hide,
   off: $off,
   on: $on,
   qs: $qs,
   qsa: $qsa,
+  show: $show,
 
   appendRotateTransform: $$appendRotateTransform,
   appendTranslateTransform: $$appendTranslateTransform,
