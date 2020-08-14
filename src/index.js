@@ -1,6 +1,8 @@
 export {
   $append as $$append,
   $appendTo as $$appendTo,
+  $off as $$off,
+  $on as $$on,
   $qs as $$qs,
   $qsa as $$qsa,
 } from "fxdom";
@@ -48,8 +50,6 @@ export { $$mergeRotateTransform } from "./mergeRotateTransform/mergeRotateTransf
 export { $$mergeScaleTransform } from "./mergeScaleTransform/mergeScaleTransform.index.js";
 export { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransform2.index.js";
 export { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
-export { $$off } from "./off/off.index.js";
-export { $$on } from "./on/on.index.js";
 export { $$removeAttrNS } from "./removeAttrNS/removeAttrNS.index.js";
 export { $$setAttrNS } from "./setAttrNS/setAttrNS.index.js";
 export { $$updateMatrixTransform } from "./updateMatrixTransform/updateMatrixTransform.index.js";
