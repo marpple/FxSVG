@@ -218,6 +218,14 @@ svg 엘리먼트에 총 3개의 `SVGTransform`을 순서대로 추가합니다.
 
 svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransform` 을 추가합니다.
 
+## \$\$isIdentityMatrix
+
+- [source](../src/isIdentityMatrix/isIdentityMatrix.index.js)
+- [detail](../src/isIdentityMatrix/README.md)
+
+입력한 matrix 가 단위행렬인지 여부를 판단합니다.
+단위행렬의 각 요소와 `Number.EPSILON` 이내로 차이나는 경우 올바른 값으로 판정합니다.
+
 ## \$\$isMatrixSVGTransform
 
 - [source](../src/isMatrixSVGTransform/isMatrixSVGTransform.index.js)
