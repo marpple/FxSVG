@@ -7,6 +7,7 @@ export {
   $qs as $$qs,
   $qsa as $$qsa,
   $show as $$show,
+  $trigger as $$trigger,
 } from "fxdom";
 
 export { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
