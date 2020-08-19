@@ -1,4 +1,14 @@
-import { $append, $appendTo, $hide, $off, $on, $qs, $qsa, $show } from "fxdom";
+import {
+  $append,
+  $appendTo,
+  $hide,
+  $off,
+  $on,
+  $qs,
+  $qsa,
+  $show,
+  $trigger,
+} from "fxdom";
 
 import { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
 import { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
@@ -27,6 +37,7 @@ import { $$initMatrixTransform } from "./initMatrixTransform/initMatrixTransform
 import { $$initRotateTransform } from "./initRotateTransform/initRotateTransform.index.js";
 import { $$initScaleTransform } from "./initScaleTransform/initScaleTransform.index.js";
 import { $$initTranslateTransform } from "./initTranslateTransform/initTranslateTransform.index.js";
+import { $$isIdentityMatrix } from "./isIdentityMatrix/isIdentityMatrix.index.js";
 import { $$isMatrixSVGTransform } from "./isMatrixSVGTransform/isMatrixSVGTransform.index.js";
 import { $$isRotateSVGTransform } from "./isRotateSVGTransform/isRotateSVGTransform.index.js";
 import { $$isScaleSVGTransform } from "./isScaleSVGTransform/isScaleSVGTransform.index.js";
@@ -59,6 +70,7 @@ export const FxSVG = {
   qs: $qs,
   qsa: $qsa,
   show: $show,
+  trigger: $trigger,
 
   appendRotateTransform: $$appendRotateTransform,
   appendTranslateTransform: $$appendTranslateTransform,
@@ -88,6 +100,7 @@ export const FxSVG = {
   initRotateTransform: $$initRotateTransform,
   initScaleTransform: $$initScaleTransform,
   initTranslateTransform: $$initTranslateTransform,
+  isIdentityMatrix: $$isIdentityMatrix,
   isMatrixSVGTransform: $$isMatrixSVGTransform,
   isRotateSVGTransform: $$isRotateSVGTransform,
   isScaleSVGTransform: $$isScaleSVGTransform,

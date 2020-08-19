@@ -1,6 +1,6 @@
 {
   "name": "fxsvg",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "description": "Functional SVG Handling Library",
   "type": "module",
   "main": "./src/index.js",
@@ -43,7 +43,7 @@
     "yargs": "^15.4.1"
   },
   "dependencies": {
-    "fxdom": "^0.5.1",
+    "fxdom": "^0.5.2",
     "fxjs2": "^0.16.3"
   }
 }

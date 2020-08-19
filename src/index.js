@@ -7,6 +7,7 @@ export {
   $qs as $$qs,
   $qsa as $$qsa,
   $show as $$show,
+  $trigger as $$trigger,
 } from "fxdom";
 
 export { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
@@ -36,6 +37,7 @@ export { $$initMatrixTransform } from "./initMatrixTransform/initMatrixTransform
 export { $$initRotateTransform } from "./initRotateTransform/initRotateTransform.index.js";
 export { $$initScaleTransform } from "./initScaleTransform/initScaleTransform.index.js";
 export { $$initTranslateTransform } from "./initTranslateTransform/initTranslateTransform.index.js";
+export { $$isIdentityMatrix } from "./isIdentityMatrix/isIdentityMatrix.index.js";
 export { $$isMatrixSVGTransform } from "./isMatrixSVGTransform/isMatrixSVGTransform.index.js";
 export { $$isRotateSVGTransform } from "./isRotateSVGTransform/isRotateSVGTransform.index.js";
 export { $$isScaleSVGTransform } from "./isScaleSVGTransform/isScaleSVGTransform.index.js";

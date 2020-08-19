@@ -169,6 +169,11 @@
 - [source](../src/isTranslateSVGTransform/isTranslateSVGTransform.index.js)
 - [detail](../src/isTranslateSVGTransform/README.md)
 
+## \$\$isIdentityMatrix
+
+- [source](../src/isIdentityMatrix/isIdentityMatrix.index.js)
+- [detail](../src/isIdentityMatrix/README.md)
+
 ## \$\$isValidFxScaleSVGTransformList
 
 - [source](../src/isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js)
