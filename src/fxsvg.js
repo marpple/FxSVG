@@ -6,6 +6,7 @@ import {
   $on,
   $qs,
   $qsa,
+  $remove,
   $show,
   $trigger,
 } from "fxdom";
@@ -69,6 +70,7 @@ export const FxSVG = {
   on: $on,
   qs: $qs,
   qsa: $qsa,
+  remove: $remove,
   show: $show,
   trigger: $trigger,
 

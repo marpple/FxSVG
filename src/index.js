@@ -6,6 +6,7 @@ export {
   $on as $$on,
   $qs as $$qs,
   $qsa as $$qsa,
+  $remove as $$remove,
   $show as $$show,
   $trigger as $$trigger,
 } from "fxdom";
