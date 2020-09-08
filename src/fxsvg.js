@@ -11,6 +11,9 @@ import {
   $trigger,
 } from "fxdom";
 
+import { CustomError } from "./Errors/CustomError.js";
+import { InvalidArgumentsError } from "./Errors/InvalidArgumentsError.js";
+
 import { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
 import { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 import { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";
@@ -73,6 +76,9 @@ export const FxSVG = {
   remove: $remove,
   show: $show,
   trigger: $trigger,
+
+  CustomError,
+  InvalidArgumentsError,
 
   appendRotateTransform: $$appendRotateTransform,
   appendTranslateTransform: $$appendTranslateTransform,

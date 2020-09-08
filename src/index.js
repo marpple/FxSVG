@@ -11,6 +11,9 @@ export {
   $trigger as $$trigger,
 } from "fxdom";
 
+export { CustomError } from "./Errors/CustomError.js";
+export { InvalidArgumentsError } from "./Errors/InvalidArgumentsError.js";
+
 export { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
 export { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 export { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";
