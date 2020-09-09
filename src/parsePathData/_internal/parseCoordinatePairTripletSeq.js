@@ -1,4 +1,4 @@
-import { go, head, map, mapL, takeL } from "fxjs2";
+import { go, head, map, mapL, take } from "fxjs2";
 import { parseCoordinatePair } from "./parseCoordinatePair.js";
 import {
   REGEXP_STR_COORDINATE_PAIR,
@@ -19,7 +19,7 @@ const parseCoordinatePairTriplet = (s) =>
     s.matchAll(new RegExp(REGEXP_STR_COORDINATE_PAIR, "g")),
     mapL(head),
     mapL(parseCoordinatePair),
-    takeL(3)
+    take(3)
   );
 
 /**

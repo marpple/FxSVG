@@ -171,6 +171,8 @@ export const $$parsePathDate = (d_str) => {
         }
 
         if (equals2(path_seg.command, "C")) {
+          [, , [cpx, cpy]] = last(path_seg.parameters);
+          yield path_seg;
           continue;
         }
 
