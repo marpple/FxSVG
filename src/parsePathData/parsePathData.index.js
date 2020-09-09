@@ -91,18 +91,19 @@ export const $$parsePathDate = (d_str) => {
         }
 
         if (equals2(path_seg.command, "m")) {
-          const { parameters } = reduce(
+          const { parameters, cpx: updated_cpx, cpy: updated_cpy } = reduce(
             (acc, [dx, dy]) => {
-              acc.x += dx;
-              acc.y += dy;
-              acc.parameters.push([acc.x, acc.y]);
+              acc.cpx += dx;
+              acc.cpy += dy;
+              acc.parameters.push([acc.cpx, acc.cpy]);
               return acc;
             },
-            { parameters: [], x: cpx, y: cpy },
+            { parameters: [], cpx, cpy },
             path_seg.parameters
           );
           [ipx, ipy] = head(parameters);
-          [cpx, cpy] = last(parameters);
+          cpx = updated_cpx;
+          cpy = updated_cpy;
           yield { command: "M", parameters };
           continue;
         }
@@ -114,17 +115,18 @@ export const $$parsePathDate = (d_str) => {
         }
 
         if (equals2(path_seg.command, "l")) {
-          const { parameters } = reduce(
+          const { parameters, cpx: updated_cpx, cpy: updated_cpy } = reduce(
             (acc, [dx, dy]) => {
-              acc.x += dx;
-              acc.y += dy;
-              acc.parameters.push([acc.x, acc.y]);
+              acc.cpx += dx;
+              acc.cpy += dy;
+              acc.parameters.push([acc.cpx, acc.cpy]);
               return acc;
             },
-            { parameters: [], x: cpx, y: cpy },
+            { parameters: [], cpx, cpy },
             path_seg.parameters
           );
-          [cpx, cpy] = last(parameters);
+          cpx = updated_cpx;
+          cpy = updated_cpy;
           yield { command: "L", parameters };
           continue;
         }
@@ -136,16 +138,16 @@ export const $$parsePathDate = (d_str) => {
         }
 
         if (equals2(path_seg.command, "h")) {
-          const { parameters } = reduce(
+          const { parameters, cpx: updated_cpx } = reduce(
             (acc, dx) => {
-              acc.x += dx;
-              acc.parameters.push(acc.x);
+              acc.cpx += dx;
+              acc.parameters.push(acc.cpx);
               return acc;
             },
-            { parameters: [], x: cpx },
+            { parameters: [], cpx },
             path_seg.parameters
           );
-          cpx = last(parameters);
+          cpx = updated_cpx;
           yield { command: "H", parameters };
           continue;
         }
@@ -157,16 +159,16 @@ export const $$parsePathDate = (d_str) => {
         }
 
         if (equals2(path_seg.command, "v")) {
-          const { parameters } = reduce(
+          const { parameters, cpy: updated_cpy } = reduce(
             (acc, dy) => {
-              acc.y += dy;
-              acc.parameters.push(acc.y);
+              acc.cpy += dy;
+              acc.parameters.push(acc.cpy);
               return acc;
             },
-            { parameters: [], y: cpy },
+            { parameters: [], cpy },
             path_seg.parameters
           );
-          cpy = last(parameters);
+          cpy = updated_cpy;
           yield { command: "V", parameters };
           continue;
         }
