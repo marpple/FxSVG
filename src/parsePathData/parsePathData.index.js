@@ -211,7 +211,7 @@ export const $$parsePathDate = (d_str) => {
         }
 
         // command === "z" or "Z"
-        // TODO update ipx, ipy, cpx, cpy
+        [cpx, cpy] = [ipx, ipy];
         yield { command: "Z", parameters: [] };
       }
     },
