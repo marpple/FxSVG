@@ -5,6 +5,7 @@ import {
   isNil,
   isString,
   last,
+  map,
   mapL,
   reduce,
   toIter,
@@ -177,6 +178,23 @@ export const $$parsePathDate = (d_str) => {
         }
 
         if (equals2(path_seg.command, "c")) {
+          const { parameters, cpx: updated_cpx, cpy: updated_cpy } = reduce(
+            (acc, parameter) => {
+              const updated_parameter = map(
+                ([x, y]) => [x + acc.x, y + acc.y],
+                parameter
+              );
+              acc.parameters.push(updated_parameter);
+              acc.cpx = updated_parameter[2][0];
+              acc.cpy = updated_parameter[2][1];
+              return acc;
+            },
+            { parameters: [], cpx, cpy },
+            path_seg.parameters
+          );
+          cpx = updated_cpx;
+          cpy = updated_cpy;
+          yield { command: "C", parameters };
           continue;
         }
 
