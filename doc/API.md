@@ -229,6 +229,11 @@
 - [source](../src/mergeTranslateTransform/mergeTranslateTransform.index.js)
 - [detail](../src/mergeTranslateTransform/README.md)
 
+## \$\$isValidPathData
+
+- [source](../src/parsePathData/parsePathData.index.js)
+- [detail](../src/parsePathData/parsePathData.spec.js)
+
 ## \$\$removeAttrNS
 
 - [source](../src/removeAttrNS/removeAttrNS.index.js)

@@ -12,8 +12,18 @@ import {
 } from "fxjs2";
 import { InvalidArgumentsError } from "../Errors/InvalidArgumentsError.js";
 import { parseParameters } from "./_internal/parseParameters.js";
+import { REGEXP_STR_SVG_PATH } from "./_internal/REGEXP_STR.js";
 import { splitByPathSeg } from "./_internal/splitByPathSeg.js";
 import { FN_PATH } from "./const.js";
+
+/**
+ * Check the input path data string is valid or not.
+ *
+ * @param {*} path_data - string value of "d" attribute.
+ * @returns {boolean}
+ */
+export const $$isValidPathData = (path_data) =>
+  isString(path_data) && new RegExp(REGEXP_STR_SVG_PATH).test(path_data);
 
 /**
  * Parse path data string to JSON style javascript array.
@@ -40,7 +50,13 @@ export const $$parsePathDate = (d_str) => {
     return [];
   }
 
-  // TODO RegExp 이용한 validation
+  if (!$$isValidPathData(d_str)) {
+    throw new InvalidArgumentsError(
+      FN_PATH,
+      `d_str`,
+      `"d_str" is invalid format path data strin.`
+    );
+  }
 
   return go(
     splitByPathSeg(d_str),

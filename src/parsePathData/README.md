@@ -1,3 +1,10 @@
+# \$\$isValidPathData
+
+- [source](./parsePathData.index.js)
+- [test](./parsePathData.spec.js)
+
+유효한 path data 문자열인지 여부를 판단합니다.
+
 # \$\$parsePathData
 
 - [source](./parsePathData.index.js)
