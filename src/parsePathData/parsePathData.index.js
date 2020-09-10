@@ -7,13 +7,16 @@ import {
   last,
   map,
   mapL,
+  not,
   reduce,
   toIter,
 } from "fxjs2";
 import { InvalidArgumentsError } from "../Errors/InvalidArgumentsError.js";
 import { parseParameters } from "./_internal/parseParameters.js";
-import { REGEXP_STR_SVG_PATH } from "./_internal/REGEXP_STR.js";
-import { splitByPathSeg } from "./_internal/splitByPathSeg.js";
+import {
+  REGEXP_STR_COMMAND,
+  REGEXP_STR_SVG_PATH,
+} from "./_internal/REGEXP_STR.js";
 import { FN_PATH } from "./const.js";
 
 /**
@@ -24,6 +27,51 @@ import { FN_PATH } from "./const.js";
  */
 export const $$isValidPathData = (path_data) =>
   isString(path_data) && new RegExp(REGEXP_STR_SVG_PATH).test(path_data);
+
+/**
+ * Split path data string by each command.
+ * Generator yields command and parameters of the command.
+ * Both command and parameters are string.
+ *
+ * This function will not validate path data!
+ * Please check path data using "$$isValidPathData" first!
+ *
+ * @param {string} path_data
+ * @returns {Generator<{command: string, parameters: string}, undefined, *>}
+ */
+export function* $$splitPathDataByCommandL(path_data) {
+  const command_index_iter = (function* (d_str) {
+    const regexp_command = new RegExp(REGEXP_STR_COMMAND, "g");
+    let result;
+    while (not(isNil((result = regexp_command.exec(d_str))))) {
+      yield result.index;
+    }
+  })(path_data);
+
+  let index1;
+  let done1;
+  let { value: index2, done: done2 } = command_index_iter.next();
+  while (true) {
+    index1 = index2;
+    done1 = done2;
+    ({ value: index2, done: done2 } = command_index_iter.next());
+
+    if (done1) {
+      return undefined;
+    }
+
+    if (done2) {
+      const command = path_data[index1];
+      const parameters = path_data.slice(index1 + 1).trim();
+      yield { command, parameters };
+      return undefined;
+    }
+
+    const command = path_data[index1];
+    const parameters = path_data.slice(index1 + 1, index2).trim();
+    yield { command, parameters };
+  }
+}
 
 /**
  * Parse path data string to JSON style javascript array.
@@ -59,7 +107,7 @@ export const $$parsePathDate = (d_str) => {
   }
 
   return go(
-    splitByPathSeg(d_str),
+    $$splitPathDataByCommandL(d_str),
     mapL(parseParameters),
     function* convertFirstPathSegL(path_seg_iter) {
       const { value: first_path_seg } = path_seg_iter.next();

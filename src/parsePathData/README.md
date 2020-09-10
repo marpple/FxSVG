@@ -5,6 +5,18 @@
 
 유효한 path data 문자열인지 여부를 판단합니다.
 
+# \$\$splitPathDataByCommandL
+
+- [source](./parsePathData.index.js)
+- [test](./parsePathData.spec.js)
+
+path data 문자열을 command 단위로 잘라냅니다.
+제너레이터는 command 와 해당 command 의 parameters 를 yield 합니다.
+command 와 parameters 는 문자열입니다.
+
+이 함수는 path data 의 유효성을 검사하지 않습니다!
+먼저 `$$isValidPathData` 함수로 검사해주세요!
+
 # \$\$parsePathData
 
 - [source](./parsePathData.index.js)

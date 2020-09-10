@@ -60,6 +60,7 @@ import { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransfo
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
 import {
   $$isValidPathData,
+  $$splitPathDataByCommandL,
   $$parsePathDate,
 } from "./parsePathData/parsePathData.index.js";
 import { $$removeAttrNS } from "./removeAttrNS/removeAttrNS.index.js";
@@ -130,6 +131,7 @@ export const FxSVG = {
   mergeScaleTransform2: $$mergeScaleTransform2,
   mergeTranslateTransform: $$mergeTranslateTransform,
   isValidPathData: $$isValidPathData,
+  splitPathDataByCommandL: $$splitPathDataByCommandL,
   parsePathDate: $$parsePathDate,
   removeAttrNS: $$removeAttrNS,
   setAttrNS: $$setAttrNS,

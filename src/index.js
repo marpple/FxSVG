@@ -60,6 +60,7 @@ export { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransfo
 export { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
 export {
   $$isValidPathData,
+  $$splitPathDataByCommandL,
   $$parsePathDate,
 } from "./parsePathData/parsePathData.index.js";
 export { $$removeAttrNS } from "./removeAttrNS/removeAttrNS.index.js";

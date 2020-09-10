@@ -349,6 +349,15 @@ svg 엘리먼트에 다른 `SVGTransform` 이 있는 경우 각 `SVGTransform` �
 
 유효한 path data 문자열인지 여부를 판단합니다.
 
+## \$\$splitPathDataByCommandL
+
+- [source](../src/parsePathData/parsePathData.index.js)
+- [detail](../src/parsePathData/parsePathData.spec.js)
+
+path data 문자열을 command 단위로 잘라냅니다.
+제너레이터는 command 와 해당 command 의 parameters 를 yield 합니다.
+command 와 parameters 는 문자열입니다.
+
 ## \$\$removeAttrNS
 
 - [source](../src/removeAttrNS/removeAttrNS.index.js)
