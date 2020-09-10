@@ -106,7 +106,7 @@ export function* $$splitPathDataByCommandL(path_data) {
  */
 
 /**
- * This function will not validate coordinate pair string!
+ * This function will not validate input data!
  * Please check yourself first!
  *
  * @param {string} coordinate_pair
@@ -123,7 +123,7 @@ const parseCoordinatePair = (coordinate_pair) =>
  * Parse parameters string to array of numbers.
  * Generator yields command and parsed parameters of the command.
  *
- * This function will not validate parameters string!
+ * This function will not validate input data!
  * Please check yourself first!
  *
  * @param {string} command
@@ -236,6 +236,264 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
 };
 
 /**
+ * Convert path command-parameters iterable from relative one to absolute one.
+ *
+ * This function will not validate input data!
+ * Please check yourself first!
+ *
+ * @param {Iterator<{command: string, parameters: Array<Parameter>}, undefined, *>} path_command_parameters_iter
+ * @returns {Generator<{command: string, parameters: Array<Parameter>}, undefined, *>}
+ */
+export function* $$convertPathCommandParametersRelativeToAbsoluteL(
+  path_command_parameters_iter
+) {
+  path_command_parameters_iter = toIter(path_command_parameters_iter);
+
+  const {
+    value: first_path_command_parameters,
+    done,
+  } = path_command_parameters_iter.next();
+
+  if (done) {
+    return undefined;
+  }
+
+  let ipx;
+  let ipy;
+  let cpx;
+  let cpy;
+
+  if (equals2(first_path_command_parameters.command, "M")) {
+    [ipx, ipy] = head(first_path_command_parameters.parameters);
+    [cpx, cpy] = last(first_path_command_parameters.parameters);
+    yield first_path_command_parameters;
+  } else {
+    const parameters_iter = toIter(first_path_command_parameters.parameters);
+    [ipx, ipy] = parameters_iter.next().value;
+    const { parameters, cpx: updated_cpx, cpy: updated_cpy } = reduce(
+      (acc, [dx, dy]) => {
+        acc.cpx += dx;
+        acc.cpy += dy;
+        acc.parameters.push([acc.cpx, acc.cpy]);
+        return acc;
+      },
+      { parameters: [[ipx, ipy]], cpx: ipx, cpy: ipy },
+      parameters_iter
+    );
+    cpx = updated_cpx;
+    cpy = updated_cpy;
+    yield { command: "M", parameters };
+  }
+
+  for (const path_command_parameters of path_command_parameters_iter) {
+    const { command, parameters } = path_command_parameters;
+
+    if (equals2(command, "M")) {
+      [ipx, ipy] = head(parameters);
+      [cpx, cpy] = last(parameters);
+      yield { command, parameters };
+      continue;
+    }
+
+    if (equals2(command, "m")) {
+      const {
+        parameters: updated_parameters,
+        cpx: updated_cpx,
+        cpy: updated_cpy,
+      } = reduce(
+        (acc, [dx, dy]) => {
+          acc.cpx += dx;
+          acc.cpy += dy;
+          acc.parameters.push([acc.cpx, acc.cpy]);
+          return acc;
+        },
+        { parameters: [], cpx, cpy },
+        parameters
+      );
+      [ipx, ipy] = head(updated_parameters);
+      cpx = updated_cpx;
+      cpy = updated_cpy;
+      yield {
+        command: command.toUpperCase(),
+        parameters: updated_parameters,
+      };
+      continue;
+    }
+
+    if (equals2(command, "L") || equals2(command, "T")) {
+      [cpx, cpy] = last(parameters);
+      yield { command, parameters };
+      continue;
+    }
+
+    if (equals2(command, "l") || equals2(command, "t")) {
+      const {
+        parameters: updated_parameters,
+        cpx: updated_cpx,
+        cpy: updated_cpy,
+      } = reduce(
+        (acc, [dx, dy]) => {
+          acc.cpx += dx;
+          acc.cpy += dy;
+          acc.parameters.push([acc.cpx, acc.cpy]);
+          return acc;
+        },
+        { parameters: [], cpx, cpy },
+        parameters
+      );
+      cpx = updated_cpx;
+      cpy = updated_cpy;
+      yield { command: command.toUpperCase(), parameters: updated_parameters };
+      continue;
+    }
+
+    if (equals2(command, "H")) {
+      cpx = last(parameters);
+      yield { command, parameters };
+      continue;
+    }
+
+    if (equals2(command, "h")) {
+      const { parameters: updated_parameters, cpx: updated_cpx } = reduce(
+        (acc, dx) => {
+          acc.cpx += dx;
+          acc.parameters.push(acc.cpx);
+          return acc;
+        },
+        { parameters: [], cpx },
+        parameters
+      );
+      cpx = updated_cpx;
+      yield { command: command.toUpperCase(), parameters: updated_parameters };
+      continue;
+    }
+
+    if (equals2(command, "V")) {
+      cpy = last(parameters);
+      yield { command, parameters };
+      continue;
+    }
+
+    if (equals2(command, "v")) {
+      const { parameters: updated_parameters, cpy: updated_cpy } = reduce(
+        (acc, dy) => {
+          acc.cpy += dy;
+          acc.parameters.push(acc.cpy);
+          return acc;
+        },
+        { parameters: [], cpy },
+        parameters
+      );
+      cpy = updated_cpy;
+      yield { command: command.toUpperCase(), parameters: updated_parameters };
+      continue;
+    }
+
+    if (equals2(command, "C")) {
+      [, , [cpx, cpy]] = last(parameters);
+      yield { command, parameters };
+      continue;
+    }
+
+    if (equals2(command, "c")) {
+      const {
+        parameters: updated_parameters,
+        cpx: updated_cpx,
+        cpy: updated_cpy,
+      } = reduce(
+        (acc, parameter) => {
+          const updated_parameter = map(
+            ([x, y]) => [x + acc.cpx, y + acc.cpy],
+            parameter
+          );
+          acc.parameters.push(updated_parameter);
+          [acc.cpx, acc.cpy] = updated_parameter[2];
+          return acc;
+        },
+        { parameters: [], cpx, cpy },
+        parameters
+      );
+      cpx = updated_cpx;
+      cpy = updated_cpy;
+      yield { command: command.toUpperCase(), parameters: updated_parameters };
+      continue;
+    }
+
+    if (equals2(command, "S") || equals2(command, "Q")) {
+      [, [cpx, cpy]] = last(parameters);
+      yield { command, parameters };
+      continue;
+    }
+
+    if (equals2(command, "s") || equals2(command, "q")) {
+      const {
+        parameters: updated_parameters,
+        cpx: updated_cpx,
+        cpy: updated_cpy,
+      } = reduce(
+        (acc, parameter) => {
+          const updated_parameter = map(
+            ([x, y]) => [x + acc.cpx, y + acc.cpy],
+            parameter
+          );
+          acc.parameters.push(updated_parameter);
+          [acc.cpx, acc.cpy] = updated_parameter[1];
+          return acc;
+        },
+        { parameters: [], cpx, cpy },
+        parameters
+      );
+      cpx = updated_cpx;
+      cpy = updated_cpy;
+      yield { command: command.toUpperCase(), parameters: updated_parameters };
+      continue;
+    }
+
+    if (equals2(command, "A")) {
+      [, , , , , cpx, cpy] = last(parameters);
+      yield { command, parameters };
+      continue;
+    }
+
+    if (equals2(command, "a")) {
+      const {
+        parameters: updated_parameters,
+        cpx: updated_cpx,
+        cpy: updated_cpy,
+      } = reduce(
+        (
+          acc,
+          [rx, ry, x_axis_rotation, large_arc_flag, sweep_flag, dx, dy]
+        ) => {
+          acc.cpx += dx;
+          acc.cpy += dy;
+          acc.parameters.push([
+            rx,
+            ry,
+            x_axis_rotation,
+            large_arc_flag,
+            sweep_flag,
+            acc.cpx,
+            acc.cpy,
+          ]);
+          return acc;
+        },
+        { parameters: [], cpx, cpy },
+        parameters
+      );
+      cpx = updated_cpx;
+      cpy = updated_cpy;
+      yield { command: command.toUpperCase(), parameters: updated_parameters };
+      continue;
+    }
+
+    // command === "z" or "Z"
+    [cpx, cpy] = [ipx, ipy];
+    yield { command: command.toUpperCase(), parameters: [] };
+  }
+}
+
+/**
  * Parse path data string to JSON style javascript array.
  *
  * @param {string=} d_str - path data
@@ -253,198 +511,7 @@ export const $$parsePathDate = (d_str) => {
   return go(
     $$splitPathDataByCommandL(d_str),
     mapL($$parsePathCommandParameters),
-    function* convertFirstPathSegL(path_seg_iter) {
-      const { value: first_path_seg } = path_seg_iter.next();
-
-      if (equals2(first_path_seg.command, "M")) {
-        yield first_path_seg;
-        yield* path_seg_iter;
-        return;
-      }
-
-      if (first_path_seg.parameters.length <= 1) {
-        yield { ...first_path_seg, command: "M" };
-        yield* path_seg_iter;
-        return;
-      }
-
-      const parameters_iter = toIter(first_path_seg.parameters);
-      const [init_cpx, init_cpy] = parameters_iter.next().value;
-      const { parameters } = reduce(
-        (acc, [dx, dy]) => {
-          acc.cpx += dx;
-          acc.cpy += dy;
-          acc.parameters.push([acc.cpx, acc.cpy]);
-          return acc;
-        },
-        { parameters: [[init_cpx, init_cpy]], cpx: init_cpx, cpy: init_cpy },
-        parameters_iter
-      );
-      yield { command: "M", parameters };
-      yield* path_seg_iter;
-    },
-    function* convertRelativeToAbsoluteL(path_seg_iter) {
-      const { value: first_path_seg } = path_seg_iter.next();
-
-      let [ipx, ipy] = head(first_path_seg.parameters);
-      let [cpx, cpy] = last(first_path_seg.parameters);
-
-      yield first_path_seg;
-      for (const path_seg of path_seg_iter) {
-        if (equals2(path_seg.command, "M")) {
-          [ipx, ipy] = head(path_seg.parameters);
-          [cpx, cpy] = last(path_seg.parameters);
-          yield path_seg;
-          continue;
-        }
-
-        if (equals2(path_seg.command, "m")) {
-          const { parameters, cpx: updated_cpx, cpy: updated_cpy } = reduce(
-            (acc, [dx, dy]) => {
-              acc.cpx += dx;
-              acc.cpy += dy;
-              acc.parameters.push([acc.cpx, acc.cpy]);
-              return acc;
-            },
-            { parameters: [], cpx, cpy },
-            path_seg.parameters
-          );
-          [ipx, ipy] = head(parameters);
-          cpx = updated_cpx;
-          cpy = updated_cpy;
-          yield { command: "M", parameters };
-          continue;
-        }
-
-        if (equals2(path_seg.command, "L")) {
-          [cpx, cpy] = last(path_seg.parameters);
-          yield path_seg;
-          continue;
-        }
-
-        if (equals2(path_seg.command, "l")) {
-          const { parameters, cpx: updated_cpx, cpy: updated_cpy } = reduce(
-            (acc, [dx, dy]) => {
-              acc.cpx += dx;
-              acc.cpy += dy;
-              acc.parameters.push([acc.cpx, acc.cpy]);
-              return acc;
-            },
-            { parameters: [], cpx, cpy },
-            path_seg.parameters
-          );
-          cpx = updated_cpx;
-          cpy = updated_cpy;
-          yield { command: "L", parameters };
-          continue;
-        }
-
-        if (equals2(path_seg.command, "H")) {
-          cpx = last(path_seg.parameters);
-          yield path_seg;
-          continue;
-        }
-
-        if (equals2(path_seg.command, "h")) {
-          const { parameters, cpx: updated_cpx } = reduce(
-            (acc, dx) => {
-              acc.cpx += dx;
-              acc.parameters.push(acc.cpx);
-              return acc;
-            },
-            { parameters: [], cpx },
-            path_seg.parameters
-          );
-          cpx = updated_cpx;
-          yield { command: "H", parameters };
-          continue;
-        }
-
-        if (equals2(path_seg.command, "V")) {
-          cpy = last(path_seg.parameters);
-          yield path_seg;
-          continue;
-        }
-
-        if (equals2(path_seg.command, "v")) {
-          const { parameters, cpy: updated_cpy } = reduce(
-            (acc, dy) => {
-              acc.cpy += dy;
-              acc.parameters.push(acc.cpy);
-              return acc;
-            },
-            { parameters: [], cpy },
-            path_seg.parameters
-          );
-          cpy = updated_cpy;
-          yield { command: "V", parameters };
-          continue;
-        }
-
-        if (equals2(path_seg.command, "C")) {
-          [, , [cpx, cpy]] = last(path_seg.parameters);
-          yield path_seg;
-          continue;
-        }
-
-        if (equals2(path_seg.command, "c")) {
-          const { parameters, cpx: updated_cpx, cpy: updated_cpy } = reduce(
-            (acc, parameter) => {
-              const updated_parameter = map(
-                ([x, y]) => [x + acc.x, y + acc.y],
-                parameter
-              );
-              acc.parameters.push(updated_parameter);
-              acc.cpx = updated_parameter[2][0];
-              acc.cpy = updated_parameter[2][1];
-              return acc;
-            },
-            { parameters: [], cpx, cpy },
-            path_seg.parameters
-          );
-          cpx = updated_cpx;
-          cpy = updated_cpy;
-          yield { command: "C", parameters };
-          continue;
-        }
-
-        if (equals2(path_seg.command, "S")) {
-          continue;
-        }
-
-        if (equals2(path_seg.command, "s")) {
-          continue;
-        }
-
-        if (equals2(path_seg.command, "Q")) {
-          continue;
-        }
-
-        if (equals2(path_seg.command, "q")) {
-          continue;
-        }
-
-        if (equals2(path_seg.command, "T")) {
-          continue;
-        }
-
-        if (equals2(path_seg.command, "t")) {
-          continue;
-        }
-
-        if (equals2(path_seg.command, "A")) {
-          continue;
-        }
-
-        if (equals2(path_seg.command, "a")) {
-          continue;
-        }
-
-        // command === "z" or "Z"
-        [cpx, cpy] = [ipx, ipy];
-        yield { command: "Z", parameters: [] };
-      }
-    },
+    $$convertPathCommandParametersRelativeToAbsoluteL,
     // convertCommandZL, // Z -> L
     // convertCommandSL, // S -> C
     // convertCommandTL, // T -> Q

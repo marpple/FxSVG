@@ -25,7 +25,16 @@ command 와 parameters 는 문자열입니다.
 parameters 문자열을 숫자 배열로 변환합니다.
 제너레이터는 command 와 해당 command 의 변환된 parameters 를 yield 합니다.
 
-이 함수는 parameters 문자열의 유효성을 검사하지 않습니다!
+이 함수는 입력 데이터의 유효성을 검사하지 않습니다!
+
+# \$\$convertPathCommandParametersRelativeToAbsoluteL
+
+- [source](./parsePathData.index.js)
+- [test](./parsePathData.spec.js)
+
+path 의 command-parameters 이터러블을 relative 좌표에서 absolute 좌표로 변환합니다.
+
+이 함수는 입력 데이터의 유효성을 검사하지 않습니다!
 
 # \$\$parsePathData
 

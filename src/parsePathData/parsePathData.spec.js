@@ -18,6 +18,7 @@ import {
   $$splitPathDataByCommandL,
   $$parsePathDate,
   $$parsePathCommandParameters,
+  $$convertPathCommandParametersRelativeToAbsoluteL,
 } from "./parsePathData.index.js";
 
 export default ({ describe, it }) => [
@@ -155,7 +156,10 @@ export default ({ describe, it }) => [
         // when
         const [
           { command: receive_command, parameters: receive_parameters },
-        ] = mapL($$parsePathCommandParameters, $$splitPathDataByCommandL(path_data));
+        ] = mapL(
+          $$parsePathCommandParameters,
+          $$splitPathDataByCommandL(path_data)
+        );
 
         // then
         expect(receive_command).equal(command);
@@ -172,7 +176,10 @@ export default ({ describe, it }) => [
         // when
         const [
           { command: receive_command, parameters: receive_parameters },
-        ] = mapL($$parsePathCommandParameters, $$splitPathDataByCommandL(path_data));
+        ] = mapL(
+          $$parsePathCommandParameters,
+          $$splitPathDataByCommandL(path_data)
+        );
 
         // then
         expect(receive_command).equal(command);
@@ -201,7 +208,10 @@ export default ({ describe, it }) => [
         // when
         const [
           { command: receive_command, parameters: receive_parameters },
-        ] = mapL($$parsePathCommandParameters, $$splitPathDataByCommandL(path_data));
+        ] = mapL(
+          $$parsePathCommandParameters,
+          $$splitPathDataByCommandL(path_data)
+        );
 
         // then
         expect(receive_command).equal(command);
@@ -230,7 +240,10 @@ export default ({ describe, it }) => [
         // when
         const [
           { command: receive_command, parameters: receive_parameters },
-        ] = mapL($$parsePathCommandParameters, $$splitPathDataByCommandL(path_data));
+        ] = mapL(
+          $$parsePathCommandParameters,
+          $$splitPathDataByCommandL(path_data)
+        );
 
         // then
         expect(receive_command).equal(command);
@@ -270,7 +283,10 @@ export default ({ describe, it }) => [
         // when
         const [
           { command: receive_command, parameters: receive_parameters },
-        ] = mapL($$parsePathCommandParameters, $$splitPathDataByCommandL(path_data));
+        ] = mapL(
+          $$parsePathCommandParameters,
+          $$splitPathDataByCommandL(path_data)
+        );
 
         // then
         expect(receive_command).equal(command);
@@ -286,12 +302,687 @@ export default ({ describe, it }) => [
         // when
         const [
           { command: receive_command, parameters: receive_parameters },
-        ] = mapL($$parsePathCommandParameters, $$splitPathDataByCommandL(path_data));
+        ] = mapL(
+          $$parsePathCommandParameters,
+          $$splitPathDataByCommandL(path_data)
+        );
 
         // then
         expect(receive_command).equal(command);
         expect(receive_parameters).deep.equal([]);
       }
+    });
+  }),
+  describe(`$$convertPathCommandParametersRelativeToAbsoluteL`, function () {
+    it(`Convert first "m" to "M".`, function () {
+      // given
+      const path_data = "m 1 2 3 4 5 6 m 1 2";
+
+      // when
+      const [
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("M");
+      expect(parameters).deep.equal([
+        [1, 2],
+        [4, 6],
+        [9, 12],
+      ]);
+      expect(cpx).equal(10);
+      expect(cpy).equal(14);
+    });
+
+    it(`Convert "M".`, function () {
+      // given
+      const path_data = `M 1 2 M 3 4 5 6 m 7 8`;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      expect(command).equal("M");
+      expect(parameters).deep.equal([
+        [3, 4],
+        [5, 6],
+      ]);
+      expect(cpx).equal(12);
+      expect(cpy).equal(14);
+    });
+
+    it(`Convert "m".`, function () {
+      // given
+      const path_data = `M 11 12 m 1 2 3 4 m 1 2`;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("M");
+      expect(parameters).deep.equal([
+        [12, 14],
+        [15, 18],
+      ]);
+      expect(cpx).equal(16);
+      expect(cpy).equal(20);
+    });
+
+    it(`Convert "L".`, function () {
+      // given
+      const path_data = `
+        M 1 2
+        L 3 4 5 6
+        m 7 8
+      `;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("L");
+      expect(parameters).deep.equal([
+        [3, 4],
+        [5, 6],
+      ]);
+      expect(cpx).equal(12);
+      expect(cpy).equal(14);
+    });
+
+    it(`Convert "l".`, function () {
+      // given
+      const path_data = `
+        M 1 2
+        l 3 4 5 6
+        m 7 8
+      `;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("L");
+      expect(parameters).deep.equal([
+        [4, 6],
+        [9, 12],
+      ]);
+      expect(cpx).equal(16);
+      expect(cpy).equal(20);
+    });
+
+    it(`Convert "H".`, function () {
+      // given
+      const path_data = `
+        M 1 2
+        H 3 4 5 6
+        m 7 8 
+      `;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("H");
+      expect(parameters).deep.equal([3, 4, 5, 6]);
+      expect(cpx).equal(13);
+      expect(cpy).equal(10);
+    });
+
+    it(`Convert "h".`, function () {
+      // given
+      const path_data = `
+        M 1 2
+        h 3 4 5 6
+        m 7 8 
+      `;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("H");
+      expect(parameters).deep.equal([4, 8, 13, 19]);
+      expect(cpx).equal(26);
+      expect(cpy).equal(10);
+    });
+
+    it(`Convert "V".`, function () {
+      // given
+      const path_data = `
+        M 1 2
+        V 3 4 5 6
+        m 7 8 
+      `;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("V");
+      expect(parameters).deep.equal([3, 4, 5, 6]);
+      expect(cpx).equal(8);
+      expect(cpy).equal(14);
+    });
+
+    it(`Convert "v".`, function () {
+      // given
+      const path_data = `
+        M 1 2
+        v 3 4 5 6
+        m 7 8 
+      `;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("V");
+      expect(parameters).deep.equal([5, 9, 14, 20]);
+      expect(cpx).equal(8);
+      expect(cpy).equal(28);
+    });
+
+    it(`Convert "C".`, function () {
+      // given
+      const path_data = `
+        M 1 2
+        C 3 4 5 6 7 8, 9 10 11 12 13 14
+        m 15 16 
+      `;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("C");
+      expect(parameters).deep.equal([
+        [
+          [3, 4],
+          [5, 6],
+          [7, 8],
+        ],
+        [
+          [9, 10],
+          [11, 12],
+          [13, 14],
+        ],
+      ]);
+      expect(cpx).equal(28);
+      expect(cpy).equal(30);
+    });
+
+    it(`Convert "c".`, function () {
+      // given
+      const path_data = `
+        M 1 2
+        c 3 4 5 6 7 8, 9 10 11 12 13 14
+        m 15 16 
+      `;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("C");
+      expect(parameters).deep.equal([
+        [
+          [4, 6],
+          [6, 8],
+          [8, 10],
+        ],
+        [
+          [17, 20],
+          [19, 22],
+          [21, 24],
+        ],
+      ]);
+      expect(cpx).equal(36);
+      expect(cpy).equal(40);
+    });
+
+    it(`Convert "S".`, function () {
+      // given
+      const path_data = `
+        M 1 2
+        S 3 4 5 6, 7 8 9 10
+        m 11 12  
+      `;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("S");
+      expect(parameters).deep.equal([
+        [
+          [3, 4],
+          [5, 6],
+        ],
+        [
+          [7, 8],
+          [9, 10],
+        ],
+      ]);
+      expect(cpx).equal(20);
+      expect(cpy).equal(22);
+    });
+
+    it(`Convert "s".`, function () {
+      // given
+      const path_data = `
+        M 1 2
+        s 3 4 5 6, 7 8 9 10
+        m 11 12 
+      `;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("S");
+      expect(parameters).deep.equal([
+        [
+          [4, 6],
+          [6, 8],
+        ],
+        [
+          [13, 16],
+          [15, 18],
+        ],
+      ]);
+      expect(cpx).equal(26);
+      expect(cpy).equal(30);
+    });
+
+    it(`Convert "Q".`, function () {
+      // given
+      const path_data = `
+        M 1 2
+        Q 3 4 5 6, 7 8 9 10
+        m 11 12  
+      `;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("Q");
+      expect(parameters).deep.equal([
+        [
+          [3, 4],
+          [5, 6],
+        ],
+        [
+          [7, 8],
+          [9, 10],
+        ],
+      ]);
+      expect(cpx).equal(20);
+      expect(cpy).equal(22);
+    });
+
+    it(`Convert "q".`, function () {
+      // given
+      const path_data = `
+        M 1 2
+        q 3 4 5 6, 7 8 9 10
+        m 11 12 
+      `;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("Q");
+      expect(parameters).deep.equal([
+        [
+          [4, 6],
+          [6, 8],
+        ],
+        [
+          [13, 16],
+          [15, 18],
+        ],
+      ]);
+      expect(cpx).equal(26);
+      expect(cpy).equal(30);
+    });
+
+    it(`Convert "T".`, function () {
+      // given
+      const path_data = `
+        M 1 2
+        T 3 4, 5 6
+        m 7 8 
+      `;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("T");
+      expect(parameters).deep.equal([
+        [3, 4],
+        [5, 6],
+      ]);
+      expect(cpx).equal(12);
+      expect(cpy).equal(14);
+    });
+
+    it(`Convert "t".`, function () {
+      // given
+      const path_data = `
+        M 1 2
+        t 3 4, 5 6
+        m 7 8 
+      `;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("T");
+      expect(parameters).deep.equal([
+        [4, 6],
+        [9, 12],
+      ]);
+      expect(cpx).equal(16);
+      expect(cpy).equal(20);
+    });
+
+    it(`Convert "A".`, function () {
+      // given
+      const path_data = `
+        M 1 2
+        A 3 4 5 1 0 6 7
+        m 8 9 
+      `;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("A");
+      expect(parameters).deep.equal([[3, 4, 5, 1, 0, 6, 7]]);
+      expect(cpx).equal(14);
+      expect(cpy).equal(16);
+    });
+
+    it(`Convert "a".`, function () {
+      // given
+      const path_data = `
+        M 1 2
+        a 3 4 5 1 0 6 7
+        m 8 9 
+      `;
+
+      // when
+      const [
+        ,
+        { command, parameters },
+        {
+          parameters: [[cpx, cpy]],
+        },
+      ] = go(
+        path_data,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command).equal("A");
+      expect(parameters).deep.equal([[3, 4, 5, 1, 0, 7, 9]]);
+      expect(cpx).equal(15);
+      expect(cpy).equal(18);
+    });
+
+    it(`Convert "Z" and "z".`, function () {
+      // given
+      const path_data1 = `
+        M 10 10
+        L 20 20 50 20
+        Z
+        m 10 10
+      `;
+      const path_data2 = `
+        M 10 10
+        L 20 20 50 20
+        z
+        m 10 10
+      `;
+
+      // when
+      const [
+        ,
+        ,
+        { command: command1, parameters: parameters1 },
+        {
+          parameters: [[cpx1, cpy1]],
+        },
+      ] = go(
+        path_data1,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+      const [
+        ,
+        ,
+        { command: command2, parameters: parameters2 },
+        {
+          parameters: [[cpx2, cpy2]],
+        },
+      ] = go(
+        path_data2,
+        $$splitPathDataByCommandL,
+        mapL($$parsePathCommandParameters),
+        $$convertPathCommandParametersRelativeToAbsoluteL
+      );
+
+      // then
+      expect(command1).equal("Z");
+      expect(command2).equal("Z");
+      expect(parameters1).deep.equal([]);
+      expect(parameters2).deep.equal([]);
+      expect(cpx1).equal(20);
+      expect(cpy1).equal(20);
+      expect(cpx2).equal(20);
+      expect(cpy2).equal(20);
     });
   }),
   describe(`$$parsePathData`, function () {

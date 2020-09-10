@@ -368,6 +368,15 @@ parameters 문자열을 숫자 배열로 변환합니다.
 
 이 함수는 parameters 문자열의 유효성을 검사하지 않습니다!
 
+## \$\$convertPathCommandParametersRelativeToAbsoluteL
+
+- [source](../src/parsePathData/parsePathData.index.js)
+- [detail](../src/parsePathData/parsePathData.spec.js)
+
+path 의 command-parameters 이터러블을 relative 좌표에서 absolute 좌표로 변환합니다.
+
+이 함수는 입력 데이터의 유효성을 검사하지 않습니다!
+
 ## \$\$removeAttrNS
 
 - [source](../src/removeAttrNS/removeAttrNS.index.js)
