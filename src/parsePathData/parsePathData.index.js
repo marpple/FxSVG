@@ -9,15 +9,22 @@ import {
   mapL,
   not,
   reduce,
+  take,
   toIter,
 } from "fxjs2";
 import { InvalidArgumentsError } from "../Errors/InvalidArgumentsError.js";
-import { parseParameters } from "./_internal/parseParameters.js";
 import {
+  FN_PATH,
   REGEXP_STR_COMMAND,
+  REGEXP_STR_COORDINATE,
+  REGEXP_STR_COORDINATE_PAIR,
+  REGEXP_STR_COORDINATE_PAIR_DOUBLE,
+  REGEXP_STR_COORDINATE_PAIR_TRIPLET,
+  REGEXP_STR_ELLIPTICAL_ARC_ARG,
+  REGEXP_STR_FLAG,
+  REGEXP_STR_NUMBER,
   REGEXP_STR_SVG_PATH,
-} from "./_internal/REGEXP_STR.js";
-import { FN_PATH } from "./const.js";
+} from "./const.js";
 
 /**
  * Check the input path data string is valid or not.
@@ -74,6 +81,161 @@ export function* $$splitPathDataByCommandL(path_data) {
 }
 
 /**
+ * @typedef {number} Coordinate
+ */
+/**
+ * @typedef {Array<number>} CoordinatePair
+ * @description Array of two numbers.
+ */
+/**
+ * @typedef {Array<CoordinatePair>} CoordinatePairDouble
+ * @description Array of two "CoordinatePair"s.
+ */
+/**
+ * @typedef {Array<CoordinatePair>} CoordinatePairTriplet
+ * @description Array of three "CoordinatePair"s.
+ */
+/**
+ * @typedef {Array<number>} EllipticalArcArg
+ * @description [rx, ry, x_axis_rotation, large_arc_flag, sweep_flag, x, y]
+ *              rx, ry, x_axis_rotation, x, y : number
+ *              large_arc_flag, sweep_flag : 0 or 1
+ */
+/**
+ * @typedef {(Coordinate|CoordinatePair|CoordinatePairTriplet|CoordinatePairDouble|EllipticalArcArg)} Parameter
+ */
+
+/**
+ * This function will not validate coordinate pair string!
+ * Please check yourself first!
+ *
+ * @param {string} coordinate_pair
+ * @returns {CoordinatePair}
+ */
+const parseCoordinatePair = (coordinate_pair) =>
+  go(
+    coordinate_pair.matchAll(new RegExp(REGEXP_STR_COORDINATE, "g")),
+    mapL(head),
+    mapL(Number),
+    take(2)
+  );
+/**
+ * Parse parameters string to array of numbers.
+ * Generator yields command and parsed parameters of the command.
+ *
+ * This function will not validate parameters string!
+ * Please check yourself first!
+ *
+ * @param {string} command
+ * @param {string} parameters
+ * @returns {{command: string, parameters: Array<Parameter>}}
+ */
+export const $$parsePathCommandParameters = ({ command, parameters }) => {
+  if (
+    equals2(command.toLowerCase(), "m") ||
+    equals2(command.toLowerCase(), "l") ||
+    equals2(command.toLowerCase(), "t")
+  ) {
+    /** @type {Array<CoordinatePair>} */
+    const parsed_parameters = go(
+      parameters.matchAll(new RegExp(REGEXP_STR_COORDINATE_PAIR, "g")),
+      mapL(head),
+      map(parseCoordinatePair)
+    );
+    return { command, parameters: parsed_parameters };
+  }
+
+  if (
+    equals2(command.toLowerCase(), "h") ||
+    equals2(command.toLowerCase(), "v")
+  ) {
+    /** @type {Array<Coordinate>} */
+    const parsed_parameters = go(
+      parameters.matchAll(new RegExp(REGEXP_STR_COORDINATE, "g")),
+      mapL(head),
+      map(Number)
+    );
+    return { command, parameters: parsed_parameters };
+  }
+
+  if (equals2(command.toLowerCase(), "c")) {
+    /** @type {Array<CoordinatePairTriplet>} */
+    const parsed_parameters = go(
+      parameters.matchAll(new RegExp(REGEXP_STR_COORDINATE_PAIR_TRIPLET, "g")),
+      mapL(head),
+      map((triplet) =>
+        go(
+          triplet.matchAll(new RegExp(REGEXP_STR_COORDINATE_PAIR, "g")),
+          mapL(head),
+          mapL(parseCoordinatePair),
+          take(3)
+        )
+      )
+    );
+    return { command, parameters: parsed_parameters };
+  }
+
+  if (
+    equals2(command.toLowerCase(), "s") ||
+    equals2(command.toLowerCase(), "q")
+  ) {
+    /** @type {Array<CoordinatePairDouble>} */
+    const parsed_parameters = go(
+      parameters.matchAll(new RegExp(REGEXP_STR_COORDINATE_PAIR_DOUBLE, "g")),
+      mapL(head),
+      map((double) =>
+        go(
+          double.matchAll(new RegExp(REGEXP_STR_COORDINATE_PAIR, "g")),
+          mapL(head),
+          mapL(parseCoordinatePair),
+          take(2)
+        )
+      )
+    );
+    return { command, parameters: parsed_parameters };
+  }
+
+  if (equals2(command.toLowerCase(), "a")) {
+    /** @type {Array<EllipticalArcArg>} */
+    const parsed_parameters = go(
+      parameters.matchAll(new RegExp(REGEXP_STR_ELLIPTICAL_ARC_ARG, "g")),
+      mapL(head),
+      map((arc_arg) => {
+        const [
+          [rx_str],
+          [ry_str],
+          { 0: x_axis_rotation_str, index: _index1 },
+        ] = arc_arg.matchAll(new RegExp(REGEXP_STR_NUMBER, "g"));
+        const index1 = _index1 + x_axis_rotation_str.length;
+        const [rx, ry, x_axis_rotation] = mapL(Number, [
+          rx_str,
+          ry_str,
+          x_axis_rotation_str,
+        ]);
+
+        const [
+          [large_arc_flag_str],
+          { 0: sweep_flag_str, index: _index2 },
+        ] = arc_arg.slice(index1).matchAll(new RegExp(REGEXP_STR_FLAG, "g"));
+        const index2 = index1 + _index2 + sweep_flag_str.length;
+        const [large_arc_flag, sweep_flag] = mapL(Number, [
+          large_arc_flag_str,
+          sweep_flag_str,
+        ]);
+
+        const [x, y] = parseCoordinatePair(arc_arg.slice(index2));
+
+        return [rx, ry, x_axis_rotation, large_arc_flag, sweep_flag, x, y];
+      })
+    );
+    return { command, parameters: parsed_parameters };
+  }
+
+  // command === "z" or "Z"
+  return { command, parameters: [] };
+};
+
+/**
  * Parse path data string to JSON style javascript array.
  *
  * @param {string=} d_str - path data
@@ -84,31 +246,13 @@ export const $$parsePathDate = (d_str) => {
     return [];
   }
 
-  if (!isString(d_str)) {
-    throw new InvalidArgumentsError(
-      FN_PATH,
-      `d_str`,
-      `"d_str" should be one of string, null, undefined.`
-    );
-  }
-
-  d_str = d_str.trim();
-
-  if (!d_str) {
-    return [];
-  }
-
   if (!$$isValidPathData(d_str)) {
-    throw new InvalidArgumentsError(
-      FN_PATH,
-      `d_str`,
-      `"d_str" is invalid format path data strin.`
-    );
+    throw new InvalidArgumentsError(FN_PATH, 1);
   }
 
   return go(
     $$splitPathDataByCommandL(d_str),
-    mapL(parseParameters),
+    mapL($$parsePathCommandParameters),
     function* convertFirstPathSegL(path_seg_iter) {
       const { value: first_path_seg } = path_seg_iter.next();
 

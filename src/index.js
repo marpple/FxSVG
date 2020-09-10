@@ -61,6 +61,7 @@ export { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTransl
 export {
   $$isValidPathData,
   $$splitPathDataByCommandL,
+  $$parsePathCommandParameters,
   $$parsePathDate,
 } from "./parsePathData/parsePathData.index.js";
 export { $$removeAttrNS } from "./removeAttrNS/removeAttrNS.index.js";

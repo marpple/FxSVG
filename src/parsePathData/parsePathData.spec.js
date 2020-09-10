@@ -1,10 +1,23 @@
 import { expect } from "chai";
-import { mapL, rangeL } from "fxjs2";
+import {
+  chunkL,
+  concatL,
+  deepFlatL,
+  go,
+  join,
+  map,
+  mapL,
+  rangeL,
+  take,
+  takeAll,
+} from "fxjs2";
+import { makeRandomBool } from "../../test/utils/makeRandomBool.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import {
   $$isValidPathData,
   $$splitPathDataByCommandL,
   $$parsePathDate,
+  $$parsePathCommandParameters,
 } from "./parsePathData.index.js";
 
 export default ({ describe, it }) => [
@@ -124,6 +137,161 @@ export default ({ describe, it }) => [
 
       expect(done5).true;
       expect(value).undefined;
+    });
+  }),
+  describe(`$$parsePathCommandParameters`, function () {
+    it(`The function parse parameters string for "M", "m", "L", "l", "T", "t" commands into the array of coordinate pairs.`, function () {
+      const parameters = map(
+        () => map(() => makeRandomInt(-100, 100), rangeL(2)),
+        rangeL(4)
+      );
+      for (const command of ["M", "m", "L", "l", "T", "t"]) {
+        // given
+        const path_data = `${command} ${join(
+          ", ",
+          mapL(join(" "), parameters)
+        )}`;
+
+        // when
+        const [
+          { command: receive_command, parameters: receive_parameters },
+        ] = mapL($$parsePathCommandParameters, $$splitPathDataByCommandL(path_data));
+
+        // then
+        expect(receive_command).equal(command);
+        expect(receive_parameters).deep.equal(parameters);
+      }
+    });
+
+    it(`The function parse parameters string for "H", "h", "V", "v" commands into the array of coordinates.`, function () {
+      const parameters = map(() => makeRandomInt(-100, 100), rangeL(10));
+      for (const command of ["H", "h", "V", "v"]) {
+        // given
+        const path_data = `${command} ${join(", ", parameters)}`;
+
+        // when
+        const [
+          { command: receive_command, parameters: receive_parameters },
+        ] = mapL($$parsePathCommandParameters, $$splitPathDataByCommandL(path_data));
+
+        // then
+        expect(receive_command).equal(command);
+        expect(receive_parameters).deep.equal(parameters);
+      }
+    });
+
+    it(`The function parse parameters string for "C", "c" commands into the array of coordinate pair triplets.`, function () {
+      const parameters = go(
+        rangeL(Infinity),
+        mapL(() => makeRandomInt(-100, 100)),
+        chunkL(2),
+        chunkL(3),
+        take(6)
+      );
+      for (const command of ["C", "c"]) {
+        // given
+        const path_data = go(
+          parameters,
+          mapL(deepFlatL),
+          mapL(join(" ")),
+          join(", "),
+          (parameters) => `${command} ${parameters}`
+        );
+
+        // when
+        const [
+          { command: receive_command, parameters: receive_parameters },
+        ] = mapL($$parsePathCommandParameters, $$splitPathDataByCommandL(path_data));
+
+        // then
+        expect(receive_command).equal(command);
+        expect(receive_parameters).deep.equal(parameters);
+      }
+    });
+
+    it(`The function parse parameters string for "S", "s", "Q", "q" commands into the array of coordinate pair doubles.`, function () {
+      const parameters = go(
+        rangeL(Infinity),
+        mapL(() => makeRandomInt(-100, 100)),
+        chunkL(2),
+        chunkL(2),
+        take(6)
+      );
+      for (const command of ["S", "s", "Q", "q"]) {
+        // given
+        const path_data = go(
+          parameters,
+          mapL(deepFlatL),
+          mapL(join(" ")),
+          join(", "),
+          (parameters) => `${command} ${parameters}`
+        );
+
+        // when
+        const [
+          { command: receive_command, parameters: receive_parameters },
+        ] = mapL($$parsePathCommandParameters, $$splitPathDataByCommandL(path_data));
+
+        // then
+        expect(receive_command).equal(command);
+        expect(receive_parameters).deep.equal(parameters);
+      }
+    });
+
+    it(`The function parse parameters string for "A", "a" commands into the array of elliptical arc args.`, function () {
+      const parameters = go(
+        rangeL(Infinity),
+        mapL(() => makeRandomInt(-100, 100)),
+        chunkL(3),
+        mapL((l) =>
+          concatL(
+            l,
+            mapL(() => (makeRandomBool() ? 0 : 1), rangeL(2))
+          )
+        ),
+        mapL((l) =>
+          concatL(
+            l,
+            mapL(() => makeRandomInt(-100, 100), rangeL(2))
+          )
+        ),
+        mapL(takeAll),
+        take(4)
+      );
+      for (const command of ["A", "a"]) {
+        // given
+        const path_data = go(
+          parameters,
+          mapL(join(" ")),
+          join(", "),
+          (parameters) => `${command} ${parameters}`
+        );
+
+        // when
+        const [
+          { command: receive_command, parameters: receive_parameters },
+        ] = mapL($$parsePathCommandParameters, $$splitPathDataByCommandL(path_data));
+
+        // then
+        expect(receive_command).equal(command);
+        expect(receive_parameters).deep.equal(parameters);
+      }
+    });
+
+    it(`The function parse parameters string for "Z", "z" commands into the empty array.`, function () {
+      for (const command of ["Z", "z"]) {
+        // given
+        const path_data = command;
+
+        // when
+        const [
+          { command: receive_command, parameters: receive_parameters },
+        ] = mapL($$parsePathCommandParameters, $$splitPathDataByCommandL(path_data));
+
+        // then
+        expect(receive_command).equal(command);
+        expect(receive_parameters).deep.equal([]);
+      }
     });
   }),
   describe(`$$parsePathData`, function () {
