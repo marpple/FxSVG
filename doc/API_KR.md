@@ -392,6 +392,14 @@ path 의 command-parameters 이터러블을 relative 좌표에서 absolute 좌�
 path 의 command-parameter 를 각 parameter 별로 펼칩니다.
 "command + parameter 시퀸스" 를 "command + parameter" 의 시퀸스로 평탄화합니다.
 
+## \$\$parsePathData
+
+- [source](../src/parsePathData/parsePathData.index.js)
+- [detail](../src/parsePathData/parsePathData.spec.js)
+
+`<path></path>` 엘리먼트의 `d` 속성의 값을 파싱하여 `{command, parameters}` 객체의 이터레이터를 반환합니다.
+위의 converting, compressing, flattening 작업을 모두 진행합니다.
+
 ## \$\$removeAttrNS
 
 - [source](../src/removeAttrNS/removeAttrNS.index.js)

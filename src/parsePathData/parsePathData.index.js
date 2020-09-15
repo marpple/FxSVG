@@ -598,34 +598,52 @@ export function* $$compressPathCommandL(path_command_parameters_iter) {
         parameters: updated_parameters,
         cpx: updated_cpx,
         cpy: updated_cpy,
-      } = reduce(
-        (acc, [[x2, y2], [x, y]]) => {
-          let x1;
-          let y1;
-          if (equals2(path_command_parameters1.command, "C")) {
-            const [, [old_x2, old_y2]] = last(
-              path_command_parameters1.parameters
-            );
-            x1 = 2 * acc.cpx - old_x2;
-            y1 = 2 * acc.cpy - old_y2;
-          } else {
-            x1 = acc.cpx;
-            y1 = acc.cpy;
-          }
+      } = go(path_command_parameters2.parameters, toIter, (iter) => {
+        const [[x2, y2], [x, y]] = iter.next().value;
+        let x1;
+        let y1;
+        if (equals2(path_command_parameters1.command, "C")) {
+          const [, [old_x2, old_y2]] = last(
+            path_command_parameters1.parameters
+          );
+          x1 = 2 * cpx - old_x2;
+          y1 = 2 * cpy - old_y2;
+        } else {
+          x1 = cpx;
+          y1 = cpy;
+        }
 
-          acc.parameters.push([
-            [x1, y1],
-            [x2, y2],
-            [x, y],
-          ]);
-
-          acc.cpx = x;
-          acc.cpy = y;
-          return acc;
-        },
-        { parameters: [], cpx, cpy },
-        path_command_parameters2.parameters
-      );
+        return reduce(
+          (acc, [[x2, y2], [x, y]]) => {
+            const x1 = 2 * acc.cpx - acc.old_x2;
+            const y1 = 2 * acc.cpy - acc.old_y2;
+            acc.parameters.push([
+              [x1, y1],
+              [x2, y2],
+              [x, y],
+            ]);
+            acc.cpx = x;
+            acc.cpy = y;
+            acc.old_x2 = x2;
+            acc.old_y2 = y2;
+            return acc;
+          },
+          {
+            parameters: [
+              [
+                [x1, y1],
+                [x2, y2],
+                [x, y],
+              ],
+            ],
+            cpx: x,
+            cpy: y,
+            old_x2: x2,
+            old_y2: y2,
+          },
+          iter
+        );
+      });
       cpx = updated_cpx;
       cpy = updated_cpy;
       path_command_parameters1 = {
@@ -648,33 +666,48 @@ export function* $$compressPathCommandL(path_command_parameters_iter) {
         parameters: updated_parameters,
         cpx: updated_cpx,
         cpy: updated_cpy,
-      } = reduce(
-        (acc, [x, y]) => {
-          let x1;
-          let y1;
-          if (equals2(path_command_parameters1.command, "Q")) {
-            const [[old_x1, old_y1]] = last(
-              path_command_parameters1.parameters
-            );
-            x1 = 2 * acc.cpx - old_x1;
-            y1 = 2 * acc.cpy - old_y1;
-          } else {
-            x1 = cpx;
-            y1 = cpy;
-          }
+      } = go(path_command_parameters2.parameters, toIter, (iter) => {
+        const [x, y] = iter.next().value;
+        let x1;
+        let y1;
+        if (equals2(path_command_parameters1.command, "Q")) {
+          const [[old_x1, old_y1]] = last(path_command_parameters1.parameters);
+          x1 = 2 * cpx - old_x1;
+          y1 = 2 * cpy - old_y1;
+        } else {
+          x1 = cpx;
+          y1 = cpy;
+        }
 
-          acc.parameters.push([
-            [x1, y1],
-            [x, y],
-          ]);
-
-          acc.cpx = x;
-          acc.cpy = y;
-          return acc;
-        },
-        { parameters: [], cpx, cpy },
-        path_command_parameters2.parameters
-      );
+        return reduce(
+          (acc, [x, y]) => {
+            const x1 = 2 * acc.cpx - acc.old_x1;
+            const y1 = 2 * acc.cpy - acc.old_y1;
+            acc.parameters.push([
+              [x1, y1],
+              [x, y],
+            ]);
+            acc.cpx = x;
+            acc.cpy = y;
+            acc.old_x1 = x1;
+            acc.old_y1 = y1;
+            return acc;
+          },
+          {
+            parameters: [
+              [
+                [x1, y1],
+                [x, y],
+              ],
+            ],
+            cpx: x,
+            cpy: y,
+            old_x1: x1,
+            old_y1: y1,
+          },
+          iter
+        );
+      });
       cpx = updated_cpx;
       cpy = updated_cpy;
       path_command_parameters1 = {
@@ -739,14 +772,16 @@ export function* $$flatPathCommandParametersL(path_command_parameters) {
 }
 
 /**
- * Parse path data string to JSON style javascript array.
+ * Parse path data string to an iterator of {command, parameters} object.
+ * Apply converting, compressing, flattening process above.
  *
  * @param {string=} d_str - path data
+ * @returns {Iterator<{command: string, parameters: Parameter}, undefined, *>}
  * @throws {InvalidArgumentsError}
  */
-export const $$parsePathDate = (d_str) => {
+export const $$parsePathDateL = (d_str) => {
   if (isNil(d_str)) {
-    return [];
+    return /** @type {Iterator<{command: string, parameters: Parameter}, undefined, *>} */ [];
   }
 
   if (!$$isValidPathData(d_str)) {

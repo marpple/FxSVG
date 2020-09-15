@@ -64,4 +64,5 @@ path 의 command-parameter 를 각 parameter 별로 펼칩니다.
 - [source](./parsePathData.index.js)
 - [test](./parsePathData.spec.js)
 
-`<path></path>` 엘리먼트의 `d` 속성의 값을 해석한 자바스크립트 객체(JSON)를 반환합니다.
+`<path></path>` 엘리먼트의 `d` 속성의 값을 파싱하여 `{command, parameters}` 객체의 이터레이터를 반환합니다.
+위의 converting, compressing, flattening 작업을 모두 진행합니다.

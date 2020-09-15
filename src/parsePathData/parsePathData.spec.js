@@ -21,6 +21,7 @@ import {
   $$convertPathCommandParametersRelativeToAbsoluteL,
   $$compressPathCommandL,
   $$flatPathCommandParametersL,
+  $$parsePathDateL,
 } from "./parsePathData.index.js";
 
 export default ({ describe, it }) => [
@@ -3062,6 +3063,203 @@ export default ({ describe, it }) => [
           done: true,
         });
       }
+    });
+  }),
+  describe(`$$parsePathDataL`, function () {
+    it(`parse path data string.`, function () {
+      // given
+      const path_data = `
+        M 1 2, 3 4
+        L 1 2, 3 4, 5 6
+        H 1, 2, 3
+        V 4, 5, 6
+        C 1 2 3 4 5 6, 7 8 9 1 2 3
+        S 1 2 3 4, 5 6 7 8
+        Q 1 2 3 4, 5 6 7 8
+        T 1 2, 3 4
+        A 1 2 3 0 1 4 5, 6 7 8 1 0 9 8
+        Z
+        m 1 2, 3 4
+        l 1 2, 3 4, 5 6
+        h 1, 2, 3
+        v 4, 5, 6
+        c 1 2 3 4 5 6, 7 8 9 1 2 3
+        s 1 2 3 4, 5 6 7 8
+        q 1 2 3 4, 5 6 7 8
+        t 1 2, 3 4
+        a 1 2 3 0 1 4 5, 6 7 8 1 0 9 8
+        z
+      `;
+
+      // when
+      const parsed_path_data = [...$$parsePathDateL(path_data)];
+
+      // then
+      expect(parsed_path_data).deep.equal([
+        { command: "M", parameters: [1, 2] },
+        { command: "L", parameters: [3, 4] },
+        { command: "L", parameters: [1, 2] },
+        { command: "L", parameters: [3, 4] },
+        { command: "L", parameters: [5, 6] },
+        { command: "L", parameters: [1, 6] },
+        { command: "L", parameters: [2, 6] },
+        { command: "L", parameters: [3, 6] },
+        { command: "L", parameters: [3, 4] },
+        { command: "L", parameters: [3, 5] },
+        { command: "L", parameters: [3, 6] },
+        {
+          command: "C",
+          parameters: [
+            [1, 2],
+            [3, 4],
+            [5, 6],
+          ],
+        },
+        {
+          command: "C",
+          parameters: [
+            [7, 8],
+            [9, 1],
+            [2, 3],
+          ],
+        },
+        {
+          command: "C",
+          parameters: [
+            [-5, 5],
+            [1, 2],
+            [3, 4],
+          ],
+        },
+        {
+          command: "C",
+          parameters: [
+            [5, 6],
+            [5, 6],
+            [7, 8],
+          ],
+        },
+        {
+          command: "Q",
+          parameters: [
+            [1, 2],
+            [3, 4],
+          ],
+        },
+        {
+          command: "Q",
+          parameters: [
+            [5, 6],
+            [7, 8],
+          ],
+        },
+        {
+          command: "Q",
+          parameters: [
+            [9, 10],
+            [1, 2],
+          ],
+        },
+        {
+          command: "Q",
+          parameters: [
+            [-7, -6],
+            [3, 4],
+          ],
+        },
+        {
+          command: "A",
+          parameters: [1, 2, 3, 0, 1, 4, 5],
+        },
+        {
+          command: "A",
+          parameters: [6, 7, 8, 1, 0, 9, 8],
+        },
+        { command: "L", parameters: [1, 2] },
+        { command: "M", parameters: [2, 4] },
+        { command: "L", parameters: [5, 8] },
+        { command: "L", parameters: [6, 10] },
+        { command: "L", parameters: [9, 14] },
+        { command: "L", parameters: [14, 20] },
+        { command: "L", parameters: [15, 20] },
+        { command: "L", parameters: [17, 20] },
+        { command: "L", parameters: [20, 20] },
+        { command: "L", parameters: [20, 24] },
+        { command: "L", parameters: [20, 29] },
+        { command: "L", parameters: [20, 35] },
+        {
+          command: "C",
+          parameters: [
+            [21, 37],
+            [23, 39],
+            [25, 41],
+          ],
+        },
+        {
+          command: "C",
+          parameters: [
+            [32, 49],
+            [34, 42],
+            [27, 44],
+          ],
+        },
+        {
+          command: "C",
+          parameters: [
+            [20, 46],
+            [28, 46],
+            [30, 48],
+          ],
+        },
+        {
+          command: "C",
+          parameters: [
+            [32, 50],
+            [35, 54],
+            [37, 56],
+          ],
+        },
+        {
+          command: "Q",
+          parameters: [
+            [38, 58],
+            [40, 60],
+          ],
+        },
+        {
+          command: "Q",
+          parameters: [
+            [45, 66],
+            [47, 68],
+          ],
+        },
+        {
+          command: "Q",
+          parameters: [
+            [49, 70],
+            [48, 70],
+          ],
+        },
+        {
+          command: "Q",
+          parameters: [
+            [47, 70],
+            [51, 74],
+          ],
+        },
+        {
+          command: "A",
+          parameters: [1, 2, 3, 0, 1, 55, 79],
+        },
+        {
+          command: "A",
+          parameters: [6, 7, 8, 1, 0, 64, 87],
+        },
+        {
+          command: "L",
+          parameters: [2, 4],
+        },
+      ]);
     });
   }),
 ];
