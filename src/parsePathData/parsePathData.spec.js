@@ -19,6 +19,7 @@ import {
   $$parsePathDate,
   $$parsePathCommandParameters,
   $$convertPathCommandParametersRelativeToAbsoluteL,
+  $$compressPathCommandL,
 } from "./parsePathData.index.js";
 
 export default ({ describe, it }) => [
@@ -983,6 +984,1517 @@ export default ({ describe, it }) => [
       expect(cpy1).equal(20);
       expect(cpx2).equal(20);
       expect(cpy2).equal(20);
+    });
+  }),
+  describe(`$$compressPathCommandL`, function () {
+    describe(`Convert "Z" to "L".`, function () {
+      it(`When following "M".`, function () {
+        // given
+        const [dummy_x, dummy_y, ipx, ipy] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${dummy_x} ${dummy_y}
+          M ${ipx} ${ipy}
+          Z 
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[ipx, ipy]]);
+      });
+
+      it(`When following "L".`, function () {
+        // given
+        const [dummy_x, dummy_y, ipx, ipy, cpx, cpy] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${dummy_x} ${dummy_y}
+          M ${ipx} ${ipy}
+          L ${cpx} ${cpy}
+          Z 
+        `;
+
+        // when
+        const [, , , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[ipx, ipy]]);
+      });
+
+      it(`When following "H".`, function () {
+        // given
+        const [dummy_x, dummy_y, ipx, ipy, cpx] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${dummy_x} ${dummy_y}
+          M ${ipx} ${ipy}
+          H ${cpx}
+          Z 
+        `;
+
+        // when
+        const [, , , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[ipx, ipy]]);
+      });
+
+      it(`When following "V".`, function () {
+        // given
+        const [dummy_x, dummy_y, ipx, ipy, cpy] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${dummy_x} ${dummy_y}
+          M ${ipx} ${ipy}
+          V ${cpy}
+          Z 
+        `;
+
+        // when
+        const [, , , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[ipx, ipy]]);
+      });
+
+      it(`When following "C".`, function () {
+        // given
+        const [
+          dummy_x,
+          dummy_y,
+          ipx,
+          ipy,
+          old_x1,
+          old_y1,
+          old_x2,
+          old_y2,
+          cpx,
+          cpy,
+        ] = mapL(() => makeRandomInt(-100, 100), rangeL(Infinity));
+        const path_data = `
+          M ${dummy_x} ${dummy_y}
+          M ${ipx} ${ipy}
+          C ${old_x1} ${old_y1} ${old_x2} ${old_y2} ${cpx} ${cpy}
+          Z 
+        `;
+
+        // when
+        const [, , , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[ipx, ipy]]);
+      });
+
+      it(`When following "S".`, function () {
+        // given
+        const [dummy_x, dummy_y, ipx, ipy, old_x2, old_y2, cpx, cpy] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${dummy_x} ${dummy_y}
+          M ${ipx} ${ipy}
+          S ${old_x2} ${old_y2} ${cpx} ${cpy}
+          Z 
+        `;
+
+        // when
+        const [, , , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[ipx, ipy]]);
+      });
+
+      it(`When following "Q".`, function () {
+        // given
+        const [dummy_x, dummy_y, ipx, ipy, old_x1, old_y1, cpx, cpy] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${dummy_x} ${dummy_y}
+          M ${ipx} ${ipy}
+          Q ${old_x1} ${old_y1} ${cpx} ${cpy}
+          Z 
+        `;
+
+        // when
+        const [, , , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[ipx, ipy]]);
+      });
+
+      it(`When following "T".`, function () {
+        // given
+        const [dummy_x, dummy_y, ipx, ipy, cpx, cpy] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${dummy_x} ${dummy_y}
+          M ${ipx} ${ipy}
+          T ${cpx} ${cpy}
+          Z 
+        `;
+
+        // when
+        const [, , , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[ipx, ipy]]);
+      });
+
+      it(`When following "A".`, function () {
+        // given
+        const [
+          dummy_x,
+          dummy_y,
+          ipx,
+          ipy,
+          rx,
+          ry,
+          x_axis_rotation,
+          cpx,
+          cpy,
+        ] = mapL(() => makeRandomInt(-100, 100), rangeL(Infinity));
+        const [large_arc_flag, sweep_flag] = mapL(
+          () => Math.round(Math.random()),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${dummy_x} ${dummy_y}
+          M ${ipx} ${ipy}
+          A ${rx} ${ry} ${x_axis_rotation} ${large_arc_flag} ${sweep_flag} ${cpx} ${cpy}
+          Z 
+        `;
+
+        // when
+        const [, , , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[ipx, ipy]]);
+      });
+
+      it(`When following "Z".`, function () {
+        // given
+        const [dummy_x, dummy_y, ipx, ipy] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${dummy_x} ${dummy_y}
+          M ${ipx} ${ipy}
+          Z
+          Z 
+        `;
+
+        // when
+        const [, , , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[ipx, ipy]]);
+      });
+    });
+
+    describe(`Convert "H" to "L".`, function () {
+      it(`When following "M".`, function () {
+        // given
+        const [dummy_x, dummy_y, ipx, ipy, x] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${dummy_x} ${dummy_y}
+          M ${ipx} ${ipy}
+          H ${x}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[x, ipy]]);
+      });
+
+      it(`When following "L".`, function () {
+        // given
+        const [ipx, ipy, cpx, cpy, x] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          L ${cpx} ${cpy}
+          H ${x}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[x, cpy]]);
+      });
+
+      it(`When following "H".`, function () {
+        // given
+        const [ipx, ipy, cpx, x] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          H ${cpx}
+          H ${x}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[x, ipy]]);
+      });
+
+      it(`When following "V".`, function () {
+        // given
+        const [ipx, ipy, cpy, x] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          V ${cpy}
+          H ${x}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[x, cpy]]);
+      });
+
+      it(`When following "C".`, function () {
+        // given
+        const [ipx, ipy, old_x1, old_y1, old_x2, old_y2, cpx, cpy, x] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          C ${old_x1} ${old_y1} ${old_x2} ${old_y2} ${cpx} ${cpy}
+          H ${x}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[x, cpy]]);
+      });
+
+      it(`When following "S".`, function () {
+        // given
+        const [ipx, ipy, old_x2, old_y2, cpx, cpy, x] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          S ${old_x2} ${old_y2} ${cpx} ${cpy}
+          H ${x}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[x, cpy]]);
+      });
+
+      it(`When following "Q".`, function () {
+        // given
+        const [ipx, ipy, old_x1, old_y1, cpx, cpy, x] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          Q ${old_x1} ${old_y1} ${cpx} ${cpy}
+          H ${x}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[x, cpy]]);
+      });
+
+      it(`When following "T".`, function () {
+        // given
+        const [ipx, ipy, cpx, cpy, x] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          T ${cpx} ${cpy}
+          H ${x}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[x, cpy]]);
+      });
+
+      it(`When following "A".`, function () {
+        // given
+        const [ipx, ipy, rx, ry, x_axis_rotation, cpx, cpy, x] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const [large_arc_flag, sweep_flag] = mapL(
+          () => Math.round(Math.random()),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          A ${rx} ${ry} ${x_axis_rotation} ${large_arc_flag} ${sweep_flag} ${cpx} ${cpy}
+          H ${x}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[x, cpy]]);
+      });
+
+      it(`When following "Z".`, function () {
+        // given
+        const [ipx, ipy, x] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          Z
+          H ${x}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[x, ipy]]);
+      });
+    });
+
+    describe(`Convert "V" to "L".`, function () {
+      it(`When following "M".`, function () {
+        // given
+        const [dummy_x, dummy_y, ipx, ipy, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${dummy_x} ${dummy_y}
+          M ${ipx} ${ipy}
+          V ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[ipx, y]]);
+      });
+
+      it(`When following "L".`, function () {
+        // given
+        const [ipx, ipy, cpx, cpy, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          L ${cpx} ${cpy}
+          V ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[cpx, y]]);
+      });
+
+      it(`When following "H".`, function () {
+        // given
+        const [ipx, ipy, cpx, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          H ${cpx}
+          V ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[cpx, y]]);
+      });
+
+      it(`When following "V".`, function () {
+        // given
+        const [ipx, ipy, cpy, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          V ${cpy}
+          V ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[ipx, y]]);
+      });
+
+      it(`When following "C".`, function () {
+        // given
+        const [ipx, ipy, old_x1, old_y1, old_x2, old_y2, cpx, cpy, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          C ${old_x1} ${old_y1} ${old_x2} ${old_y2} ${cpx} ${cpy}
+          V ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[cpx, y]]);
+      });
+
+      it(`When following "S".`, function () {
+        // given
+        const [ipx, ipy, old_x2, old_y2, cpx, cpy, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          S ${old_x2} ${old_y2} ${cpx} ${cpy}
+          V ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[cpx, y]]);
+      });
+
+      it(`When following "Q".`, function () {
+        // given
+        const [ipx, ipy, old_x1, old_y1, cpx, cpy, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          Q ${old_x1} ${old_y1} ${cpx} ${cpy}
+          V ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[cpx, y]]);
+      });
+
+      it(`When following "T".`, function () {
+        // given
+        const [ipx, ipy, cpx, cpy, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          T ${cpx} ${cpy}
+          V ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[cpx, y]]);
+      });
+
+      it(`When following "A".`, function () {
+        // given
+        const [ipx, ipy, rx, ry, x_axis_rotation, cpx, cpy, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const [large_arc_flag, sweep_flag] = mapL(
+          () => Math.round(Math.random()),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          A ${rx} ${ry} ${x_axis_rotation} ${large_arc_flag} ${sweep_flag} ${cpx} ${cpy}
+          V ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[cpx, y]]);
+      });
+
+      it(`When following "Z".`, function () {
+        // given
+        const [ipx, ipy, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          Z
+          V ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("L");
+        expect(parameters).deep.equal([[ipx, y]]);
+      });
+    });
+
+    describe(`Convert "S" to "C".`, function () {
+      it(`When following "M".`, function () {
+        // given
+        const [dummy_x, dummy_y, ipx, ipy, x2, y2, x, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${dummy_x} ${dummy_y}
+          M ${ipx} ${ipy}
+          S ${x2} ${y2} ${x} ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("C");
+        expect(parameters).deep.equal([
+          [
+            [ipx, ipy],
+            [x2, y2],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "L".`, function () {
+        // given
+        const [ipx, ipy, cpx, cpy, x2, y2, x, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          L ${cpx} ${cpy}
+          S ${x2} ${y2} ${x} ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("C");
+        expect(parameters).deep.equal([
+          [
+            [cpx, cpy],
+            [x2, y2],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "H".`, function () {
+        // given
+        const [ipx, ipy, cpx, x2, y2, x, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          H ${cpx}
+          S ${x2} ${y2} ${x} ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("C");
+        expect(parameters).deep.equal([
+          [
+            [cpx, ipy],
+            [x2, y2],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "V".`, function () {
+        // given
+        const [ipx, ipy, cpy, x2, y2, x, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          V ${cpy}
+          S ${x2} ${y2} ${x} ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("C");
+        expect(parameters).deep.equal([
+          [
+            [ipx, cpy],
+            [x2, y2],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "C".`, function () {
+        // given
+        const [
+          ipx,
+          ipy,
+          old_x1,
+          old_y1,
+          old_x2,
+          old_y2,
+          cpx,
+          cpy,
+          x2,
+          y2,
+          x,
+          y,
+        ] = mapL(() => makeRandomInt(-100, 100), rangeL(Infinity));
+        const path_data = `
+          M ${ipx} ${ipy}
+          C ${old_x1} ${old_y1} ${old_x2} ${old_y2} ${cpx} ${cpy}
+          S ${x2} ${y2} ${x} ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("C");
+        expect(parameters).deep.equal([
+          [
+            [2 * cpx - old_x2, 2 * cpy - old_y2],
+            [x2, y2],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "S".`, function () {
+        // given
+        const [ipx, ipy, old_x2, old_y2, cpx, cpy, x2, y2, x, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          S ${old_x2} ${old_y2} ${cpx} ${cpy}
+          S ${x2} ${y2} ${x} ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("C");
+        expect(parameters).deep.equal([
+          [
+            [2 * cpx - old_x2, 2 * cpy - old_y2],
+            [x2, y2],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "Q".`, function () {
+        // given
+        const [ipx, ipy, old_x1, old_y1, cpx, cpy, x2, y2, x, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          Q ${old_x1} ${old_y1} ${cpx} ${cpy}
+          S ${x2} ${y2} ${x} ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("C");
+        expect(parameters).deep.equal([
+          [
+            [cpx, cpy],
+            [x2, y2],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "T".`, function () {
+        // given
+        const [
+          ipx,
+          ipy,
+          old_x1,
+          old_y1,
+          old_x,
+          old_y,
+          cpx,
+          cpy,
+          x2,
+          y2,
+          x,
+          y,
+        ] = mapL(() => makeRandomInt(-100, 100), rangeL(Infinity));
+        const path_data = `
+          M ${ipx} ${ipy}
+          Q ${old_x1} ${old_y1} ${old_x} ${old_y}
+          T ${cpx} ${cpy}
+          S ${x2} ${y2} ${x} ${y}
+        `;
+
+        // when
+        const [, , , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("C");
+        expect(parameters).deep.equal([
+          [
+            [cpx, cpy],
+            [x2, y2],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "A".`, function () {
+        // given
+        const [
+          ipx,
+          ipy,
+          rx,
+          ry,
+          x_axis_rotation,
+          cpx,
+          cpy,
+          x2,
+          y2,
+          x,
+          y,
+        ] = mapL(() => makeRandomInt(-100, 100), rangeL(Infinity));
+        const [large_arc_flag, sweep_flag] = mapL(
+          () => (makeRandomBool() ? 0 : 1),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          A ${rx} ${ry} ${x_axis_rotation} ${large_arc_flag} ${sweep_flag} ${cpx} ${cpy}
+          S ${x2} ${y2} ${x} ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("C");
+        expect(parameters).deep.equal([
+          [
+            [cpx, cpy],
+            [x2, y2],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "Z".`, function () {
+        // given
+        const [ipx, ipy, l_x, l_y, x2, y2, x, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          L ${l_x} ${l_y}
+          Z
+          S ${x2} ${y2} ${x} ${y}
+        `;
+
+        // when
+        const [, , , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("C");
+        expect(parameters).deep.equal([
+          [
+            [ipx, ipy],
+            [x2, y2],
+            [x, y],
+          ],
+        ]);
+      });
+    });
+
+    describe(`Convert "T" to "Q".`, function () {
+      it(`When following "M".`, function () {
+        // given
+        const [dummy_x, dummy_y, ipx, ipy, x, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${dummy_x} ${dummy_y}
+          M ${ipx} ${ipy}
+          T ${x} ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("Q");
+        expect(parameters).deep.equal([
+          [
+            [ipx, ipy],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "L".`, function () {
+        // given
+        const [ipx, ipy, cpx, cpy, x, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          L ${cpx} ${cpy}
+          T ${x} ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("Q");
+        expect(parameters).deep.equal([
+          [
+            [cpx, cpy],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "H".`, function () {
+        // given
+        const [ipx, ipy, cpx, x, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          H ${cpx}
+          T ${x} ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("Q");
+        expect(parameters).deep.equal([
+          [
+            [cpx, ipy],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "V".`, function () {
+        // given
+        const [ipx, ipy, cpy, x, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          V ${cpy}
+          T ${x} ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("Q");
+        expect(parameters).deep.equal([
+          [
+            [ipx, cpy],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "C".`, function () {
+        // given
+        const [ipx, ipy, old_x1, old_y1, old_x2, old_y2, cpx, cpy, x, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          C ${old_x1} ${old_y1} ${old_x2} ${old_y2} ${cpx} ${cpy}
+          T ${x} ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("Q");
+        expect(parameters).deep.equal([
+          [
+            [cpx, cpy],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "S".`, function () {
+        // given
+        const [
+          ipx,
+          ipy,
+          c_x1,
+          c_y1,
+          c_x2,
+          c_y2,
+          c_x,
+          c_y,
+          s_x,
+          s_y,
+          cpx,
+          cpy,
+          x,
+          y,
+        ] = mapL(() => makeRandomInt(-100, 100), rangeL(Infinity));
+        const path_data = `
+          M ${ipx} ${ipy}
+          C ${c_x1} ${c_y1} ${c_x2} ${c_y2} ${c_x} ${c_y}
+          S ${s_x} ${s_y} ${cpx} ${cpy}
+          T ${x} ${y}
+        `;
+
+        // when
+        const [, , , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("Q");
+        expect(parameters).deep.equal([
+          [
+            [cpx, cpy],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "Q".`, function () {
+        // given
+        const [ipx, ipy, old_x1, old_y1, cpx, cpy, x, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          Q ${old_x1} ${old_y1} ${cpx} ${cpy}
+          T ${x} ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("Q");
+        expect(parameters).deep.equal([
+          [
+            [2 * cpx - old_x1, 2 * cpy - old_y1],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "T".`, function () {
+        // given
+        const [ipx, ipy, old_x1, old_y1, old_x, old_y, cpx, cpy, x, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          Q ${old_x1} ${old_y1} ${old_x} ${old_y}
+          T ${cpx} ${cpy}
+          T ${x} ${y}
+        `;
+
+        // when
+        const [, , , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("Q");
+        expect(parameters).deep.equal([
+          [
+            [2 * cpx - (2 * old_x - old_x1), 2 * cpy - (2 * old_y - old_y1)],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "A".`, function () {
+        // given
+        const [ipx, ipy, rx, ry, x_axis_rotation, cpx, cpy, x, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const [large_arc_flag, sweep_flag] = mapL(
+          () => (makeRandomBool() ? 0 : 1),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          A ${rx} ${ry} ${x_axis_rotation} ${large_arc_flag} ${sweep_flag} ${cpx} ${cpy}
+          T ${x} ${y}
+        `;
+
+        // when
+        const [, , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("Q");
+        expect(parameters).deep.equal([
+          [
+            [cpx, cpy],
+            [x, y],
+          ],
+        ]);
+      });
+
+      it(`When following "Z".`, function () {
+        // given
+        const [ipx, ipy, l_x, l_y, x, y] = mapL(
+          () => makeRandomInt(-100, 100),
+          rangeL(Infinity)
+        );
+        const path_data = `
+          M ${ipx} ${ipy}
+          L ${l_x} ${l_y}
+          Z
+          T ${x} ${y}
+        `;
+
+        // when
+        const [, , , { command, parameters }] = go(
+          path_data,
+          $$splitPathDataByCommandL,
+          mapL($$parsePathCommandParameters),
+          $$convertPathCommandParametersRelativeToAbsoluteL,
+          $$compressPathCommandL
+        );
+
+        // then
+        expect(command).equal("Q");
+        expect(parameters).deep.equal([
+          [
+            [ipx, ipy],
+            [x, y],
+          ],
+        ]);
+      });
     });
   }),
   describe(`$$parsePathData`, function () {

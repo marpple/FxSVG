@@ -36,6 +36,19 @@ path 의 command-parameters 이터러블을 relative 좌표에서 absolute 좌�
 
 이 함수는 입력 데이터의 유효성을 검사하지 않습니다!
 
+# \$\$compressPathCommandL
+
+- [source](./parsePathData.index.js)
+- [test](./parsePathData.spec.js)
+
+다른 command 에 의존적인 command 를 변환합니다.
+
+- "Z", "H", "V" -> "L"
+- "S" -> "C"
+- "T" -> "Q"
+
+이 함수는 입력 데이터의 유효성을 검사하지 않습니다!
+
 # \$\$parsePathData
 
 - [source](./parsePathData.index.js)

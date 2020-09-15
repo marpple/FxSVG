@@ -377,6 +377,13 @@ path 의 command-parameters 이터러블을 relative 좌표에서 absolute 좌�
 
 이 함수는 입력 데이터의 유효성을 검사하지 않습니다!
 
+## \$\$compressPathCommandL
+
+- [source](../src/parsePathData/parsePathData.index.js)
+- [detail](../src/parsePathData/parsePathData.spec.js)
+
+다른 command 에 의존적인 command 를 변환합니다.
+
 ## \$\$removeAttrNS
 
 - [source](../src/removeAttrNS/removeAttrNS.index.js)
