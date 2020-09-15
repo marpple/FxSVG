@@ -64,6 +64,7 @@ export {
   $$parsePathCommandParameters,
   $$convertPathCommandParametersRelativeToAbsoluteL,
   $$compressPathCommandL,
+  $$flatPathCommandParametersL,
   $$parsePathDate,
 } from "./parsePathData/parsePathData.index.js";
 export { $$removeAttrNS } from "./removeAttrNS/removeAttrNS.index.js";

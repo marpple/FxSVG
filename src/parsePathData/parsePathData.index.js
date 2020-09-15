@@ -1,5 +1,7 @@
 import {
+  dropL,
   equals2,
+  flatMapL,
   go,
   head,
   isNil,
@@ -126,11 +128,12 @@ const parseCoordinatePair = (coordinate_pair) =>
  * This function will not validate input data!
  * Please check yourself first!
  *
- * @param {string} command
- * @param {string} parameters
+ * @param {{command: string, parameters: string}} path_command_parameters
  * @returns {{command: string, parameters: Array<Parameter>}}
  */
-export const $$parsePathCommandParameters = ({ command, parameters }) => {
+export const $$parsePathCommandParameters = (path_command_parameters) => {
+  const { command, parameters } = path_command_parameters;
+
   if (
     equals2(command.toLowerCase(), "m") ||
     equals2(command.toLowerCase(), "l") ||
@@ -697,6 +700,45 @@ export function* $$compressPathCommandL(path_command_parameters_iter) {
 }
 
 /**
+ * Spreed path_command_parameters for each parameter.
+ * Flatten "command and parameter sequence" to "sequence of command and parameter".
+ *
+ * This function will not validate input data!
+ * Please check yourself first!
+ *
+ * @param {{command: string, parameters: Array<Parameter>}} path_command_parameters
+ * @returns {Generator<{command: string, parameters: Parameter}, undefined, *>}
+ */
+export function* $$flatPathCommandParametersL(path_command_parameters) {
+  const { command, parameters } = path_command_parameters;
+
+  if (equals2(command.toUpperCase(), "M")) {
+    yield { command, parameters: head(parameters) };
+    const line_to_command = equals2(command, "m") ? "l" : "L";
+    yield* /** @type {Iterator<{command: string, parameters: CoordinatePair}, undefined, *>} */ go(
+      parameters,
+      dropL(1),
+      mapL((coordinate_pair) => ({
+        command: line_to_command,
+        parameters: coordinate_pair,
+      }))
+    );
+    return undefined;
+  }
+
+  if (equals2(command.toUpperCase(), "Z")) {
+    yield path_command_parameters;
+    return undefined;
+  }
+
+  // "L", "l", "H", "h", "V", "v", "C", "c", "S", "s", "Q", "q", "T", "t", "A", "a"
+  yield* /** @type {Iterator<{command: string, parameters: Parameter}, undefined, *>} */ mapL(
+    (parameters) => ({ command, parameters }),
+    parameters
+  );
+}
+
+/**
  * Parse path data string to JSON style javascript array.
  *
  * @param {string=} d_str - path data
@@ -716,7 +758,6 @@ export const $$parsePathDate = (d_str) => {
     mapL($$parsePathCommandParameters),
     $$convertPathCommandParametersRelativeToAbsoluteL,
     $$compressPathCommandL,
-    // flatMapL(flatPathSegL)
-    (a) => [...a]
+    flatMapL($$flatPathCommandParametersL)
   );
 };

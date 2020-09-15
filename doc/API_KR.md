@@ -384,6 +384,14 @@ path 의 command-parameters 이터러블을 relative 좌표에서 absolute 좌�
 
 다른 command 에 의존적인 command 를 변환합니다.
 
+## \$\$flatPathCommandParametersL
+
+- [source](../src/parsePathData/parsePathData.index.js)
+- [detail](../src/parsePathData/parsePathData.spec.js)
+
+path 의 command-parameter 를 각 parameter 별로 펼칩니다.
+"command + parameter 시퀸스" 를 "command + parameter" 의 시퀸스로 평탄화합니다.
+
 ## \$\$removeAttrNS
 
 - [source](../src/removeAttrNS/removeAttrNS.index.js)

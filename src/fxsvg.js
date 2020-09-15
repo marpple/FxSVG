@@ -64,6 +64,7 @@ import {
   $$parsePathCommandParameters,
   $$convertPathCommandParametersRelativeToAbsoluteL,
   $$compressPathCommandL,
+  $$flatPathCommandParametersL,
   $$parsePathDate,
 } from "./parsePathData/parsePathData.index.js";
 import { $$removeAttrNS } from "./removeAttrNS/removeAttrNS.index.js";
@@ -139,6 +140,7 @@ export const FxSVG = {
   convertPathCommandParametersRelativeToAbsoluteL: $$convertPathCommandParametersRelativeToAbsoluteL,
   compressPathCommandL: $$compressPathCommandL,
   parsePathDate: $$parsePathDate,
+  flatPathCommandParametersL: $$flatPathCommandParametersL,
   removeAttrNS: $$removeAttrNS,
   setAttrNS: $$setAttrNS,
   updateMatrixTransform: $$updateMatrixTransform,

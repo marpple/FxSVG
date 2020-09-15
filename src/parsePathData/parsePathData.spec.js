@@ -3,6 +3,7 @@ import {
   chunkL,
   concatL,
   deepFlatL,
+  dropL,
   go,
   join,
   map,
@@ -16,10 +17,10 @@ import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import {
   $$isValidPathData,
   $$splitPathDataByCommandL,
-  $$parsePathDate,
   $$parsePathCommandParameters,
   $$convertPathCommandParametersRelativeToAbsoluteL,
   $$compressPathCommandL,
+  $$flatPathCommandParametersL,
 } from "./parsePathData.index.js";
 
 export default ({ describe, it }) => [
@@ -2497,37 +2498,570 @@ export default ({ describe, it }) => [
       });
     });
   }),
-  describe(`$$parsePathData`, function () {
-    describe(`parse "move to" command`, function () {
-      it(`command "M" with a single parameter`, function () {
-        // given
-        const [x, y] = mapL(() => makeRandomInt(-100, 100), rangeL(2));
-        const path_data = `M ${x},${y}`;
+  describe(`$$flatPathCommandParametersL`, function () {
+    it(`Flatten "M" command.`, function () {
+      // given
+      /** @type {Array<Array<number>>} */
+      const parameters = map(
+        () => map(() => makeRandomInt(-100, 100), rangeL(2)),
+        rangeL(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "M",
+        parameters,
+      };
 
-        // when
-        const parsed_data = $$parsePathDate(path_data);
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
 
-        // then
-        expect(parsed_data).length(1);
-        expect(parsed_data[0].command).equal("M");
-        expect(parsed_data[0].parameters).deep.equal([[x, y]]);
+      // then
+      expect(flatten_iter.next().value).deep.equal({
+        command: "M",
+        parameters: parameters[0],
       });
+      for (const coordinate_pair of dropL(1, parameters)) {
+        expect(flatten_iter.next()).deep.equal({
+          value: {
+            command: "L",
+            parameters: coordinate_pair,
+          },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
     });
 
-    describe(`parse "line to" command`, function () {
-      it(`command "L" with a single parameter`, function () {
+    it(`Flatten "m" command.`, function () {
+      // given
+      /** @type {Array<Array<number>>} */
+      const parameters = map(
+        () => map(() => makeRandomInt(-100, 100), rangeL(2)),
+        rangeL(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "m",
+        parameters,
+      };
+
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
+
+      // then
+      expect(flatten_iter.next().value).deep.equal({
+        command: "m",
+        parameters: parameters[0],
+      });
+      for (const coordinate_pair of dropL(1, parameters)) {
+        expect(flatten_iter.next()).deep.equal({
+          value: {
+            command: "l",
+            parameters: coordinate_pair,
+          },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
+    });
+
+    it(`Flatten "L" command.`, function () {
+      // given
+      /** @type {Array<Array<number>>} */
+      const parameters = map(
+        () => map(() => makeRandomInt(-100, 100), rangeL(2)),
+        rangeL(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "L",
+        parameters,
+      };
+
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
+
+      // then
+      for (const coordinate_pair of parameters) {
+        expect(flatten_iter.next()).deep.equal({
+          value: { command: "L", parameters: coordinate_pair },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
+    });
+
+    it(`Flatten "l" command.`, function () {
+      // given
+      /** @type {Array<Array<number>>} */
+      const parameters = map(
+        () => map(() => makeRandomInt(-100, 100), rangeL(2)),
+        rangeL(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "l",
+        parameters,
+      };
+
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
+
+      // then
+      for (const coordinate_pair of parameters) {
+        expect(flatten_iter.next()).deep.equal({
+          value: { command: "l", parameters: coordinate_pair },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
+    });
+
+    it(`Flatten "H" command.`, function () {
+      // given
+      /** @type {Array<number>} */
+      const parameters = map(
+        () => makeRandomInt(-100, 100),
+        rangeL(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "H",
+        parameters,
+      };
+
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
+
+      // then
+      for (const coordinate of parameters) {
+        expect(flatten_iter.next()).deep.equal({
+          value: { command: "H", parameters: coordinate },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
+    });
+
+    it(`Flatten "h" command.`, function () {
+      // given
+      /** @type {Array<number>} */
+      const parameters = map(
+        () => makeRandomInt(-100, 100),
+        rangeL(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "h",
+        parameters,
+      };
+
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
+
+      // then
+      for (const coordinate of parameters) {
+        expect(flatten_iter.next()).deep.equal({
+          value: { command: "h", parameters: coordinate },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
+    });
+
+    it(`Flatten "V" command.`, function () {
+      // given
+      /** @type {Array<number>} */
+      const parameters = map(
+        () => makeRandomInt(-100, 100),
+        rangeL(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "V",
+        parameters,
+      };
+
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
+
+      // then
+      for (const coordinate of parameters) {
+        expect(flatten_iter.next()).deep.equal({
+          value: { command: "V", parameters: coordinate },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
+    });
+
+    it(`Flatten "v" command.`, function () {
+      // given
+      /** @type {Array<number>} */
+      const parameters = map(
+        () => makeRandomInt(-100, 100),
+        rangeL(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "v",
+        parameters,
+      };
+
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
+
+      // then
+      for (const coordinate of parameters) {
+        expect(flatten_iter.next()).deep.equal({
+          value: { command: "v", parameters: coordinate },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
+    });
+
+    it(`Flatten "C" command.`, function () {
+      // given
+      /** @type {Array<Array<Array<number>>>} */
+      const parameters = go(
+        rangeL(Infinity),
+        mapL(() => makeRandomInt(-100, 100)),
+        chunkL(2),
+        chunkL(3),
+        take(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "C",
+        parameters,
+      };
+
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
+
+      // then
+      for (const coordinate_pair_triplet of parameters) {
+        expect(flatten_iter.next()).deep.equal({
+          value: { command: "C", parameters: coordinate_pair_triplet },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
+    });
+
+    it(`Flatten "c" command.`, function () {
+      // given
+      /** @type {Array<Array<Array<number>>>} */
+      const parameters = go(
+        rangeL(Infinity),
+        mapL(() => makeRandomInt(-100, 100)),
+        chunkL(2),
+        chunkL(3),
+        take(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "c",
+        parameters,
+      };
+
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
+
+      // then
+      for (const coordinate_pair_triplet of parameters) {
+        expect(flatten_iter.next()).deep.equal({
+          value: { command: "c", parameters: coordinate_pair_triplet },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
+    });
+
+    it(`Flatten "S" command.`, function () {
+      // given
+      /** @type {Array<Array<Array<number>>>} */
+      const parameters = go(
+        rangeL(Infinity),
+        mapL(() => makeRandomInt(-100, 100)),
+        chunkL(2),
+        chunkL(2),
+        take(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "S",
+        parameters,
+      };
+
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
+
+      // then
+      for (const coordinate_pair_double of parameters) {
+        expect(flatten_iter.next()).deep.equal({
+          value: { command: "S", parameters: coordinate_pair_double },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
+    });
+
+    it(`Flatten "s" command.`, function () {
+      // given
+      /** @type {Array<Array<Array<number>>>} */
+      const parameters = go(
+        rangeL(Infinity),
+        mapL(() => makeRandomInt(-100, 100)),
+        chunkL(2),
+        chunkL(2),
+        take(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "s",
+        parameters,
+      };
+
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
+
+      // then
+      for (const coordinate_pair_double of parameters) {
+        expect(flatten_iter.next()).deep.equal({
+          value: { command: "s", parameters: coordinate_pair_double },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
+    });
+
+    it(`Flatten "Q" command.`, function () {
+      // given
+      /** @type {Array<Array<Array<number>>>} */
+      const parameters = go(
+        rangeL(Infinity),
+        mapL(() => makeRandomInt(-100, 100)),
+        chunkL(2),
+        chunkL(2),
+        take(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "Q",
+        parameters,
+      };
+
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
+
+      // then
+      for (const coordinate_pair_double of parameters) {
+        expect(flatten_iter.next()).deep.equal({
+          value: { command: "Q", parameters: coordinate_pair_double },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
+    });
+
+    it(`Flatten "q" command.`, function () {
+      // given
+      /** @type {Array<Array<Array<number>>>} */
+      const parameters = go(
+        rangeL(Infinity),
+        mapL(() => makeRandomInt(-100, 100)),
+        chunkL(2),
+        chunkL(2),
+        take(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "q",
+        parameters,
+      };
+
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
+
+      // then
+      for (const coordinate_pair_double of parameters) {
+        expect(flatten_iter.next()).deep.equal({
+          value: { command: "q", parameters: coordinate_pair_double },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
+    });
+
+    it(`Flatten "T" command.`, function () {
+      // given
+      /** @type {Array<Array<number>>} */
+      const parameters = go(
+        rangeL(Infinity),
+        mapL(() => makeRandomInt(-100, 100)),
+        chunkL(2),
+        take(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "T",
+        parameters,
+      };
+
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
+
+      // then
+      for (const coordinate_pair of parameters) {
+        expect(flatten_iter.next()).deep.equal({
+          value: { command: "T", parameters: coordinate_pair },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
+    });
+
+    it(`Flatten "t" command.`, function () {
+      // given
+      /** @type {Array<Array<number>>} */
+      const parameters = go(
+        rangeL(Infinity),
+        mapL(() => makeRandomInt(-100, 100)),
+        chunkL(2),
+        take(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "t",
+        parameters,
+      };
+
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
+
+      // then
+      for (const coordinate_pair of parameters) {
+        expect(flatten_iter.next()).deep.equal({
+          value: { command: "t", parameters: coordinate_pair },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
+    });
+
+    it(`Flatten "A" command.`, function () {
+      // given
+      /** @type {Array<Array<number>>} */
+      const parameters = go(
+        rangeL(Infinity),
+        mapL(() => makeRandomInt(-100, 100)),
+        chunkL(5),
+        mapL(([rx, ry, x_axis_rotation, x, y]) => {
+          const [large_arc_flag, sweep_flag] = mapL(
+            () => Math.round(Math.random()),
+            rangeL(2)
+          );
+          return [rx, ry, x_axis_rotation, large_arc_flag, sweep_flag, x, y];
+        }),
+        take(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "A",
+        parameters,
+      };
+
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
+
+      // then
+      for (const arc_args of parameters) {
+        expect(flatten_iter.next()).deep.equal({
+          value: { command: "A", parameters: arc_args },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
+    });
+
+    it(`Flatten "a" command.`, function () {
+      // given
+      /** @type {Array<Array<number>>} */
+      const parameters = go(
+        rangeL(Infinity),
+        mapL(() => makeRandomInt(-100, 100)),
+        chunkL(5),
+        mapL(([rx, ry, x_axis_rotation, x, y]) => {
+          const [large_arc_flag, sweep_flag] = mapL(
+            () => Math.round(Math.random()),
+            rangeL(2)
+          );
+          return [rx, ry, x_axis_rotation, large_arc_flag, sweep_flag, x, y];
+        }),
+        take(makeRandomInt(1, 10))
+      );
+      const path_command_parameters = {
+        command: "a",
+        parameters,
+      };
+
+      // when
+      const flatten_iter = $$flatPathCommandParametersL(
+        path_command_parameters
+      );
+
+      // then
+      for (const arc_args of parameters) {
+        expect(flatten_iter.next()).deep.equal({
+          value: { command: "a", parameters: arc_args },
+          done: false,
+        });
+      }
+      expect(flatten_iter.next()).deep.equal({ value: undefined, done: true });
+    });
+
+    it(`Flatten "Z" or "z" command.`, function () {
+      for (const command of ["Z", "z"]) {
         // given
-        const [x, y] = mapL(() => makeRandomInt(-100, 100), rangeL(2));
-        const path_data = `L ${x} ${y}`;
+        const path_command_parameters = {
+          command,
+          parameters: [],
+        };
 
         // when
-        const parsed_data = $$parsePathDate(path_data);
+        const flatten_iter = $$flatPathCommandParametersL(
+          path_command_parameters
+        );
 
         // then
-        expect(parsed_data).length(1);
-        expect(parsed_data[0].command).equal("L");
-        expect(parsed_data[0].parameters).deep.equal([[x, y]]);
-      });
+        expect(flatten_iter.next()).deep.equal({
+          value: path_command_parameters,
+          done: false,
+        });
+        expect(flatten_iter.next()).deep.equal({
+          value: undefined,
+          done: true,
+        });
+      }
     });
   }),
 ];

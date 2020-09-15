@@ -49,6 +49,16 @@ path 의 command-parameters 이터러블을 relative 좌표에서 absolute 좌�
 
 이 함수는 입력 데이터의 유효성을 검사하지 않습니다!
 
+# \$\$flatPathCommandParametersL
+
+- [source](./parsePathData.index.js)
+- [test](./parsePathData.spec.js)
+
+path 의 command-parameter 를 각 parameter 별로 펼칩니다.
+"command + parameter 시퀸스" 를 "command + parameter" 의 시퀸스로 평탄화합니다.
+
+이 함수는 입력 데이터의 유효성을 검사하지 않습니다!
+
 # \$\$parsePathData
 
 - [source](./parsePathData.index.js)
