@@ -11,6 +11,9 @@ import {
   $trigger,
 } from "fxdom";
 
+import { CustomError } from "./Errors/CustomError.js";
+import { InvalidArgumentsError } from "./Errors/InvalidArgumentsError.js";
+
 import { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
 import { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 import { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";
@@ -55,6 +58,15 @@ import { $$mergeRotateTransform } from "./mergeRotateTransform/mergeRotateTransf
 import { $$mergeScaleTransform } from "./mergeScaleTransform/mergeScaleTransform.index.js";
 import { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransform2.index.js";
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
+import {
+  $$isValidPathData,
+  $$splitPathDataByCommandL,
+  $$parsePathCommandParameters,
+  $$convertPathCommandParametersRelativeToAbsoluteL,
+  $$compressPathCommandL,
+  $$flatPathCommandParametersL,
+  $$parsePathDateL,
+} from "./parsePathData/parsePathData.index.js";
 import { $$removeAttrNS } from "./removeAttrNS/removeAttrNS.index.js";
 import { $$setAttrNS } from "./setAttrNS/setAttrNS.index.js";
 import { $$updateMatrixTransform } from "./updateMatrixTransform/updateMatrixTransform.index.js";
@@ -73,6 +85,9 @@ export const FxSVG = {
   remove: $remove,
   show: $show,
   trigger: $trigger,
+
+  CustomError,
+  InvalidArgumentsError,
 
   appendRotateTransform: $$appendRotateTransform,
   appendTranslateTransform: $$appendTranslateTransform,
@@ -119,6 +134,13 @@ export const FxSVG = {
   mergeScaleTransform: $$mergeScaleTransform,
   mergeScaleTransform2: $$mergeScaleTransform2,
   mergeTranslateTransform: $$mergeTranslateTransform,
+  isValidPathData: $$isValidPathData,
+  splitPathDataByCommandL: $$splitPathDataByCommandL,
+  parsePathCommandParameters: $$parsePathCommandParameters,
+  convertPathCommandParametersRelativeToAbsoluteL: $$convertPathCommandParametersRelativeToAbsoluteL,
+  compressPathCommandL: $$compressPathCommandL,
+  parsePathDateL: $$parsePathDateL,
+  flatPathCommandParametersL: $$flatPathCommandParametersL,
   removeAttrNS: $$removeAttrNS,
   setAttrNS: $$setAttrNS,
   updateMatrixTransform: $$updateMatrixTransform,

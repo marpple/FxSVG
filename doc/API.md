@@ -229,6 +229,41 @@
 - [source](../src/mergeTranslateTransform/mergeTranslateTransform.index.js)
 - [detail](../src/mergeTranslateTransform/README.md)
 
+## \$\$isValidPathData
+
+- [source](../src/parsePathData/parsePathData.index.js)
+- [detail](../src/parsePathData/parsePathData.spec.js)
+
+## \$\$splitPathDataByCommandL
+
+- [source](../src/parsePathData/parsePathData.index.js)
+- [detail](../src/parsePathData/parsePathData.spec.js)
+
+## \$\$parsePathCommandParameters
+
+- [source](../src/parsePathData/parsePathData.index.js)
+- [detail](../src/parsePathData/parsePathData.spec.js)
+
+## \$\$convertPathCommandParametersRelativeToAbsoluteL
+
+- [source](../src/parsePathData/parsePathData.index.js)
+- [detail](../src/parsePathData/parsePathData.spec.js)
+
+## \$\$compressPathCommandL
+
+- [source](../src/parsePathData/parsePathData.index.js)
+- [detail](../src/parsePathData/parsePathData.spec.js)
+
+## \$\$flatPathCommandParametersL
+
+- [source](../src/parsePathData/parsePathData.index.js)
+- [detail](../src/parsePathData/parsePathData.spec.js)
+
+## \$\$parsePathData
+
+- [source](../src/parsePathData/parsePathData.index.js)
+- [detail](../src/parsePathData/parsePathData.spec.js)
+
 ## \$\$removeAttrNS
 
 - [source](../src/removeAttrNS/removeAttrNS.index.js)
