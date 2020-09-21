@@ -4,6 +4,7 @@
 - [test](./parsePathData.spec.js)
 
 유효한 path data 문자열인지 여부를 판단합니다.
+SVG 스펙과는 다르게 FxSVG 에서는 좌표 사이에 "COMMA_OR_WHITESPACE" 구분자가 필수입니다.
 
 # \$\$splitPathDataByCommandL
 

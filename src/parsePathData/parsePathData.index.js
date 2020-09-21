@@ -30,6 +30,8 @@ import {
 
 /**
  * Check the input path data string is valid or not.
+ * Unlike SVG spec, it requires "COMMA_OR_WHITESPACE" between coordinates.
+ * It is not optional within FxSVG.
  *
  * @param {*} path_data - string value of "d" attribute.
  * @returns {boolean}
@@ -86,8 +88,8 @@ export function* $$splitPathDataByCommandL(path_data) {
  * @typedef {number} Coordinate
  */
 /**
- * @typedef {Array<number>} CoordinatePair
- * @description Array of two numbers.
+ * @typedef {Array<Coordinate>} CoordinatePair
+ * @description Array of two "Coordinate"s.
  */
 /**
  * @typedef {Array<CoordinatePair>} CoordinatePairDouble
