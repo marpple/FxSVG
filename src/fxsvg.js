@@ -48,6 +48,10 @@ import { $$isScaleSVGTransform } from "./isScaleSVGTransform/isScaleSVGTransform
 import { $$isSVGTransform } from "./isSVGTransform/isSVGTransform.index.js";
 import { $$isTranslateSVGTransform } from "./isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 import { $$isValidFxScaleSVGTransformList } from "./isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js";
+import {
+  $$toStringPathCommandParameters,
+  $$joinPathData,
+} from "./joinPathData/joinPathData.index.js";
 import { $$LiveRotateTransform } from "./LiveRotateTransform/LiveRotateTransform.index.js";
 import { $$LiveScaleTransform } from "./LiveScaleTransform/LiveScaleTransform.index.js";
 import { $$LiveScaleTransform2 } from "./LiveScaleTransform2/LiveScaleTransform2.index.js";
@@ -124,6 +128,8 @@ export const FxSVG = {
   isSVGTransform: $$isSVGTransform,
   isTranslateSVGTransform: $$isTranslateSVGTransform,
   isValidFxScaleSVGTransformList: $$isValidFxScaleSVGTransformList,
+  toStringPathCommandParameters: $$toStringPathCommandParameters,
+  joinPathData: $$joinPathData,
   LiveRotateTransform: $$LiveRotateTransform,
   LiveScaleTransform: $$LiveScaleTransform,
   LiveScaleTransform2: $$LiveScaleTransform2,

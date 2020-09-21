@@ -268,6 +268,21 @@ svg 엘리먼트에 `SVGTransform.SVG_TRANSFORM_TRANSLATE` 타입의 `SVGTransfo
 
 `$$initScaleTransform` 함수를 적용한 `SVGTransformList`인지 여부를 판단합니다.
 
+## \$\$toStringPathCommandParameters
+
+- [source](../src/joinPathData/joinPathData.index.js)
+- [detail](../src/joinPathData/README.md)
+
+입력한 command + parameters 객체로 SVG path data 문자열을 생성합니다.
+
+## \$\$joinPathData
+
+- [source](../src/joinPathData/joinPathData.index.js)
+- [detail](../src/joinPathData/README.md)
+
+입력한 command + parameters 객체의 배열로 SVG path data 문자열을 생성합니다.
+반환한 문자열은 SVG 엘리먼트의 "d" 속성값에 해당합니다.
+
 ## \$\$LiveRotateTransform
 
 - [source](../src/LiveRotateTransform/LiveRotateTransform.index.js)
@@ -348,6 +363,7 @@ svg 엘리먼트에 다른 `SVGTransform` 이 있는 경우 각 `SVGTransform` �
 - [detail](../src/parsePathData/parsePathData.spec.js)
 
 유효한 path data 문자열인지 여부를 판단합니다.
+SVG 스펙과는 다르게 FxSVG 에서는 좌표 사이에 "COMMA_OR_WHITESPACE" 구분자가 필수입니다.
 
 ## \$\$splitPathDataByCommandL
 

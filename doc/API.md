@@ -179,6 +179,16 @@
 - [source](../src/isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js)
 - [detail](../src/isValidFxScaleSVGTransformList/README.md)
 
+## \$\$toStringPathCommandParameters
+
+- [source](../src/joinPathData/joinPathData.index.js)
+- [detail](../src/joinPathData/README.md)
+
+## \$\$joinPathData
+
+- [source](../src/joinPathData/joinPathData.index.js)
+- [detail](../src/joinPathData/README.md)
+
 ## \$\$LiveRotateTransform
 
 - [source](../src/LiveRotateTransform/LiveRotateTransform.index.js)
