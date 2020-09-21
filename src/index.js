@@ -1,6 +1,7 @@
 export {
   $append as $$append,
   $appendTo as $$appendTo,
+  $closest as $$closest,
   $hide as $$hide,
   $off as $$off,
   $on as $$on,
@@ -48,6 +49,10 @@ export { $$isScaleSVGTransform } from "./isScaleSVGTransform/isScaleSVGTransform
 export { $$isSVGTransform } from "./isSVGTransform/isSVGTransform.index.js";
 export { $$isTranslateSVGTransform } from "./isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 export { $$isValidFxScaleSVGTransformList } from "./isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js";
+export {
+  $$toStringPathCommandParameters,
+  $$joinPathData,
+} from "./joinPathData/joinPathData.index.js";
 export { $$LiveRotateTransform } from "./LiveRotateTransform/LiveRotateTransform.index.js";
 export { $$LiveScaleTransform } from "./LiveScaleTransform/LiveScaleTransform.index.js";
 export { $$LiveScaleTransform2 } from "./LiveScaleTransform2/LiveScaleTransform2.index.js";

@@ -30,6 +30,8 @@ import {
 
 /**
  * Check the input path data string is valid or not.
+ * Unlike SVG spec, it requires "COMMA_OR_WHITESPACE" between coordinates.
+ * It is not optional within FxSVG.
  *
  * @param {*} path_data - string value of "d" attribute.
  * @returns {boolean}
@@ -86,8 +88,8 @@ export function* $$splitPathDataByCommandL(path_data) {
  * @typedef {number} Coordinate
  */
 /**
- * @typedef {Array<number>} CoordinatePair
- * @description Array of two numbers.
+ * @typedef {Array<Coordinate>} CoordinatePair
+ * @description Array of two "Coordinate"s.
  */
 /**
  * @typedef {Array<CoordinatePair>} CoordinatePairDouble
@@ -128,12 +130,12 @@ const parseCoordinatePair = (coordinate_pair) =>
  * This function will not validate input data!
  * Please check yourself first!
  *
- * @param {{command: string, parameters: string}} path_command_parameters
+ * @param {Object} path_command_parameters
+ * @param {string} path_command_parameters.command
+ * @param {string} path_command_parameters.parameters
  * @returns {{command: string, parameters: Array<Parameter>}}
  */
-export const $$parsePathCommandParameters = (path_command_parameters) => {
-  const { command, parameters } = path_command_parameters;
-
+export const $$parsePathCommandParameters = ({ command, parameters }) => {
   if (
     equals2(command.toLowerCase(), "m") ||
     equals2(command.toLowerCase(), "l") ||
@@ -496,7 +498,7 @@ export function* $$convertPathCommandParametersRelativeToAbsoluteL(
 
 /**
  * Convert some commands that are dependent to other commands.
- * "Z", "H", "V" -> "L"
+ * "H", "V" -> "L"
  * "S" -> "C"
  * "T" -> "Q"
  *
@@ -727,7 +729,7 @@ export function* $$compressPathCommandL(path_command_parameters_iter) {
 
     // command "Z"
     [cpx, cpy] = [ipx, ipy];
-    path_command_parameters1 = { command: "L", parameters: [[ipx, ipy]] };
+    path_command_parameters1 = path_command_parameters2;
     yield path_command_parameters1;
   }
 }
@@ -739,12 +741,12 @@ export function* $$compressPathCommandL(path_command_parameters_iter) {
  * This function will not validate input data!
  * Please check yourself first!
  *
- * @param {{command: string, parameters: Array<Parameter>}} path_command_parameters
+ * @param {Object} path_command_parameters
+ * @param {string} path_command_parameters.command
+ * @param {Array<Parameter>} path_command_parameters.parameters
  * @returns {Generator<{command: string, parameters: Parameter}, undefined, *>}
  */
-export function* $$flatPathCommandParametersL(path_command_parameters) {
-  const { command, parameters } = path_command_parameters;
-
+export function* $$flatPathCommandParametersL({ command, parameters }) {
   if (equals2(command.toUpperCase(), "M")) {
     yield { command, parameters: head(parameters) };
     const line_to_command = equals2(command, "m") ? "l" : "L";
@@ -760,7 +762,7 @@ export function* $$flatPathCommandParametersL(path_command_parameters) {
   }
 
   if (equals2(command.toUpperCase(), "Z")) {
-    yield path_command_parameters;
+    yield { command, parameters };
     return undefined;
   }
 
