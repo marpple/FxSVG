@@ -2,6 +2,7 @@ export {
   $append as $$append,
   $appendTo as $$appendTo,
   $closest as $$closest,
+  $contains as $$contains,
   $hide as $$hide,
   $off as $$off,
   $on as $$on,
