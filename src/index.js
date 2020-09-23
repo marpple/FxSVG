@@ -5,6 +5,7 @@ export {
   $closest as $$closest,
   $contains as $$contains,
   $hide as $$hide,
+  $insertBefore as $$insertBefore,
   $off as $$off,
   $on as $$on,
   $qs as $$qs,
