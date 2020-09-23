@@ -1,87 +1,72 @@
 import {
+  chunkL,
   dropL,
+  each,
+  eachL,
   equals2,
   flatMapL,
   go,
   head,
   isNil,
-  isString,
   last,
   map,
   mapL,
   not,
   reduce,
-  take,
+  takeAll,
+  tap,
   toIter,
 } from "fxjs2";
 import { InvalidArgumentsError } from "../Errors/InvalidArgumentsError.js";
 import {
   FN_PATH,
+  FN_PATH_PARSE_COORDINATE_SEQ,
+  FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
+  REGEXP_STR_COMMA_WSP,
   REGEXP_STR_COMMAND,
-  REGEXP_STR_COORDINATE,
-  REGEXP_STR_COORDINATE_PAIR,
-  REGEXP_STR_COORDINATE_PAIR_DOUBLE,
-  REGEXP_STR_COORDINATE_PAIR_TRIPLET,
-  REGEXP_STR_ELLIPTICAL_ARC_ARG,
   REGEXP_STR_FLAG,
   REGEXP_STR_NUMBER,
-  REGEXP_STR_SVG_PATH,
 } from "./const.js";
 
 /**
- * Check the input path data string is valid or not.
- * Unlike SVG spec, it requires "COMMA_OR_WHITESPACE" between coordinates.
- * It is not optional within FxSVG.
- *
- * @param {*} path_data - string value of "d" attribute.
- * @returns {boolean}
+ * @typedef {string} Command
+ * @description one of "M", "m", "L", "l", "H", "h", "V", "v", "C", "c", "S", "s", "Q", "q", "T", "t", "A", "a", "Z", "z".
  */
-export const $$isValidPathData = (path_data) =>
-  isString(path_data) && new RegExp(REGEXP_STR_SVG_PATH).test(path_data);
 
 /**
  * Split path data string by each command.
  * Generator yields command and parameters of the command.
  * Both command and parameters are string.
  *
- * This function will not validate path data!
- * Please check path data using "$$isValidPathData" first!
+ * This function will not validate input data!
  *
  * @param {string} path_data
- * @returns {Generator<{command: string, parameters: string}, undefined, *>}
+ * @returns {Generator<{command: Command, parameters: string}, undefined, *>}
  */
 export function* $$splitPathDataByCommandL(path_data) {
-  const command_index_iter = (function* (d_str) {
-    const regexp_command = new RegExp(REGEXP_STR_COMMAND, "g");
-    let result;
-    while (not(isNil((result = regexp_command.exec(d_str))))) {
-      yield result.index;
-    }
-  })(path_data);
+  const regexp = new RegExp(REGEXP_STR_COMMAND, "g");
 
-  let index1;
-  let done1;
-  let { value: index2, done: done2 } = command_index_iter.next();
-  while (true) {
-    index1 = index2;
-    done1 = done2;
-    ({ value: index2, done: done2 } = command_index_iter.next());
+  let prev_result;
+  let result;
 
-    if (done1) {
-      return undefined;
-    }
-
-    if (done2) {
-      const command = path_data[index1];
-      const parameters = path_data.slice(index1 + 1).trim();
-      yield { command, parameters };
-      return undefined;
-    }
-
-    const command = path_data[index1];
-    const parameters = path_data.slice(index1 + 1, index2).trim();
-    yield { command, parameters };
+  prev_result = regexp.exec(path_data);
+  if (!prev_result) {
+    return undefined;
   }
+
+  while (not(isNil((result = regexp.exec(path_data))))) {
+    const command = path_data[prev_result.index];
+    const parameters = path_data
+      .slice(prev_result.index + 1, result.index)
+      .trim();
+    yield { command, parameters };
+
+    prev_result = result;
+  }
+
+  const command = path_data[prev_result.index];
+  const parameters = path_data.slice(prev_result.index + 1).trim();
+  yield { command, parameters };
 }
 
 /**
@@ -110,30 +95,80 @@ export function* $$splitPathDataByCommandL(path_data) {
  */
 
 /**
- * This function will not validate input data!
- * Please check yourself first!
- *
- * @param {string} coordinate_pair
- * @returns {CoordinatePair}
+ * @param {string} str
+ * @returns {Iterator<number, undefined, *>}
+ * @throws {InvalidArgumentsError}
  */
-const parseCoordinatePair = (coordinate_pair) =>
+const $$parseCoordinateSeqL = (str) =>
   go(
-    coordinate_pair.matchAll(new RegExp(REGEXP_STR_COORDINATE, "g")),
-    mapL(head),
-    mapL(Number),
-    take(2)
+    str.trim(),
+    function* (str) {
+      if (!str) {
+        return;
+      }
+
+      const regexp_number = new RegExp(REGEXP_STR_NUMBER, "g");
+      const regexp_comma_wsp = new RegExp(REGEXP_STR_COMMA_WSP, "g");
+
+      let index = 0;
+
+      let result;
+
+      result = regexp_number.exec(str);
+      if (!result || not(equals2(index, result.index))) {
+        throw new InvalidArgumentsError(
+          FN_PATH_PARSE_COORDINATE_SEQ,
+          `"str"`,
+          `input str : "${str}"`
+        );
+      }
+      yield result[0];
+      index = result.index + result[0].length;
+
+      while (true) {
+        regexp_comma_wsp.lastIndex = index;
+        const comma_wsp_result = regexp_comma_wsp.exec(str);
+        if (comma_wsp_result) {
+          index = comma_wsp_result.index + comma_wsp_result[0].length;
+        }
+
+        regexp_number.lastIndex = index;
+        const current_number_result = regexp_number.exec(str);
+        if (!current_number_result) {
+          break;
+        }
+        result = current_number_result;
+        if (not(equals2(index, result.index))) {
+          throw new InvalidArgumentsError(
+            FN_PATH_PARSE_COORDINATE_SEQ,
+            `"str"`,
+            `input str : "${str}"`
+          );
+        }
+        yield result[0];
+        index = result.index + result[0].length;
+      }
+
+      if (not(equals2(result.index + result[0].length, str.length))) {
+        throw new InvalidArgumentsError(
+          FN_PATH_PARSE_COORDINATE_SEQ,
+          `"str"`,
+          `input str : "${str}"`
+        );
+      }
+    },
+    mapL(Number)
   );
+
 /**
  * Parse parameters string to array of numbers.
  * Generator yields command and parsed parameters of the command.
  *
- * This function will not validate input data!
- * Please check yourself first!
- *
  * @param {Object} path_command_parameters
- * @param {string} path_command_parameters.command
+ * @param {Command} path_command_parameters.command
  * @param {string} path_command_parameters.parameters
- * @returns {{command: string, parameters: Array<Parameter>}}
+ * @returns {{command: Command, parameters: Array<Parameter>}}
+ * @throws {InvalidArgumentsError}
  */
 export const $$parsePathCommandParameters = ({ command, parameters }) => {
   if (
@@ -143,9 +178,27 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
   ) {
     /** @type {Array<CoordinatePair>} */
     const parsed_parameters = go(
-      parameters.matchAll(new RegExp(REGEXP_STR_COORDINATE_PAIR, "g")),
-      mapL(head),
-      map(parseCoordinatePair)
+      parameters,
+      $$parseCoordinateSeqL,
+      chunkL(2),
+      each((pair) => {
+        if (pair.length < 2) {
+          throw new InvalidArgumentsError(
+            FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
+            `"parameters"`,
+            JSON.stringify({ command, parameters })
+          );
+        }
+      }),
+      tap((l) => {
+        if (!l.length) {
+          throw new InvalidArgumentsError(
+            FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
+            `"parameters"`,
+            JSON.stringify({ command, parameters })
+          );
+        }
+      })
     );
     return { command, parameters: parsed_parameters };
   }
@@ -156,9 +209,18 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
   ) {
     /** @type {Array<Coordinate>} */
     const parsed_parameters = go(
-      parameters.matchAll(new RegExp(REGEXP_STR_COORDINATE, "g")),
-      mapL(head),
-      map(Number)
+      parameters,
+      $$parseCoordinateSeqL,
+      takeAll,
+      tap((l) => {
+        if (!l.length) {
+          throw new InvalidArgumentsError(
+            FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
+            `"parameters"`,
+            JSON.stringify({ command, parameters })
+          );
+        }
+      })
     );
     return { command, parameters: parsed_parameters };
   }
@@ -166,16 +228,37 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
   if (equals2(command.toLowerCase(), "c")) {
     /** @type {Array<CoordinatePairTriplet>} */
     const parsed_parameters = go(
-      parameters.matchAll(new RegExp(REGEXP_STR_COORDINATE_PAIR_TRIPLET, "g")),
-      mapL(head),
-      map((triplet) =>
-        go(
-          triplet.matchAll(new RegExp(REGEXP_STR_COORDINATE_PAIR, "g")),
-          mapL(head),
-          mapL(parseCoordinatePair),
-          take(3)
-        )
-      )
+      parameters,
+      $$parseCoordinateSeqL,
+      chunkL(2),
+      eachL((pair) => {
+        if (pair.length < 2) {
+          throw new InvalidArgumentsError(
+            FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
+            `"parameters"`,
+            JSON.stringify({ command, parameters })
+          );
+        }
+      }),
+      chunkL(3),
+      each((triplet) => {
+        if (triplet.length < 3) {
+          throw new InvalidArgumentsError(
+            FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
+            `"parameters"`,
+            JSON.stringify({ command, parameters })
+          );
+        }
+      }),
+      tap((l) => {
+        if (!l.length) {
+          throw new InvalidArgumentsError(
+            FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
+            `"parameters"`,
+            JSON.stringify({ command, parameters })
+          );
+        }
+      })
     );
     return { command, parameters: parsed_parameters };
   }
@@ -186,16 +269,37 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
   ) {
     /** @type {Array<CoordinatePairDouble>} */
     const parsed_parameters = go(
-      parameters.matchAll(new RegExp(REGEXP_STR_COORDINATE_PAIR_DOUBLE, "g")),
-      mapL(head),
-      map((double) =>
-        go(
-          double.matchAll(new RegExp(REGEXP_STR_COORDINATE_PAIR, "g")),
-          mapL(head),
-          mapL(parseCoordinatePair),
-          take(2)
-        )
-      )
+      parameters,
+      $$parseCoordinateSeqL,
+      chunkL(2),
+      eachL((pair) => {
+        if (pair.length < 2) {
+          throw new InvalidArgumentsError(
+            FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
+            `"parameters"`,
+            JSON.stringify({ command, parameters })
+          );
+        }
+      }),
+      chunkL(2),
+      each((pair) => {
+        if (pair.length < 2) {
+          throw new InvalidArgumentsError(
+            FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
+            `"parameters"`,
+            JSON.stringify({ command, parameters })
+          );
+        }
+      }),
+      tap((l) => {
+        if (!l.length) {
+          throw new InvalidArgumentsError(
+            FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
+            `"parameters"`,
+            JSON.stringify({ command, parameters })
+          );
+        }
+      })
     );
     return { command, parameters: parsed_parameters };
   }
@@ -203,57 +307,143 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
   if (equals2(command.toLowerCase(), "a")) {
     /** @type {Array<EllipticalArcArg>} */
     const parsed_parameters = go(
-      parameters.matchAll(new RegExp(REGEXP_STR_ELLIPTICAL_ARC_ARG, "g")),
-      mapL(head),
-      map((arc_arg) => {
-        const [
-          [rx_str],
-          [ry_str],
-          { 0: x_axis_rotation_str, index: _index1 },
-        ] = arc_arg.matchAll(new RegExp(REGEXP_STR_NUMBER, "g"));
-        const index1 = _index1 + x_axis_rotation_str.length;
-        const [rx, ry, x_axis_rotation] = mapL(Number, [
-          rx_str,
-          ry_str,
-          x_axis_rotation_str,
-        ]);
+      parameters.trim(),
+      function* (str) {
+        const regexp_number = new RegExp(REGEXP_STR_NUMBER, "g");
+        const regexp_flag = new RegExp(REGEXP_STR_FLAG, "g");
+        const regexp_comma_wsp = new RegExp(REGEXP_STR_COMMA_WSP, "g");
 
-        const [
-          [large_arc_flag_str],
-          { 0: sweep_flag_str, index: _index2 },
-        ] = arc_arg.slice(index1).matchAll(new RegExp(REGEXP_STR_FLAG, "g"));
-        const index2 = index1 + _index2 + sweep_flag_str.length;
-        const [large_arc_flag, sweep_flag] = mapL(Number, [
-          large_arc_flag_str,
-          sweep_flag_str,
-        ]);
+        if (!str) {
+          return;
+        }
 
-        const [x, y] = parseCoordinatePair(arc_arg.slice(index2));
+        let result;
+        let index = 0;
 
-        return [rx, ry, x_axis_rotation, large_arc_flag, sweep_flag, x, y];
+        const processOptional = (regexp) => {
+          regexp.lastIndex = index;
+          const result = regexp.exec(str);
+          if (!result) {
+            return result;
+          }
+
+          if (not(equals2(result.index, index))) {
+            throw new InvalidArgumentsError(
+              FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
+              `"parameters"`,
+              JSON.stringify({ command, parameters })
+            );
+          }
+
+          index = result.index + result[0].length;
+          return result;
+        };
+        const processRequired = (regexp) => {
+          regexp.lastIndex = index;
+          const result = regexp.exec(str);
+          if (!result || not(equals2(result.index, index))) {
+            throw new InvalidArgumentsError(
+              FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
+              `"parameters"`,
+              JSON.stringify({ command, parameters })
+            );
+          }
+          index = result.index + result[0].length;
+          return result;
+        };
+
+        yield processRequired(regexp_number)[0];
+        processOptional(regexp_comma_wsp);
+        yield processRequired(regexp_number)[0];
+        processOptional(regexp_comma_wsp);
+        yield processRequired(regexp_number)[0];
+        processRequired(regexp_comma_wsp);
+        yield processRequired(regexp_flag)[0];
+        processOptional(regexp_comma_wsp);
+        yield processRequired(regexp_flag)[0];
+        processOptional(regexp_comma_wsp);
+        yield processRequired(regexp_number)[0];
+        processOptional(regexp_comma_wsp);
+        result = processRequired(regexp_number);
+        yield result[0];
+
+        while (true) {
+          processOptional(regexp_comma_wsp);
+
+          const temp_result = processOptional(regexp_number);
+          if (!temp_result) {
+            break;
+          }
+          yield temp_result[0];
+          processOptional(regexp_comma_wsp);
+          yield processRequired(regexp_number)[0];
+          processOptional(regexp_comma_wsp);
+          yield processRequired(regexp_number)[0];
+          processRequired(regexp_comma_wsp);
+          yield processRequired(regexp_flag)[0];
+          processOptional(regexp_comma_wsp);
+          yield processRequired(regexp_flag)[0];
+          processOptional(regexp_comma_wsp);
+          yield processRequired(regexp_number)[0];
+          processOptional(regexp_comma_wsp);
+          result = processRequired(regexp_number);
+          yield result[0];
+        }
+
+        if (not(equals2(result.index + result[0].length, str.length))) {
+          throw new InvalidArgumentsError(
+            FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
+            `"parameters"`,
+            JSON.stringify({ command, parameters })
+          );
+        }
+      },
+      mapL(Number),
+      chunkL(7),
+      each((l) => {
+        if (l.length < 7) {
+          throw new InvalidArgumentsError(
+            FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
+            `"parameters"`,
+            JSON.stringify({ command, parameters })
+          );
+        }
+      }),
+      tap((l) => {
+        if (!l.length) {
+          throw new InvalidArgumentsError(
+            FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
+            `"parameters"`,
+            JSON.stringify({ command, parameters })
+          );
+        }
       })
     );
     return { command, parameters: parsed_parameters };
   }
 
-  // command === "z" or "Z"
-  return { command, parameters: [] };
+  if (equals2(command.toLowerCase(), "z")) {
+    return { command, parameters: [] };
+  }
+
+  throw new InvalidArgumentsError(
+    FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
+    `"command"`,
+    JSON.stringify({ command, parameters })
+  );
 };
 
 /**
  * Convert path command-parameters iterable from relative one to absolute one.
  *
  * This function will not validate input data!
- * Please check yourself first!
  *
- * @param {Iterator<{command: string, parameters: Array<Parameter>}, undefined, *>} path_command_parameters_iter
- * @returns {Generator<{command: string, parameters: Array<Parameter>}, undefined, *>}
+ * @param {Iterator<{command: Command, parameters: Array<Parameter>}, undefined, *>} path_command_parameters_iter
+ * @returns {Generator<{command: Command, parameters: Array<Parameter>}, undefined, *>}
  */
 export function* $$convertPathCommandParametersRelativeToAbsoluteL(
   path_command_parameters_iter
 ) {
-  path_command_parameters_iter = toIter(path_command_parameters_iter);
-
   const {
     value: first_path_command_parameters,
     done,
@@ -273,6 +463,7 @@ export function* $$convertPathCommandParametersRelativeToAbsoluteL(
     [cpx, cpy] = last(first_path_command_parameters.parameters);
     yield first_path_command_parameters;
   } else {
+    // first_path_command_parameters.command === "m"
     const parameters_iter = toIter(first_path_command_parameters.parameters);
     [ipx, ipy] = parameters_iter.next().value;
     const { parameters, cpx: updated_cpx, cpy: updated_cpy } = reduce(
@@ -503,14 +694,11 @@ export function* $$convertPathCommandParametersRelativeToAbsoluteL(
  * "T" -> "Q"
  *
  * This function will not validate input data!
- * Please check yourself first!
  *
- * @param {Iterator<{command: string, parameters: Array<Parameter>}, undefined, *>} path_command_parameters_iter
- * @returns {Generator<{command: string, parameters: Array<Parameter>}, undefined, *>}
+ * @param {Iterator<{command: Command, parameters: Array<Parameter>}, undefined, *>} path_command_parameters_iter
+ * @returns {Generator<{command: Command, parameters: Array<Parameter>}, undefined, *>}
  */
 export function* $$compressPathCommandL(path_command_parameters_iter) {
-  path_command_parameters_iter = toIter(path_command_parameters_iter);
-
   let {
     value: path_command_parameters1,
     done,
@@ -739,12 +927,11 @@ export function* $$compressPathCommandL(path_command_parameters_iter) {
  * Flatten "command and parameter sequence" to "sequence of command and parameter".
  *
  * This function will not validate input data!
- * Please check yourself first!
  *
  * @param {Object} path_command_parameters
- * @param {string} path_command_parameters.command
+ * @param {Command} path_command_parameters.command
  * @param {Array<Parameter>} path_command_parameters.parameters
- * @returns {Generator<{command: string, parameters: Parameter}, undefined, *>}
+ * @returns {Generator<{command: Command, parameters: Parameter}, undefined, *>}
  */
 export function* $$flatPathCommandParametersL({ command, parameters }) {
   if (equals2(command.toUpperCase(), "M")) {
@@ -783,15 +970,33 @@ export function* $$flatPathCommandParametersL({ command, parameters }) {
  */
 export const $$parsePathDateL = (d_str) => {
   if (isNil(d_str)) {
-    return /** @type {Iterator<{command: string, parameters: Parameter}, undefined, *>} */ [];
-  }
-
-  if (!$$isValidPathData(d_str)) {
-    throw new InvalidArgumentsError(FN_PATH, 1);
+    return /** @type {Iterator<{command: string, parameters: Parameter}, undefined, *>} */ toIter(
+      []
+    );
   }
 
   return go(
     $$splitPathDataByCommandL(d_str),
+    function* (iter) {
+      const { value, done } = iter.next();
+      if (done) {
+        return;
+      }
+
+      if (
+        not(equals2(value.command, "M")) &&
+        not(equals2(value.command, "m"))
+      ) {
+        throw new InvalidArgumentsError(
+          FN_PATH,
+          `"d_str"`,
+          `The first command is not one of "M" and "m".`
+        );
+      }
+
+      yield value;
+      yield* iter;
+    },
     mapL($$parsePathCommandParameters),
     $$convertPathCommandParametersRelativeToAbsoluteL,
     $$compressPathCommandL,

@@ -1,8 +1,11 @@
 import {
   $append,
   $appendTo,
+  $before,
   $closest,
+  $contains,
   $hide,
+  $insertBefore,
   $off,
   $on,
   $qs,
@@ -64,7 +67,6 @@ import { $$mergeScaleTransform } from "./mergeScaleTransform/mergeScaleTransform
 import { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransform2.index.js";
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
 import {
-  $$isValidPathData,
   $$splitPathDataByCommandL,
   $$parsePathCommandParameters,
   $$convertPathCommandParametersRelativeToAbsoluteL,
@@ -82,8 +84,11 @@ import { $$updateTranslateTransform } from "./updateTranslateTransform/updateTra
 export const FxSVG = {
   append: $append,
   appendTo: $appendTo,
+  before: $before,
   closest: $closest,
+  contains: $contains,
   hide: $hide,
+  insertBefore: $insertBefore,
   off: $off,
   on: $on,
   qs: $qs,
@@ -142,7 +147,6 @@ export const FxSVG = {
   mergeScaleTransform: $$mergeScaleTransform,
   mergeScaleTransform2: $$mergeScaleTransform2,
   mergeTranslateTransform: $$mergeTranslateTransform,
-  isValidPathData: $$isValidPathData,
   splitPathDataByCommandL: $$splitPathDataByCommandL,
   parsePathCommandParameters: $$parsePathCommandParameters,
   convertPathCommandParametersRelativeToAbsoluteL: $$convertPathCommandParametersRelativeToAbsoluteL,

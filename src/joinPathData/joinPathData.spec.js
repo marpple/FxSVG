@@ -34,29 +34,6 @@ export default ({ describe, it }) => [
             expect(str).equal(expect_str);
           }
         });
-
-        it(`When parameters is "Array<[number, number]>".`, function () {
-          for (const command of command_list) {
-            // given
-            /** @type {Array<Array<number>>} */
-            const parameters = go(
-              rangeL(Infinity),
-              mapL(() => makeRandomNumber(-100, 100)),
-              chunkL(2),
-              take(makeRandomInt(1, 10))
-            );
-            const expect_str = `${command} ${join(" ", deepFlatL(parameters))}`;
-
-            // when
-            const str = $$toStringPathCommandParameters({
-              command,
-              parameters,
-            });
-
-            // then
-            expect(str).equal(expect_str);
-          }
-        });
       });
 
       describe(`Throw InvalidArgumentsError.`, function () {
@@ -74,14 +51,10 @@ export default ({ describe, it }) => [
           }
         });
 
-        it(`When parameters is "Array<number>{length: odd_natural_number}".`, function () {
+        it(`When parameters is "Array<number>{length: 1}".`, function () {
           for (const command of command_list) {
             // given
-            /** @type {Array<number>} */
-            const parameters = map(
-              () => makeRandomNumber(-100, 100),
-              rangeL(3)
-            );
+            const parameters = [makeRandomNumber(-100, 100)];
 
             // when
             const f = () =>
@@ -92,15 +65,13 @@ export default ({ describe, it }) => [
           }
         });
 
-        it(`When parameters is "Array<Array<number>{length: odd_natural_number}>{length: odd_natural_number}".`, function () {
+        it(`When parameters is "Array<number>{length: >=3}".`, function () {
           for (const command of command_list) {
             // given
-            /** @type {Array<Array<number>>} */
-            const parameters = go(
-              rangeL(Infinity),
-              mapL(() => makeRandomNumber(-100, 100)),
-              chunkL(3),
-              take(7)
+            /** @type {Array<number>} */
+            const parameters = map(
+              () => makeRandomNumber(-100, 100),
+              rangeL(makeRandomInt(3, 10))
             );
 
             // when
@@ -137,7 +108,7 @@ export default ({ describe, it }) => [
       });
 
       describe(`Throw InvalidArgumentsError.`, function () {
-        it(`When parameters is "Array<number>".`, function () {
+        it(`When parameters is "Array<number>{length: >=1}".`, function () {
           for (const command of command_list) {
             // given
             /** @type {Array<number>} */
@@ -156,7 +127,7 @@ export default ({ describe, it }) => [
           }
         });
 
-        it(`When parameters is "Array<Array<number>>".`, function () {
+        it(`When parameters is "Array<Array<number>>{length: >=1}".`, function () {
           for (const command of command_list) {
             // given
             /** @type {Array<number>} */
@@ -198,6 +169,22 @@ export default ({ describe, it }) => [
             expect(receive_str).equal(expect_str);
           }
         });
+      });
+
+      describe(`Throw InvalidArgumentsError.`, function () {
+        it(`When parameters is an empty list.`, function () {
+          for (const command of command_list) {
+            // given
+            const parameters = [];
+
+            // when
+            const f = () =>
+              $$toStringPathCommandParameters({ command, parameters });
+
+            // then
+            expect(f).throw(InvalidArgumentsError);
+          }
+        });
 
         it(`When parameters is "Array<number>".`, function () {
           for (const command of command_list) {
@@ -207,25 +194,6 @@ export default ({ describe, it }) => [
               () => makeRandomNumber(-100, 100),
               rangeL(makeRandomInt(1, 10))
             );
-            const expect_str = `${command} ${join(" ", deepFlatL(parameters))}`;
-
-            // when
-            const receive_str = $$toStringPathCommandParameters({
-              command,
-              parameters,
-            });
-
-            // then
-            expect(receive_str).equal(expect_str);
-          }
-        });
-      });
-
-      describe(`Throw InvalidArgumentsError.`, function () {
-        it(`When parameters is an empty list.`, function () {
-          for (const command of command_list) {
-            // given
-            const parameters = [];
 
             // when
             const f = () =>
@@ -251,30 +219,6 @@ export default ({ describe, it }) => [
               mapL(() => makeRandomNumber(-100, 100)),
               chunkL(2),
               take(3)
-            );
-            const expect_str = `${command} ${join(" ", deepFlatL(parameters))}`;
-
-            // when
-            const receive_str = $$toStringPathCommandParameters({
-              command,
-              parameters,
-            });
-
-            // then
-            expect(receive_str).equal(expect_str);
-          }
-        });
-
-        it(`When parameters is "Array<Array<[number, number]>{length: 3}>".`, function () {
-          for (const command of command_list) {
-            // given
-            /** @type {Array<Array<number>>} */
-            const parameters = go(
-              rangeL(Infinity),
-              mapL(() => makeRandomNumber(-100, 100)),
-              chunkL(2),
-              chunkL(3),
-              take(makeRandomInt(1, 10))
             );
             const expect_str = `${command} ${join(" ", deepFlatL(parameters))}`;
 
@@ -344,6 +288,27 @@ export default ({ describe, it }) => [
             expect(f).throw(InvalidArgumentsError);
           }
         });
+
+        it(`When parameters is "Array<Array<[number, number]>{length: 3}>".`, function () {
+          for (const command of command_list) {
+            // given
+            /** @type {Array<Array<number>>} */
+            const parameters = go(
+              rangeL(Infinity),
+              mapL(() => makeRandomNumber(-100, 100)),
+              chunkL(2),
+              chunkL(3),
+              take(makeRandomInt(1, 10))
+            );
+
+            // when
+            const f = () =>
+              $$toStringPathCommandParameters({ command, parameters });
+
+            // then
+            expect(f).throw(InvalidArgumentsError);
+          }
+        });
       });
     });
 
@@ -360,30 +325,6 @@ export default ({ describe, it }) => [
               mapL(() => makeRandomNumber(-100, 100)),
               chunkL(2),
               take(2)
-            );
-            const expect_str = `${command} ${join(" ", deepFlatL(parameters))}`;
-
-            // when
-            const receive_str = $$toStringPathCommandParameters({
-              command,
-              parameters,
-            });
-
-            // then
-            expect(receive_str).equal(expect_str);
-          }
-        });
-
-        it(`When parameters is "Array<Array<[number, number]>{length: 2}>".`, function () {
-          for (const command of command_list) {
-            // given
-            /** @type {Array<Array<number>>} */
-            const parameters = go(
-              rangeL(Infinity),
-              mapL(() => makeRandomNumber(-100, 100)),
-              chunkL(2),
-              chunkL(2),
-              take(makeRandomInt(1, 10))
             );
             const expect_str = `${command} ${join(" ", deepFlatL(parameters))}`;
 
@@ -433,6 +374,47 @@ export default ({ describe, it }) => [
             expect(f).throw(InvalidArgumentsError);
           }
         });
+
+        it(`When parameters is "Array<[number, number]>{length: >=3}".`, function () {
+          for (const command of command_list) {
+            // given
+            /** @type {Array<Array<number>>} */
+            const parameters = go(
+              rangeL(Infinity),
+              mapL(() => makeRandomNumber(-100, 100)),
+              chunkL(2),
+              take(makeRandomInt(3, 10))
+            );
+
+            // when
+            const f = () =>
+              $$toStringPathCommandParameters({ command, parameters });
+
+            // then
+            expect(f).throw(InvalidArgumentsError);
+          }
+        });
+
+        it(`When parameters is "Array<Array<[number, number]>{length: 2}>".`, function () {
+          for (const command of command_list) {
+            // given
+            /** @type {Array<Array<number>>} */
+            const parameters = go(
+              rangeL(Infinity),
+              mapL(() => makeRandomNumber(-100, 100)),
+              chunkL(2),
+              chunkL(2),
+              take(makeRandomInt(1, 10))
+            );
+
+            // when
+            const f = () =>
+              $$toStringPathCommandParameters({ command, parameters });
+
+            // then
+            expect(f).throw(InvalidArgumentsError);
+          }
+        });
       });
     });
 
@@ -472,10 +454,27 @@ export default ({ describe, it }) => [
             expect(receive_str).equal(expect_str);
           }
         });
+      });
+
+      describe(`Throw InvalidArgumentsError.`, function () {
+        it(`When parameters is an empty list.`, function () {
+          for (const command of command_list) {
+            // given
+            const parameters = [];
+
+            // when
+            const f = () =>
+              $$toStringPathCommandParameters({ command, parameters });
+
+            // then
+            expect(f).throw(InvalidArgumentsError);
+          }
+        });
 
         it(`When parameters is "Array<[number, number, number, 0|1, 0|1, number, number]>"`, function () {
           for (const command of command_list) {
             // given
+            /** @type {Array<Array<number>>} */
             const parameters = map(() => {
               const [rx, ry, x_axis_rotation, x, y] = mapL(
                 () => makeRandomNumber(-100, 100),
@@ -495,25 +494,6 @@ export default ({ describe, it }) => [
                 y,
               ];
             }, rangeL(makeRandomInt(1, 10)));
-            const expect_str = `${command} ${join(" ", deepFlatL(parameters))}`;
-
-            // when
-            const receive_str = $$toStringPathCommandParameters({
-              command,
-              parameters,
-            });
-
-            // then
-            expect(receive_str).equal(expect_str);
-          }
-        });
-      });
-
-      describe(`Throw InvalidArgumentsError.`, function () {
-        it(`When parameters is an empty list.`, function () {
-          for (const command of command_list) {
-            // given
-            const parameters = [];
 
             // when
             const f = () =>
@@ -534,8 +514,8 @@ export default ({ describe, it }) => [
       const path_data_list = [
         { command: "M", parameters: [1, 2] },
         { command: "L", parameters: [3, 4] },
-        { command: "H", parameters: [5] },
-        { command: "V", parameters: [6] },
+        { command: "H", parameters: 5 },
+        { command: "V", parameters: 6 },
         {
           command: "C",
           parameters: [
@@ -563,8 +543,8 @@ export default ({ describe, it }) => [
         { command: "Z", parameters: [] },
         { command: "m", parameters: [28, 29] },
         { command: "l", parameters: [30, 31] },
-        { command: "h", parameters: [32] },
-        { command: "v", parameters: [33] },
+        { command: "h", parameters: 32 },
+        { command: "v", parameters: 33 },
         {
           command: "c",
           parameters: [
