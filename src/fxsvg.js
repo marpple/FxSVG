@@ -1,6 +1,7 @@
 import {
   $append,
   $appendTo,
+  $before,
   $closest,
   $contains,
   $hide,
@@ -82,6 +83,7 @@ import { $$updateTranslateTransform } from "./updateTranslateTransform/updateTra
 export const FxSVG = {
   append: $append,
   appendTo: $appendTo,
+  before: $before,
   closest: $closest,
   contains: $contains,
   hide: $hide,

@@ -1,6 +1,7 @@
 export {
   $append as $$append,
   $appendTo as $$appendTo,
+  $before as $$before,
   $closest as $$closest,
   $contains as $$contains,
   $hide as $$hide,
