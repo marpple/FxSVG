@@ -357,14 +357,6 @@ svg 엘리먼트에 가장 마지막으로 적용된 `SVGTransform` 이 `SVGTran
 해당 `SVGTransform` 을 svg 엘리먼트의 `x`, `y` 속성 (혹은 그에 준하는 속성) 에 반영합니다.
 svg 엘리먼트에 다른 `SVGTransform` 이 있는 경우 각 `SVGTransform` 을 업데이트합니다.
 
-## \$\$isValidPathData
-
-- [source](../src/parsePathData/parsePathData.index.js)
-- [detail](../src/parsePathData/parsePathData.spec.js)
-
-유효한 path data 문자열인지 여부를 판단합니다.
-SVG 스펙과는 다르게 FxSVG 에서는 좌표 사이에 "COMMA_OR_WHITESPACE" 구분자가 필수입니다.
-
 ## \$\$splitPathDataByCommandL
 
 - [source](../src/parsePathData/parsePathData.index.js)

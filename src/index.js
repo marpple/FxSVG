@@ -65,7 +65,6 @@ export { $$mergeScaleTransform } from "./mergeScaleTransform/mergeScaleTransform
 export { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransform2.index.js";
 export { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
 export {
-  $$isValidPathData,
   $$splitPathDataByCommandL,
   $$parsePathCommandParameters,
   $$convertPathCommandParametersRelativeToAbsoluteL,
