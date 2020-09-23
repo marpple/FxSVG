@@ -128,7 +128,7 @@ const $$parseCoordinateSeqL = (str) =>
       while (true) {
         regexp_comma_wsp.lastIndex = index;
         const comma_wsp_result = regexp_comma_wsp.exec(str);
-        if (comma_wsp_result) {
+        if (comma_wsp_result && equals2(index, comma_wsp_result.index)) {
           index = comma_wsp_result.index + comma_wsp_result[0].length;
         }
 
@@ -323,16 +323,8 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
         const processOptional = (regexp) => {
           regexp.lastIndex = index;
           const result = regexp.exec(str);
-          if (!result) {
+          if (!result || not(equals2(result.index, index))) {
             return result;
-          }
-
-          if (not(equals2(result.index, index))) {
-            throw new InvalidArgumentsError(
-              FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
-              `"parameters"`,
-              JSON.stringify({ command, parameters })
-            );
           }
 
           index = result.index + result[0].length;
