@@ -6,8 +6,8 @@
  */
 export class CustomError extends Error {
   /**
-   * @param {string=} fn_path - function name or path that the error is occurred.
-   * @param {string=} description
+   * @param {string} [fn_path="<anonymous>"] - function name or path that the error is occurred.
+   * @param {?string} description
    */
   constructor(fn_path = "<anonymous>", description) {
     const message = `Failed to execute '${fn_path}' (FxSVG)${
