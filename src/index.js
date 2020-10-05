@@ -1,10 +1,12 @@
 export {
+  $after as $$after,
   $append as $$append,
   $appendTo as $$appendTo,
   $before as $$before,
   $closest as $$closest,
   $contains as $$contains,
   $hide as $$hide,
+  $insertAfter as $$insertAfter,
   $insertBefore as $$insertBefore,
   $off as $$off,
   $on as $$on,
