@@ -908,9 +908,12 @@ export function* $$compressPathCommandL(path_command_parameters_iter) {
     }
 
     // command "Z"
-    [cpx, cpy] = [ipx, ipy];
-    path_command_parameters1 = path_command_parameters2;
-    yield path_command_parameters1;
+    // ignore duplicate "Z"
+    if (not(equals2(path_command_parameters1.command, "Z"))) {
+      [cpx, cpy] = [ipx, ipy];
+      path_command_parameters1 = path_command_parameters2;
+      yield path_command_parameters1;
+    }
   }
 }
 
