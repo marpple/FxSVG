@@ -1,10 +1,12 @@
 import {
+  $after,
   $append,
   $appendTo,
   $before,
   $closest,
   $contains,
   $hide,
+  $insertAfter,
   $insertBefore,
   $off,
   $on,
@@ -82,12 +84,14 @@ import { $$updateScaleTransform } from "./updateScaleTransform/updateScaleTransf
 import { $$updateTranslateTransform } from "./updateTranslateTransform/updateTranslateTransform.index.js";
 
 export const FxSVG = {
+  after: $after,
   append: $append,
   appendTo: $appendTo,
   before: $before,
   closest: $closest,
   contains: $contains,
   hide: $hide,
+  insertAfter: $insertAfter,
   insertBefore: $insertBefore,
   off: $off,
   on: $on,
