@@ -1,7 +1,9 @@
-import { expect } from "chai";
+import chai from "chai";
 import { flatMapL, mapL } from "fxjs2";
 import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$el } from "./el.index.js";
+
+const { expect } = chai;
 
 const MOCK_STR = `<circle cx="10" cy="20" r="30"></circle>`;
 

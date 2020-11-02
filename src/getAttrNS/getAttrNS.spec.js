@@ -1,6 +1,8 @@
-import { expect } from "chai";
+import chai from "chai";
 import { $$el } from "../el/el.index.js";
 import { $$getAttrNS } from "./getAttrNS.index.js";
+
+const { expect } = chai;
 
 export default ({ describe, it }) => [
   describe(`$$getAttrNS`, function () {

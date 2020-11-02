@@ -1,7 +1,9 @@
-import { expect } from "chai";
+import chai from "chai";
 import { all, go, head, join, mapL } from "fxjs2";
 import { $$el } from "../el/el.index.js";
 import { $$hasAttrNS } from "./hasAttrNS.index.js";
+
+const { expect } = chai;
 
 export default ({ describe, it }) => [
   describe(`$$hasAttrNS`, function () {

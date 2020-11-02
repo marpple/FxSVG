@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import { go, mapL, reduce } from "fxjs2";
 import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import {
@@ -7,6 +7,8 @@ import {
 } from "../../test/utils/index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$consolidateTransformList } from "./consolidateTransformList.index.js";
+
+const { expect } = chai;
 
 const setupMock = ({ transform = makeRandomTransformAttributeValue() } = {}) =>
   $$getBaseTransformList(makeMockRect({ transform }));

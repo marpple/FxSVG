@@ -1,7 +1,9 @@
-import { expect } from "chai";
+import chai from "chai";
 import { head, mapL, rangeL } from "fxjs2";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { $$getSVG, $$setSVG } from "./getSetSVG.index.js";
+
+const { expect } = chai;
 
 export default ({ describe, it, beforeEach }) => [
   describe(`$$setSVG + $$getSVG`, function () {

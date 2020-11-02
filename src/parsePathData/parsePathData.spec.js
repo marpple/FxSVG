@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import {
   chunkL,
   concatL,
@@ -22,6 +22,8 @@ import {
   $$flatPathCommandParametersL,
   $$parsePathDateL,
 } from "./parsePathData.index.js";
+
+const { expect } = chai;
 
 export default ({ describe, it }) => [
   describe(`$$splitPathDataByCommandL`, function () {

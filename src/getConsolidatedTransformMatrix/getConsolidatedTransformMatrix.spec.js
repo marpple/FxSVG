@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import { go, join, mapL, rangeL } from "fxjs2";
 import { expectSameValueSVGMatrix } from "../../test/assertions/expectSameValueSVGMatrix.js";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
@@ -8,6 +8,8 @@ import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$el } from "../el/el.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getConsolidatedTransformMatrix } from "./getConsolidatedTransformMatrix.index.js";
+
+const { expect } = chai;
 
 export default ({ describe, it }) => [
   describe(`$$getConsolidatedTransformMatrix`, function () {

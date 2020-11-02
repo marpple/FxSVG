@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import { $append } from "fxdom";
 import { defaultTo, go, mapL, rangeL, reduce } from "fxjs2";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
@@ -8,6 +8,8 @@ import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTr
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getBoxPoints } from "./getBoxPoints.index.js";
+
+const { expect } = chai;
 
 const setupMock = ({ transform } = {}) => {
   const x = makeRandomInt(-1000, 1000);

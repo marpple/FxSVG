@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import {
   makeRandomNumber,
   makeRandomSVGTransformMatrix,
@@ -8,6 +8,8 @@ import {
 } from "../../test/utils/index.js";
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
 import { $$isSVGTransform } from "./isSVGTransform.index.js";
+
+const { expect } = chai;
 
 export default ({ describe, it }) => [
   describe("$$isSVGTransform", function () {

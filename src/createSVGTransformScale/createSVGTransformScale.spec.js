@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import { appendL, defaultTo, extend, flatMapL, go, mapL, object } from "fxjs2";
 import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
@@ -6,6 +6,8 @@ import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.i
 import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
 import { $$isSVGTransform } from "../isSVGTransform/isSVGTransform.index.js";
 import { $$createSVGTransformScale } from "./createSVGTransformScale.index.js";
+
+const { expect } = chai;
 
 const makeCases = () =>
   go(

@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import {
   defaultTo,
   each,
@@ -26,6 +26,8 @@ import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSV
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$getBaseTransformList } from "./getBaseTransformList.index.js";
+
+const { expect } = chai;
 
 const setupMock = ({
   transform = makeRandomTransformAttributeValue(),

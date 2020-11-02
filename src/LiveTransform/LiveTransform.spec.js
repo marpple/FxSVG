@@ -1,5 +1,7 @@
-import { expect } from "chai";
+import chai from "chai";
 import { $$LiveTransform } from "./LiveTransform.index.js";
+
+const { expect } = chai;
 
 export default ({ describe, it }) => [
   describe(`$$LiveTransform`, function () {

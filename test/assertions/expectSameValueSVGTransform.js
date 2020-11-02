@@ -1,5 +1,7 @@
-import { expect } from "chai";
+import chai from "chai";
 import { expectSameValueSVGMatrix } from "./expectSameValueSVGMatrix.js";
+
+const { expect } = chai;
 
 export const expectSameValueSVGTransform = (
   receive_transform,

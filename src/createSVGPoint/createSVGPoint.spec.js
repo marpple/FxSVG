@@ -1,7 +1,9 @@
-import { expect } from "chai";
+import chai from "chai";
 import { appendL, defaultTo, extend, flatMapL, go, mapL, object } from "fxjs2";
 import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
 import { $$createSVGPoint } from "./createSVGPoint.index.js";
+
+const { expect } = chai;
 
 const makeCases = () =>
   go(

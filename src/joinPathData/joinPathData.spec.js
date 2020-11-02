@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import { chunkL, deepFlatL, go, join, map, mapL, rangeL, take } from "fxjs2";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
@@ -7,6 +7,8 @@ import {
   $$joinPathData,
   $$toStringPathCommandParameters,
 } from "./joinPathData.index.js";
+
+const { expect } = chai;
 
 export default ({ describe, it }) => [
   describe(`$$toStringPathCommandParameters`, function () {

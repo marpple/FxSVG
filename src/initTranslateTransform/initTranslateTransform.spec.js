@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import { equals2, go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs2";
 import {
   deepCopyTransformList,
@@ -13,6 +13,8 @@ import {
 } from "../../test/assertions/index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$initTranslateTransform } from "./initTranslateTransform.index.js";
+
+const { expect } = chai;
 
 const setupSVGList = () => [
   undefined,

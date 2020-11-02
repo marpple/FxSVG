@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import { defaultTo, equals2, isUndefined, mapL, rangeL } from "fxjs2";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
@@ -10,6 +10,8 @@ import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
 import { $$LiveScaleTransform2 } from "./LiveScaleTransform2.index.js";
+
+const { expect } = chai;
 
 const DIRECTIONS = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
 

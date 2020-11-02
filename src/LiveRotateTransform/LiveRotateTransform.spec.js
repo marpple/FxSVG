@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import { defaultTo, isUndefined, mapL } from "fxjs2";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
@@ -8,6 +8,8 @@ import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSV
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isRotateSVGTransform } from "../isRotateSVGTransform/isRotateSVGTransform.index.js";
 import { $$LiveRotateTransform } from "./LiveRotateTransform.index.js";
+
+const { expect } = chai;
 
 const setupMock = ({
   angle: _angle,

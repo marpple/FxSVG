@@ -1,9 +1,11 @@
-import { expect } from "chai";
+import chai from "chai";
 import { each, filterL, go, mapL, object } from "fxjs2";
 import { makeAllCombinations } from "../../test/utils/makeAllCombinations.js";
 import { makeRandomNumberExcept } from "../../test/utils/makeRandomNumberExcept.js";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$isIdentityMatrix } from "./isIdentityMatrix.index.js";
+
+const { expect } = chai;
 
 export default ({ describe, it }) => [
   describe(`$$isIdentityMatrix`, function () {

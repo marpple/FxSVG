@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import { appendL, defaultTo, extend, flatMapL, go, mapL, object } from "fxjs2";
 import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
@@ -9,6 +9,8 @@ import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.i
 import { $$isRotateSVGTransform } from "../isRotateSVGTransform/isRotateSVGTransform.index.js";
 import { $$isSVGTransform } from "../isSVGTransform/isSVGTransform.index.js";
 import { $$createSVGTransformRotate } from "./createSVGTransformRotate.index.js";
+
+const { expect } = chai;
 
 const makeCases = () =>
   go(

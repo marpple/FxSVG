@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import { go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs2";
 import {
   expectSameValueSVGTransform,
@@ -14,6 +14,8 @@ import {
 } from "../../test/utils/index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$initRotateTransform } from "./initRotateTransform.index.js";
+
+const { expect } = chai;
 
 const setupSVGList = () => [
   undefined,

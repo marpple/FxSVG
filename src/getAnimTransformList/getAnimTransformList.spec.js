@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import { defaultTo, equals2, go, join, mapL, rangeL, zipL } from "fxjs2";
 import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
@@ -8,6 +8,8 @@ import {
 } from "../../test/utils/index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getAnimTransformList } from "./getAnimTransformList.index.js";
+
+const { expect } = chai;
 
 export default ({ describe, it }) => [
   describe(`$$getAnimTransformList`, function () {

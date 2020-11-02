@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import { equals2, go, mapL, rangeL, rejectL, takeL } from "fxjs2";
 import { expectSameValueSVGTransform } from "../../test/assertions/expectSameValueSVGTransform.js";
 import {
@@ -11,6 +11,8 @@ import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSV
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$appendRotateTransform } from "./appendRotateTransform.index.js";
+
+const { expect } = chai;
 
 const setupMock = ({
   angle = makeRandomInt(-700, 700),

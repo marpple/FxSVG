@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import { $append } from "fxdom";
 import { go, mapL, reduce } from "fxjs2";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
@@ -8,6 +8,8 @@ import { makeRandomTransformAttributeValue } from "../../test/utils/makeRandomTr
 import { $$createSVGPoint } from "../createSVGPoint/createSVGPoint.index.js";
 import { $$getBoxPoints } from "../getBoxPoints/getBoxPoints.index.js";
 import { $$getCenterPoint } from "./getCenterPoint.index.js";
+
+const { expect } = chai;
 
 const setupMock = ({ transform } = {}) => {
   const $svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");

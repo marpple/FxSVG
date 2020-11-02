@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import {
   entriesL,
   equals2,
@@ -13,6 +13,8 @@ import {
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$els } from "./els.index.js";
+
+const { expect } = chai;
 
 const setupSVGList = () => [
   undefined,
