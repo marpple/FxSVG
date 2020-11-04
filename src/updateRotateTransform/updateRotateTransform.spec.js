@@ -1,5 +1,5 @@
 import chai from "chai";
-import { mapL, rangeL } from "fxjs2";
+import { mapL, rangeL } from "fxjs";
 import {
   expectSameValueSVGTransform,
   expectTransformWithRotateAngleCxCy,

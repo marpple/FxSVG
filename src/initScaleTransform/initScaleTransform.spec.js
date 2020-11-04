@@ -1,5 +1,5 @@
 import chai from "chai";
-import { go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs2";
+import { go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs";
 import {
   makeRandomTransformAttributeValue,
   makeRandomNumber,

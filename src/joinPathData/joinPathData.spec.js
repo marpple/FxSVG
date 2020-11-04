@@ -1,5 +1,5 @@
 import chai from "chai";
-import { chunkL, deepFlatL, go, join, map, mapL, rangeL, take } from "fxjs2";
+import { chunkL, deepFlatL, go, join, map, mapL, rangeL, take } from "fxjs";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
 import { InvalidArgumentsError } from "../Errors/InvalidArgumentsError.js";

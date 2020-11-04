@@ -1,4 +1,4 @@
-import { go, mapL, object, split } from "fxjs2";
+import { go, mapL, object, split } from "fxjs";
 import { $$createSVGMatrix } from "../../src/createSVGMatrix/createSVGMatrix.index.js";
 import { makeRandomNumber } from "./makeRandomNumber.js";
 

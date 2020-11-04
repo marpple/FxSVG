@@ -1,5 +1,5 @@
 import chai from "chai";
-import { appendL, defaultTo, extend, flatMapL, go, mapL, object } from "fxjs2";
+import { appendL, defaultTo, extend, flatMapL, go, mapL, object } from "fxjs";
 import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";

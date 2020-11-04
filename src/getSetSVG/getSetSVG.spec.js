@@ -1,5 +1,5 @@
 import chai from "chai";
-import { head, mapL, rangeL } from "fxjs2";
+import { head, mapL, rangeL } from "fxjs";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { $$getSVG, $$setSVG } from "./getSetSVG.index.js";
 

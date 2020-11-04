@@ -16,7 +16,7 @@ import {
   takeAll,
   tap,
   toIter,
-} from "fxjs2";
+} from "fxjs";
 import { InvalidArgumentsError } from "../Errors/InvalidArgumentsError.js";
 import {
   FN_PATH,

@@ -1,4 +1,4 @@
-import { defaultTo } from "fxjs2";
+import { defaultTo } from "fxjs";
 import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
 
 export const $$updateScaleTransform = ({ sx, sy } = {}) => (transform) => {

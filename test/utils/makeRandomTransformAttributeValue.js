@@ -1,4 +1,4 @@
-import { join } from "fxjs2";
+import { join } from "fxjs";
 import { makeRandomNumber } from "./makeRandomNumber.js";
 import { makeRandomTransformStringList } from "./makeRandomTransformStringList.js";
 

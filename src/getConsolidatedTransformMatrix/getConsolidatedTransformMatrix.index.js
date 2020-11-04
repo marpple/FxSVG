@@ -1,4 +1,4 @@
-import { go, rangeL, mapL, reduce, defaultTo } from "fxjs2";
+import { go, rangeL, mapL, reduce, defaultTo } from "fxjs";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 

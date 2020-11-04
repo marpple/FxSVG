@@ -12,7 +12,7 @@ import {
   reduce,
   rejectL,
   tap,
-} from "fxjs2";
+} from "fxjs";
 import {
   makeMockRectInitiatedScaleTransform,
   makeRandomBool,

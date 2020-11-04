@@ -1,4 +1,4 @@
-import { every } from "fxjs2";
+import { every } from "fxjs";
 
 export const $$isIdentityMatrix = ({ a, b, c, d, e, f } = {}) =>
   every(([x, y]) => Number.isFinite(x) && Math.abs(x - y) < Number.EPSILON, [

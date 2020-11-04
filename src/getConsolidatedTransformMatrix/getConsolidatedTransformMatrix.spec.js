@@ -1,5 +1,5 @@
 import chai from "chai";
-import { go, join, mapL, rangeL } from "fxjs2";
+import { go, join, mapL, rangeL } from "fxjs";
 import { expectSameValueSVGMatrix } from "../../test/assertions/expectSameValueSVGMatrix.js";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";

@@ -1,4 +1,4 @@
-import { go, head, mapL, rangeL, rejectL } from "fxjs2";
+import { go, head, mapL, rangeL, rejectL } from "fxjs";
 import { makeRandomNumber } from "./makeRandomNumber.js";
 
 export const makeRandomNumberExcept = (min = 0, max = 1000, excepts = []) => {

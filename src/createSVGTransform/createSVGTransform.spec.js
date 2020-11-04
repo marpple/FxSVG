@@ -1,5 +1,5 @@
 import chai from "chai";
-import { mapL } from "fxjs2";
+import { mapL } from "fxjs";
 import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import { $$isMatrixSVGTransform } from "../isMatrixSVGTransform/isMatrixSVGTransform.index.js";
 import { $$isSVGTransform } from "../isSVGTransform/isSVGTransform.index.js";

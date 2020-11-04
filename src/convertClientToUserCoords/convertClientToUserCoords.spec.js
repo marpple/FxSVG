@@ -1,5 +1,5 @@
 import chai from "chai";
-import { html } from "fxjs2";
+import { html } from "fxjs";
 import { $$el } from "../el/el.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 import { $$convertClientToUserCoords } from "./convertClientToUserCoords.index.js";
