@@ -1,4 +1,6 @@
-import { expect } from "chai";
+import chai from "chai";
+
+const { expect } = chai;
 
 export const expectSameNumberEpsilon = (
   receive_number,

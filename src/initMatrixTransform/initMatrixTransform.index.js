@@ -1,4 +1,4 @@
-import { defaultTo } from "fxjs2";
+import { defaultTo } from "fxjs";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";

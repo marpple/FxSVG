@@ -10,6 +10,8 @@ export {
   $insertBefore as $$insertBefore,
   $off as $$off,
   $on as $$on,
+  $prepend as $$prepend,
+  $prependTo as $$prependTo,
   $qs as $$qs,
   $qsa as $$qsa,
   $remove as $$remove,

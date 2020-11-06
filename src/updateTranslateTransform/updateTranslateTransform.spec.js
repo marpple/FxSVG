@@ -1,5 +1,5 @@
-import { expect } from "chai";
-import { mapL, rangeL } from "fxjs2";
+import chai from "chai";
+import { mapL, rangeL } from "fxjs";
 import {
   expectSameValueSVGTransform,
   expectTransformWithTranslateTxTy,
@@ -14,6 +14,8 @@ import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSV
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$updateTranslateTransform } from "./updateTranslateTransform.index.js";
+
+const { expect } = chai;
 
 const setupMockTransform = () => {
   const [tx, ty] = mapL(() => makeRandomInt(-100, 100), rangeL(2));

@@ -1,4 +1,4 @@
-import { go, mapL, rangeL } from "fxjs2";
+import { go, mapL, rangeL } from "fxjs";
 import { $$createSVGTransformScale } from "../../src/createSVGTransformScale/createSVGTransformScale.index.js";
 import { makeRandomNumber } from "./makeRandomNumber.js";
 

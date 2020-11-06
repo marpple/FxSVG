@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import {
   concatL,
   equals2,
@@ -12,7 +12,7 @@ import {
   reduce,
   rejectL,
   tap,
-} from "fxjs2";
+} from "fxjs";
 import {
   makeMockRectInitiatedScaleTransform,
   makeRandomBool,
@@ -28,6 +28,8 @@ import {
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isValidFxScaleSVGTransformList } from "./isValidFxScaleSVGTransformList.index.js";
+
+const { expect } = chai;
 
 export const makeInvalidIndexCases = () => {
   const [_mock1, _mock2] = go(

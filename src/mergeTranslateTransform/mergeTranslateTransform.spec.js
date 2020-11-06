@@ -1,5 +1,5 @@
-import { expect } from "chai";
-import { equals2, go, map, mapL, rejectL, zipL, zipWithIndexL } from "fxjs2";
+import chai from "chai";
+import { equals2, go, map, mapL, rejectL, zipL, zipWithIndexL } from "fxjs";
 import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   deepCopyTransformList,
@@ -17,6 +17,8 @@ import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/cr
 import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform.index.js";
+
+const { expect } = chai;
 
 const setupSVGList = () => [
   undefined,

@@ -1,4 +1,4 @@
-import { each } from "fxjs2";
+import { each } from "fxjs";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 
 export const $$els = (svg = "") => ($svg = $$getSVG()) => {

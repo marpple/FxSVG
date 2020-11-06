@@ -1,8 +1,10 @@
-import { expect } from "chai";
-import { equals2, go, map, mapL, rangeL } from "fxjs2";
+import chai from "chai";
+import { equals2, go, map, mapL, rangeL } from "fxjs";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
 import { $$getBoundingPoints } from "./getBoundingPoints.index.js";
+
+const { expect } = chai;
 
 export default ({ describe, it }) => [
   describe(`$$getBoundingPoints`, function () {

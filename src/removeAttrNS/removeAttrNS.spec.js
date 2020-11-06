@@ -1,7 +1,9 @@
-import { expect } from "chai";
+import chai from "chai";
 import { $$el } from "../el/el.index.js";
 import { $$hasAttrNS } from "../hasAttrNS/hasAttrNS.index.js";
 import { $$removeAttrNS } from "./removeAttrNS.index.js";
+
+const { expect } = chai;
 
 export default ({ describe, it }) => [
   describe(`$$removeAttrNS`, function () {

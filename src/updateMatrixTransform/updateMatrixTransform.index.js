@@ -1,4 +1,4 @@
-import { defaultTo } from "fxjs2";
+import { defaultTo } from "fxjs";
 import { $$isMatrixSVGTransform } from "../isMatrixSVGTransform/isMatrixSVGTransform.index.js";
 
 export const $$updateMatrixTransform = ({ matrix } = {}) => (transform) => {

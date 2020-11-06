@@ -8,7 +8,7 @@ import {
   object,
   rangeL,
   rejectL,
-} from "fxjs2";
+} from "fxjs";
 import { $$getAttrNS } from "../../src/getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../../src/getBaseTransformList/getBaseTransformList.index.js";
 import { $$initRotateTransform } from "../../src/initRotateTransform/initRotateTransform.index.js";

@@ -1,5 +1,5 @@
-import { expect } from "chai";
-import { go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs2";
+import chai from "chai";
+import { go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs";
 import {
   makeRandomTransformAttributeValue,
   makeRandomNumber,
@@ -14,6 +14,8 @@ import {
 } from "../../test/assertions/index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$initScaleTransform } from "./initScaleTransform.index.js";
+
+const { expect } = chai;
 
 const setupSVGList = () => [
   undefined,

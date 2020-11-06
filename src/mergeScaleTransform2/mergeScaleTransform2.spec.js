@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import {
   appendL,
   extend,
@@ -12,7 +12,7 @@ import {
   rejectL,
   zipL,
   zipWithIndexL,
-} from "fxjs2";
+} from "fxjs";
 import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   deepCopyTransformList,
@@ -26,6 +26,8 @@ import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { makeInvalidCases as makeInvalidIsValidFxSVGTransformListCases } from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.spec.js";
 import { $$mergeScaleTransform2 } from "./mergeScaleTransform2.index.js";
+
+const { expect } = chai;
 
 const DIRECTIONS = ["n", "ne", "e", "se", "s", "sw", "w", "nw"];
 

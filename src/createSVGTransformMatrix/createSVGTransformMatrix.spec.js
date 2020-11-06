@@ -1,5 +1,5 @@
-import { expect } from "chai";
-import { appendL, defaultTo, extend, flatMapL, go, mapL, object } from "fxjs2";
+import chai from "chai";
+import { appendL, defaultTo, extend, flatMapL, go, mapL, object } from "fxjs";
 import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import {
   makeAllCombinations,
@@ -9,6 +9,8 @@ import {
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$isMatrixSVGTransform } from "../isMatrixSVGTransform/isMatrixSVGTransform.index.js";
 import { $$createSVGTransformMatrix } from "./createSVGTransformMatrix.index.js";
+
+const { expect } = chai;
 
 const makeCases = () =>
   go(

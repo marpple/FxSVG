@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import {
   chunkL,
   concatL,
@@ -11,7 +11,7 @@ import {
   rangeL,
   take,
   takeAll,
-} from "fxjs2";
+} from "fxjs";
 import { makeRandomBool } from "../../test/utils/makeRandomBool.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import {
@@ -22,6 +22,8 @@ import {
   $$flatPathCommandParametersL,
   $$parsePathDateL,
 } from "./parsePathData.index.js";
+
+const { expect } = chai;
 
 export default ({ describe, it }) => [
   describe(`$$splitPathDataByCommandL`, function () {

@@ -1,5 +1,5 @@
-import { expect } from "chai";
-import { defaultTo, isUndefined, mapL, rangeL } from "fxjs2";
+import chai from "chai";
+import { defaultTo, isUndefined, mapL, rangeL } from "fxjs";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
@@ -11,6 +11,8 @@ import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/cr
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
 import { $$LiveScaleTransform } from "./LiveScaleTransform.index.js";
+
+const { expect } = chai;
 
 const setupMock = ({
   x: _x,

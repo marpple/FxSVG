@@ -1,4 +1,4 @@
-import { go, mapL, rangeL } from "fxjs2";
+import { go, mapL, rangeL } from "fxjs";
 import { $$isScaleSVGTransform } from "../isScaleSVGTransform/isScaleSVGTransform.index.js";
 import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 

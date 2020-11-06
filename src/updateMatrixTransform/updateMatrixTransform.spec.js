@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import chai from "chai";
 import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   makeRandomNumber,
@@ -10,6 +10,8 @@ import { $$createSVGTransformRotate } from "../createSVGTransformRotate/createSV
 import { $$createSVGTransformScale } from "../createSVGTransformScale/createSVGTransformScale.index.js";
 import { $$createSVGTransformTranslate } from "../createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$updateMatrixTransform } from "./updateMatrixTransform.index.js";
+
+const { expect } = chai;
 
 const setupMockTransform = () => {
   const matrix = makeRandomSVGMatrix(() => makeRandomNumber(-100, 100));

@@ -1,4 +1,4 @@
-import { go, map, rangeL } from "fxjs2";
+import { go, map, rangeL } from "fxjs";
 import { makeRandomInt } from "./makeRandomInt.js";
 import { makeRandomNumber } from "./makeRandomNumber.js";
 import { makeRandomTransformString } from "./makeRandomTransformString.js";
