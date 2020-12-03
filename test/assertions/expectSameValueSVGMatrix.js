@@ -1,4 +1,4 @@
-import { each, go, mapL } from "fxjs";
+import { each, go, mapL } from "fxjs/esm";
 import { expectSameNumberEpsilon } from "./expectSameNumberEpsilon.js";
 
 export const expectSameValueSVGMatrix = (receive_m, expect_m, message = "") =>

@@ -1,5 +1,5 @@
 import chai from "chai";
-import { appendL, defaultTo, extend, flatMapL, go, mapL, object } from "fxjs";
+import { appendL, defaultTo, extend, flatMapL, go, mapL, object } from "fxjs/esm";
 import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
 import { $$createSVGMatrix } from "./createSVGMatrix.index.js";

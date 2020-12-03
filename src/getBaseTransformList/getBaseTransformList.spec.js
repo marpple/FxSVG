@@ -11,7 +11,7 @@ import {
   rangeL,
   tap,
   zip,
-} from "fxjs";
+} from "fxjs/esm";
 import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import {
   makeMockRect,

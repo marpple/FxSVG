@@ -1,5 +1,5 @@
 import chai from "chai";
-import { mapL, rangeL } from "fxjs";
+import { mapL, rangeL } from "fxjs/esm";
 import {
   expectSameValueSVGTransform,
   expectTransformWithTranslateTxTy,

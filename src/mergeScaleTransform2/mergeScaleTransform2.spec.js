@@ -12,7 +12,7 @@ import {
   rejectL,
   zipL,
   zipWithIndexL,
-} from "fxjs";
+} from "fxjs/esm";
 import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   deepCopyTransformList,
