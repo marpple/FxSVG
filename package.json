@@ -37,7 +37,7 @@
     "express": "^4.17.1",
     "mocha": "^8.2.1",
     "playwright": "^1.5.2",
-    "prettier": "2.1.2",
+    "prettier": "2.2.1",
     "webpack": "^5.4.0",
     "webpack-dev-middleware": "^4.0.0",
     "yargs": "^16.1.0"
