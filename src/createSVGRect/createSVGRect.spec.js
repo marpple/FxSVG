@@ -1,5 +1,13 @@
 import chai from "chai";
-import { appendL, defaultTo, extend, flatMapL, go, mapL, object } from "fxjs/es";
+import {
+  appendL,
+  defaultTo,
+  extend,
+  flatMapL,
+  go,
+  mapL,
+  object,
+} from "fxjs/es";
 import { makeAllCombinations, makeRandomInt } from "../../test/utils/index.js";
 import { $$createSVGRect } from "./createSVGRect.index.js";
 

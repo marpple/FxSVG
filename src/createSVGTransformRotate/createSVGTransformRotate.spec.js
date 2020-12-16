@@ -1,5 +1,13 @@
 import chai from "chai";
-import { appendL, defaultTo, extend, flatMapL, go, mapL, object } from "fxjs/es";
+import {
+  appendL,
+  defaultTo,
+  extend,
+  flatMapL,
+  go,
+  mapL,
+  object,
+} from "fxjs/es";
 import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   makeAllCombinations,

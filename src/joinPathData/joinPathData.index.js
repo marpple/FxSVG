@@ -1,15 +1,15 @@
 import {
+  eachL,
+  equals2,
+  every,
+  flatL,
+  go,
+  isArray,
   join,
   mapL,
-  isArray,
-  equals2,
-  go,
-  eachL,
   not,
   tap,
-  every,
   toIter,
-  flatL,
 } from "fxjs/es";
 import { InvalidArgumentsError } from "../Errors/InvalidArgumentsError.js";
 

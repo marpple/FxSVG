@@ -5,12 +5,12 @@ import {
   expectSameValueSVGTransform,
 } from "../../test/assertions/index.js";
 import {
-  makeRandomSVGMatrix,
-  makeRandomNumber,
-  makeRandomInt,
   deepCopyTransformList,
-  makeRandomTransformAttributeValue,
   makeMockRect,
+  makeRandomInt,
+  makeRandomNumber,
+  makeRandomSVGMatrix,
+  makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
