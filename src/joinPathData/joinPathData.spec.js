@@ -2,7 +2,7 @@ import chai from "chai";
 import { chunkL, deepFlatL, go, join, map, mapL, rangeL, take } from "fxjs/es";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";
-import { InvalidArgumentsError } from "../Errors/InvalidArgumentsError.js";
+import { IllegalArgumentError } from "../Errors/IllegalArgumentError.js";
 import {
   $$joinPathData,
   $$toStringPathCommandParameters,
@@ -49,7 +49,7 @@ export default ({ describe, it }) => [
               $$toStringPathCommandParameters({ command, parameters });
 
             // then
-            expect(f).throw(InvalidArgumentsError);
+            expect(f).throw(IllegalArgumentError);
           }
         });
 
@@ -63,7 +63,7 @@ export default ({ describe, it }) => [
               $$toStringPathCommandParameters({ command, parameters });
 
             // then
-            expect(f).throw(InvalidArgumentsError);
+            expect(f).throw(IllegalArgumentError);
           }
         });
 
@@ -81,7 +81,7 @@ export default ({ describe, it }) => [
               $$toStringPathCommandParameters({ command, parameters });
 
             // then
-            expect(f).throw(InvalidArgumentsError);
+            expect(f).throw(IllegalArgumentError);
           }
         });
       });
@@ -125,7 +125,7 @@ export default ({ describe, it }) => [
               $$toStringPathCommandParameters({ command, parameters });
 
             // then
-            expect(f).throw(InvalidArgumentsError);
+            expect(f).throw(IllegalArgumentError);
           }
         });
 
@@ -145,7 +145,7 @@ export default ({ describe, it }) => [
               $$toStringPathCommandParameters({ command, parameters });
 
             // then
-            expect(f).throw(InvalidArgumentsError);
+            expect(f).throw(IllegalArgumentError);
           }
         });
       });
@@ -184,7 +184,7 @@ export default ({ describe, it }) => [
               $$toStringPathCommandParameters({ command, parameters });
 
             // then
-            expect(f).throw(InvalidArgumentsError);
+            expect(f).throw(IllegalArgumentError);
           }
         });
 
@@ -202,7 +202,7 @@ export default ({ describe, it }) => [
               $$toStringPathCommandParameters({ command, parameters });
 
             // then
-            expect(f).throw(InvalidArgumentsError);
+            expect(f).throw(IllegalArgumentError);
           }
         });
       });
@@ -247,7 +247,7 @@ export default ({ describe, it }) => [
               $$toStringPathCommandParameters({ command, parameters });
 
             // then
-            expect(f).throw(InvalidArgumentsError);
+            expect(f).throw(IllegalArgumentError);
           }
         });
 
@@ -267,7 +267,7 @@ export default ({ describe, it }) => [
               $$toStringPathCommandParameters({ command, parameters });
 
             // then
-            expect(f).throw(InvalidArgumentsError);
+            expect(f).throw(IllegalArgumentError);
           }
         });
 
@@ -287,7 +287,7 @@ export default ({ describe, it }) => [
               $$toStringPathCommandParameters({ command, parameters });
 
             // then
-            expect(f).throw(InvalidArgumentsError);
+            expect(f).throw(IllegalArgumentError);
           }
         });
 
@@ -308,7 +308,7 @@ export default ({ describe, it }) => [
               $$toStringPathCommandParameters({ command, parameters });
 
             // then
-            expect(f).throw(InvalidArgumentsError);
+            expect(f).throw(IllegalArgumentError);
           }
         });
       });
@@ -353,7 +353,7 @@ export default ({ describe, it }) => [
               $$toStringPathCommandParameters({ command, parameters });
 
             // then
-            expect(f).throw(InvalidArgumentsError);
+            expect(f).throw(IllegalArgumentError);
           }
         });
 
@@ -373,7 +373,7 @@ export default ({ describe, it }) => [
               $$toStringPathCommandParameters({ command, parameters });
 
             // then
-            expect(f).throw(InvalidArgumentsError);
+            expect(f).throw(IllegalArgumentError);
           }
         });
 
@@ -393,7 +393,7 @@ export default ({ describe, it }) => [
               $$toStringPathCommandParameters({ command, parameters });
 
             // then
-            expect(f).throw(InvalidArgumentsError);
+            expect(f).throw(IllegalArgumentError);
           }
         });
 
@@ -414,7 +414,7 @@ export default ({ describe, it }) => [
               $$toStringPathCommandParameters({ command, parameters });
 
             // then
-            expect(f).throw(InvalidArgumentsError);
+            expect(f).throw(IllegalArgumentError);
           }
         });
       });
@@ -469,7 +469,7 @@ export default ({ describe, it }) => [
               $$toStringPathCommandParameters({ command, parameters });
 
             // then
-            expect(f).throw(InvalidArgumentsError);
+            expect(f).throw(IllegalArgumentError);
           }
         });
 
@@ -502,7 +502,7 @@ export default ({ describe, it }) => [
               $$toStringPathCommandParameters({ command, parameters });
 
             // then
-            expect(f).throw(InvalidArgumentsError);
+            expect(f).throw(IllegalArgumentError);
           }
         });
       });
@@ -624,7 +624,7 @@ export default ({ describe, it }) => [
       const f = () => $$joinPathData(path_data);
 
       // when
-      expect(f).throw(InvalidArgumentsError);
+      expect(f).throw(IllegalArgumentError);
     });
   }),
 ];

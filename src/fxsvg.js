@@ -33,7 +33,7 @@ import { $$createSVGTransformTranslate } from "./createSVGTransformTranslate/cre
 import { $$el } from "./el/el.index.js";
 import { $$els } from "./els/els.index.js";
 import { CustomError } from "./Errors/CustomError.js";
-import { InvalidArgumentsError } from "./Errors/InvalidArgumentsError.js";
+import { IllegalArgumentError } from "./Errors/IllegalArgumentError.js";
 import { $$getAnimTransformList } from "./getAnimTransformList/getAnimTransformList.index.js";
 import { $$getAttrNS } from "./getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "./getBaseTransformList/getBaseTransformList.index.js";
@@ -104,7 +104,7 @@ export const FxSVG = {
   trigger: $trigger,
 
   CustomError,
-  InvalidArgumentsError,
+  InvalidArgumentsError: IllegalArgumentError,
 
   appendRotateTransform: $$appendRotateTransform,
   appendTranslateTransform: $$appendTranslateTransform,

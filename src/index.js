@@ -20,7 +20,7 @@ export {
 } from "fxdom";
 
 export { CustomError } from "./Errors/CustomError.js";
-export { InvalidArgumentsError } from "./Errors/InvalidArgumentsError.js";
+export { IllegalArgumentError } from "./Errors/IllegalArgumentError.js";
 
 export { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
 export { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
