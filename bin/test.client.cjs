@@ -9,16 +9,19 @@ const argv = yargs
   .alias("h", "headless")
   .alias("w", "watch")
   .alias("t", "type")
+  .alias("p", "port")
   .array("type")
   .default("repeat", "1")
   .default("type", ["chromium", "webkit", "firefox"])
+  .default("port", "8080")
   .parse();
 
+const PORT = parseInt(argv.port, 10);
 const TEST_REPEAT_COUNT = parseInt(argv.repeat, 10);
 const TEST_HEADLESS = !!argv.headless;
 const TEST_IS_WATCH = !!argv.watch;
-const TEST_PAGE_DEFAULT_URL = "http://localhost:8080/test/index.html";
-const TEST_PAGE_JSON_URL = "http://localhost:8080/test/index.json.html";
+const TEST_PAGE_DEFAULT_URL = `http://localhost:${PORT}/test/index.html`;
+const TEST_PAGE_JSON_URL = `http://localhost:${PORT}/test/index.json.html`;
 const TEST_BROWSER_TYPE_LIST = argv.type;
 
 const runTest = async (
