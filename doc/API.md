@@ -112,12 +112,12 @@
 ## \$\$getSVG
 
 - [source](../src/getSetSVG/getSetSVG.index.js)
-- [detail](../src/getSetSVG/README.md)
+- [test](../src/getSetSVG/getSetSVG.spec.js)
 
 ## \$\$setSVG
 
 - [source](../src/getSetSVG/getSetSVG.index.js)
-- [detail](../src/getSetSVG/README.md)
+- [test](../src/getSetSVG/getSetSVG.spec.js)
 
 ## \$\$hasAttrNS
 

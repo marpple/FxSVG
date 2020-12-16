@@ -1,49 +1,67 @@
 import chai from "chai";
-import { head, mapL, rangeL } from "fxjs/es";
-import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
+import { map, rangeL } from "fxjs/es";
 import { $$getSVG, $$setSVG } from "./getSetSVG.index.js";
-
-const { expect } = chai;
 
 export default ({ describe, it, beforeEach }) => [
   describe(`$$setSVG + $$getSVG`, function () {
-    it(`"$$setSVG" set the SVG element that "$$getSVG" returns.`, function () {
-      const $svg = document.createElementNS(
+    it(`$$getSVG returns the SVGSVGElement set by $$setSVG.`, function () {
+      // given
+      const svg_el = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "svg"
       );
-      $$setSVG($svg);
+      $$setSVG(svg_el);
 
-      expect($$getSVG()).equal($svg);
+      // when
+      const received = $$getSVG();
+
+      // then
+      chai.expect(received).equal(svg_el);
     });
   }),
   describe(`$$setSVG`, function () {
-    it(`The return value is the same reference with the input value.`, function () {
-      const $svg = document.createElementNS(
+    it(`$$setSVG returns the same reference with the input SVGSVGElement.`, function () {
+      // given
+      const svg_el = document.createElementNS(
         "http://www.w3.org/2000/svg",
         "svg"
       );
 
-      expect($$setSVG($svg)).equal($svg);
+      // when
+      const received = $$setSVG(svg_el);
+
+      // then
+      chai.expect(received).equal(svg_el);
     });
   }),
   describe(`$$getSVG`, function () {
     beforeEach(function () {
-      $$setSVG(undefined);
+      $$setSVG(null);
     });
 
-    it(`The return value is a SVG element.`, function () {
-      const $svg = $$getSVG();
+    it(`$$getSVG returns a SVGSVGElement.`, function () {
+      // given
+      // document.createElementNS should be available.
 
-      expect($svg.nodeName.toLowerCase()).equal("svg");
+      // when
+      const svg_el = $$getSVG();
+
+      // then
+      chai.expect(svg_el.nodeName.toLowerCase()).equal("svg");
+      chai.expect(svg_el).instanceof(SVGSVGElement);
     });
 
-    it(`The return value is always same.`, function () {
-      const iter = mapL(() => $$getSVG(), rangeL(makeRandomInt(2)));
+    it(`$$getSVG always returns the same reference.`, function () {
+      // given
+      // document.createElementNS should be available.
 
-      const $a = head(iter);
-      for (const $b of iter) {
-        expect($b).equal($a);
+      // when
+      const received_list = map($$getSVG, rangeL(10));
+
+      // then
+      const [first] = received_list;
+      for (const a of received_list) {
+        chai.expect(a).equal(first);
       }
     });
   }),
