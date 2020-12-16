@@ -7,7 +7,7 @@ import {
   object,
   rangeL,
   rejectL,
-} from "fxjs/esm";
+} from "fxjs/es";
 import { $$getAttrNS } from "../../src/getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../../src/getBaseTransformList/getBaseTransformList.index.js";
 import { $$initTranslateTransform } from "../../src/initTranslateTransform/initTranslateTransform.index.js";

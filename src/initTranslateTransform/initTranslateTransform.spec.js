@@ -1,5 +1,5 @@
 import chai from "chai";
-import { equals2, go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs/esm";
+import { equals2, go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs/es";
 import {
   deepCopyTransformList,
   makeMockRect,

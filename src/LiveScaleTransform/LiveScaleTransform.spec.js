@@ -1,5 +1,5 @@
 import chai from "chai";
-import { defaultTo, isUndefined, mapL, rangeL } from "fxjs/esm";
+import { defaultTo, isUndefined, mapL, rangeL } from "fxjs/es";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";

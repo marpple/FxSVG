@@ -1,4 +1,4 @@
-import { each, go, mapL, rangeL, reduce } from "fxjs/esm";
+import { each, go, mapL, rangeL, reduce } from "fxjs/es";
 import { $$createSVGTransformMatrix } from "../createSVGTransformMatrix/createSVGTransformMatrix.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";

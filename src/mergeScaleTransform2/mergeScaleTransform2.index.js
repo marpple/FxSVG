@@ -1,4 +1,4 @@
-import { each, go, go1, mapL, rangeL, some } from "fxjs/esm";
+import { each, go, go1, mapL, rangeL, some } from "fxjs/es";
 import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$isValidFxScaleSVGTransformList } from "../isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js";

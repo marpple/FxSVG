@@ -1,5 +1,5 @@
 import chai from "chai";
-import { go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs/esm";
+import { go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs/es";
 import {
   expectSameValueSVGTransform,
   expectTransformWithRotateAngleCxCy,

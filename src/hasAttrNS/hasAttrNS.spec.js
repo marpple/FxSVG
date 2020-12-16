@@ -1,5 +1,5 @@
 import chai from "chai";
-import { all, go, head, join, mapL } from "fxjs/esm";
+import { all, go, head, join, mapL } from "fxjs/es";
 import { $$el } from "../el/el.index.js";
 import { $$hasAttrNS } from "./hasAttrNS.index.js";
 

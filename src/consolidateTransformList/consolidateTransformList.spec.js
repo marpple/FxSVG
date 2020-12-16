@@ -1,5 +1,5 @@
 import chai from "chai";
-import { go, mapL, reduce } from "fxjs/esm";
+import { go, mapL, reduce } from "fxjs/es";
 import { expectSameValueSVGMatrix } from "../../test/assertions/index.js";
 import {
   makeMockRect,

@@ -1,4 +1,4 @@
-import { eachL, go, mapL, reduce } from "fxjs/esm";
+import { eachL, go, mapL, reduce } from "fxjs/es";
 import { $$createSVGPoint } from "../createSVGPoint/createSVGPoint.index.js";
 import { $$getBoxPoints } from "../getBoxPoints/getBoxPoints.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";

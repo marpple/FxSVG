@@ -10,7 +10,7 @@ import {
   every,
   toIter,
   flatL,
-} from "fxjs/esm";
+} from "fxjs/es";
 import { InvalidArgumentsError } from "../Errors/InvalidArgumentsError.js";
 
 /**

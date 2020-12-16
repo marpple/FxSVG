@@ -1,4 +1,4 @@
-import { map } from "fxjs/esm";
+import { map } from "fxjs/es";
 import { $$createSVGMatrix } from "../../src/createSVGMatrix/createSVGMatrix.index.js";
 
 export const deepCopyTransformList = (transform_list) =>

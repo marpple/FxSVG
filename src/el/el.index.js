@@ -1,4 +1,4 @@
-import { head } from "fxjs/esm";
+import { head } from "fxjs/es";
 import { $$els } from "../els/els.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 

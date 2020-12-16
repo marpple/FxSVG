@@ -1,5 +1,5 @@
 import chai from "chai";
-import { equals2, go, mapL, rangeL, rejectL, takeL } from "fxjs/esm";
+import { equals2, go, mapL, rangeL, rejectL, takeL } from "fxjs/es";
 import { expectSameValueSVGTransform } from "../../test/assertions/expectSameValueSVGTransform.js";
 import {
   makeRandomInt,

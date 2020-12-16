@@ -8,7 +8,7 @@ import {
   mapL,
   object,
   rejectL,
-} from "fxjs/esm";
+} from "fxjs/es";
 import { $$el } from "../../src/el/el.index.js";
 import { makeRandomNumber } from "./makeRandomNumber.js";
 

@@ -9,7 +9,7 @@ import {
   mapL,
   rangeL,
   zip,
-} from "fxjs/esm";
+} from "fxjs/es";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$els } from "./els.index.js";

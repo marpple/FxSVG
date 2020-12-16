@@ -1,5 +1,5 @@
 import chai from "chai";
-import { defaultTo, equals2, go, join, mapL, rangeL, zipL } from "fxjs/esm";
+import { defaultTo, equals2, go, join, mapL, rangeL, zipL } from "fxjs/es";
 import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   makeMockRect,

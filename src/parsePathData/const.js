@@ -1,4 +1,4 @@
-import { go, join, mapL } from "fxjs/esm";
+import { go, join, mapL } from "fxjs/es";
 
 export const FN_PATH = `$$parsePathData`;
 export const FN_PATH_PARSE_COORDINATE_SEQ = `$$parseCoordinateSeqL`;

@@ -1,4 +1,4 @@
-import { go, mapL, rangeL } from "fxjs/esm";
+import { go, mapL, rangeL } from "fxjs/es";
 import { $$createSVGTransformRotate } from "../../src/createSVGTransformRotate/createSVGTransformRotate.index.js";
 import { makeRandomNumber } from "./makeRandomNumber.js";
 

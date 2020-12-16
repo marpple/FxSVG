@@ -11,7 +11,7 @@ import {
   rangeL,
   take,
   takeAll,
-} from "fxjs/esm";
+} from "fxjs/es";
 import { makeRandomBool } from "../../test/utils/makeRandomBool.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import {

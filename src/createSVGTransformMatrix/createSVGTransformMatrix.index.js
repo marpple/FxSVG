@@ -1,4 +1,4 @@
-import { defaultTo } from "fxjs/esm";
+import { defaultTo } from "fxjs/es";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";
 import { $$createSVGTransform } from "../createSVGTransform/createSVGTransform.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
