@@ -17,7 +17,7 @@ import {
   $remove,
   $show,
   $trigger,
-} from "fxdom";
+} from "fxdom/es";
 import { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
 import { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 import { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";

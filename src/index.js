@@ -17,7 +17,7 @@ export {
   $remove as $$remove,
   $show as $$show,
   $trigger as $$trigger,
-} from "fxdom";
+} from "fxdom/es";
 
 export { CustomError } from "./Errors/CustomError.js";
 export { IllegalArgumentError } from "./Errors/IllegalArgumentError.js";
