@@ -33,10 +33,10 @@
   },
   "homepage": "https://github.com/marpple/FxSVG#readme",
   "devDependencies": {
-    "chai": "^4.2.0",
+    "chai": "^4.3.0",
     "express": "^4.17.1",
-    "mocha": "^8.2.1",
-    "playwright": "^1.7.0",
+    "mocha": "^8.3.0",
+    "playwright": "^1.8.1",
     "prettier": "2.2.1",
     "webpack": "^5.10.3",
     "webpack-dev-middleware": "^4.0.2",
