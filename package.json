@@ -9,6 +9,7 @@
     "dist"
   ],
   "scripts": {
+    "np": "npx -p np -c 'np --branch master --yolo --no-publish --no-yarn'",
     "test:server": "node test/server.js",
     "test:client": "node bin/test.client.js",
     "test:client:headless": "node bin/test.client.js --headless",
