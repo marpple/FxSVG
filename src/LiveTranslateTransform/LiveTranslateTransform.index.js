@@ -1,4 +1,4 @@
-import { defaultTo } from "fxjs";
+import { defaultTo } from "fxjs/es";
 import { $$appendTranslateTransform } from "../appendTranslateTransform/appendTranslateTransform.index.js";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 import { $$initTranslateTransform } from "../initTranslateTransform/initTranslateTransform.index.js";

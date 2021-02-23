@@ -11,16 +11,16 @@ import {
   rangeL,
   take,
   takeAll,
-} from "fxjs";
+} from "fxjs/es";
 import { makeRandomBool } from "../../test/utils/makeRandomBool.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import {
-  $$splitPathDataByCommandL,
-  $$parsePathCommandParameters,
-  $$convertPathCommandParametersRelativeToAbsoluteL,
   $$compressPathCommandL,
+  $$convertPathCommandParametersRelativeToAbsoluteL,
   $$flatPathCommandParametersL,
+  $$parsePathCommandParameters,
   $$parsePathDateL,
+  $$splitPathDataByCommandL,
 } from "./parsePathData.index.js";
 
 const { expect } = chai;

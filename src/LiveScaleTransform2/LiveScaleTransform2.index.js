@@ -1,4 +1,4 @@
-import { defaultTo } from "fxjs";
+import { defaultTo } from "fxjs/es";
 import { $$getSVG } from "../getSetSVG/getSetSVG.index.js";
 import { $$initScaleTransform } from "../initScaleTransform/initScaleTransform.index.js";
 import { $$LiveTransform } from "../LiveTransform/LiveTransform.index.js";

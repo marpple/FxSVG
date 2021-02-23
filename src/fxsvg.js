@@ -17,11 +17,7 @@ import {
   $remove,
   $show,
   $trigger,
-} from "fxdom";
-
-import { CustomError } from "./Errors/CustomError.js";
-import { InvalidArgumentsError } from "./Errors/InvalidArgumentsError.js";
-
+} from "fxdom/es";
 import { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
 import { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";
 import { $$consolidateTransformList } from "./consolidateTransformList/consolidateTransformList.index.js";
@@ -36,6 +32,8 @@ import { $$createSVGTransformScale } from "./createSVGTransformScale/createSVGTr
 import { $$createSVGTransformTranslate } from "./createSVGTransformTranslate/createSVGTransformTranslate.index.js";
 import { $$el } from "./el/el.index.js";
 import { $$els } from "./els/els.index.js";
+import { CustomError } from "./Errors/CustomError.js";
+import { IllegalArgumentError } from "./Errors/IllegalArgumentError.js";
 import { $$getAnimTransformList } from "./getAnimTransformList/getAnimTransformList.index.js";
 import { $$getAttrNS } from "./getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "./getBaseTransformList/getBaseTransformList.index.js";
@@ -57,8 +55,8 @@ import { $$isSVGTransform } from "./isSVGTransform/isSVGTransform.index.js";
 import { $$isTranslateSVGTransform } from "./isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 import { $$isValidFxScaleSVGTransformList } from "./isValidFxScaleSVGTransformList/isValidFxScaleSVGTransformList.index.js";
 import {
-  $$toStringPathCommandParameters,
   $$joinPathData,
+  $$toStringPathCommandParameters,
 } from "./joinPathData/joinPathData.index.js";
 import { $$LiveRotateTransform } from "./LiveRotateTransform/LiveRotateTransform.index.js";
 import { $$LiveScaleTransform } from "./LiveScaleTransform/LiveScaleTransform.index.js";
@@ -71,12 +69,12 @@ import { $$mergeScaleTransform } from "./mergeScaleTransform/mergeScaleTransform
 import { $$mergeScaleTransform2 } from "./mergeScaleTransform2/mergeScaleTransform2.index.js";
 import { $$mergeTranslateTransform } from "./mergeTranslateTransform/mergeTranslateTransform.index.js";
 import {
-  $$splitPathDataByCommandL,
-  $$parsePathCommandParameters,
-  $$convertPathCommandParametersRelativeToAbsoluteL,
   $$compressPathCommandL,
+  $$convertPathCommandParametersRelativeToAbsoluteL,
   $$flatPathCommandParametersL,
+  $$parsePathCommandParameters,
   $$parsePathDateL,
+  $$splitPathDataByCommandL,
 } from "./parsePathData/parsePathData.index.js";
 import { $$removeAttrNS } from "./removeAttrNS/removeAttrNS.index.js";
 import { $$setAttrNS } from "./setAttrNS/setAttrNS.index.js";
@@ -106,7 +104,7 @@ export const FxSVG = {
   trigger: $trigger,
 
   CustomError,
-  InvalidArgumentsError,
+  InvalidArgumentsError: IllegalArgumentError,
 
   appendRotateTransform: $$appendRotateTransform,
   appendTranslateTransform: $$appendTranslateTransform,

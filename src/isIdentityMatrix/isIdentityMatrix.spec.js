@@ -1,5 +1,5 @@
 import chai from "chai";
-import { each, filterL, go, mapL, object } from "fxjs";
+import { each, filterL, go, mapL, object } from "fxjs/es";
 import { makeAllCombinations } from "../../test/utils/makeAllCombinations.js";
 import { makeRandomNumberExcept } from "../../test/utils/makeRandomNumberExcept.js";
 import { $$createSVGMatrix } from "../createSVGMatrix/createSVGMatrix.index.js";

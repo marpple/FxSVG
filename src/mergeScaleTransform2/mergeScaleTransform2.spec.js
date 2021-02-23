@@ -12,15 +12,15 @@ import {
   rejectL,
   zipL,
   zipWithIndexL,
-} from "fxjs";
+} from "fxjs/es";
 import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   deepCopyTransformList,
+  makeMockRectInitiatedScaleTransform,
   makeRandomBool,
   makeRandomInt,
   makeRandomNumber,
   makeRandomTransformAttributeValue,
-  makeMockRectInitiatedScaleTransform,
 } from "../../test/utils/index.js";
 import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";

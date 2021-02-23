@@ -1,6 +1,6 @@
 import chai from "chai";
-import { $append } from "fxdom";
-import { defaultTo, go, mapL, rangeL, reduce } from "fxjs";
+import { $append } from "fxdom/es";
+import { defaultTo, go, mapL, rangeL, reduce } from "fxjs/es";
 import { makeMockRect } from "../../test/utils/makeMockRect.js";
 import { makeRandomInt } from "../../test/utils/makeRandomInt.js";
 import { makeRandomNumber } from "../../test/utils/makeRandomNumber.js";

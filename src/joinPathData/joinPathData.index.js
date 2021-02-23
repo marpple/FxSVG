@@ -1,17 +1,17 @@
 import {
+  eachL,
+  equals2,
+  every,
+  flatL,
+  go,
+  isArray,
   join,
   mapL,
-  isArray,
-  equals2,
-  go,
-  eachL,
   not,
   tap,
-  every,
   toIter,
-  flatL,
-} from "fxjs";
-import { InvalidArgumentsError } from "../Errors/InvalidArgumentsError.js";
+} from "fxjs/es";
+import { IllegalArgumentError } from "../Errors/IllegalArgumentError.js";
 
 /**
  * @typedef {string} Command
@@ -40,7 +40,7 @@ const ARC_ARG_FLAG_SET = new Set([0, 1]);
  * @param {Command} path_command_parameters.command
  * @param {Parameter} path_command_parameters.parameters
  * @returns {string} SVG path + parameters path data string
- * @throws {InvalidArgumentsError}
+ * @throws {IllegalArgumentError}
  */
 export const $$toStringPathCommandParameters = ({ command, parameters }) => {
   if (COMMAND_MLT.has(command)) {
@@ -48,7 +48,7 @@ export const $$toStringPathCommandParameters = ({ command, parameters }) => {
       parameters,
       tap((l) => {
         if (!isArray(l) || not(equals2(l.length, 2))) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_TO_STRING_PATH_COMMAND_PARAMETERS,
             `"parameters"`,
             JSON.stringify({ command, parameters })
@@ -57,7 +57,7 @@ export const $$toStringPathCommandParameters = ({ command, parameters }) => {
       }),
       eachL((a) => {
         if (!Number.isFinite(a)) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_TO_STRING_PATH_COMMAND_PARAMETERS,
             `"parameters"`,
             JSON.stringify({ command, parameters })
@@ -71,7 +71,7 @@ export const $$toStringPathCommandParameters = ({ command, parameters }) => {
 
   if (COMMAND_HV.has(command)) {
     if (!Number.isFinite(parameters)) {
-      throw new InvalidArgumentsError(
+      throw new IllegalArgumentError(
         FN_PATH_TO_STRING_PATH_COMMAND_PARAMETERS,
         `"parameters"`,
         JSON.stringify({ command, parameters })
@@ -87,7 +87,7 @@ export const $$toStringPathCommandParameters = ({ command, parameters }) => {
       parameters,
       tap((l) => {
         if (!isArray(l) || not(equals2(l.length, is_command_c ? 3 : 2))) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_TO_STRING_PATH_COMMAND_PARAMETERS,
             `"parameters"`,
             JSON.stringify({ command, parameters })
@@ -96,7 +96,7 @@ export const $$toStringPathCommandParameters = ({ command, parameters }) => {
       }),
       eachL((pair) => {
         if (!isArray(pair) || not(equals2(pair.length, 2))) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_TO_STRING_PATH_COMMAND_PARAMETERS,
             `"parameters"`,
             JSON.stringify({ command, parameters })
@@ -106,7 +106,7 @@ export const $$toStringPathCommandParameters = ({ command, parameters }) => {
       flatL,
       eachL((a) => {
         if (!Number.isFinite(a)) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_TO_STRING_PATH_COMMAND_PARAMETERS,
             `"parameters"`,
             JSON.stringify({ command, parameters })
@@ -120,7 +120,7 @@ export const $$toStringPathCommandParameters = ({ command, parameters }) => {
 
   if (COMMAND_A.has(command)) {
     if (!isArray(parameters) || not(equals2(parameters.length, 7))) {
-      throw new InvalidArgumentsError(
+      throw new IllegalArgumentError(
         FN_PATH_TO_STRING_PATH_COMMAND_PARAMETERS,
         `"parameters"`,
         JSON.stringify({ command, parameters })
@@ -144,7 +144,7 @@ export const $$toStringPathCommandParameters = ({ command, parameters }) => {
         ])
       )
     ) {
-      throw new InvalidArgumentsError(
+      throw new IllegalArgumentError(
         FN_PATH_TO_STRING_PATH_COMMAND_PARAMETERS,
         `"parameters"`,
         JSON.stringify({ command, parameters })
@@ -155,7 +155,7 @@ export const $$toStringPathCommandParameters = ({ command, parameters }) => {
 
   if (COMMAND_Z.has(command)) {
     if (!isArray(parameters) || parameters.length > 0) {
-      throw new InvalidArgumentsError(
+      throw new IllegalArgumentError(
         FN_PATH_TO_STRING_PATH_COMMAND_PARAMETERS,
         `"parameters"`,
         JSON.stringify({ command, parameters })
@@ -164,7 +164,7 @@ export const $$toStringPathCommandParameters = ({ command, parameters }) => {
     return command;
   }
 
-  throw new InvalidArgumentsError(
+  throw new IllegalArgumentError(
     FN_PATH_TO_STRING_PATH_COMMAND_PARAMETERS,
     `"command"`,
     JSON.stringify({ command, parameters })
@@ -178,7 +178,7 @@ const FN_PATH_JOIN_PATH_DATA = `$$joinPathData`;
  *
  * @param {Array<{command: Command, parameters: Parameter}>} [path_data=[]]
  * @returns {string}
- * @throws {InvalidArgumentsError}
+ * @throws {IllegalArgumentError}
  */
 export const $$joinPathData = (path_data = []) =>
   go(
@@ -191,7 +191,7 @@ export const $$joinPathData = (path_data = []) =>
       }
 
       if (not(equals2(value.command.toLowerCase(), "m"))) {
-        throw new InvalidArgumentsError(
+        throw new IllegalArgumentError(
           FN_PATH_JOIN_PATH_DATA,
           `"path_data"`,
           `the first command is not one of "M" and "m".`

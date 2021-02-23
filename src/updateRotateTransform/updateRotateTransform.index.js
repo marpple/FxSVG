@@ -1,4 +1,4 @@
-import { defaultTo } from "fxjs";
+import { defaultTo } from "fxjs/es";
 import { $$isRotateSVGTransform } from "../isRotateSVGTransform/isRotateSVGTransform.index.js";
 
 export const $$updateRotateTransform = ({ angle, cx = 0, cy = 0 } = {}) => (

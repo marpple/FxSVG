@@ -17,10 +17,10 @@ export {
   $remove as $$remove,
   $show as $$show,
   $trigger as $$trigger,
-} from "fxdom";
+} from "fxdom/es";
 
 export { CustomError } from "./Errors/CustomError.js";
-export { InvalidArgumentsError } from "./Errors/InvalidArgumentsError.js";
+export { IllegalArgumentError } from "./Errors/IllegalArgumentError.js";
 
 export { $$appendRotateTransform } from "./appendRotateTransform/appendRotateTransform.index.js";
 export { $$appendTranslateTransform } from "./appendTranslateTransform/appendTranslateTransform.index.js";

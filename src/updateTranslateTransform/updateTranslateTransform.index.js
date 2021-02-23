@@ -1,4 +1,4 @@
-import { defaultTo } from "fxjs";
+import { defaultTo } from "fxjs/es";
 import { $$isTranslateSVGTransform } from "../isTranslateSVGTransform/isTranslateSVGTransform.index.js";
 
 export const $$updateTranslateTransform = ({ tx, ty } = {}) => (transform) => {

@@ -16,8 +16,8 @@ import {
   takeAll,
   tap,
   toIter,
-} from "fxjs";
-import { InvalidArgumentsError } from "../Errors/InvalidArgumentsError.js";
+} from "fxjs/es";
+import { IllegalArgumentError } from "../Errors/IllegalArgumentError.js";
 import {
   FN_PATH,
   FN_PATH_PARSE_COORDINATE_SEQ,
@@ -97,7 +97,7 @@ export function* $$splitPathDataByCommandL(path_data) {
 /**
  * @param {string} str
  * @returns {Iterator<number, undefined, *>}
- * @throws {InvalidArgumentsError}
+ * @throws {IllegalArgumentError}
  */
 const $$parseCoordinateSeqL = (str) =>
   go(
@@ -116,7 +116,7 @@ const $$parseCoordinateSeqL = (str) =>
 
       result = regexp_number.exec(str);
       if (!result || not(equals2(index, result.index))) {
-        throw new InvalidArgumentsError(
+        throw new IllegalArgumentError(
           FN_PATH_PARSE_COORDINATE_SEQ,
           `"str"`,
           `input str : "${str}"`
@@ -139,7 +139,7 @@ const $$parseCoordinateSeqL = (str) =>
         }
         result = current_number_result;
         if (not(equals2(index, result.index))) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_PARSE_COORDINATE_SEQ,
             `"str"`,
             `input str : "${str}"`
@@ -150,7 +150,7 @@ const $$parseCoordinateSeqL = (str) =>
       }
 
       if (not(equals2(result.index + result[0].length, str.length))) {
-        throw new InvalidArgumentsError(
+        throw new IllegalArgumentError(
           FN_PATH_PARSE_COORDINATE_SEQ,
           `"str"`,
           `input str : "${str}"`
@@ -168,7 +168,7 @@ const $$parseCoordinateSeqL = (str) =>
  * @param {Command} path_command_parameters.command
  * @param {string} path_command_parameters.parameters
  * @returns {{command: Command, parameters: Array<Parameter>}}
- * @throws {InvalidArgumentsError}
+ * @throws {IllegalArgumentError}
  */
 export const $$parsePathCommandParameters = ({ command, parameters }) => {
   if (
@@ -183,7 +183,7 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
       chunkL(2),
       each((pair) => {
         if (pair.length < 2) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
             `"parameters"`,
             JSON.stringify({ command, parameters })
@@ -192,7 +192,7 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
       }),
       tap((l) => {
         if (!l.length) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
             `"parameters"`,
             JSON.stringify({ command, parameters })
@@ -214,7 +214,7 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
       takeAll,
       tap((l) => {
         if (!l.length) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
             `"parameters"`,
             JSON.stringify({ command, parameters })
@@ -233,7 +233,7 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
       chunkL(2),
       eachL((pair) => {
         if (pair.length < 2) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
             `"parameters"`,
             JSON.stringify({ command, parameters })
@@ -243,7 +243,7 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
       chunkL(3),
       each((triplet) => {
         if (triplet.length < 3) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
             `"parameters"`,
             JSON.stringify({ command, parameters })
@@ -252,7 +252,7 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
       }),
       tap((l) => {
         if (!l.length) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
             `"parameters"`,
             JSON.stringify({ command, parameters })
@@ -274,7 +274,7 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
       chunkL(2),
       eachL((pair) => {
         if (pair.length < 2) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
             `"parameters"`,
             JSON.stringify({ command, parameters })
@@ -284,7 +284,7 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
       chunkL(2),
       each((pair) => {
         if (pair.length < 2) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
             `"parameters"`,
             JSON.stringify({ command, parameters })
@@ -293,7 +293,7 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
       }),
       tap((l) => {
         if (!l.length) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
             `"parameters"`,
             JSON.stringify({ command, parameters })
@@ -334,7 +334,7 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
           regexp.lastIndex = index;
           const result = regexp.exec(str);
           if (!result || not(equals2(result.index, index))) {
-            throw new InvalidArgumentsError(
+            throw new IllegalArgumentError(
               FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
               `"parameters"`,
               JSON.stringify({ command, parameters })
@@ -383,7 +383,7 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
         }
 
         if (not(equals2(result.index + result[0].length, str.length))) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
             `"parameters"`,
             JSON.stringify({ command, parameters })
@@ -394,7 +394,7 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
       chunkL(7),
       each((l) => {
         if (l.length < 7) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
             `"parameters"`,
             JSON.stringify({ command, parameters })
@@ -403,7 +403,7 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
       }),
       tap((l) => {
         if (!l.length) {
-          throw new InvalidArgumentsError(
+          throw new IllegalArgumentError(
             FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
             `"parameters"`,
             JSON.stringify({ command, parameters })
@@ -418,7 +418,7 @@ export const $$parsePathCommandParameters = ({ command, parameters }) => {
     return { command, parameters: [] };
   }
 
-  throw new InvalidArgumentsError(
+  throw new IllegalArgumentError(
     FN_PATH_PARSE_PATH_COMMAND_PARAMETERS,
     `"command"`,
     JSON.stringify({ command, parameters })
@@ -961,7 +961,7 @@ export function* $$flatPathCommandParametersL({ command, parameters }) {
  *
  * @param {string=} d_str - path data
  * @returns {Iterator<{command: string, parameters: Parameter}, undefined, *>}
- * @throws {InvalidArgumentsError}
+ * @throws {IllegalArgumentError}
  */
 export const $$parsePathDateL = (d_str) => {
   if (isNil(d_str)) {
@@ -982,7 +982,7 @@ export const $$parsePathDateL = (d_str) => {
         not(equals2(value.command, "M")) &&
         not(equals2(value.command, "m"))
       ) {
-        throw new InvalidArgumentsError(
+        throw new IllegalArgumentError(
           FN_PATH,
           `"d_str"`,
           `The first command is not one of "M" and "m".`

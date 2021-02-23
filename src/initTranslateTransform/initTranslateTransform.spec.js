@@ -1,5 +1,9 @@
 import chai from "chai";
-import { equals2, go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs";
+import { equals2, go, mapL, rejectL, zipL, zipWithIndexL } from "fxjs/es";
+import {
+  expectSameValueSVGTransform,
+  expectTransformWithTranslateTxTy,
+} from "../../test/assertions/index.js";
 import {
   deepCopyTransformList,
   makeMockRect,
@@ -7,10 +11,6 @@ import {
   makeRandomNumber,
   makeRandomTransformAttributeValue,
 } from "../../test/utils/index.js";
-import {
-  expectSameValueSVGTransform,
-  expectTransformWithTranslateTxTy,
-} from "../../test/assertions/index.js";
 import { $$getBaseTransformList } from "../getBaseTransformList/getBaseTransformList.index.js";
 import { $$initTranslateTransform } from "./initTranslateTransform.index.js";
 

@@ -1,5 +1,5 @@
 import chai from "chai";
-import { equals2, go, map, rejectL, zipL, zipWithIndexL } from "fxjs";
+import { equals2, go, map, rejectL, zipL, zipWithIndexL } from "fxjs/es";
 import { expectSameValueSVGTransform } from "../../test/assertions/index.js";
 import {
   deepCopyTransformList,

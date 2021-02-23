@@ -1,5 +1,5 @@
 import chai from "chai";
-import { flatMapL, mapL } from "fxjs";
+import { flatMapL, mapL } from "fxjs/es";
 import { $$getAttrNS } from "../getAttrNS/getAttrNS.index.js";
 import { $$el } from "./el.index.js";
 

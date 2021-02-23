@@ -1,4 +1,4 @@
-import { reduce } from "fxjs";
+import { reduce } from "fxjs/es";
 
 export const $$getBoundingPoints = (points = []) =>
   reduce(

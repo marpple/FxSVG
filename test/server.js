@@ -1,10 +1,17 @@
-const path = require("path");
-const express = require("express");
-const webpack = require("webpack");
-const middleware = require("webpack-dev-middleware");
-const yargs = require("yargs");
+import express from "express";
+import path from "path";
+import url from "url";
+import webpack from "webpack";
+import middleware from "webpack-dev-middleware";
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 
-const argv = yargs.alias("p", "port").default("port", "8080").parse();
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+
+const argv = yargs(hideBin(process.argv))
+  .alias("p", "port")
+  .default("port", "8080")
+  .parse();
 const port = parseInt(argv.port, 10);
 
 const app = express();
