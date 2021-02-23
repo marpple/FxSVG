@@ -12,7 +12,7 @@
     "test:server": "node test/server.js",
     "test:client": "node bin/test.client.js",
     "test:client:headless": "node bin/test.client.js --headless",
-    "build": "node ./bin/build.cjs"
+    "build": "node bin/build.js"
   },
   "repository": {
     "type": "git",

@@ -1,7 +1,10 @@
-const fs = require("fs");
-const path = require("path");
-const { Readable } = require("stream");
-const webpack = require("webpack");
+import fs from "fs";
+import path from "path";
+import { Readable } from "stream";
+import url from "url";
+import webpack from "webpack";
+
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 const BROWSER_INDEX_FILENAME = "browser_index";
 
