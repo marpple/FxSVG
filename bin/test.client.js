@@ -1,10 +1,14 @@
-const fs = require("fs");
-const path = require("path");
-const cluster = require("cluster");
-const playwright = require("playwright");
-const yargs = require("yargs");
+import cluster from "cluster";
+import fs from "fs";
+import path from "path";
+import playwright from "playwright";
+import url from "url";
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 
-const argv = yargs
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+
+const argv = yargs(hideBin(process.argv))
   .alias("r", "repeat")
   .alias("h", "headless")
   .alias("w", "watch")

@@ -10,8 +10,8 @@
   ],
   "scripts": {
     "test:server": "node test/server.js",
-    "test:client": "node bin/test.client.cjs",
-    "test:client:headless": "node bin/test.client.cjs --headless",
+    "test:client": "node bin/test.client.js",
+    "test:client:headless": "node bin/test.client.js --headless",
     "build": "node ./bin/build.cjs"
   },
   "repository": {
