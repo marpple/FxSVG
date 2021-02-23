@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "test:server": "node ./test/server.cjs",
+    "test:server": "node test/server.js",
     "test:client": "node bin/test.client.cjs",
     "test:client:headless": "node bin/test.client.cjs --headless",
     "build": "node ./bin/build.cjs"
